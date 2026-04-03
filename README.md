@@ -2,6 +2,18 @@
 
 PercentDoseGraph is a lightweight browser app for clinicians and pharmacists who want to review medication dosing as a percentage of a patient-specific maximum dose over different time windows.
 
+## GitHub Repository Assets
+
+This repository includes several files configured for GitHub hosting:
+- **`.github/`** - GitHub-specific configuration (workflows, issue templates, PR templates)
+- **`LICENSE`** - MIT open source license
+- **`CONTRIBUTING.md`** - Developer contribution guidelines
+- **`SECURITY.md`** - Security policy and vulnerability reporting
+- **`deploy/`** - Deployment-ready folder for web hosting services
+- **`.gitignore`, `.gitattributes`, `.npmrc`** - Git and npm configuration
+
+These are only relevant if pushing to GitHub. For local development of the application itself, focus on the core files listed below.
+
 ## What this first version does
 
 - captures the core clinical context: patient, medication, dose unit, and max dose
