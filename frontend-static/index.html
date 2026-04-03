@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PercentDoseGraph Static Type</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Medication Dose Trend Viewer</p>
+          <h1>See drug exposure as a percent of the patient-specific maximum dose.</h1>
+          <p class="hero-text">
+            Track how dosing changes across a day, week, year, or multi-year period and
+            quickly compare actual dose to a clinician-defined ceiling.
+          </p>
+        </div>
+        <div class="hero-card">
+          <p class="card-label">Current view</p>
+          <p class="card-value" id="headlinePercent">0%</p>
+          <p class="card-caption">Average daily dose across the selected period</p>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel controls-panel">
+          <div class="panel-header">
+            <h2>Clinical Inputs</h2>
+            <p>Define the patient context and the medication ceiling used for normalization.</p>
+          </div>
+
+          <form id="settingsForm" class="stack">
+            <label>
+              Medication
+              <input id="medicationName" name="medicationName" type="text" value="Morphine" />
+            </label>
+            <label>
+              Patient
+              <input id="patientName" name="patientName" type="text" value="Example Patient" />
+            </label>
+            <label>
+              Route of administration
+              <select id="medicationRoute" name="medicationRoute">
+                <option value="PO" selected>PO</option>
+                <option value="IV">IV</option>
+                <option value="IM">IM</option>
+                <option value="SC">SC</option>
+                <option value="SL">SL</option>
+                <option value="PR">PR</option>
+                <option value="TD">Transdermal</option>
+                <option value="Other">Other</option>
+              </select>
+            </label>
+            <label>
+              Dose unit
+              <input id="doseUnit" name="doseUnit" type="text" value="mg/day" />
+            </label>
+            <label>
+              Reference maximum dose for this patient and route
+              <input
+                id="maxDose"
+                name="maxDose"
+                type="number"
+                min="0.1"
+                step="0.1"
+                value="120"
+              />
+            </label>
+            <label>
+              Assessment window
+              <select id="timeframe" name="timeframe">
+                <option value="1d">1 day</option>
+                <option value="7d">1 week</option>
+                <option value="1y" selected>1 year</option>
+                <option value="2y">2 years</option>
+                <option value="3y">3 years</option>
+                <option value="5y">5 years</option>
+                <option value="10y">10 years</option>
+              </select>
+            </label>
+          </form>
+
+          <div class="reference-panel">
+            <div class="panel-header compact">
+              <h2>Reference Match</h2>
+              <p>The app can infer a starting max dose from a small built-in drug library, but you can always adjust it.</p>
+            </div>
+            <div class="reference-status">
+              <p class="reference-pill" id="inferenceStatus">No reference match</p>
+              <button id="applyInferenceButton" class="secondary-button" type="button">Apply inferred max</button>
+            </div>
+            <div class="reference-meta">
+              <p id="inferenceSummary"></p>
+            </div>
+            <div class="reference-list" id="referenceList"></div>
+          </div>
+
+          <div class="panel-header compact">
+            <h2>Dose Events</h2>
+            <p>Add actual doses by route. Trends only include the currently selected route, so PO and IV stay separate.</p>
+            <div class="export-controls">
+              <button id="importJsonButton" class="secondary-button">Import JSON</button>
+              <button id="exportJsonButton" class="secondary-button">Export JSON</button>
+              <button id="exportCsvButton" class="secondary-button">Export CSV</button>
+              <button id="clearDataButton" class="secondary-button" style="background: rgba(180, 35, 24, 0.08); color: var(--danger); border-color: rgba(180, 35, 24, 0.18);">Clear All</button>
+              <input type="file" id="importFileInput" accept=".json" style="display: none;" />
+            </div>
+          </div>
+
+          <form id="doseForm" class="dose-form">
+            <label>
+              Date
+              <input id="doseDate" name="doseDate" type="date" required />
+            </label>
+            <label>
+              Route
+              <select id="doseRoute" name="doseRoute">
+                <option value="PO" selected>PO</option>
+                <option value="IV">IV</option>
+                <option value="IM">IM</option>
+                <option value="SC">SC</option>
+                <option value="SL">SL</option>
+                <option value="PR">PR</option>
+                <option value="TD">Transdermal</option>
+                <option value="Other">Other</option>
+              </select>
+            </label>
+            <label>
+              Dose
+              <input id="doseAmount" name="doseAmount" type="number" min="0" step="0.1" required />
+            </label>
+            <button type="submit" class="primary-button">Add Dose Event</button>
+          </form>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Route</th>
+                  <th>Dose</th>
+                  <th>% Max</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="eventsTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel analytics-panel">
+          <div class="panel-header">
+            <h2>Trend</h2>
+            <p id="chartSubtitle">Average daily dose as a percentage of the maximum dose.</p>
+          </div>
+
+          <div class="metrics-grid">
+            <article class="metric">
+              <span>Average</span>
+              <strong id="averagePercent">0%</strong>
+            </article>
+            <article class="metric">
+              <span>Peak day</span>
+              <strong id="peakPercent">0%</strong>
+            </article>
+            <article class="metric">
+              <span>Total administered</span>
+              <strong id="totalDose">0</strong>
+            </article>
+            <article class="metric">
+              <span>Days above 80%</span>
+              <strong id="highDays">0</strong>
+            </article>
+          </div>
+
+          <div class="chart-card">
+            <canvas id="doseChart" width="900" height="380" aria-label="Dose percentage chart"></canvas>
+          </div>
+
+          <div class="summary-grid">
+            <article class="summary-card">
+              <h3>Interpretation</h3>
+              <p id="interpretationText"></p>
+            </article>
+            <article class="summary-card">
+              <h3>Selected range</h3>
+              <p id="rangeText"></p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel profiles-panel">
+          <div class="panel-header">
+            <h2>Medication Profiles</h2>
+            <p>Save and load named medication snapshots for timeline comparison.</p>
+          </div>
+
+          <div class="profile-controls">
+            <label>
+              Profile name
+              <input id="profileName" name="profileName" type="text" placeholder="e.g. Patient A - Aug 2023" />
+            </label>
+            <button id="saveProfileButton" class="secondary-button">Save Profile</button>
+            <button id="loadProfileButton" class="secondary-button">Load Profile</button>
+          </div>
+
+          <div id="profileList" class="profile-list">
+            <p class="empty-state">No saved profiles yet.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../script.js"></script>
+  </body>
+</html>

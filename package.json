@@ -1,0 +1,21 @@
+{
+  "name": "percentdosegraph",
+  "private": true,
+  "workspaces": [
+    "artifacts/api-server",
+    "lib/db",
+    "lib/api-zod"
+  ],
+  "scripts": {
+    "dev:web": "npm run build:web && node scripts/dev-static-server.mjs",
+    "dev:api": "npm --workspace @workspace/api-server run dev",
+    "build:web": "esbuild frontend-react/app.js --bundle --format=esm --platform=browser --outfile=frontend-react/app.bundle.js",
+    "build:api": "npm --workspace @workspace/api-server run build",
+    "build:all": "npm run build:web && npm run build:api"
+  },
+  "dependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "recharts": "^3.8.1"
+  }
+}

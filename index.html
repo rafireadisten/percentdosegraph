@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PercentDoseGraph Frontends</title>
+    <style>
+      :root {
+        --bg: #f6f1e8;
+        --panel: rgba(255, 252, 246, 0.92);
+        --ink: #1f2a2e;
+        --muted: #66757a;
+        --accent: #0e7a6d;
+        --accent-strong: #0a5e54;
+        --border: rgba(31, 42, 46, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(14, 122, 109, 0.18), transparent 28%),
+          linear-gradient(135deg, #f8f5ef 0%, #efe5d5 100%);
+      }
+
+      main {
+        width: min(1080px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 4rem 0;
+      }
+
+      .hero {
+        margin-bottom: 2rem;
+      }
+
+      .eyebrow {
+        margin: 0 0 0.75rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: var(--accent-strong);
+      }
+
+      h1 {
+        margin: 0 0 1rem;
+        max-width: 12ch;
+        font-size: clamp(2.6rem, 7vw, 5rem);
+        line-height: 0.95;
+      }
+
+      .hero p:last-child {
+        max-width: 48rem;
+        margin: 0;
+        font-size: 1.05rem;
+        color: var(--muted);
+      }
+
+      .chooser {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1.5rem;
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: var(--panel);
+        box-shadow: 0 18px 50px rgba(70, 56, 27, 0.08);
+      }
+
+      .card h2,
+      .card p {
+        margin: 0;
+      }
+
+      .label {
+        display: inline-flex;
+        width: fit-content;
+        padding: 0.35rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(14, 122, 109, 0.12);
+        color: var(--accent-strong);
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .card p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .link {
+        width: fit-content;
+        margin-top: auto;
+        padding: 0.8rem 1rem;
+        border-radius: 14px;
+        text-decoration: none;
+        color: white;
+        background: var(--accent);
+        font-weight: 600;
+      }
+
+      .link:hover {
+        background: var(--accent-strong);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">PercentDoseGraph</p>
+        <h1>Choose the frontend type.</h1>
+        <p>
+          This home page now separates the browser-first static version from a reactive
+          React and Recharts version so you can compare both approaches side by side.
+        </p>
+      </section>
+
+      <section class="chooser" aria-label="Frontend type chooser">
+        <article class="card">
+          <span class="label">Static Type</span>
+          <h2>Plain HTML, CSS, and JavaScript</h2>
+          <p>
+            Uses the original canvas chart and form logic with no React dependency. This is
+            the simplest version to open directly in a browser.
+          </p>
+          <a class="link" href="./frontend-static/">Open Static Type</a>
+        </article>
+
+        <article class="card">
+          <span class="label">Reactive Type</span>
+          <h2>React plus Recharts</h2>
+          <p>
+            Uses a reactive component model and a Recharts line chart. This version is
+            scaffolded as a separate frontend so we can evolve it independently.
+          </p>
+          <a class="link" href="./frontend-react/">Open Reactive Type</a>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

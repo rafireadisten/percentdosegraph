@@ -1,0 +1,308 @@
+[
+  {
+    "drug": "Morphine",
+    "aliases": ["morphine sulfate"],
+    "route": "PO",
+    "maxDose": 120,
+    "unit": "mg/day",
+    "source": "Starter library reference",
+    "note": "Illustrative oral daily ceiling for percent-of-max trending."
+  },
+  {
+    "drug": "Morphine",
+    "aliases": ["morphine sulfate"],
+    "route": "IV",
+    "maxDose": 40,
+    "unit": "mg/day",
+    "source": "Starter library reference",
+    "note": "Illustrative IV daily ceiling kept separate from PO dosing."
+  },
+  {
+    "drug": "Hydromorphone",
+    "aliases": ["dilaudid"],
+    "route": "PO",
+    "maxDose": 32,
+    "unit": "mg/day",
+    "source": "Starter library reference",
+    "note": "Illustrative oral reference entry."
+  },
+  {
+    "drug": "Hydromorphone",
+    "aliases": ["dilaudid"],
+    "route": "IV",
+    "maxDose": 12,
+    "unit": "mg/day",
+    "source": "Starter library reference",
+    "note": "Illustrative IV reference entry."
+  },
+  {
+    "drug": "Oxycodone",
+    "aliases": [],
+    "route": "PO",
+    "maxDose": 80,
+    "unit": "mg/day",
+    "source": "Starter library reference",
+    "note": "Illustrative oral reference entry."
+  },
+  {
+    "drug": "Acetaminophen",
+    "aliases": ["paracetamol", "tylenol"],
+    "route": "PO",
+    "maxDose": 4000,
+    "unit": "mg/day",
+    "source": "Starter library reference",
+    "note": "Common daily cap used as a starting reference only."
+  },
+  {
+    "drug": "Acetaminophen",
+    "aliases": ["paracetamol", "tylenol"],
+    "route": "IV",
+    "maxDose": 4000,
+    "unit": "mg/day",
+    "source": "Starter library reference",
+    "note": "IV tracked separately even when the numeric cap matches PO."
+  },
+  {
+    "drug": "Lorazepam",
+    "aliases": ["ativan"],
+    "route": "PO",
+    "maxDose": 10,
+    "unit": "mg/day",
+    "source": "Starter library reference",
+    "note": "Illustrative oral reference entry."
+  },
+  {
+    "drug": "Lorazepam",
+    "aliases": ["ativan"],
+    "route": "IV",
+    "maxDose": 8,
+    "unit": "mg/day",
+    "source": "Starter library reference",
+    "note": "Illustrative IV reference entry."
+  },
+  {
+    "drug": "Fentanyl",
+    "aliases": [],
+    "route": "IV",
+    "maxDose": 600,
+    "unit": "mcg/day",
+    "source": "Starter library reference",
+    "note": "Illustrative IV reference entry using mcg/day."
+  },
+  {
+    "drug": "Fentanyl",
+    "aliases": [],
+    "route": "TD",
+    "maxDose": 100,
+    "unit": "mcg/hr",
+    "source": "Starter library reference",
+    "note": "Illustrative transdermal reference entry."
+  },
+  {
+    "drug": "Allopurinol",
+    "aliases": ["allopurinol"],
+    "route": "PO",
+    "maxDose": 800,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "Gout treatment; titrate from 100mg/day. Xanthine Oxidase Inhibitor."
+  },
+  {
+    "drug": "Tamsulosin",
+    "aliases": ["flomax"],
+    "route": "PO",
+    "maxDose": 0.8,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "BPH treatment; 0.4mg once daily. Alpha-1 Blocker (Uroselective)."
+  },
+  {
+    "drug": "Levothyroxine",
+    "aliases": ["synthroid", "levoxyl"],
+    "route": "PO",
+    "maxDose": 0.3,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "Thyroid hormone replacement; typical 75–200mcg/day."
+  },
+  {
+    "drug": "Vascepa",
+    "aliases": ["icosapent ethyl"],
+    "route": "PO",
+    "maxDose": 4000,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "2g BID (4g/day); CV risk reduction. Omega-3 Fatty Acid (EPA)."
+  },
+  {
+    "drug": "Aspirin",
+    "aliases": ["acetylsalicylic acid"],
+    "route": "PO",
+    "maxDose": 4000,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "Cardioprotective: 81mg/day. NSAID / Antiplatelet."
+  },
+  {
+    "drug": "Atorvastatin",
+    "aliases": ["lipitor"],
+    "route": "PO",
+    "maxDose": 80,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "10–80mg/day. Statin (HMG-CoA Reductase)."
+  },
+  {
+    "drug": "Amlodipine",
+    "aliases": ["norvasc"],
+    "route": "PO",
+    "maxDose": 10,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "5–10mg/day. Calcium Channel Blocker."
+  },
+  {
+    "drug": "Metoprolol Tartrate",
+    "aliases": ["lopressor", "metoprolol"],
+    "route": "PO",
+    "maxDose": 450,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "100mg BID typical; max 450mg/day. Beta Blocker (Beta-1 Selective)."
+  },
+  {
+    "drug": "Losartan",
+    "aliases": ["cozaar"],
+    "route": "PO",
+    "maxDose": 100,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "25–100mg/day. ARB."
+  },
+  {
+    "drug": "Dapagliflozin",
+    "aliases": ["farxiga"],
+    "route": "PO",
+    "maxDose": 10,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "10mg/day; heart failure/T2DM. SGLT-2 Inhibitor."
+  },
+  {
+    "drug": "Omeprazole",
+    "aliases": ["prilosec"],
+    "route": "PO",
+    "maxDose": 120,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "20–40mg/day; hypersecretory up to 120mg. Proton Pump Inhibitor."
+  },
+  {
+    "drug": "Pantoprazole",
+    "aliases": ["protonix"],
+    "route": "PO",
+    "maxDose": 240,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "40mg/day; up to 240mg hypersecretory. Proton Pump Inhibitor."
+  },
+  {
+    "drug": "Vitamin D3",
+    "aliases": ["cholecalciferol"],
+    "route": "PO",
+    "maxDose": 4000,
+    "unit": "IU/day",
+    "source": "Expanded library from Replit",
+    "note": "OTC safe upper limit 4000 IU/day. Fat-Soluble Vitamin."
+  },
+  {
+    "drug": "Lisinopril",
+    "aliases": ["prinivil", "zestril"],
+    "route": "PO",
+    "maxDose": 80,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "10–80mg/day for HTN. ACE Inhibitor."
+  },
+  {
+    "drug": "Metformin",
+    "aliases": ["glucophage"],
+    "route": "PO",
+    "maxDose": 2550,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "500–2550mg/day in divided doses. Biguanide."
+  },
+  {
+    "drug": "Linagliptin",
+    "aliases": ["tradjenta"],
+    "route": "PO",
+    "maxDose": 5,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "5mg once daily; renal-dose not required. DPP-4 Inhibitor."
+  },
+  {
+    "drug": "Empagliflozin",
+    "aliases": ["jardiance"],
+    "route": "PO",
+    "maxDose": 25,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "10–25mg/day. SGLT-2 Inhibitor."
+  },
+  {
+    "drug": "Semaglutide",
+    "aliases": ["ozempic", "wegovy"],
+    "route": "SC",
+    "maxDose": 2,
+    "unit": "mg/week",
+    "source": "Expanded library from Replit",
+    "note": "Weekly injection; max 2mg/week. GLP-1 Receptor Agonist."
+  },
+  {
+    "drug": "Gabapentin",
+    "aliases": ["neurontin"],
+    "route": "PO",
+    "maxDose": 3600,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "300–3600mg/day in divided doses. Anticonvulsant / Neuropathic."
+  },
+  {
+    "drug": "Rosuvastatin",
+    "aliases": ["crestor"],
+    "route": "PO",
+    "maxDose": 40,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "5–40mg/day. Statin (HMG-CoA Reductase)."
+  },
+  {
+    "drug": "Carvedilol",
+    "aliases": ["coreg"],
+    "route": "PO",
+    "maxDose": 100,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "HF: 25mg BID max; HTN: 50mg BID. Beta Blocker (Alpha + Beta)."
+  },
+  {
+    "drug": "Furosemide",
+    "aliases": ["lasix"],
+    "route": "PO",
+    "maxDose": 600,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "20–600mg/day oral. Loop Diuretic."
+  },
+  {
+    "drug": "Spironolactone",
+    "aliases": ["aldactone"],
+    "route": "PO",
+    "maxDose": 400,
+    "unit": "mg/day",
+    "source": "Expanded library from Replit",
+    "note": "25–400mg/day. Potassium-Sparing Diuretic."
+  }
+]
