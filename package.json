@@ -1,6 +1,22 @@
 {
   "name": "percentdosegraph",
+  "version": "1.0.0",
+  "description": "A lightweight clinical dosing visualization tool for pharmacists and clinicians",
   "private": true,
+  "license": "MIT",
+  "author": "Rafi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/percentdosegraph.git"
+  },
+  "keywords": [
+    "clinical",
+    "dosing",
+    "medication",
+    "pharmacy",
+    "healthcare",
+    "visualization"
+  ],
   "workspaces": [
     "artifacts/api-server",
     "lib/db",
