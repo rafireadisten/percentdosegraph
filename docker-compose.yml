@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-change-in-production}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      DATABASE_URL: ${DATABASE_URL:-}
+    volumes:
+      - ./accounts.json:/app/accounts.json
+      - ./profiles.json:/app/profiles.json
+      - ./data:/app/data
+    networks:
+      - frontend
+
+  web:
+    image: node:20-alpine
+    working_dir: /app
+    command: npm run dev:web
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - frontend
+    depends_on:
+      - api
+
+networks:
+  frontend:
+    driver: bridge
