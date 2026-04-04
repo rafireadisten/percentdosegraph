@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Setup Helper - PercentDoseGraph</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-top: 0;
+        }
+        
+        .step {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+        
+        .step h2 {
+            color: #667eea;
+            margin-top: 0;
+            font-size: 1.1em;
+        }
+        
+        .step p {
+            margin: 10px 0;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .code-block {
+            background: #222;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9em;
+            margin: 10px 0;
+            user-select: all;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: #f9f9f9;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        
+        .info-box strong {
+            color: #1976D2;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1em;
+            color: #666;
+        }
+        
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .copy-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .copy-btn:hover {
+            background: #45a049;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 GitHub Setup Helper</h1>
+        <p style="text-align: center; color: #666;">Get your PercentDoseGraph codebase on GitHub in 3 easy steps</p>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('automatic')">Automatic</button>
+            <button class="tab-btn" onclick="switchTab('manual')">Manual</button>
+        </div>
+        
+        <!-- AUTOMATIC TAB -->
+        <div id="automatic" class="tab-content active">
+            <div class="step">
+                <h2>✅ Automated Setup (Easiest)</h2>
+                <p>Use this command in your terminal to automatically create your GitHub repo and push your code:</p>
+                
+                <div class="code-block">cd /Users/readisten/Documents/percentdosegraph
+./setup-github.sh</div>
+                
+                <p><strong>This will:</strong></p>
+                <ul>
+                    <li>Check your GitHub login</li>
+                    <li>Create the repository automatically</li>
+                    <li>Push all your code</li>
+                    <li>Show you the GitHub URL</li>
+                </ul>
+                
+                <div class="info-box">
+                    <strong>Note:</strong> Requires <a href="https://cli.github.com" target="_blank">GitHub CLI</a> to be installed
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <a href="https://cli.github.com" class="btn btn-primary" target="_blank">Install GitHub CLI</a>
+                <a href="#" class="btn btn-secondary" onclick="switchTab('manual'); return false;">Use Manual Instead</a>
+            </div>
+        </div>
+        
+        <!-- MANUAL TAB -->
+        <div id="manual" class="tab-content">
+            <div class="step">
+                <h2>📋 Step 1: Create Repository on GitHub</h2>
+                <p>Go to GitHub and create a new repository:</p>
+                
+                <div class="button-group">
+                    <a href="https://github.com/new" class="btn btn-primary" target="_blank">Create Repository</a>
+                </div>
+                
+                <p><strong>Fill in these fields:</strong></p>
+                <ul>
+                    <li><strong>Repository name:</strong> <code>percentdosegraph</code></li>
+                    <li><strong>Description:</strong> <code>A lightweight clinical dosing visualization tool</code></li>
+                    <li><strong>Visibility:</strong> Public</li>
+                </ul>
+                
+                <p>Then click <strong>"Create repository"</strong></p>
+            </div>
+            
+            <div class="step">
+                <h2>📝 Step 2: Copy and Run Commands</h2>
+                <p>Find your GitHub username in the URL you just created. For example:</p>
+                <p><code>https://github.com/<strong>YOUR_USERNAME</strong>/percentdosegraph</code></p>
+                
+                <div class="info-box">
+                    <strong>YOUR_USERNAME</strong> = your GitHub account name
+                </div>
+                
+                <p>Then run these commands in your terminal:</p>
+                
+                <div class="code-block" id="setupCommands">cd /Users/readisten/Documents/percentdosegraph
+git remote add origin https://github.com/YOUR_USERNAME/percentdosegraph.git
+git branch -M main
+git push -u origin main</div>
+                
+                <button class="copy-btn" onclick="copyCode()">Copy Commands</button>
+            </div>
+            
+            <div class="step">
+                <h2>🎉 Step 3: Verify on GitHub</h2>
+                <p>Your code should now be visible at:</p>
+                <p><code>https://github.com/YOUR_USERNAME/percentdosegraph</code></p>
+            </div>
+            
+            <div class="info-box">
+                <strong>⚠️ Important:</strong> Replace <code>YOUR_USERNAME</code> with your actual GitHub username!
+            </div>
+        </div>
+        
+        <div class="step" style="background: #f0f7ff; border-left-color: #2196F3;">
+            <h2>🔐 Next: Configure Secrets</h2>
+            <p>After your code is on GitHub, add your API secrets:</p>
+            <ol>
+                <li>Go to your repository Settings</li>
+                <li>Click "Secrets and variables" → "Actions"</li>
+                <li>Add these secrets:
+                    <ul>
+                        <li><code>JWT_SECRET</code> (required)</li>
+                        <li><code>GOOGLE_CLIENT_ID</code> (optional)</li>
+                        <li><code>GOOGLE_CLIENT_SECRET</code> (optional)</li>
+                    </ul>
+                </li>
+            </ol>
+            <a href="#" id="secretsLink" class="btn btn-primary" target="_blank" onclick="updateSecretsLink(); return false;">Go to Secrets Settings</a>
+        </div>
+        
+        <div class="footer">
+            <p>Need help? See <code>GITHUB_HOW_TO.md</code> in your project for detailed instructions</p>
+            <p>PercentDoseGraph - Clinical Dosing Visualization Tool</p>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Hide all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Highlight button
+            event.target.classList.add('active');
+        }
+        
+        function copyCode() {
+            const code = document.getElementById('setupCommands');
+            navigator.clipboard.writeText(code.textContent).then(() => {
+                alert('Commands copied to clipboard!');
+            }).catch(() => {
+                alert('Copy failed. Please select and copy manually.');
+            });
+        }
+        
+        function updateSecretsLink() {
+            // This will be updated after they enter their username
+            const username = prompt('Enter your GitHub username:');
+            if (username) {
+                document.getElementById('secretsLink').href = 
+                    `https://github.com/${username}/percentdosegraph/settings/secrets/actions`;
+                document.getElementById('secretsLink').click();
+            }
+        }
+    </script>
+</body>
+</html>
