@@ -48939,6 +48939,8 @@ var TIMEFRAME_OPTIONS = [
 var PROFILES_STORAGE_KEY = "percentdosegraph:react-profiles";
 var MEDICATION_LIST_STORAGE_KEY = "percentdosegraph:react-medication-list";
 var WORKSPACE_STORAGE_KEY = "percentdosegraph:react-workspace";
+var AUTH_TOKEN_STORAGE_KEY = "percentdosegraph:auth-token";
+var AUTH_ACCOUNT_STORAGE_KEY = "percentdosegraph:auth-account";
 var CHART_COLORS = [
   "#0d8f78",
   "#bf4f29",
@@ -48963,6 +48965,7 @@ var CHART_COLORS = [
 ];
 function App() {
   const workspaceDefaults = loadWorkspaceFromStorage();
+  const sessionDefaults = loadAuthSessionFromStorage();
   const importFileRef = (0, import_react56.useRef)(null);
   const [drugs, setDrugs] = (0, import_react56.useState)([]);
   const [doses, setDoses] = (0, import_react56.useState)([]);
@@ -48997,6 +49000,7 @@ function App() {
   const [entryNotes, setEntryNotes] = (0, import_react56.useState)("");
   const [entryStatus, setEntryStatus] = (0, import_react56.useState)("");
   const [entryError, setEntryError] = (0, import_react56.useState)("");
+  const [editingDoseId, setEditingDoseId] = (0, import_react56.useState)(null);
   const [medicationEntries, setMedicationEntries] = (0, import_react56.useState)(
     () => loadMedicationEntriesFromStorage()
   );
@@ -49004,6 +49008,16 @@ function App() {
   const [activeProfileId, setActiveProfileId] = (0, import_react56.useState)(null);
   const [profileStatus, setProfileStatus] = (0, import_react56.useState)("");
   const [profileName, setProfileName] = (0, import_react56.useState)("");
+  const [isAuthenticated, setIsAuthenticated] = (0, import_react56.useState)(Boolean(sessionDefaults.token));
+  const [user, setUser] = (0, import_react56.useState)(sessionDefaults.account);
+  const [authReady, setAuthReady] = (0, import_react56.useState)(false);
+  const [authToken, setAuthToken] = (0, import_react56.useState)(sessionDefaults.token ?? "");
+  const [authMode, setAuthMode] = (0, import_react56.useState)("login");
+  const [authEmail, setAuthEmail] = (0, import_react56.useState)("");
+  const [authPassword, setAuthPassword] = (0, import_react56.useState)("");
+  const [authName, setAuthName] = (0, import_react56.useState)("");
+  const [authLoading, setAuthLoading] = (0, import_react56.useState)(false);
+  const [authError, setAuthError] = (0, import_react56.useState)("");
   (0, import_react56.useEffect)(() => {
     saveProfilesToStorage(profiles);
   }, [profiles]);
@@ -49019,6 +49033,60 @@ function App() {
       timeframe
     });
   }, [patientName, patientNotes, route, timeframe, workspaceLabel]);
+  (0, import_react56.useEffect)(() => {
+    let cancelled2 = false;
+    async function restoreAuth() {
+      if (!sessionDefaults.token) {
+        setAuthReady(true);
+        return;
+      }
+      try {
+        const payload = await apiGet("/auth/me", sessionDefaults.token);
+        if (!cancelled2) {
+          persistAuthSession(sessionDefaults.token, payload.account);
+          setAuthToken(sessionDefaults.token);
+          setUser(payload.account);
+          setIsAuthenticated(true);
+        }
+      } catch (authFailure) {
+        console.warn("Clearing stale auth session:", authFailure);
+        clearAuthSession();
+        if (!cancelled2) {
+          setAuthToken("");
+          setUser(null);
+          setIsAuthenticated(false);
+        }
+      } finally {
+        if (!cancelled2) {
+          setAuthReady(true);
+        }
+      }
+    }
+    restoreAuth();
+    return () => {
+      cancelled2 = true;
+    };
+  }, [sessionDefaults.token]);
+  (0, import_react56.useEffect)(() => {
+    let cancelled2 = false;
+    async function loadProfiles() {
+      if (!isAuthenticated || !user?.id) {
+        return;
+      }
+      try {
+        const apiProfiles = await apiGet(`/accounts/${user.id}/profiles`, authToken);
+        if (!cancelled2) {
+          setProfiles(normalizeStoredProfiles(apiProfiles.map(mapApiProfileToAppProfile)));
+        }
+      } catch (profileError) {
+        console.warn("Falling back to local profile storage:", profileError);
+      }
+    }
+    loadProfiles();
+    return () => {
+      cancelled2 = true;
+    };
+  }, [authToken, isAuthenticated, user?.id]);
   (0, import_react56.useEffect)(() => {
     let cancelled2 = false;
     async function load() {
@@ -49225,13 +49293,13 @@ function App() {
   function handleDeleteMedicationEntry(entryId) {
     setMedicationEntries((current3) => current3.filter((entry) => entry.id !== entryId));
   }
-  function handleSaveProfile() {
+  async function handleSaveProfile() {
     if (!selectedDrugIds.length && !medicationEntries.length) {
       setProfileStatus("Add medications before saving a medication list profile.");
       return;
     }
     const label = profileName.trim() || generateSequentialProfileLabel(profiles);
-    const profile = {
+    const draftProfile = {
       id: generateProfileId({
         selectedDrugIds,
         route,
@@ -49249,9 +49317,20 @@ function App() {
       savedListDate: formatDateKey(/* @__PURE__ */ new Date()),
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
-    setProfiles((current3) => [...current3, profile]);
-    setActiveProfileId(profile.id);
-    setProfileStatus(`Saved ${profile.label} with ${medicationEntries.length} medication entries.`);
+    try {
+      const saved = await saveProfileToApi(draftProfile, profiles, user, authToken);
+      const normalizedProfile = normalizeStoredProfiles([saved])[0];
+      setProfiles((current3) => upsertProfile(current3, normalizedProfile));
+      setActiveProfileId(normalizedProfile.id);
+      setProfileStatus(
+        `Saved ${normalizedProfile.label} with ${medicationEntries.length} medication entries.`
+      );
+    } catch (profileError) {
+      console.warn("Saving profile locally because API save failed:", profileError);
+      setProfiles((current3) => upsertProfile(current3, draftProfile));
+      setActiveProfileId(draftProfile.id);
+      setProfileStatus(`Saved ${draftProfile.label} locally in this browser.`);
+    }
     setProfileName("");
   }
   function handleApplyProfile(profile) {
@@ -49283,12 +49362,77 @@ function App() {
     setProfileStatus(`Added medications from ${profile.label} into the current list.`);
     setWorkspaceStatus("");
   }
-  function handleDeleteProfile(profileId) {
+  async function handleRenameProfile(profile) {
+    const nextLabel = window.prompt("Rename this saved medication list profile:", profile.label);
+    if (!nextLabel || nextLabel.trim() === profile.label) {
+      return;
+    }
+    const updatedProfile = {
+      ...profile,
+      label: nextLabel.trim(),
+      workspaceLabel: profile.workspaceLabel || nextLabel.trim()
+    };
+    try {
+      const saved = await saveProfileToApi(updatedProfile, profiles, user, authToken);
+      const normalizedProfile = normalizeStoredProfiles([saved])[0];
+      setProfiles((current3) => upsertProfile(current3, normalizedProfile));
+      if (activeProfileId === profile.id) {
+        setActiveProfileId(normalizedProfile.id);
+      }
+      setProfileStatus(`Renamed profile to ${normalizedProfile.label}.`);
+    } catch (profileError) {
+      console.warn("Renaming profile locally because API save failed:", profileError);
+      setProfiles((current3) => upsertProfile(current3, updatedProfile));
+      setProfileStatus(`Renamed profile to ${updatedProfile.label} locally.`);
+    }
+  }
+  async function handleDeleteProfile(profileId) {
+    try {
+      if (isNumericIdentifier(profileId)) {
+        await apiDelete(`/profiles/${profileId}`, authToken);
+      }
+    } catch (profileError) {
+      console.warn("Deleting profile locally because API delete failed:", profileError);
+    }
     setProfiles((current3) => current3.filter((profile) => profile.id !== profileId));
     if (activeProfileId === profileId) {
       setActiveProfileId(null);
     }
     setProfileStatus("Profile deleted.");
+  }
+  function handleStartDoseEdit(dose) {
+    setEditingDoseId(dose.id);
+    setEntryDrugId(String(dose.drugId));
+    setEntryDate(dose.date);
+    setEntryEndDate(dose.endDate ?? "");
+    setEntryRoute(dose.route);
+    setEntryAmount(String(dose.amount));
+    setEntryNotes(dose.notes ?? "");
+    setEntryStatus("Editing an existing dose event.");
+    setEntryError("");
+  }
+  function handleCancelDoseEdit() {
+    setEditingDoseId(null);
+    setEntryDate(formatDateKey(/* @__PURE__ */ new Date()));
+    setEntryEndDate("");
+    setEntryAmount("");
+    setEntryNotes("");
+    setEntryStatus("");
+    setEntryError("");
+  }
+  async function handleDeleteDose(doseId) {
+    try {
+      if (isNumericIdentifier(doseId)) {
+        await apiDelete(`/doses/${doseId}`);
+      }
+    } catch (deleteError) {
+      console.warn("Deleting dose locally because API delete failed:", deleteError);
+    }
+    setDoses((current3) => current3.filter((dose) => dose.id !== doseId));
+    if (editingDoseId === doseId) {
+      handleCancelDoseEdit();
+    }
+    setWorkspaceStatus("Deleted the selected dose event.");
   }
   async function handleDoseEntrySubmit(event) {
     event.preventDefault();
@@ -49322,21 +49466,44 @@ function App() {
       notes: entryNotes.trim()
     };
     try {
-      const created = await apiPost("/doses", payload);
-      setDoses((current3) => mergeDoseEvents(current3, [normalizeDoseRecord(created, current3.length, entryDrugId)]));
-      setEntryStatus("Dose saved to the local API and added to the chart.");
+      if (editingDoseId && isNumericIdentifier(editingDoseId)) {
+        const updated = await apiPut(`/doses/${editingDoseId}`, payload, authToken);
+        setDoses(
+          (current3) => current3.map(
+            (dose, index) => dose.id === editingDoseId ? normalizeDoseRecord(updated, index, entryDrugId) : dose
+          )
+        );
+        setEntryStatus("Dose updated and the chart has been refreshed.");
+      } else if (editingDoseId) {
+        setDoses(
+          (current3) => current3.map(
+            (dose, index) => dose.id === editingDoseId ? normalizeDoseRecord({ id: editingDoseId, ...payload }, index, entryDrugId) : dose
+          )
+        );
+        setEntryStatus("Dose updated locally in the browser session.");
+      } else {
+        const created = await apiPost("/doses", payload, authToken);
+        setDoses(
+          (current3) => mergeDoseEvents(current3, [normalizeDoseRecord(created, current3.length, entryDrugId)])
+        );
+        setEntryStatus("Dose saved to the local API and added to the chart.");
+      }
     } catch (saveError) {
-      console.warn("Saving dose locally because API create failed:", saveError);
+      console.warn("Saving dose locally because API create/update failed:", saveError);
       const localDose = normalizeDoseRecord(
         {
-          id: `local-${entryDrugId}-${entryDate}-${entryRoute}-${amount}`,
+          id: editingDoseId || `local-${entryDrugId}-${entryDate}-${entryRoute}-${amount}`,
           ...payload
         },
         doses.length,
         entryDrugId
       );
-      setDoses((current3) => mergeDoseEvents(current3, [localDose]));
-      setEntryStatus("Dose saved locally in the browser session and added to the chart.");
+      setDoses(
+        (current3) => editingDoseId ? current3.map((dose) => dose.id === editingDoseId ? localDose : dose) : mergeDoseEvents(current3, [localDose])
+      );
+      setEntryStatus(
+        editingDoseId ? "Dose updated locally in the browser session." : "Dose saved locally in the browser session and added to the chart."
+      );
     }
     setSelectedDrugIds((current3) => {
       if (current3.includes(entryDrugId) || current3.length >= MAX_VISIBLE_DRUGS) {
@@ -49345,6 +49512,7 @@ function App() {
       return [...current3, entryDrugId];
     });
     setRoute(entryRoute);
+    setEditingDoseId(null);
     setEntryAmount("");
     setEntryEndDate("");
     setEntryNotes("");
@@ -49445,10 +49613,116 @@ function App() {
     setListError("");
     setEntryStatus("");
     setEntryError("");
+    setEditingDoseId(null);
     setProfileStatus("");
     setWorkspaceStatus("Cleared the current workspace.");
   }
+  function handlePrintReport() {
+    window.print();
+  }
+  async function handleAuth() {
+    setAuthLoading(true);
+    setAuthError("");
+    try {
+      const endpoint = authMode === "login" ? "/auth/login" : "/auth/register";
+      const body = authMode === "login" ? { email: authEmail, password: authPassword } : { name: authName, email: authEmail, password: authPassword };
+      const response = await fetch(`${API_BASE_PATH}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Authentication failed");
+      }
+      persistAuthSession(data.token, data.account);
+      setAuthToken(data.token);
+      setUser(data.account);
+      setIsAuthenticated(true);
+      setAuthEmail("");
+      setAuthPassword("");
+      setAuthName("");
+    } catch (err) {
+      setAuthError(err instanceof Error ? err.message : "Authentication failed");
+    } finally {
+      setAuthLoading(false);
+    }
+  }
+  function handleLogout() {
+    clearAuthSession();
+    setAuthToken("");
+    setUser(null);
+    setIsAuthenticated(false);
+    setProfiles([]);
+    setActiveProfileId(null);
+  }
+  (0, import_react56.useEffect)(() => {
+    if (sessionDefaults.account) {
+      setUser(sessionDefaults.account);
+    }
+  }, []);
   const canAddMore = selectedDrugIds.length < MAX_VISIBLE_DRUGS;
+  if (!authReady) {
+    return h("div", { className: "auth-container" }, h("p", null, "Restoring session..."));
+  }
+  if (!isAuthenticated) {
+    return h(
+      "div",
+      { className: "auth-container" },
+      h("h1", null, "MedGraf Account Management"),
+      h(
+        "div",
+        { className: "auth-form" },
+        h("h2", null, authMode === "login" ? "Login" : "Register"),
+        authError && h("div", { className: "error" }, authError),
+        authMode === "register" && h(
+          "input",
+          {
+            type: "text",
+            placeholder: "Name",
+            value: authName,
+            onChange: (e) => setAuthName(e.target.value)
+          }
+        ),
+        h(
+          "input",
+          {
+            type: "email",
+            placeholder: "Email",
+            value: authEmail,
+            onChange: (e) => setAuthEmail(e.target.value)
+          }
+        ),
+        h(
+          "input",
+          {
+            type: "password",
+            placeholder: "Password",
+            value: authPassword,
+            onChange: (e) => setAuthPassword(e.target.value)
+          }
+        ),
+        h(
+          "button",
+          {
+            onClick: handleAuth,
+            disabled: authLoading
+          },
+          authLoading ? "Loading..." : authMode === "login" ? "Login" : "Register"
+        ),
+        h(
+          "button",
+          { onClick: () => setAuthMode(authMode === "login" ? "register" : "login") },
+          authMode === "login" ? "Need an account? Register" : "Have an account? Login"
+        ),
+        h(
+          "p",
+          { className: "helper" },
+          "Accounts now persist medication profiles in the backend. Sign in to load and manage your saved lists."
+        )
+      )
+    );
+  }
   return h(
     "div",
     { className: "shell" },
@@ -49456,7 +49730,9 @@ function App() {
       "div",
       { className: "topbar" },
       h("a", { className: "home-link", href: "../index.html" }, "Back to home"),
-      h("span", { className: "badge" }, "Reactive Type")
+      h("span", { className: "badge" }, "Reactive Type"),
+      h("span", { className: "user-info" }, `Logged in as ${user?.name || user?.email}`),
+      h("button", { onClick: handleLogout }, "Logout")
     ),
     h(
       "section",
@@ -49834,8 +50110,17 @@ function App() {
           h(
             "button",
             { type: "submit", className: "primary-button" },
-            "Add Dose Entry"
+            editingDoseId ? "Update Dose Entry" : "Add Dose Entry"
           ),
+          editingDoseId ? h(
+            "button",
+            {
+              type: "button",
+              className: "pill-button secondary-button",
+              onClick: handleCancelDoseEdit
+            },
+            "Cancel edit"
+          ) : null,
           entryStatus ? h("p", { className: "helper success-text" }, entryStatus) : null,
           entryError ? h("p", { className: "helper error-text" }, entryError) : null
         ),
@@ -49920,6 +50205,15 @@ function App() {
               "button",
               {
                 type: "button",
+                className: "pill-button secondary-button",
+                onClick: handlePrintReport
+              },
+              "Print report"
+            ),
+            h(
+              "button",
+              {
+                type: "button",
                 className: "remove-button",
                 onClick: handleClearWorkspace
               },
@@ -49980,6 +50274,15 @@ function App() {
                       onClick: () => handleMergeProfile(profile)
                     },
                     "Add to current"
+                  ),
+                  h(
+                    "button",
+                    {
+                      type: "button",
+                      className: "pill-button secondary-button",
+                      onClick: () => handleRenameProfile(profile)
+                    },
+                    "Rename"
                   ),
                   h(
                     "button",
@@ -50079,6 +50382,39 @@ function App() {
         h(
           "section",
           { className: "panel" },
+          h(
+            "div",
+            { className: "print-report-header" },
+            h("h2", null, "Patient report"),
+            h(
+              "p",
+              null,
+              `${patientName} \xB7 ${workspaceLabel} \xB7 ${formatDisplayDate(range4.startDate)} through ${formatDisplayDate(range4.endDate)}`
+            ),
+            patientNotes ? h("p", { className: "helper" }, patientNotes) : null
+          ),
+          h(
+            "div",
+            { className: "print-summary-grid" },
+            h(
+              "article",
+              { className: "insight-card" },
+              h("span", { className: "metric-label" }, "Peak exposure"),
+              h("strong", null, `${summary.peakPercent.toFixed(1)}%`)
+            ),
+            h(
+              "article",
+              { className: "insight-card" },
+              h("span", { className: "metric-label" }, "Dose events"),
+              h("strong", null, summary.eventCount)
+            ),
+            h(
+              "article",
+              { className: "insight-card" },
+              h("span", { className: "metric-label" }, "Plotted drugs"),
+              h("strong", null, selectedDrugs.length)
+            )
+          ),
           h(
             "div",
             { className: "panel-copy" },
@@ -50310,7 +50646,8 @@ function App() {
                   h("th", null, "Drug"),
                   h("th", null, "Route"),
                   h("th", null, "Dose"),
-                  h("th", null, "% Max")
+                  h("th", null, "% Max"),
+                  h("th", null, "Actions")
                 )
               ),
               h(
@@ -50329,14 +50666,36 @@ function App() {
                     h("td", null, drug?.name ?? "Unknown drug"),
                     h("td", null, event.route),
                     h("td", null, `${event.amount.toFixed(1)} ${unit2}`),
-                    h("td", null, `${percent.toFixed(1)}%`)
+                    h("td", null, `${percent.toFixed(1)}%`),
+                    h(
+                      "td",
+                      { className: "table-actions" },
+                      h(
+                        "button",
+                        {
+                          type: "button",
+                          className: "pill-button secondary-button compact-button",
+                          onClick: () => handleStartDoseEdit(event)
+                        },
+                        "Edit"
+                      ),
+                      h(
+                        "button",
+                        {
+                          type: "button",
+                          className: "remove-button compact-button",
+                          onClick: () => handleDeleteDose(event.id)
+                        },
+                        "Delete"
+                      )
+                    )
                   );
                 }) : h(
                   "tr",
                   null,
                   h(
                     "td",
-                    { colSpan: 6 },
+                    { colSpan: 7 },
                     "No dose events match the current route and selected drug set."
                   )
                 )
@@ -50685,24 +51044,41 @@ async function searchOpenFdaDirect(query) {
     })
   );
 }
-async function apiGet(path2) {
-  return fetchJson(`${API_BASE_PATH}${path2}`);
+async function apiGet(path2, token) {
+  return fetchJson(`${API_BASE_PATH}${path2}`, token);
 }
-async function apiPost(path2, payload) {
+async function apiPost(path2, payload, token) {
+  return apiRequest(path2, "POST", payload, token);
+}
+async function apiPut(path2, payload, token) {
+  return apiRequest(path2, "PUT", payload, token);
+}
+async function apiDelete(path2, token) {
+  return apiRequest(path2, "DELETE", void 0, token);
+}
+async function apiRequest(path2, method, payload, token) {
+  const headers = {
+    "Content-Type": "application/json"
+  };
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
   const response = await fetch(`${API_BASE_PATH}${path2}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
+    method,
+    headers,
+    body: payload === void 0 ? void 0 : JSON.stringify(payload)
   });
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
+  if (response.status === 204) {
+    return null;
+  }
   return response.json();
 }
-async function fetchJson(url) {
-  const response = await fetch(url);
+async function fetchJson(url, token) {
+  const headers = token ? { Authorization: `Bearer ${token}` } : void 0;
+  const response = await fetch(url, { headers });
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
@@ -50768,6 +51144,21 @@ function loadWorkspaceFromStorage() {
     return {};
   }
 }
+function loadAuthSessionFromStorage() {
+  try {
+    const token = window.localStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
+    const accountRaw = window.localStorage.getItem(AUTH_ACCOUNT_STORAGE_KEY);
+    return {
+      token: token ?? "",
+      account: accountRaw ? JSON.parse(accountRaw) : null
+    };
+  } catch {
+    return {
+      token: "",
+      account: null
+    };
+  }
+}
 function saveProfilesToStorage(profiles) {
   try {
     window.localStorage.setItem(PROFILES_STORAGE_KEY, JSON.stringify(profiles));
@@ -50785,6 +51176,72 @@ function saveWorkspaceToStorage(workspace) {
     window.localStorage.setItem(WORKSPACE_STORAGE_KEY, JSON.stringify(workspace));
   } catch {
   }
+}
+function persistAuthSession(token, account) {
+  try {
+    window.localStorage.setItem(AUTH_TOKEN_STORAGE_KEY, token);
+    window.localStorage.setItem(AUTH_ACCOUNT_STORAGE_KEY, JSON.stringify(account));
+  } catch {
+  }
+}
+function clearAuthSession() {
+  try {
+    window.localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
+    window.localStorage.removeItem(AUTH_ACCOUNT_STORAGE_KEY);
+  } catch {
+  }
+}
+function mapApiProfileToAppProfile(profile) {
+  return {
+    id: String(profile.id),
+    name: profile.name,
+    label: profile.payload?.label ?? profile.name,
+    selectedDrugIds: profile.payload?.selectedDrugIds ?? [],
+    medicationEntries: profile.payload?.medicationEntries ?? [],
+    patientName: profile.payload?.patientName ?? "Example Patient",
+    workspaceLabel: profile.payload?.workspaceLabel ?? profile.name,
+    patientNotes: profile.payload?.patientNotes ?? "",
+    route: profile.payload?.route ?? "PO",
+    timeframe: profile.payload?.timeframe ?? "1y",
+    savedListDate: profile.payload?.savedListDate ?? profile.createdAt?.slice(0, 10) ?? "",
+    createdAt: profile.createdAt
+  };
+}
+function mapAppProfileToApiProfile(profile, accountId) {
+  return {
+    ...accountId ? { accountId } : {},
+    name: profile.label,
+    payload: {
+      label: profile.label,
+      selectedDrugIds: profile.selectedDrugIds,
+      medicationEntries: profile.medicationEntries,
+      patientName: profile.patientName,
+      workspaceLabel: profile.workspaceLabel,
+      patientNotes: profile.patientNotes,
+      route: profile.route,
+      timeframe: profile.timeframe,
+      savedListDate: profile.savedListDate,
+      createdAt: profile.createdAt
+    }
+  };
+}
+async function saveProfileToApi(profile, profiles, user, token) {
+  const existing = profiles.find((item) => item.id === profile.id);
+  const payload = mapAppProfileToApiProfile(profile, user?.id);
+  if (existing && isNumericIdentifier(existing.id)) {
+    const updated = await apiPut(`/profiles/${existing.id}`, payload, token);
+    return mapApiProfileToAppProfile(updated);
+  }
+  const created = user?.id ? await apiPost(`/accounts/${user.id}/profiles`, payload, token) : await apiPost("/profiles", payload, token);
+  return mapApiProfileToAppProfile(created);
+}
+function upsertProfile(profiles, nextProfile) {
+  const byId = new Map(profiles.map((profile) => [String(profile.id), profile]));
+  byId.set(String(nextProfile.id), normalizeStoredProfiles([nextProfile])[0]);
+  return Array.from(byId.values()).sort((left, right) => left.label.localeCompare(right.label));
+}
+function isNumericIdentifier(value) {
+  return /^[0-9]+$/.test(String(value));
 }
 function searchCatalogLocally(drugs, term, selectedDrugIds) {
   const query = term.trim().toLowerCase();

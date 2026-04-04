@@ -26,6 +26,7 @@
     "dev": "npm run dev:web",
     "dev:web": "npm run build:web && node scripts/dev-static-server.mjs",
     "dev:api": "npm --workspace @workspace/api-server run dev",
+    "db:init": "npm --workspace @workspace/api-server run db:init",
     "dev:full": "concurrently \"npm run dev:api\" \"npm run dev:web\" \"npm run watch:web\"",
     "build": "npm run build:all",
     "build:web": "esbuild frontend-react/app.js --bundle --format=esm --platform=browser --outfile=frontend-react/app.bundle.js",

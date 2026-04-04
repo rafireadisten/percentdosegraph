@@ -8,10 +8,25 @@ const rootDir = path.resolve(__dirname, "../../../../");
 const dataDir = path.join(rootDir, "data");
 
 const filePaths = {
+  accounts: path.join(rootDir, "accounts.json"),
   drugs: path.join(dataDir, "drugs.json"),
   doses: path.join(dataDir, "doses.json"),
   profiles: path.join(rootDir, "profiles.json"),
 } as const;
+
+const DEFAULT_ACCOUNT_EMAIL = "default@percentdosegraph.local";
+const DEFAULT_ACCOUNT_NAME = "Default Workspace Account";
+
+type AccountRecord = {
+  id: number;
+  name: string;
+  email: string;
+  passwordHash: string;
+  role?: string;
+  isActive?: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
 
 type DrugRecord = {
   id: number;
@@ -41,6 +56,7 @@ type ProfilePayload = {
 
 type ProfileRecord = {
   id: number;
+  accountId: number;
   name: string;
   payload: ProfilePayload;
   createdAt: string;
@@ -48,10 +64,13 @@ type ProfileRecord = {
 };
 
 type EntityMap = {
+  accounts: AccountRecord;
   drugs: DrugRecord;
   doses: DoseRecord;
   profiles: ProfileRecord;
 };
+
+export type PublicAccount = Omit<AccountRecord, "passwordHash">;
 
 const hasDatabase = Boolean(process.env.DATABASE_URL);
 
@@ -68,10 +87,25 @@ async function writeCollection<K extends keyof EntityMap>(key: K, entries: Entit
 }
 
 function normalizeRecord<K extends keyof EntityMap>(key: K, entry: EntityMap[K], index: number) {
+  if (key === "accounts") {
+    const account = entry as AccountRecord;
+    return {
+      id: Number(account.id ?? index + 1),
+      name: account.name ?? `Account ${index + 1}`,
+      email: account.email ?? `account-${index + 1}@percentdosegraph.local`,
+      passwordHash: account.passwordHash ?? "",
+      role: account.role ?? "user",
+      isActive: account.isActive ?? true,
+      createdAt: account.createdAt ?? new Date().toISOString(),
+      updatedAt: account.updatedAt ?? account.createdAt ?? new Date().toISOString(),
+    } as EntityMap[K];
+  }
+
   if (key === "profiles") {
     const profile = entry as ProfileRecord;
     return {
       id: Number(profile.id ?? index + 1),
+      accountId: Number(profile.accountId ?? 1),
       name: profile.name,
       payload: profile.payload ?? {},
       createdAt: profile.createdAt ?? new Date().toISOString(),
@@ -111,6 +145,176 @@ function nextId(entries: Array<{ id: number }>) {
 
 async function dbModule() {
   return import("@workspace/db");
+}
+
+export async function listAccounts() {
+  if (hasDatabase) {
+    const { db, accountsTable } = await dbModule();
+    return db.select().from(accountsTable).orderBy(accountsTable.name);
+  }
+
+  const accounts = await readCollection("accounts");
+  return accounts.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export async function createAccount(input: Omit<AccountRecord, "id" | "createdAt" | "updatedAt">) {
+  if (hasDatabase) {
+    const { db, accountsTable } = await dbModule();
+    const [account] = await db.insert(accountsTable).values(input).returning();
+    return account;
+  }
+
+  const accounts = await readCollection("accounts");
+  const timestamp = new Date().toISOString();
+  const account = {
+    id: nextId(accounts),
+    ...input,
+    createdAt: timestamp,
+    updatedAt: timestamp,
+  };
+  accounts.push(account);
+  await writeCollection("accounts", accounts);
+  return account;
+}
+
+export async function getAccountById(id: number) {
+  if (hasDatabase) {
+    const { db, accountsTable } = await dbModule();
+    const { eq } = await import("drizzle-orm");
+    const [account] = await db.select().from(accountsTable).where(eq(accountsTable.id, id));
+    return account ?? null;
+  }
+
+  const accounts = await readCollection("accounts");
+  return accounts.find((account) => account.id === id) ?? null;
+}
+
+export async function getAccountByEmail(email: string) {
+  if (hasDatabase) {
+    const { db, accountsTable } = await dbModule();
+    const { eq } = await import("drizzle-orm");
+    const [account] = await db.select().from(accountsTable).where(eq(accountsTable.email, email));
+    return account ?? null;
+  }
+
+  const accounts = await readCollection("accounts");
+  return accounts.find((account) => account.email === email) ?? null;
+}
+
+export async function updateAccountById(
+  id: number,
+  input: Partial<Omit<AccountRecord, "id" | "createdAt" | "updatedAt">>
+) {
+  if (hasDatabase) {
+    const { db, accountsTable } = await dbModule();
+    const { eq } = await import("drizzle-orm");
+    const [account] = await db
+      .update(accountsTable)
+      .set({
+        ...input,
+        updatedAt: new Date(),
+      })
+      .where(eq(accountsTable.id, id))
+      .returning();
+    return account ?? null;
+  }
+
+  const accounts = await readCollection("accounts");
+  const index = accounts.findIndex((account) => account.id === id);
+  if (index === -1) {
+    return null;
+  }
+
+  const nextAccount = {
+    ...accounts[index],
+    ...input,
+    updatedAt: new Date().toISOString(),
+  };
+  accounts[index] = normalizeRecord("accounts", nextAccount as EntityMap["accounts"], index);
+  await writeCollection("accounts", accounts);
+  return accounts[index];
+}
+
+export async function deleteAccountById(id: number) {
+  if (hasDatabase) {
+    const { db, accountsTable } = await dbModule();
+    const { eq } = await import("drizzle-orm");
+    const [account] = await db.delete(accountsTable).where(eq(accountsTable.id, id)).returning();
+    return account ?? null;
+  }
+
+  const accounts = await readCollection("accounts");
+  const index = accounts.findIndex((account) => account.id === id);
+  if (index === -1) {
+    return null;
+  }
+
+  const profiles = await readCollection("profiles");
+  const filteredProfiles = profiles.filter((profile) => profile.accountId !== id);
+  if (filteredProfiles.length !== profiles.length) {
+    await writeCollection("profiles", filteredProfiles);
+  }
+
+  const [account] = accounts.splice(index, 1);
+  await writeCollection("accounts", accounts);
+  return account;
+}
+
+export async function ensureDefaultAccount() {
+  if (hasDatabase) {
+    const { db, accountsTable } = await dbModule();
+    const { eq } = await import("drizzle-orm");
+    const [existing] = await db
+      .select()
+      .from(accountsTable)
+      .where(eq(accountsTable.email, DEFAULT_ACCOUNT_EMAIL));
+
+    if (existing) {
+      return existing;
+    }
+
+    const [account] = await db
+      .insert(accountsTable)
+      .values({
+        name: DEFAULT_ACCOUNT_NAME,
+        email: DEFAULT_ACCOUNT_EMAIL,
+        passwordHash: "",
+        role: "system",
+        isActive: true,
+      })
+      .returning();
+    return account;
+  }
+
+  const accounts = await readCollection("accounts");
+  const existing = accounts.find((account) => account.email === DEFAULT_ACCOUNT_EMAIL);
+  if (existing) {
+    return existing;
+  }
+
+  const timestamp = new Date().toISOString();
+  const account = {
+    id: nextId(accounts),
+    name: DEFAULT_ACCOUNT_NAME,
+    email: DEFAULT_ACCOUNT_EMAIL,
+    passwordHash: "",
+    role: "system",
+    isActive: true,
+    createdAt: timestamp,
+    updatedAt: timestamp,
+  };
+  accounts.push(account);
+  await writeCollection("accounts", accounts);
+  return account;
+}
+
+export function sanitizeAccount(account: AccountRecord | null) {
+  if (!account) {
+    return null;
+  }
+
+  const { passwordHash, ...publicAccount } = account;
+  return publicAccount;
 }
 
 export async function listDrugs() {
@@ -209,20 +413,75 @@ export async function deleteDoseById(id: number) {
   return dose;
 }
 
-export async function listProfiles() {
+export async function updateDoseById(
+  id: number,
+  input: Partial<Omit<DoseRecord, "id">>
+) {
+  if (hasDatabase) {
+    const { db, dosesTable } = await dbModule();
+    const { eq } = await import("drizzle-orm");
+    const [dose] = await db.update(dosesTable).set(input).where(eq(dosesTable.id, id)).returning();
+    return dose ?? null;
+  }
+
+  const doses = await readCollection("doses");
+  const index = doses.findIndex((dose) => dose.id === id);
+  if (index === -1) {
+    return null;
+  }
+
+  const current = doses[index];
+  const nextDose = {
+    ...current,
+    ...input,
+  };
+  doses[index] = normalizeRecord("doses", nextDose as EntityMap["doses"], index);
+  await writeCollection("doses", doses);
+  return doses[index];
+}
+
+export async function listProfiles(accountId?: number) {
   if (hasDatabase) {
     const { db, profilesTable } = await dbModule();
+    const { eq } = await import("drizzle-orm");
+    if (accountId) {
+      return db
+        .select()
+        .from(profilesTable)
+        .where(eq(profilesTable.accountId, accountId))
+        .orderBy(profilesTable.name);
+    }
     return db.select().from(profilesTable).orderBy(profilesTable.name);
   }
 
   const profiles = await readCollection("profiles");
-  return profiles.sort((a, b) => a.name.localeCompare(b.name));
+  return profiles
+    .filter((profile) => (accountId ? profile.accountId === accountId : true))
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-export async function createProfile(input: Omit<ProfileRecord, "id" | "createdAt" | "updatedAt">) {
+export async function getProfileById(id: number) {
   if (hasDatabase) {
     const { db, profilesTable } = await dbModule();
-    const [profile] = await db.insert(profilesTable).values(input).returning();
+    const { eq } = await import("drizzle-orm");
+    const [profile] = await db.select().from(profilesTable).where(eq(profilesTable.id, id));
+    return profile ?? null;
+  }
+
+  const profiles = await readCollection("profiles");
+  return profiles.find((profile) => profile.id === id) ?? null;
+}
+
+export async function createProfile(
+  input: Omit<ProfileRecord, "id" | "createdAt" | "updatedAt" | "accountId"> & {
+    accountId?: number;
+  }
+) {
+  const accountId = input.accountId ?? (await ensureDefaultAccount()).id;
+
+  if (hasDatabase) {
+    const { db, profilesTable } = await dbModule();
+    const [profile] = await db.insert(profilesTable).values({ ...input, accountId }).returning();
     return profile;
   }
 
@@ -231,6 +490,7 @@ export async function createProfile(input: Omit<ProfileRecord, "id" | "createdAt
   const profile = {
     id: nextId(profiles),
     ...input,
+    accountId,
     createdAt: timestamp,
     updatedAt: timestamp,
   };

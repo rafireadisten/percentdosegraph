@@ -1,10 +1,12 @@
 import { Router, type Request } from "express";
+import passport from "passport";
 import { CreateProfileBody, UpdateProfileBody } from "@workspace/api-zod";
 import type { Logger } from "pino";
 import logger from "../lib/logger.js";
 import {
   createProfile,
   deleteProfileById,
+  getProfileById,
   listProfiles,
   updateProfileById,
 } from "../lib/store.js";
@@ -17,9 +19,32 @@ function getLogger(req: Request) {
   return (req as LoggedRequest).log ?? logger;
 }
 
-router.get("/profiles", async (req, res) => {
+function canAccessAccount(req: Request, accountId?: number) {
+  const user = req.user as { id?: number; role?: string } | undefined;
+  if (!accountId) {
+    return true;
+  }
+
+  return user?.role === "admin" || user?.role === "system" || user?.id === accountId;
+}
+
+router.get("/profiles", passport.authenticate("bearer", { session: false }), async (req, res) => {
   try {
-    const profiles = await listProfiles();
+    const accountId = req.query.accountId
+      ? Number.parseInt(String(req.query.accountId), 10)
+      : undefined;
+
+    if (req.query.accountId && Number.isNaN(accountId)) {
+      res.status(400).json({ error: "Invalid accountId" });
+      return;
+    }
+
+    if (!canAccessAccount(req, accountId)) {
+      res.status(403).json({ error: "Not authorized for this account" });
+      return;
+    }
+
+    const profiles = await listProfiles(accountId);
     res.json(profiles);
   } catch (err) {
     getLogger(req).error({ err }, "Failed to list profiles");
@@ -27,11 +52,16 @@ router.get("/profiles", async (req, res) => {
   }
 });
 
-router.post("/profiles", async (req, res) => {
+router.post("/profiles", passport.authenticate("bearer", { session: false }), async (req, res) => {
   try {
     const parsed = CreateProfileBody.safeParse(req.body);
     if (!parsed.success) {
       res.status(400).json({ error: parsed.error.message });
+      return;
+    }
+
+    if (!canAccessAccount(req, parsed.data.accountId)) {
+      res.status(403).json({ error: "Not authorized for this account" });
       return;
     }
 
@@ -43,11 +73,22 @@ router.post("/profiles", async (req, res) => {
   }
 });
 
-router.put("/profiles/:id", async (req, res) => {
+router.put("/profiles/:id", passport.authenticate("bearer", { session: false }), async (req, res) => {
   try {
     const id = Number.parseInt(req.params.id, 10);
     if (Number.isNaN(id)) {
       res.status(400).json({ error: "Invalid id" });
+      return;
+    }
+
+    const existing = await getProfileById(id);
+    if (!existing) {
+      res.status(404).json({ error: "Profile not found" });
+      return;
+    }
+
+    if (!canAccessAccount(req, existing.accountId)) {
+      res.status(403).json({ error: "Not authorized for this account" });
       return;
     }
 
@@ -57,11 +98,12 @@ router.put("/profiles/:id", async (req, res) => {
       return;
     }
 
-    const profile = await updateProfileById(id, parsed.data);
-    if (!profile) {
-      res.status(404).json({ error: "Profile not found" });
+    if (!canAccessAccount(req, parsed.data.accountId ?? existing.accountId)) {
+      res.status(403).json({ error: "Not authorized for this account" });
       return;
     }
+
+    const profile = await updateProfileById(id, parsed.data);
 
     res.json(profile);
   } catch (err) {
@@ -70,7 +112,7 @@ router.put("/profiles/:id", async (req, res) => {
   }
 });
 
-router.delete("/profiles/:id", async (req, res) => {
+router.delete("/profiles/:id", passport.authenticate("bearer", { session: false }), async (req, res) => {
   try {
     const id = Number.parseInt(req.params.id, 10);
     if (Number.isNaN(id)) {
@@ -78,12 +120,18 @@ router.delete("/profiles/:id", async (req, res) => {
       return;
     }
 
-    const deletedProfile = await deleteProfileById(id);
-    if (!deletedProfile) {
+    const existing = await getProfileById(id);
+    if (!existing) {
       res.status(404).json({ error: "Profile not found" });
       return;
     }
 
+    if (!canAccessAccount(req, existing.accountId)) {
+      res.status(403).json({ error: "Not authorized for this account" });
+      return;
+    }
+
+    const deletedProfile = await deleteProfileById(id);
     res.json(deletedProfile);
   } catch (err) {
     getLogger(req).error({ err }, "Failed to delete profile");

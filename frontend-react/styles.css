@@ -555,6 +555,29 @@ textarea {
   font-size: 0.82rem;
 }
 
+.print-report-header {
+  margin-bottom: 1rem;
+}
+
+.print-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.compact-button {
+  padding: 0.5rem 0.7rem;
+  min-width: auto;
+  font-size: 0.85rem;
+}
+
 .hidden-input {
   display: none;
 }
@@ -566,7 +589,8 @@ textarea {
   }
 
   .metrics,
-  .insights {
+  .insights,
+  .print-summary-grid {
     grid-template-columns: 1fr;
   }
 
@@ -586,4 +610,106 @@ textarea {
   .tall-chart {
     height: 460px;
   }
+}
+
+@media print {
+  body {
+    background: white;
+  }
+
+  .shell {
+    width: 100%;
+    padding: 0;
+  }
+
+  .topbar,
+  .selector-panel,
+  .insights,
+  .table-actions,
+  .remove-button,
+  .pill-button,
+  .home-link,
+  .badge {
+    display: none !important;
+  }
+
+  .hero,
+  .layout,
+  .metrics,
+  .print-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-panel,
+  .panel {
+    box-shadow: none;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: white;
+    break-inside: avoid;
+  }
+
+  .chart-panel,
+  .tall-chart {
+    height: 360px;
+  }
+
+  .table-wrap {
+    overflow: visible;
+  }
+}
+
+/* Auth styles */
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.auth-form {
+  background: var(--panel);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-form input {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.auth-form button {
+  padding: 0.75rem;
+  background: var(--line);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.auth-form button:hover {
+  background: #0a7a65;
+}
+
+.auth-form button:disabled {
+  background: var(--muted);
+  cursor: not-allowed;
+}
+
+.auth-form .error {
+  color: var(--danger);
+  font-size: 0.9rem;
+}
+
+.user-info {
+  font-size: 0.9rem;
+  color: var(--muted);
 }

@@ -53,6 +53,48 @@ percentdosegraph/
 5. View trends in the chart panel
 6. Save profiles for different patients/medications
 
+## Backend Persistence
+
+The API server supports two persistence modes:
+
+- `file` mode: default fallback using `data/drugs.json`, `data/doses.json`, and `profiles.json`
+- `database` mode: enabled when `DATABASE_URL` is set
+
+When `DATABASE_URL` is present, the API now:
+
+- creates the required `drugs`, `doses`, and `profiles` tables automatically on boot
+- seeds the database one time from the existing JSON files when the tables are empty
+- exposes the current persistence mode at `GET /api/health`
+
+Useful commands:
+
+```bash
+npm run dev:api
+npm run db:init
+```
+
+Optional environment variables:
+
+- `DATABASE_URL`: PostgreSQL connection string
+- `PERSISTENCE_SEED_ON_BOOT=false`: skip one-time JSON seeding during startup
+
+### Backend Accounts And Profiles
+
+Medication profiles can now belong to persisted backend accounts.
+
+Core endpoints:
+
+- `GET /api/accounts`
+- `POST /api/accounts`
+- `GET /api/accounts/:id`
+- `PUT /api/accounts/:id`
+- `DELETE /api/accounts/:id`
+- `GET /api/accounts/:id/profiles`
+- `POST /api/accounts/:id/profiles`
+- `GET /api/profiles?accountId=:id`
+
+For backward compatibility, `POST /api/profiles` still works and will attach the profile to the default backend account when no `accountId` is provided.
+
 ## Data Export/Import
 
 - **Export JSON**: Complete backup of settings and dose events

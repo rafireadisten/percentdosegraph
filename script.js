@@ -1,5 +1,7 @@
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const API_BASE_PATH = resolveApiBasePath();
+const AUTH_TOKEN_STORAGE_KEY = "percentdosegraph:static-auth-token";
+const AUTH_ACCOUNT_STORAGE_KEY = "percentdosegraph:static-auth-account";
 
 let drugReferenceLibrary = [];
 
@@ -19,6 +21,11 @@ const state = {
   },
   doseEvents: [],
   profiles: [],
+  auth: {
+    token: "",
+    account: null,
+    mode: "login",
+  },
 };
 
 function resolveApiBasePath() {
@@ -68,8 +75,19 @@ const elements = {
   saveProfileButton: document.getElementById("saveProfileButton"),
   loadProfileButton: document.getElementById("loadProfileButton"),
   profileList: document.getElementById("profileList"),
+  authForm: document.getElementById("authForm"),
+  authNameLabel: document.getElementById("authNameLabel"),
+  authName: document.getElementById("authName"),
+  authEmail: document.getElementById("authEmail"),
+  authPassword: document.getElementById("authPassword"),
+  authSubmitButton: document.getElementById("authSubmitButton"),
+  authToggleButton: document.getElementById("authToggleButton"),
+  authLogoutButton: document.getElementById("authLogoutButton"),
+  authStatusText: document.getElementById("authStatusText"),
+  authMessage: document.getElementById("authMessage"),
 };
 
+restoreAuthSession();
 syncFormFromState();
 initialize();
 
@@ -136,6 +154,22 @@ elements.loadProfileButton.addEventListener("click", async () => {
   await loadProfiles();
 });
 
+elements.authForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  await handleAuthSubmit();
+});
+
+elements.authToggleButton.addEventListener("click", () => {
+  state.auth.mode = state.auth.mode === "login" ? "register" : "login";
+  renderAuthState();
+});
+
+elements.authLogoutButton.addEventListener("click", () => {
+  clearAuthSession();
+  renderAuthState();
+  renderProfileList();
+});
+
 elements.doseForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -195,6 +229,7 @@ elements.eventsTableBody.addEventListener("click", async (event) => {
 });
 
 async function initialize() {
+  await hydrateAuthSession();
   await loadDrugReferenceLibrary();
   await loadDoseEvents();
   await loadProfiles();
@@ -257,6 +292,31 @@ function render() {
   renderMetrics(metrics);
   renderNarrative(range, metrics);
   renderChart(chartPoints);
+  renderAuthState();
+}
+
+function renderAuthState() {
+  const isAuthenticated = Boolean(state.auth.token && state.auth.account);
+  const mode = state.auth.mode;
+  const account = state.auth.account;
+
+  elements.authNameLabel.classList.toggle("hidden", mode !== "register" || isAuthenticated);
+  elements.authToggleButton.classList.toggle("hidden", isAuthenticated);
+  elements.authLogoutButton.classList.toggle("hidden", !isAuthenticated);
+  elements.authSubmitButton.classList.toggle("hidden", isAuthenticated);
+  elements.authEmail.disabled = isAuthenticated;
+  elements.authPassword.disabled = isAuthenticated;
+  elements.authName.disabled = isAuthenticated;
+  elements.authSubmitButton.textContent = mode === "login" ? "Login" : "Register";
+  elements.authToggleButton.textContent =
+    mode === "login" ? "Need an account?" : "Have an account?";
+
+  if (isAuthenticated) {
+    elements.authStatusText.textContent = `Signed in as ${account.name || account.email}. Backend profile persistence is active.`;
+  } else {
+    elements.authStatusText.textContent =
+      "Not signed in. Profiles will stay local until you authenticate.";
+  }
 }
 
 function syncFormFromState() {
@@ -767,7 +827,11 @@ async function importDataFromJson(file) {
 
 async function loadProfiles() {
   try {
-    const apiProfiles = await apiGet("/profiles");
+    const apiPath =
+      state.auth.account?.id
+        ? `/accounts/${state.auth.account.id}/profiles`
+        : "/profiles";
+    const apiProfiles = await apiGet(apiPath);
     state.profiles = apiProfiles.map(normalizeProfile);
   } catch (error) {
     console.warn("Falling back to profiles.json:", error);
@@ -803,7 +867,12 @@ async function saveProfile() {
   };
 
   try {
-    const createdProfile = await apiPost("/profiles", profilePayload);
+    const createdProfile = await apiPost(
+      state.auth.account?.id
+        ? `/accounts/${state.auth.account.id}/profiles`
+        : "/profiles",
+      profilePayload
+    );
     state.profiles.push(normalizeProfile(createdProfile));
   } catch (error) {
     console.warn("Saving profile locally because API create failed:", error);
@@ -922,29 +991,145 @@ function normalizeProfile(profile) {
   };
 }
 
-async function apiGet(path) {
-  const response = await fetch(buildApiUrl(path));
+async function hydrateAuthSession() {
+  if (!state.auth.token) {
+    renderAuthState();
+    return;
+  }
+
+  try {
+    const payload = await apiGet("/auth/me");
+    state.auth.account = payload.account;
+    persistAuthSession(state.auth.token, payload.account);
+  } catch (error) {
+    console.warn("Clearing stale static auth session:", error);
+    clearAuthSession();
+  }
+
+  renderAuthState();
+}
+
+async function handleAuthSubmit() {
+  const mode = state.auth.mode;
+  const email = elements.authEmail.value.trim().toLowerCase();
+  const password = elements.authPassword.value;
+  const name = elements.authName.value.trim();
+
+  if (!email || !password || (mode === "register" && !name)) {
+    setAuthMessage("Complete the required account fields first.", "error");
+    return;
+  }
+
+  if (mode === "register" && password.length < 8) {
+    setAuthMessage("Passwords need at least 8 characters.", "error");
+    return;
+  }
+
+  elements.authSubmitButton.disabled = true;
+  setAuthMessage(mode === "login" ? "Signing in..." : "Creating your account...");
+
+  try {
+    const endpoint = mode === "login" ? "/auth/login" : "/auth/register";
+    const payload =
+      mode === "login"
+        ? { email, password }
+        : { name, email, password };
+    const authPayload = await apiPost(endpoint, payload, { skipAuth: true });
+
+    state.auth.token = authPayload.token;
+    state.auth.account = authPayload.account;
+    persistAuthSession(authPayload.token, authPayload.account);
+    elements.authPassword.value = "";
+    if (mode === "register") {
+      elements.authName.value = "";
+      state.auth.mode = "login";
+    }
+
+    setAuthMessage("Signed in. Backend profile persistence is ready.", "success");
+    renderAuthState();
+    await loadProfiles();
+  } catch (error) {
+    setAuthMessage(error.message || "Authentication failed.", "error");
+  } finally {
+    elements.authSubmitButton.disabled = false;
+  }
+}
+
+function setAuthMessage(message, tone = "") {
+  elements.authMessage.textContent = message;
+  elements.authMessage.className = `auth-message${tone ? ` ${tone}` : ""}`;
+}
+
+function restoreAuthSession() {
+  try {
+    state.auth.token = window.localStorage.getItem(AUTH_TOKEN_STORAGE_KEY) || "";
+    const rawAccount = window.localStorage.getItem(AUTH_ACCOUNT_STORAGE_KEY);
+    state.auth.account = rawAccount ? JSON.parse(rawAccount) : null;
+  } catch {
+    state.auth.token = "";
+    state.auth.account = null;
+  }
+}
+
+function persistAuthSession(token, account) {
+  try {
+    window.localStorage.setItem(AUTH_TOKEN_STORAGE_KEY, token);
+    window.localStorage.setItem(AUTH_ACCOUNT_STORAGE_KEY, JSON.stringify(account));
+  } catch {
+    // ignore storage errors
+  }
+}
+
+function clearAuthSession() {
+  try {
+    window.localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
+    window.localStorage.removeItem(AUTH_ACCOUNT_STORAGE_KEY);
+  } catch {
+    // ignore storage errors
+  }
+
+  state.auth.token = "";
+  state.auth.account = null;
+  setAuthMessage("Signed out.");
+}
+
+async function apiGet(path, options) {
+  const response = await fetch(buildApiUrl(path), {
+    headers: buildApiHeaders(options),
+  });
   return readApiResponse(response);
 }
 
-async function apiPost(path, body) {
+async function apiPost(path, body, options) {
   const response = await fetch(buildApiUrl(path), {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: buildApiHeaders(options),
     body: JSON.stringify(body),
   });
 
   return readApiResponse(response);
 }
 
-async function apiDelete(path) {
+async function apiDelete(path, options) {
   const response = await fetch(buildApiUrl(path), {
     method: "DELETE",
+    headers: buildApiHeaders(options),
   });
 
   return readApiResponse(response);
+}
+
+function buildApiHeaders(options = {}) {
+  const headers = {};
+  if (!options.noJson) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  if (!options.skipAuth && state.auth.token) {
+    headers.Authorization = `Bearer ${state.auth.token}`;
+  }
+
+  return headers;
 }
 
 function buildApiUrl(path) {

@@ -19,7 +19,15 @@ export const LogDoseBody = z.object({
   notes: z.string().optional()
 });
 
+export const UpdateDoseBody = LogDoseBody.partial().refine(
+  (value) => Object.keys(value).length > 0,
+  {
+    message: "At least one field is required"
+  }
+);
+
 export const CreateProfileBody = z.object({
+  accountId: z.number().int().positive().optional(),
   name: z.string().min(1),
   payload: z.record(z.any())
 });
@@ -30,3 +38,23 @@ export const UpdateProfileBody = CreateProfileBody.partial().refine(
     message: "At least one field is required"
   }
 );
+
+export const CreateAccountBody = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+  password: z.string().min(8),
+  role: z.string().min(1).optional(),
+  isActive: z.boolean().optional()
+});
+
+export const UpdateAccountBody = CreateAccountBody.partial().refine(
+  (value) => Object.keys(value).length > 0,
+  {
+    message: "At least one field is required"
+  }
+);
+
+export const LoginBody = z.object({
+  email: z.string().email(),
+  password: z.string().min(1)
+});

@@ -1,8 +1,8 @@
 import { Router, type Request } from "express";
-import { LogDoseBody } from "@workspace/api-zod";
+import { LogDoseBody, UpdateDoseBody } from "@workspace/api-zod";
 import type { Logger } from "pino";
 import logger from "../lib/logger.js";
-import { createDose, deleteDoseById, listDoses } from "../lib/store.js";
+import { createDose, deleteDoseById, listDoses, updateDoseById } from "../lib/store.js";
 
 type LoggedRequest = Request & { log?: Logger };
 
@@ -35,6 +35,33 @@ router.post("/doses", async (req, res) => {
   } catch (err) {
     getLogger(req).error({ err }, "Failed to create dose");
     res.status(500).json({ error: "Failed to create dose" });
+  }
+});
+
+router.put("/doses/:id", async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) {
+      res.status(400).json({ error: "Invalid id" });
+      return;
+    }
+
+    const parsed = UpdateDoseBody.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ error: parsed.error.message });
+      return;
+    }
+
+    const dose = await updateDoseById(id, parsed.data);
+    if (!dose) {
+      res.status(404).json({ error: "Dose not found" });
+      return;
+    }
+
+    res.json(dose);
+  } catch (err) {
+    getLogger(req).error({ err }, "Failed to update dose");
+    res.status(500).json({ error: "Failed to update dose" });
   }
 });
 

@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Test Pharmacist",
+    "email": "test.pharmacist@example.com",
+    "passwordHash": "",
+    "role": "user",
+    "isActive": true,
+    "createdAt": "2026-04-04T14:48:17.353Z",
+    "updatedAt": "2026-04-04T14:48:17.353Z"
+  },
+  {
+    "id": 2,
+    "name": "Auth Smoke",
+    "email": "auth.smoke@example.com",
+    "passwordHash": "$2a$12$Uq5DHLEWEYgVDK1MIPXDNOZj6zM.5KJmvifm3v7q5syi9oqzjJU5u",
+    "role": "user",
+    "isActive": true,
+    "createdAt": "2026-04-04T15:37:19.534Z",
+    "updatedAt": "2026-04-04T15:37:19.534Z"
+  },
+  {
+    "id": 3,
+    "name": "Frontend Wireup",
+    "email": "wireup.frontend@example.com",
+    "passwordHash": "$2a$12$X/PD.OiT8ofReeIOKiuXdOf8XdTNAHvo1DK0n5JwK.DnT93OfzZrm",
+    "role": "user",
+    "isActive": true,
+    "createdAt": "2026-04-04T15:49:36.797Z",
+    "updatedAt": "2026-04-04T15:49:36.797Z"
+  }
+]

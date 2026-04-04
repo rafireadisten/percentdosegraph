@@ -194,7 +194,35 @@
         <section class="panel profiles-panel">
           <div class="panel-header">
             <h2>Medication Profiles</h2>
-            <p>Save and load named medication snapshots for timeline comparison.</p>
+            <p>Save and load named medication snapshots for timeline comparison. Sign in to persist profiles in the backend account store.</p>
+          </div>
+
+          <div class="auth-panel">
+            <div class="auth-panel-header">
+              <h3>Account</h3>
+              <p id="authStatusText">Not signed in. Profiles will stay local until you authenticate.</p>
+            </div>
+
+            <form id="authForm" class="auth-grid">
+              <label id="authNameLabel" class="auth-name-field hidden">
+                Name
+                <input id="authName" name="authName" type="text" placeholder="Your name" />
+              </label>
+              <label>
+                Email
+                <input id="authEmail" name="authEmail" type="email" placeholder="you@example.com" />
+              </label>
+              <label>
+                Password
+                <input id="authPassword" name="authPassword" type="password" placeholder="Minimum 8 characters" />
+              </label>
+              <div class="auth-actions">
+                <button id="authSubmitButton" type="submit" class="secondary-button">Login</button>
+                <button id="authToggleButton" type="button" class="secondary-button">Need an account?</button>
+                <button id="authLogoutButton" type="button" class="secondary-button hidden">Logout</button>
+              </div>
+              <p id="authMessage" class="auth-message"></p>
+            </form>
           </div>
 
           <div class="profile-controls">

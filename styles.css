@@ -33,6 +33,10 @@ select {
   font: inherit;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .app-shell {
   width: min(1400px, calc(100vw - 32px));
   margin: 0 auto;
@@ -370,6 +374,48 @@ canvas {
   align-items: end;
   margin-bottom: 18px;
   flex-wrap: wrap;
+}
+
+.auth-panel {
+  margin-bottom: 18px;
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: rgba(255, 252, 247, 0.84);
+}
+
+.auth-panel-header {
+  margin-bottom: 14px;
+}
+
+.auth-panel-header h3,
+.auth-panel-header p {
+  margin-bottom: 6px;
+}
+
+.auth-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.auth-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.auth-message {
+  min-height: 1.4em;
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.auth-message.error {
+  color: var(--danger);
+}
+
+.auth-message.success {
+  color: var(--accent);
 }
 
 .profile-controls label {
