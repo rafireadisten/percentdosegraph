@@ -23,15 +23,34 @@
     "lib/api-zod"
   ],
   "scripts": {
+    "dev": "npm run dev:web",
     "dev:web": "npm run build:web && node scripts/dev-static-server.mjs",
     "dev:api": "npm --workspace @workspace/api-server run dev",
+    "dev:full": "concurrently \"npm run dev:api\" \"npm run dev:web\" \"npm run watch:web\"",
+    "build": "npm run build:all",
     "build:web": "esbuild frontend-react/app.js --bundle --format=esm --platform=browser --outfile=frontend-react/app.bundle.js",
     "build:api": "npm --workspace @workspace/api-server run build",
-    "build:all": "npm run build:web && npm run build:api"
+    "build:all": "npm run build:web && npm run build:api",
+    "build:deploy": "npm run build:all && cp frontend-react/app.bundle.js deploy/ && cp frontend-react/index.html deploy/ && cp frontend-react/styles.css deploy/",
+    "watch:web": "nodemon --watch frontend-react --ext js,css --exec \"npm run build:web\"",
+    "start": "npm run dev:full",
+    "lint": "echo 'Linting not yet configured - add ESLint'",
+    "test": "echo 'Testing not yet configured - add Jest/Vitest'",
+    "clean": "rm -rf node_modules/**/dist node_modules/**/build frontend-react/app.bundle.js artifacts/api-server/dist",
+    "precommit": "npm run lint && npm run test && npm run build:all",
+    "auto-build": "npm run build:all && echo '✅ Auto-build completed successfully'",
+    "auto-deploy": "npm run build:deploy && echo '🚀 Auto-deploy to /deploy folder completed'",
+    "watch": "node scripts/auto-build.mjs",
+    "prepare": "husky"
   },
   "dependencies": {
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "recharts": "^3.8.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "husky": "^9.1.7",
+    "nodemon": "^3.1.7"
   }
 }

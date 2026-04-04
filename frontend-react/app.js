@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Brush,
@@ -17,6 +17,11 @@ const h = React.createElement;
 const MAX_VISIBLE_DRUGS = 20;
 const API_BASE_PATH = resolveApiBasePath();
 const ROUTE_OPTIONS = ["PO", "IV", "IM", "SC", "SL", "PR", "TD", "Other"];
+const TIMELINE_STATUS_OPTIONS = [
+  { value: "current", label: "Current" },
+  { value: "historic", label: "Historic" },
+  { value: "planned", label: "Planned" }
+];
 const TIMEFRAME_OPTIONS = [
   { value: "30d", label: "30 days", days: 30 },
   { value: "90d", label: "90 days", days: 90 },
@@ -24,6 +29,9 @@ const TIMEFRAME_OPTIONS = [
   { value: "2y", label: "2 years", days: 365 * 2 },
   { value: "5y", label: "5 years", days: 365 * 5 }
 ];
+const PROFILES_STORAGE_KEY = "percentdosegraph:react-profiles";
+const MEDICATION_LIST_STORAGE_KEY = "percentdosegraph:react-medication-list";
+const WORKSPACE_STORAGE_KEY = "percentdosegraph:react-workspace";
 const CHART_COLORS = [
   "#0d8f78",
   "#bf4f29",
@@ -48,17 +56,33 @@ const CHART_COLORS = [
 ];
 
 function App() {
+  const workspaceDefaults = loadWorkspaceFromStorage();
+  const importFileRef = useRef(null);
   const [drugs, setDrugs] = useState([]);
   const [doses, setDoses] = useState([]);
   const [selectedDrugIds, setSelectedDrugIds] = useState([]);
-  const [route, setRoute] = useState("PO");
-  const [timeframe, setTimeframe] = useState("1y");
+  const [route, setRoute] = useState(workspaceDefaults.route ?? "PO");
+  const [timeframe, setTimeframe] = useState(workspaceDefaults.timeframe ?? "1y");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState("");
+  const [patientName, setPatientName] = useState(workspaceDefaults.patientName ?? "Example Patient");
+  const [workspaceLabel, setWorkspaceLabel] = useState(
+    workspaceDefaults.workspaceLabel ?? "Current medication timeline"
+  );
+  const [patientNotes, setPatientNotes] = useState(workspaceDefaults.patientNotes ?? "");
+  const [workspaceStatus, setWorkspaceStatus] = useState("");
+  const [listDrugId, setListDrugId] = useState("");
+  const [listStartDate, setListStartDate] = useState(formatDateKey(new Date()));
+  const [listEndDate, setListEndDate] = useState("");
+  const [listRoute, setListRoute] = useState("PO");
+  const [listTimelineStatus, setListTimelineStatus] = useState("current");
+  const [listNotes, setListNotes] = useState("");
+  const [listStatus, setListStatus] = useState("");
+  const [listError, setListError] = useState("");
   const [entryDrugId, setEntryDrugId] = useState("");
   const [entryDate, setEntryDate] = useState(formatDateKey(new Date()));
   const [entryEndDate, setEntryEndDate] = useState("");
@@ -67,6 +91,31 @@ function App() {
   const [entryNotes, setEntryNotes] = useState("");
   const [entryStatus, setEntryStatus] = useState("");
   const [entryError, setEntryError] = useState("");
+  const [medicationEntries, setMedicationEntries] = useState(() =>
+    loadMedicationEntriesFromStorage()
+  );
+  const [profiles, setProfiles] = useState(() => normalizeStoredProfiles(loadProfilesFromStorage()));
+  const [activeProfileId, setActiveProfileId] = useState(null);
+  const [profileStatus, setProfileStatus] = useState("");
+  const [profileName, setProfileName] = useState("");
+
+  useEffect(() => {
+    saveProfilesToStorage(profiles);
+  }, [profiles]);
+
+  useEffect(() => {
+    saveMedicationEntriesToStorage(medicationEntries);
+  }, [medicationEntries]);
+
+  useEffect(() => {
+    saveWorkspaceToStorage({
+      patientName,
+      workspaceLabel,
+      patientNotes,
+      route,
+      timeframe
+    });
+  }, [patientName, patientNotes, route, timeframe, workspaceLabel]);
 
   useEffect(() => {
     let cancelled = false;
@@ -88,12 +137,12 @@ function App() {
 
         setDrugs(normalizedDrugs);
         setDoses(normalizedDoses);
-        setSelectedDrugIds(
-          normalizedDrugs
-            .slice(0, Math.min(5, normalizedDrugs.length))
-            .map((drug) => drug.id)
-        );
-        setEntryDrugId(String(defaultDrugId ?? ""));
+        const initialSelection = getInitialSelectedDrugIds(normalizedDrugs, medicationEntries);
+        const defaultSelection = initialSelection[0] ?? defaultDrugId ?? "";
+
+        setSelectedDrugIds(initialSelection);
+        setEntryDrugId(String(defaultSelection));
+        setListDrugId(String(defaultSelection));
       } catch (loadError) {
         if (!cancelled) {
           setError(loadError instanceof Error ? loadError.message : "Unknown loading error");
@@ -173,7 +222,10 @@ function App() {
     if (!entryDrugId || !drugs.some((drug) => drug.id === entryDrugId)) {
       setEntryDrugId(String(candidateDrugId));
     }
-  }, [drugs, entryDrugId, selectedDrugIds]);
+    if (!listDrugId || !drugs.some((drug) => drug.id === listDrugId)) {
+      setListDrugId(String(candidateDrugId));
+    }
+  }, [drugs, entryDrugId, listDrugId, selectedDrugIds]);
 
   const drugLookup = useMemo(() => {
     return new Map(drugs.map((drug) => [drug.id, drug]));
@@ -186,11 +238,22 @@ function App() {
       .slice(0, MAX_VISIBLE_DRUGS);
   }, [drugLookup, selectedDrugIds]);
 
+  const medicationTableRows = useMemo(() => {
+    return buildMedicationTableRows(medicationEntries, drugLookup, selectedDrugIds);
+  }, [drugLookup, medicationEntries, selectedDrugIds]);
+
   const range = useMemo(() => buildRange(doses, timeframe), [doses, timeframe]);
   const filteredEvents = useMemo(() => {
-    return getFilteredEvents(doses, selectedDrugIds, route, range.startDate, range.endDate)
+    return getFilteredEvents(
+      doses,
+      selectedDrugIds,
+      route,
+      range.startDate,
+      range.endDate,
+      medicationEntries
+    )
       .sort((left, right) => right.date.localeCompare(left.date));
-  }, [doses, range.endDate, range.startDate, route, selectedDrugIds]);
+  }, [doses, medicationEntries, range.endDate, range.startDate, route, selectedDrugIds]);
 
   const chartData = useMemo(() => {
     return buildChartData(filteredEvents, selectedDrugs, range.startDate, range.endDate);
@@ -200,6 +263,10 @@ function App() {
     chartData,
     filteredEvents,
     selectedDrugs
+  ]);
+
+  const medicationSummary = useMemo(() => summarizeMedicationEntries(medicationEntries), [
+    medicationEntries
   ]);
 
   function handleAddDrug(drug) {
@@ -221,6 +288,20 @@ function App() {
     setSelectedDrugIds((current) => current.filter((id) => id !== drugId));
   }
 
+  function handleToggleDrugSelection(drugId) {
+    setSelectedDrugIds((current) => {
+      if (current.includes(drugId)) {
+        return current.filter((id) => id !== drugId);
+      }
+
+      if (current.length >= MAX_VISIBLE_DRUGS) {
+        return current;
+      }
+
+      return [...current, drugId];
+    });
+  }
+
   function handleMaxDoseChange(drugId, nextValue) {
     setDrugs((current) =>
       current.map((drug) => {
@@ -235,6 +316,132 @@ function App() {
         };
       })
     );
+  }
+
+  function handleMedicationEntrySubmit(event) {
+    event.preventDefault();
+
+    if (!listDrugId) {
+      setListError("Choose a medication before adding it to the list.");
+      setListStatus("");
+      return;
+    }
+
+    if (!listStartDate) {
+      setListError("Choose a start date for the medication entry.");
+      setListStatus("");
+      return;
+    }
+
+    if (listEndDate && listEndDate < listStartDate) {
+      setListError("Medication end date must be the same as or after the start date.");
+      setListStatus("");
+      return;
+    }
+
+    const normalizedEndDate =
+      listTimelineStatus === "historic" && !listEndDate ? listStartDate : listEndDate;
+    const entry = normalizeMedicationEntry({
+      id: `med-${listDrugId}-${listStartDate}-${listRoute}-${Date.now()}`,
+      drugId: listDrugId,
+      startDate: listStartDate,
+      endDate: normalizedEndDate,
+      route: listRoute,
+      timelineStatus: listTimelineStatus,
+      notes: listNotes.trim(),
+      createdAt: new Date().toISOString(),
+      sourceProfileId: activeProfileId
+    }, medicationEntries.length);
+
+    setMedicationEntries((current) => mergeMedicationEntries(current, [entry]));
+    setSelectedDrugIds((current) => {
+      if (current.includes(entry.drugId) || current.length >= MAX_VISIBLE_DRUGS) {
+        return current;
+      }
+
+      return [...current, entry.drugId];
+    });
+    setListStatus("Medication added to the active list and available in the graph key.");
+    setListError("");
+    setListEndDate("");
+    setListNotes("");
+    setEntryDrugId(String(entry.drugId));
+    setWorkspaceStatus("");
+  }
+
+  function handleDeleteMedicationEntry(entryId) {
+    setMedicationEntries((current) => current.filter((entry) => entry.id !== entryId));
+  }
+
+  function handleSaveProfile() {
+    if (!selectedDrugIds.length && !medicationEntries.length) {
+      setProfileStatus("Add medications before saving a medication list profile.");
+      return;
+    }
+
+    const label = profileName.trim() || generateSequentialProfileLabel(profiles);
+    const profile = {
+      id: generateProfileId({
+        selectedDrugIds,
+        route,
+        timeframe,
+        drugNames: selectedDrugs.map((drug) => drug.name)
+      }, profiles.length + 1),
+      label,
+      selectedDrugIds,
+      medicationEntries,
+      patientName,
+      workspaceLabel,
+      patientNotes,
+      route,
+      timeframe,
+      savedListDate: formatDateKey(new Date()),
+      createdAt: new Date().toISOString()
+    };
+
+    setProfiles((current) => [...current, profile]);
+    setActiveProfileId(profile.id);
+    setProfileStatus(`Saved ${profile.label} with ${medicationEntries.length} medication entries.`);
+    setProfileName("");
+  }
+
+  function handleApplyProfile(profile) {
+    const nextSelectedDrugIds = getSelectedDrugIdsFromProfile(profile);
+    setSelectedDrugIds(nextSelectedDrugIds);
+    setMedicationEntries(profile.medicationEntries ?? []);
+    setPatientName(profile.patientName ?? "Example Patient");
+    setWorkspaceLabel(profile.workspaceLabel ?? profile.label ?? "Current medication timeline");
+    setPatientNotes(profile.patientNotes ?? "");
+    setRoute(profile.route);
+    setTimeframe(profile.timeframe);
+    setActiveProfileId(profile.id);
+    setProfileStatus(`Opened ${profile.label} from ${profile.savedListDate ?? "a previous save"}.`);
+    setWorkspaceStatus("");
+  }
+
+  function handleMergeProfile(profile) {
+    setMedicationEntries((current) => mergeMedicationEntries(current, profile.medicationEntries ?? []));
+    setSelectedDrugIds((current) => {
+      const merged = new Set(current);
+      for (const drugId of getSelectedDrugIdsFromProfile(profile)) {
+        if (merged.size >= MAX_VISIBLE_DRUGS && !merged.has(drugId)) {
+          continue;
+        }
+        merged.add(drugId);
+      }
+      return Array.from(merged);
+    });
+    setActiveProfileId(profile.id);
+    setProfileStatus(`Added medications from ${profile.label} into the current list.`);
+    setWorkspaceStatus("");
+  }
+
+  function handleDeleteProfile(profileId) {
+    setProfiles((current) => current.filter((profile) => profile.id !== profileId));
+    if (activeProfileId === profileId) {
+      setActiveProfileId(null);
+    }
+    setProfileStatus("Profile deleted.");
   }
 
   async function handleDoseEntrySubmit(event) {
@@ -304,6 +511,124 @@ function App() {
     setEntryEndDate("");
     setEntryNotes("");
     setEntryError("");
+    setWorkspaceStatus("");
+  }
+
+  function handleExportJson() {
+    const payload = buildWorkspaceExportPayload({
+      patientName,
+      workspaceLabel,
+      patientNotes,
+      route,
+      timeframe,
+      selectedDrugIds,
+      drugs,
+      doses,
+      medicationEntries,
+      profiles
+    });
+
+    downloadFile(
+      `${slugify(workspaceLabel || patientName || "workspace") || "workspace"}.json`,
+      JSON.stringify(payload, null, 2),
+      "application/json"
+    );
+    setWorkspaceStatus("Exported the current workspace as JSON.");
+  }
+
+  function handleExportCsv() {
+    if (!filteredEvents.length) {
+      setWorkspaceStatus("There are no visible dose events to export for the current filter.");
+      return;
+    }
+
+    const csv = buildDoseEventsCsv(filteredEvents, drugLookup);
+    downloadFile(
+      `${slugify(workspaceLabel || patientName || "dose-events") || "dose-events"}.csv`,
+      csv,
+      "text/csv;charset=utf-8"
+    );
+    setWorkspaceStatus("Exported the visible dose-event table as CSV.");
+  }
+
+  function handleImportWorkspaceClick() {
+    importFileRef.current?.click();
+  }
+
+  async function handleImportWorkspace(event) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      const text = await file.text();
+      const imported = JSON.parse(text);
+      const normalizedDrugs = Array.isArray(imported.drugs)
+        ? imported.drugs.map(normalizeDrugRecord)
+        : [];
+      const importedSelectedDrugIds = Array.isArray(imported.selectedDrugIds)
+        ? imported.selectedDrugIds.map(String)
+        : [];
+      const importedMedicationEntries = Array.isArray(imported.medicationEntries)
+        ? imported.medicationEntries.map(normalizeMedicationEntry)
+        : [];
+
+      setDrugs((current) => mergeDrugCatalog(current, normalizedDrugs));
+      setDoses(
+        Array.isArray(imported.doses)
+          ? imported.doses.map((dose, index) =>
+              normalizeDoseRecord(dose, index, normalizedDrugs[0]?.id ?? drugs[0]?.id)
+            )
+          : []
+      );
+      setMedicationEntries(importedMedicationEntries);
+      setProfiles(
+        normalizeStoredProfiles(Array.isArray(imported.profiles) ? imported.profiles : [])
+      );
+      setSelectedDrugIds(
+        importedSelectedDrugIds.length
+          ? importedSelectedDrugIds.slice(0, MAX_VISIBLE_DRUGS)
+          : getInitialSelectedDrugIds(normalizedDrugs.length ? normalizedDrugs : drugs, importedMedicationEntries)
+      );
+      setRoute(imported.route ?? "PO");
+      setTimeframe(imported.timeframe ?? "1y");
+      setPatientName(imported.patientName ?? "Example Patient");
+      setWorkspaceLabel(imported.workspaceLabel ?? "Imported medication timeline");
+      setPatientNotes(imported.patientNotes ?? "");
+      setActiveProfileId(null);
+      setProfileStatus("");
+      setWorkspaceStatus(`Imported workspace from ${file.name}.`);
+    } catch (importError) {
+      setWorkspaceStatus(
+        importError instanceof Error ? importError.message : "Unable to import that workspace file."
+      );
+    } finally {
+      event.target.value = "";
+    }
+  }
+
+  function handleClearWorkspace() {
+    if (!window.confirm("Clear the current workspace, including the medication list, saved profiles, and visible dose history?")) {
+      return;
+    }
+
+    setSelectedDrugIds([]);
+    setDoses([]);
+    setMedicationEntries([]);
+    setProfiles([]);
+    setActiveProfileId(null);
+    setRoute("PO");
+    setTimeframe("1y");
+    setPatientName("Example Patient");
+    setWorkspaceLabel("Current medication timeline");
+    setPatientNotes("");
+    setListStatus("");
+    setListError("");
+    setEntryStatus("");
+    setEntryError("");
+    setProfileStatus("");
+    setWorkspaceStatus("Cleared the current workspace.");
   }
 
   const canAddMore = selectedDrugIds.length < MAX_VISIBLE_DRUGS;
@@ -324,17 +649,20 @@ function App() {
         "article",
         { className: "hero-panel" },
         h("p", { className: "badge" }, "React + Recharts"),
-        h("h1", null, "Multi-drug comparison charting for U.S. medication search."),
+        h("h1", null, workspaceLabel || "Multi-drug comparison charting for U.S. medication search."),
         h(
           "p",
           null,
-          "Plot up to 20 medications at once, compare each against its own ceiling, and expand the selector with official FDA-listed U.S. drug names when you need more than the bundled sample library."
+          `${patientName} · Plot up to 20 medications at once, compare each against its own ceiling, and expand the selector with official FDA-listed U.S. drug names when you need more than the bundled sample library.`
         )
       ),
       h(
         "article",
         { className: "hero-panel" },
-        h("p", { className: "metric-label" }, "Plotted drugs"),
+        h("p", { className: "metric-label" }, patientNotes ? "Clinical note" : "Plotted drugs"),
+        patientNotes
+          ? h("p", { className: "helper" }, patientNotes)
+          : null,
         h("p", { className: "big-number" }, `${selectedDrugs.length}/${MAX_VISIBLE_DRUGS}`),
         h(
           "p",
@@ -439,6 +767,161 @@ function App() {
             },
             ROUTE_OPTIONS.map((option) => h("option", { key: option, value: option }, option))
           )
+        ),
+        h(
+          "section",
+          { className: "workspace-panel" },
+          h(
+            "div",
+            null,
+            h("h2", null, "Patient workspace"),
+            h(
+              "p",
+              null,
+              "Capture the patient or medication-list context you want saved into profiles and exports."
+            )
+          ),
+          h(
+            "div",
+            { className: "field" },
+            h("label", { htmlFor: "patientName" }, "Patient / chart label"),
+            h("input", {
+              id: "patientName",
+              type: "text",
+              value: patientName,
+              onChange: (event) => setPatientName(event.target.value)
+            })
+          ),
+          h(
+            "div",
+            { className: "field" },
+            h("label", { htmlFor: "workspaceLabel" }, "Workspace title"),
+            h("input", {
+              id: "workspaceLabel",
+              type: "text",
+              value: workspaceLabel,
+              onChange: (event) => setWorkspaceLabel(event.target.value)
+            })
+          ),
+          h(
+            "div",
+            { className: "field" },
+            h("label", { htmlFor: "patientNotes" }, "Clinical notes"),
+            h("textarea", {
+              id: "patientNotes",
+              rows: 4,
+              value: patientNotes,
+              onChange: (event) => setPatientNotes(event.target.value)
+            })
+          )
+        ),
+        h(
+          "form",
+          { className: "dose-entry-form", onSubmit: handleMedicationEntrySubmit },
+          h(
+            "div",
+            null,
+            h("h2", null, "Medication list entry"),
+            h(
+              "p",
+              null,
+              "Build a patient medication list with start and end dates so you can reopen prior lists, add new medications later, and distinguish current from historic therapy."
+            )
+          ),
+          h(
+            "div",
+            { className: "field" },
+            h("label", { htmlFor: "listDrug" }, "Medication"),
+            h(
+              "select",
+              {
+                id: "listDrug",
+                value: listDrugId,
+                onChange: (event) => setListDrugId(event.target.value)
+              },
+              drugs.map((drug) => h("option", { key: drug.id, value: drug.id }, drug.name))
+            )
+          ),
+          h(
+            "div",
+            { className: "entry-grid" },
+            h(
+              "div",
+              { className: "field" },
+              h("label", { htmlFor: "listStartDate" }, "Start date"),
+              h("input", {
+                id: "listStartDate",
+                type: "date",
+                value: listStartDate,
+                onChange: (event) => setListStartDate(event.target.value)
+              })
+            ),
+            h(
+              "div",
+              { className: "field" },
+              h("label", { htmlFor: "listEndDate" }, "End date"),
+              h("input", {
+                id: "listEndDate",
+                type: "date",
+                min: listStartDate,
+                value: listEndDate,
+                onChange: (event) => setListEndDate(event.target.value)
+              })
+            ),
+            h(
+              "div",
+              { className: "field" },
+              h("label", { htmlFor: "listRoute" }, "Medication route"),
+              h(
+                "select",
+                {
+                  id: "listRoute",
+                  value: listRoute,
+                  onChange: (event) => setListRoute(event.target.value)
+                },
+                ROUTE_OPTIONS.map((option) => h("option", { key: option, value: option }, option))
+              )
+            )
+          ),
+          h(
+            "div",
+            { className: "entry-grid two-up" },
+            h(
+              "div",
+              { className: "field" },
+              h("label", { htmlFor: "listTimelineStatus" }, "Timeline"),
+              h(
+                "select",
+                {
+                  id: "listTimelineStatus",
+                  value: listTimelineStatus,
+                  onChange: (event) => setListTimelineStatus(event.target.value)
+                },
+                TIMELINE_STATUS_OPTIONS.map((option) =>
+                  h("option", { key: option.value, value: option.value }, option.label)
+                )
+              )
+            ),
+            h(
+              "div",
+              { className: "field" },
+              h("label", { htmlFor: "listNotes" }, "Notes"),
+              h("input", {
+                id: "listNotes",
+                type: "text",
+                placeholder: "Current, discontinued, resumed, etc.",
+                value: listNotes,
+                onChange: (event) => setListNotes(event.target.value)
+              })
+            )
+          ),
+          h(
+            "button",
+            { type: "submit", className: "primary-button" },
+            "Add Medication To List"
+          ),
+          listStatus ? h("p", { className: "helper success-text" }, listStatus) : null,
+          listError ? h("p", { className: "helper error-text" }, listError) : null
         ),
         h(
           "form",
@@ -564,6 +1047,148 @@ function App() {
         ),
         h(
           "div",
+          { className: "field profile-actions" },
+          h(
+            "button",
+            {
+              type: "button",
+              className: "primary-button",
+              onClick: handleSaveProfile,
+              disabled: !selectedDrugs.length && !medicationEntries.length
+            },
+            "Save med list profile"
+          ),
+          h(
+            "div",
+            { className: "field" },
+            h("label", { htmlFor: "profileName" }, "Profile name"),
+            h("input", {
+              id: "profileName",
+              type: "text",
+              placeholder: "Optional custom name",
+              value: profileName,
+              onChange: (event) => setProfileName(event.target.value)
+            })
+          ),
+          profileStatus ? h("p", { className: "helper" }, profileStatus) : null
+        ),
+        h(
+          "section",
+          { className: "workspace-panel" },
+          h("h2", null, "Data tools"),
+          h(
+            "div",
+            { className: "profile-card-actions" },
+            h(
+              "button",
+              {
+                type: "button",
+                className: "pill-button secondary-button",
+                onClick: handleImportWorkspaceClick
+              },
+              "Import JSON"
+            ),
+            h(
+              "button",
+              {
+                type: "button",
+                className: "pill-button secondary-button",
+                onClick: handleExportJson
+              },
+              "Export JSON"
+            ),
+            h(
+              "button",
+              {
+                type: "button",
+                className: "pill-button secondary-button",
+                onClick: handleExportCsv
+              },
+              "Export CSV"
+            ),
+            h(
+              "button",
+              {
+                type: "button",
+                className: "remove-button",
+                onClick: handleClearWorkspace
+              },
+              "Clear Workspace"
+            )
+          ),
+          h("input", {
+            ref: importFileRef,
+            type: "file",
+            accept: ".json,application/json",
+            className: "hidden-input",
+            onChange: handleImportWorkspace
+          }),
+          workspaceStatus ? h("p", { className: "helper" }, workspaceStatus) : null
+        ),
+        h(
+          "section",
+          { className: "profile-panel" },
+          h("h2", null, "Saved graph profiles"),
+          profiles.length
+            ? h(
+                "div",
+                { className: "profile-list" },
+                profiles.map((profile) =>
+                  h(
+                    "article",
+                    {
+                      className: `profile-card${profile.id === activeProfileId ? " active" : ""}`,
+                      key: profile.id
+                    },
+                    h(
+                      "div",
+                      { className: "profile-card-header" },
+                      h("strong", null, profile.label),
+                      h("small", null, profile.savedListDate ?? profile.id)
+                    ),
+                    h(
+                      "p",
+                      null,
+                      `${profile.patientName ?? "Patient"} · ${getSelectedDrugIdsFromProfile(profile).length} medication(s) · ${profile.route} · ${TIMEFRAME_OPTIONS.find((option) => option.value === profile.timeframe)?.label ?? profile.timeframe}`
+                    ),
+                    h(
+                      "div",
+                      { className: "profile-card-actions" },
+                      h(
+                        "button",
+                        {
+                          type: "button",
+                          className: "pill-button",
+                          onClick: () => handleApplyProfile(profile)
+                        },
+                        "Open list"
+                      ),
+                      h(
+                        "button",
+                        {
+                          type: "button",
+                          className: "pill-button secondary-button",
+                          onClick: () => handleMergeProfile(profile)
+                        },
+                        "Add to current"
+                      ),
+                      h(
+                        "button",
+                        {
+                          type: "button",
+                          className: "remove-button",
+                          onClick: () => handleDeleteProfile(profile.id)
+                        },
+                        "Delete"
+                      )
+                    )
+                  )
+                )
+              )
+            : h("p", { className: "helper" }, "Save a graph setup to revisit the same drug set, route, and timeframe quickly.")
+        ),
+        h(
+          "div",
           { className: "selected-drug-list" },
           h(
             "div",
@@ -575,16 +1200,35 @@ function App() {
               `${selectedDrugs.length}/${MAX_VISIBLE_DRUGS}`
             )
           ),
-          selectedDrugs.length
-            ? selectedDrugs.map((drug) =>
+          medicationTableRows.length
+            ? medicationTableRows.slice(0, 20).map((row) =>
                 h(
-                  "div",
-                  { className: "selected-drug", key: drug.id },
+                  "article",
+                  { className: "selected-drug medication-row", key: row.id },
                   h(
                     "div",
                     { className: "selected-drug-copy" },
-                    h("strong", null, drug.name),
-                    h("p", null, buildDrugResultCaption(drug))
+                    h(
+                      "div",
+                      { className: "medication-row-heading" },
+                      row.plotted
+                        ? h("span", {
+                            className: "color-swatch",
+                            style: { backgroundColor: row.color }
+                          })
+                        : null,
+                      h("strong", null, row.name),
+                      h(
+                        "span",
+                        { className: `timeline-badge ${row.timelineStatus}` },
+                        capitalizeLabel(row.timelineStatus)
+                      )
+                    ),
+                    h(
+                      "p",
+                      null,
+                      `${row.route} · ${row.windowLabel}${row.notes ? ` · ${row.notes}` : ""}`
+                    )
                   ),
                   h(
                     "div",
@@ -597,23 +1241,32 @@ function App() {
                         type: "number",
                         min: "0.1",
                         step: "0.1",
-                        value: drug.maxDailyDose ?? "",
-                        onChange: (event) => handleMaxDoseChange(drug.id, event.target.value)
+                        value: row.maxDailyDose ?? "",
+                        onChange: (event) => handleMaxDoseChange(row.drugId, event.target.value)
                       })
                     ),
                     h(
                       "button",
                       {
                         type: "button",
-                        className: "remove-button",
-                        onClick: () => handleRemoveDrug(drug.id)
+                        className: "pill-button",
+                        onClick: () => handleToggleDrugSelection(row.drugId)
                       },
-                      "Remove"
+                      row.plotted ? "Hide" : "Plot"
+                    ),
+                    h(
+                      "button",
+                      {
+                        type: "button",
+                        className: "remove-button",
+                        onClick: () => handleDeleteMedicationEntry(row.id)
+                      },
+                      "Delete"
                     )
                   )
                 )
               )
-            : h("div", { className: "empty small-empty" }, "Add a few medications to start comparing lines.")
+            : h("div", { className: "empty small-empty" }, "Add a few medications to start building the list and graph key.")
         )
       ),
       h(
@@ -638,20 +1291,20 @@ function App() {
             h(
               "article",
               { className: "metric" },
-              h("span", { className: "metric-label" }, "Selected drugs"),
-              h("strong", null, selectedDrugs.length)
+              h("span", { className: "metric-label" }, "Medication list"),
+              h("strong", null, medicationEntries.length)
             ),
             h(
               "article",
               { className: "metric" },
-              h("span", { className: "metric-label" }, "Drugs with data"),
-              h("strong", null, summary.activeDrugCount)
+              h("span", { className: "metric-label" }, "Current meds"),
+              h("strong", null, medicationSummary.currentCount)
             ),
             h(
               "article",
               { className: "metric" },
-              h("span", { className: "metric-label" }, "Peak percent"),
-              h("strong", null, `${summary.peakPercent.toFixed(1)}%`)
+              h("span", { className: "metric-label" }, "Historic meds"),
+              h("strong", null, medicationSummary.historicCount)
             ),
             h(
               "article",
@@ -763,13 +1416,80 @@ function App() {
             h(
               "article",
               { className: "insight-card insight-copy" },
-              h("span", { className: "metric-label" }, "Interpretation"),
+              h("span", { className: "metric-label" }, "Medication list"),
               h(
                 "p",
                 null,
-                selectedDrugs.length
-                  ? `Each line is normalized against that drug's own editable daily ceiling, which makes cross-drug comparison possible even when the units differ. Use the per-drug Max/day inputs to tune those ceilings before drawing conclusions.`
-                  : "Add a few drugs from the selector to compare percent-of-max trends on the same chart."
+                medicationEntries.length
+                  ? `${medicationSummary.currentCount} current, ${medicationSummary.historicCount} historic, and ${medicationSummary.plannedCount} planned entry/entries are available for this patient list.`
+                  : "Add a few medications from the list entry module to start a reusable medication history."
+              )
+            )
+          )
+        ),
+        h(
+          "section",
+          { className: "panel" },
+          h("h2", null, "Graph key and medication list"),
+          h(
+            "p",
+            null,
+            "This key ties the plotted lines back to the medication list, including historic and current date windows."
+          ),
+          h(
+            "div",
+            { className: "table-wrap" },
+            h(
+              "table",
+              { className: "table" },
+              h(
+                "thead",
+                null,
+                h(
+                  "tr",
+                  null,
+                  h("th", null, "Key"),
+                  h("th", null, "Medication"),
+                  h("th", null, "Timeline"),
+                  h("th", null, "Window"),
+                  h("th", null, "Route"),
+                  h("th", null, "Status")
+                )
+              ),
+              h(
+                "tbody",
+                null,
+                medicationTableRows.length
+                  ? medicationTableRows.map((row) =>
+                      h(
+                        "tr",
+                        { key: `table-${row.id}` },
+                        h(
+                          "td",
+                          null,
+                          row.plotted
+                            ? h("span", {
+                                className: "color-swatch table-swatch",
+                                style: { backgroundColor: row.color }
+                              })
+                            : "—"
+                        ),
+                        h("td", null, row.name),
+                        h("td", null, capitalizeLabel(row.timelineStatus)),
+                        h("td", null, row.windowLabel),
+                        h("td", null, row.route),
+                        h("td", null, row.plotted ? "Plotted" : "Stored only")
+                      )
+                    )
+                  : h(
+                      "tr",
+                      null,
+                      h(
+                        "td",
+                        { colSpan: 6 },
+                        "No medication list entries yet."
+                      )
+                    )
               )
             )
           )
@@ -942,6 +1662,107 @@ function mergeDoseEvents(current, next) {
   return merged;
 }
 
+function normalizeMedicationEntry(entry, index) {
+  return {
+    id: String(entry.id ?? `medication-${index + 1}`),
+    drugId: String(entry.drugId ?? ""),
+    startDate: entry.startDate ?? entry.date ?? formatDateKey(new Date()),
+    endDate: entry.endDate ?? "",
+    route: entry.route ?? "PO",
+    timelineStatus: entry.timelineStatus ?? "current",
+    notes: entry.notes ?? "",
+    createdAt: entry.createdAt ?? new Date().toISOString(),
+    sourceProfileId: entry.sourceProfileId ?? null
+  };
+}
+
+function mergeMedicationEntries(current, next) {
+  const merged = current.slice();
+  const seen = new Set(
+    current.map(
+      (entry) => `${entry.drugId}:${entry.startDate}:${entry.endDate}:${entry.route}:${entry.timelineStatus}`
+    )
+  );
+
+  for (const entry of next.map(normalizeMedicationEntry)) {
+    const key = `${entry.drugId}:${entry.startDate}:${entry.endDate}:${entry.route}:${entry.timelineStatus}`;
+    if (seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    merged.push(entry);
+  }
+
+  return merged.sort(compareMedicationEntries);
+}
+
+function compareMedicationEntries(left, right) {
+  const statusOrder = {
+    current: 0,
+    planned: 1,
+    historic: 2
+  };
+  const leftRank = statusOrder[left.timelineStatus] ?? 3;
+  const rightRank = statusOrder[right.timelineStatus] ?? 3;
+
+  if (leftRank !== rightRank) {
+    return leftRank - rightRank;
+  }
+
+  return String(right.startDate).localeCompare(String(left.startDate));
+}
+
+function normalizeStoredProfiles(profiles) {
+  if (!Array.isArray(profiles)) {
+    return [];
+  }
+
+  return profiles.map((profile, index) => ({
+    ...profile,
+    id: String(profile.id ?? `profile-${index + 1}`),
+    label: profile.label ?? profile.name ?? `Profile ${index + 1}`,
+    selectedDrugIds: Array.isArray(profile.selectedDrugIds)
+      ? profile.selectedDrugIds.map(String)
+      : [],
+    medicationEntries: Array.isArray(profile.medicationEntries)
+      ? profile.medicationEntries.map(normalizeMedicationEntry)
+      : [],
+    patientName: profile.patientName ?? "Example Patient",
+    workspaceLabel: profile.workspaceLabel ?? profile.label ?? `Profile ${index + 1}`,
+    patientNotes: profile.patientNotes ?? "",
+    route: profile.route ?? "PO",
+    timeframe: profile.timeframe ?? "1y",
+    savedListDate: profile.savedListDate ?? profile.createdAt?.slice(0, 10) ?? ""
+  }));
+}
+
+function getInitialSelectedDrugIds(drugs, medicationEntries) {
+  const entryDrugIds = Array.from(
+    new Set((medicationEntries ?? []).map((entry) => String(entry.drugId)).filter(Boolean))
+  ).slice(0, MAX_VISIBLE_DRUGS);
+
+  if (entryDrugIds.length) {
+    return entryDrugIds;
+  }
+
+  return drugs.slice(0, Math.min(5, drugs.length)).map((drug) => drug.id);
+}
+
+function getSelectedDrugIdsFromProfile(profile) {
+  const selectedDrugIds = Array.isArray(profile.selectedDrugIds)
+    ? profile.selectedDrugIds.map(String)
+    : [];
+
+  if (selectedDrugIds.length) {
+    return selectedDrugIds.slice(0, MAX_VISIBLE_DRUGS);
+  }
+
+  return Array.from(
+    new Set((profile.medicationEntries ?? []).map((entry) => String(entry.drugId)).filter(Boolean))
+  ).slice(0, MAX_VISIBLE_DRUGS);
+}
+
 function buildRange(doses, timeframe) {
   const endDate = getAnchorDate(doses);
   const selected = TIMEFRAME_OPTIONS.find((option) => option.value === timeframe);
@@ -952,18 +1773,34 @@ function buildRange(doses, timeframe) {
   return { startDate, endDate, totalDays };
 }
 
-function getFilteredEvents(doses, selectedDrugIds, route, startDate, endDate) {
+function getFilteredEvents(doses, selectedDrugIds, route, startDate, endDate, medicationEntries) {
   const selected = new Set(selectedDrugIds.map(String));
   const startKey = formatDateKey(startDate);
   const endKey = formatDateKey(endDate);
+  const medicationByDrug = groupMedicationEntriesByDrug(medicationEntries);
 
   return doses.filter((dose) => {
     const eventEndDate = dose.endDate ?? dose.date;
+    const matchingEntries = (medicationByDrug.get(String(dose.drugId)) ?? []).filter(
+      (entry) => entry.route === dose.route
+    );
+    const overlapsMedicationWindow =
+      !matchingEntries.length ||
+      matchingEntries.some((entry) =>
+        rangesOverlap(
+          dose.date,
+          eventEndDate,
+          entry.startDate,
+          getMedicationEntryEndDate(entry, endKey)
+        )
+      );
+
     return (
       selected.has(String(dose.drugId)) &&
       dose.route === route &&
       dose.date <= endKey &&
-      eventEndDate >= startKey
+      eventEndDate >= startKey &&
+      overlapsMedicationWindow
     );
   });
 }
@@ -1212,6 +2049,88 @@ function mergeSearchResults(localMatches, remoteMatches, selectedDrugIds) {
   );
 }
 
+function generateSequentialProfileLabel(profiles) {
+  let index = profiles.length + 1;
+  const existing = new Set(profiles.map((profile) => profile.label));
+  while (existing.has(`Profile ${index}`)) {
+    index += 1;
+  }
+  return `Profile ${index}`;
+}
+
+function generateProfileId(profile, num) {
+  const parts = [
+    `profile-${num}`,
+    profile.route.toLowerCase(),
+    profile.timeframe,
+    ...profile.drugNames
+      .slice(0, 3)
+      .map((name) => slugify(name))
+      .filter(Boolean)
+  ];
+
+  return parts.join("-");
+}
+
+function slugify(value) {
+  return String(value)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function loadProfilesFromStorage() {
+  try {
+    const raw = window.localStorage.getItem(PROFILES_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function loadMedicationEntriesFromStorage() {
+  try {
+    const raw = window.localStorage.getItem(MEDICATION_LIST_STORAGE_KEY);
+    return raw ? JSON.parse(raw).map(normalizeMedicationEntry) : [];
+  } catch {
+    return [];
+  }
+}
+
+function loadWorkspaceFromStorage() {
+  try {
+    const raw = window.localStorage.getItem(WORKSPACE_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveProfilesToStorage(profiles) {
+  try {
+    window.localStorage.setItem(PROFILES_STORAGE_KEY, JSON.stringify(profiles));
+  } catch {
+    // ignore storage errors
+  }
+}
+
+function saveMedicationEntriesToStorage(entries) {
+  try {
+    window.localStorage.setItem(MEDICATION_LIST_STORAGE_KEY, JSON.stringify(entries));
+  } catch {
+    // ignore storage errors
+  }
+}
+
+function saveWorkspaceToStorage(workspace) {
+  try {
+    window.localStorage.setItem(WORKSPACE_STORAGE_KEY, JSON.stringify(workspace));
+  } catch {
+    // ignore storage errors
+  }
+}
+
 function searchCatalogLocally(drugs, term, selectedDrugIds) {
   const query = term.trim().toLowerCase();
 
@@ -1228,6 +2147,154 @@ function searchCatalogLocally(drugs, term, selectedDrugIds) {
 function buildDrugResultCaption(drug) {
   const parts = [drug.genericName, drug.drugClass, drug.dosageForm, drug.source].filter(Boolean);
   return parts.join(" · ") || "No extra metadata";
+}
+
+function buildMedicationTableRows(medicationEntries, drugLookup, selectedDrugIds) {
+  const plottedIndex = new Map(selectedDrugIds.map((drugId, index) => [String(drugId), index]));
+
+  return medicationEntries
+    .map((entry) => {
+      const drug = drugLookup.get(String(entry.drugId));
+      const plotIndex = plottedIndex.get(String(entry.drugId));
+
+      return {
+        ...entry,
+        drugId: String(entry.drugId),
+        name: drug?.name ?? "Unknown drug",
+        maxDailyDose: drug?.maxDailyDose ?? 100,
+        plotted: plottedIndex.has(String(entry.drugId)),
+        color:
+          plotIndex === undefined ? "transparent" : CHART_COLORS[plotIndex % CHART_COLORS.length],
+        windowLabel: describeMedicationWindow(entry)
+      };
+    })
+    .sort(compareMedicationEntries);
+}
+
+function summarizeMedicationEntries(entries) {
+  return entries.reduce(
+    (summary, entry) => {
+      if (entry.timelineStatus === "historic") {
+        summary.historicCount += 1;
+      } else if (entry.timelineStatus === "planned") {
+        summary.plannedCount += 1;
+      } else {
+        summary.currentCount += 1;
+      }
+
+      return summary;
+    },
+    { currentCount: 0, historicCount: 0, plannedCount: 0 }
+  );
+}
+
+function describeMedicationWindow(entry) {
+  if (!entry.startDate) {
+    return "No timeline";
+  }
+
+  if (!entry.endDate) {
+    return entry.timelineStatus === "planned"
+      ? `Starts ${entry.startDate}`
+      : `${entry.startDate} onward`;
+  }
+
+  if (entry.startDate === entry.endDate) {
+    return entry.startDate;
+  }
+
+  return `${entry.startDate} to ${entry.endDate}`;
+}
+
+function groupMedicationEntriesByDrug(entries) {
+  const grouped = new Map();
+
+  for (const entry of entries ?? []) {
+    const drugId = String(entry.drugId);
+    if (!grouped.has(drugId)) {
+      grouped.set(drugId, []);
+    }
+    grouped.get(drugId).push(normalizeMedicationEntry(entry));
+  }
+
+  return grouped;
+}
+
+function getMedicationEntryEndDate(entry, fallbackEndDate) {
+  return entry.endDate || fallbackEndDate;
+}
+
+function rangesOverlap(leftStart, leftEnd, rightStart, rightEnd) {
+  return leftStart <= rightEnd && leftEnd >= rightStart;
+}
+
+function capitalizeLabel(value) {
+  if (!value) {
+    return "";
+  }
+
+  return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
+}
+
+function buildWorkspaceExportPayload(workspace) {
+  return {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    patientName: workspace.patientName,
+    workspaceLabel: workspace.workspaceLabel,
+    patientNotes: workspace.patientNotes,
+    route: workspace.route,
+    timeframe: workspace.timeframe,
+    selectedDrugIds: workspace.selectedDrugIds,
+    drugs: workspace.drugs,
+    doses: workspace.doses,
+    medicationEntries: workspace.medicationEntries,
+    profiles: workspace.profiles
+  };
+}
+
+function buildDoseEventsCsv(filteredEvents, drugLookup) {
+  const rows = [
+    ["date", "end_date", "drug", "route", "amount", "unit", "percent_max", "notes"]
+  ];
+
+  for (const event of filteredEvents) {
+    const drug = drugLookup.get(String(event.drugId));
+    const maxDose = drug?.maxDailyDose ?? 100;
+    const percent = maxDose > 0 ? ((event.amount / maxDose) * 100).toFixed(1) : "0.0";
+
+    rows.push([
+      event.date,
+      event.endDate ?? "",
+      drug?.name ?? "Unknown drug",
+      event.route,
+      String(event.amount),
+      drug?.unit ?? "mg",
+      percent,
+      event.notes ?? ""
+    ]);
+  }
+
+  return rows.map((row) => row.map(toCsvCell).join(",")).join("\n");
+}
+
+function toCsvCell(value) {
+  const normalized = String(value ?? "");
+  if (!/[",\n]/.test(normalized)) {
+    return normalized;
+  }
+
+  return `"${normalized.replace(/"/g, '""')}"`;
+}
+
+function downloadFile(filename, contents, mimeType) {
+  const blob = new Blob([contents], { type: mimeType });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  window.URL.revokeObjectURL(url);
 }
 
 function renderTooltip(active, payload, drugLookup) {

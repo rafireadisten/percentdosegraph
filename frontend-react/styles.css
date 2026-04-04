@@ -25,7 +25,8 @@ body {
 
 button,
 select,
-input {
+input,
+textarea {
   font: inherit;
 }
 
@@ -132,12 +133,18 @@ input {
 }
 
 .field input,
-.field select {
+.field select,
+.field textarea {
   width: 100%;
   padding: 0.85rem 0.95rem;
   border-radius: 14px;
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.86);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 110px;
 }
 
 .search-input {
@@ -272,6 +279,20 @@ input {
   background: rgba(255, 255, 255, 0.7);
 }
 
+.workspace-panel {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.workspace-panel h2,
+.workspace-panel p {
+  margin-top: 0;
+}
+
 .entry-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -290,6 +311,65 @@ input {
   color: white;
   background: var(--line);
   cursor: pointer;
+}
+
+.primary-button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.profile-actions {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.profile-panel {
+  padding: 1rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.profile-panel h2 {
+  margin-top: 0;
+  margin-bottom: 0.85rem;
+}
+
+.profile-list {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.profile-card {
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.88);
+  display: grid;
+  gap: 0.6rem;
+}
+
+.profile-card.active {
+  border-color: var(--line);
+  box-shadow: 0 0 0 2px rgba(13, 143, 120, 0.12);
+}
+
+.profile-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.profile-card-header strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.profile-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
 }
 
 .result-row,
@@ -338,6 +418,11 @@ input {
   min-width: 88px;
 }
 
+.secondary-button {
+  background: rgba(33, 49, 58, 0.1);
+  color: var(--ink);
+}
+
 .pill-button:disabled {
   opacity: 0.55;
   cursor: default;
@@ -350,9 +435,57 @@ input {
 
 .selected-drug-meta {
   display: grid;
-  grid-template-columns: minmax(180px, 220px) auto;
+  grid-template-columns: minmax(160px, 220px) auto auto;
   gap: 0.9rem;
   align-items: end;
+}
+
+.medication-row {
+  gap: 1rem;
+}
+
+.medication-row-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.color-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  display: inline-block;
+  box-shadow: inset 0 0 0 1px rgba(33, 49, 58, 0.12);
+}
+
+.table-swatch {
+  vertical-align: middle;
+}
+
+.timeline-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.timeline-badge.current {
+  background: rgba(13, 143, 120, 0.12);
+  color: #0b6858;
+}
+
+.timeline-badge.historic {
+  background: rgba(191, 79, 41, 0.12);
+  color: var(--danger);
+}
+
+.timeline-badge.planned {
+  background: rgba(41, 86, 191, 0.12);
+  color: #2956bf;
 }
 
 .small-label {
@@ -420,6 +553,10 @@ input {
 .tooltip-more {
   margin: 0.75rem 0 0;
   font-size: 0.82rem;
+}
+
+.hidden-input {
+  display: none;
 }
 
 @media (max-width: 920px) {
