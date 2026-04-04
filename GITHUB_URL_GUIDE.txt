@@ -1,0 +1,114 @@
+╔════════════════════════════════════════════════════════════════╗
+║           HOW TO GET YOUR GITHUB REPO URL                      ║
+║              (Multiple Easy Methods!)                           ║
+╚════════════════════════════════════════════════════════════════╝
+
+YOUR GITHUB URL WILL LOOK LIKE THIS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+https://github.com/YOUR_USERNAME/percentdosegraph.git
+
+What is YOUR_USERNAME?
+  → It's your GitHub account login name
+  → Example: john-doe, alice-smith, dev-team-99
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+METHOD 1: AUTOMATED (Fastest)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Run in Terminal:
+  cd /Users/readisten/Documents/percentdosegraph
+  ./setup-github.sh
+
+This script will:
+  ✓ Create repo automatically
+  ✓ Show you the exact URL
+  ✓ Push your code
+  ✓ Print full instructions
+
+Requires: GitHub CLI (free, install from cli.github.com)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+METHOD 2: MANUAL (No Extra Tools)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 1: Visit https://github.com/new
+Step 2: Enter:
+  Repository name: percentdosegraph
+  Description: A lightweight clinical dosing visualization tool
+  Visibility: Public
+Step 3: Click "Create repository"
+
+You'll see a URL like:
+  https://github.com/YOUR_USERNAME/percentdosegraph
+
+That's your repo URL!
+
+Step 4: Copy your USERNAME from that URL
+
+Step 5: Run in terminal:
+  cd /Users/readisten/Documents/percentdosegraph
+  git remote add origin https://github.com/YOUR_USERNAME/percentdosegraph.git
+  git branch -M main
+  git push -u origin main
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+METHOD 3: WEB INTERFACE (Point & Click)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Open this file in a browser:
+  /Users/readisten/Documents/percentdosegraph/github-setup.html
+
+Then follow the visual guide with:
+  ✓ Copy buttons
+  ✓ Links to GitHub
+  ✓ Step-by-step instructions
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DON'T HAVE A GITHUB ACCOUNT?
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Sign up free:
+  1. Go to https://github.com/signup
+  2. Choose a username (this becomes YOUR_USERNAME)
+  3. Verify your email
+  4. Then use any of the 3 methods above
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WHAT DO I GET?
+━━━━━━━━━━━━
+
+Your URL: https://github.com/YOUR_USERNAME/percentdosegraph.git
+
+Use this to:
+  • Clone on another machine
+  • Share your code with team
+  • Enable automatic GitHub Pages deployment
+  • Trigger CI/CD workflows
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXAMPLE
+━━━━
+
+If your GitHub username is: alice-dev
+
+Your URL will be:
+  https://github.com/alice-dev/percentdosegraph.git
+
+Then run:
+  git remote add origin https://github.com/alice-dev/percentdosegraph.git
+  git push -u origin main
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STUCK?
+━━━━
+
+See detailed guide: GITHUB_HOW_TO.md
+Or open in browser: github-setup.html
+
