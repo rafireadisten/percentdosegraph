@@ -1,11 +1,11 @@
-import { Router } from "express";
-import authRouter from "./auth.js";
-import accountsRouter from "./accounts.js";
-import healthRouter from "./health.js";
-import drugsRouter from "./drugs.js";
-import dosesRouter from "./doses.js";
-import profilesRouter from "./profiles.js";
-import usDrugsRouter from "./us-drugs.js";
+import { Router } from 'express';
+import authRouter from './auth.js';
+import accountsRouter from './accounts.js';
+import healthRouter from './health.js';
+import drugsRouter from './drugs.js';
+import dosesRouter from './doses.js';
+import profilesRouter from './profiles.js';
+import usDrugsRouter from './us-drugs.js';
 
 const router = Router();
 

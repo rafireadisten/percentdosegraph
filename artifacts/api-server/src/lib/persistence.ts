@@ -1,34 +1,34 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import logger from "./logger.js";
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import logger from './logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, "../../../../");
-const dataDir = path.join(rootDir, "data");
+const rootDir = path.resolve(__dirname, '../../../../');
+const dataDir = path.join(rootDir, 'data');
 
 const filePaths = {
-  accounts: path.join(rootDir, "accounts.json"),
-  drugs: path.join(dataDir, "drugs.json"),
-  doses: path.join(dataDir, "doses.json"),
-  profiles: path.join(rootDir, "profiles.json"),
+  accounts: path.join(rootDir, 'accounts.json'),
+  drugs: path.join(dataDir, 'drugs.json'),
+  doses: path.join(dataDir, 'doses.json'),
+  profiles: path.join(rootDir, 'profiles.json'),
 } as const;
 
 export function getPersistenceMode() {
-  return process.env.DATABASE_URL ? "database" : "file";
+  return process.env.DATABASE_URL ? 'database' : 'file';
 }
 
 export async function ensurePersistenceReady() {
-  if (getPersistenceMode() !== "database") {
-    logger.info("Persistence mode: file-backed JSON");
+  if (getPersistenceMode() !== 'database') {
+    logger.info('Persistence mode: file-backed JSON');
     return {
-      mode: "file",
+      mode: 'file',
       seeded: false,
     } as const;
   }
 
-  const { pool } = await import("@workspace/db");
+  const { pool } = await import('@workspace/db');
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS accounts (
@@ -125,25 +125,25 @@ export async function ensurePersistenceReady() {
     );
   `);
 
-  const shouldSeed = process.env.PERSISTENCE_SEED_ON_BOOT !== "false";
+  const shouldSeed = process.env.PERSISTENCE_SEED_ON_BOOT !== 'false';
   const seeded = shouldSeed ? await seedDatabaseFromFilesIfEmpty() : false;
 
-  logger.info({ seeded }, "Persistence mode: database");
+  logger.info({ seeded }, 'Persistence mode: database');
 
   return {
-    mode: "database",
+    mode: 'database',
     seeded,
   } as const;
 }
 
 async function seedDatabaseFromFilesIfEmpty() {
-  const { pool } = await import("@workspace/db");
+  const { pool } = await import('@workspace/db');
 
   const [accountsCount, drugsCount, dosesCount, profilesCount] = await Promise.all([
-    countRows(pool, "accounts"),
-    countRows(pool, "drugs"),
-    countRows(pool, "doses"),
-    countRows(pool, "profiles"),
+    countRows(pool, 'accounts'),
+    countRows(pool, 'drugs'),
+    countRows(pool, 'doses'),
+    countRows(pool, 'profiles'),
   ]);
 
   if (accountsCount > 1 || drugsCount > 0 || dosesCount > 0 || profilesCount > 0) {
@@ -157,7 +157,7 @@ async function seedDatabaseFromFilesIfEmpty() {
     readJsonFile(filePaths.profiles),
   ]);
 
-  await pool.query("BEGIN");
+  await pool.query('BEGIN');
 
   try {
     const accountIdByLegacyId = new Map<number, number>();
@@ -179,8 +179,8 @@ async function seedDatabaseFromFilesIfEmpty() {
         [
           account.name,
           account.email,
-          account.passwordHash ?? "",
-          account.role ?? "user",
+          account.passwordHash ?? '',
+          account.role ?? 'user',
           account.isActive ?? true,
           account.createdAt ?? new Date().toISOString(),
           account.updatedAt ?? account.createdAt ?? new Date().toISOString(),
@@ -235,8 +235,7 @@ async function seedDatabaseFromFilesIfEmpty() {
 
     for (const profile of profiles) {
       const resolvedAccountId =
-        accountIdByLegacyId.get(Number(profile.accountId)) ||
-        defaultAccountId;
+        accountIdByLegacyId.get(Number(profile.accountId)) || defaultAccountId;
       await pool.query(
         `
           INSERT INTO profiles
@@ -245,7 +244,7 @@ async function seedDatabaseFromFilesIfEmpty() {
         `,
         [
           resolvedAccountId,
-          profile.name ?? profile.label ?? `Profile ${profile.id ?? ""}`.trim(),
+          profile.name ?? profile.label ?? `Profile ${profile.id ?? ''}`.trim(),
           JSON.stringify(profile.payload ?? {}),
           profile.createdAt ?? new Date().toISOString(),
           profile.updatedAt ?? profile.createdAt ?? new Date().toISOString(),
@@ -253,30 +252,38 @@ async function seedDatabaseFromFilesIfEmpty() {
       );
     }
 
-    await pool.query("COMMIT");
+    await pool.query('COMMIT');
     logger.info(
-      { accounts: accounts.length, drugs: drugs.length, doses: doses.length, profiles: profiles.length },
-      "Seeded database persistence from JSON files"
+      {
+        accounts: accounts.length,
+        drugs: drugs.length,
+        doses: doses.length,
+        profiles: profiles.length,
+      },
+      'Seeded database persistence from JSON files'
     );
     return true;
   } catch (error) {
-    await pool.query("ROLLBACK");
+    await pool.query('ROLLBACK');
     throw error;
   }
 }
 
-async function countRows(pool: { query: (sql: string) => Promise<{ rows: Array<{ count: string }> }> }, tableName: string) {
+async function countRows(
+  pool: { query: (sql: string) => Promise<{ rows: Array<{ count: string }> }> },
+  tableName: string
+) {
   const result = await pool.query(`SELECT COUNT(*)::text AS count FROM ${tableName}`);
-  return Number(result.rows[0]?.count ?? "0");
+  return Number(result.rows[0]?.count ?? '0');
 }
 
 async function readJsonFile(filePath: string) {
   try {
-    const raw = await fs.readFile(filePath, "utf8");
+    const raw = await fs.readFile(filePath, 'utf8');
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
   } catch (error) {
-    logger.warn({ filePath, error }, "Failed to read seed file, continuing with empty dataset");
+    logger.warn({ filePath, error }, 'Failed to read seed file, continuing with empty dataset');
     return [];
   }
 }

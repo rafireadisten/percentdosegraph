@@ -1,6 +1,6 @@
-import { Router, type Request } from "express";
-import type { Logger } from "pino";
-import logger from "../lib/logger.js";
+import { Router, type Request } from 'express';
+import type { Logger } from 'pino';
+import logger from '../lib/logger.js';
 
 type LoggedRequest = Request & { log?: Logger };
 
@@ -17,15 +17,15 @@ type OpenFdaNdcRecord = {
 };
 
 const router = Router();
-const openFdaBaseUrl = "https://api.fda.gov/drug/ndc.json";
+const openFdaBaseUrl = 'https://api.fda.gov/drug/ndc.json';
 
 function getLogger(req: Request) {
   return (req as LoggedRequest).log ?? logger;
 }
 
-router.get("/us-drugs/search", async (req, res) => {
+router.get('/us-drugs/search', async (req, res) => {
   try {
-    const query = String(req.query.q ?? "").trim();
+    const query = String(req.query.q ?? '').trim();
     const limit = clampLimit(req.query.limit);
 
     if (query.length < 2) {
@@ -36,25 +36,25 @@ router.get("/us-drugs/search", async (req, res) => {
     const payload = await searchOpenFdaNdc(query, limit);
     res.json({ results: payload });
   } catch (err) {
-    getLogger(req).error({ err }, "Failed to search U.S. drug catalog");
-    res.status(502).json({ error: "Failed to search U.S. drug catalog" });
+    getLogger(req).error({ err }, 'Failed to search U.S. drug catalog');
+    res.status(502).json({ error: 'Failed to search U.S. drug catalog' });
   }
 });
 
 async function searchOpenFdaNdc(query: string, limit: number) {
   const params = new URLSearchParams({
     search: buildSearchQuery(query),
-    limit: String(limit)
+    limit: String(limit),
   });
 
   if (process.env.OPENFDA_API_KEY) {
-    params.set("api_key", process.env.OPENFDA_API_KEY);
+    params.set('api_key', process.env.OPENFDA_API_KEY);
   }
 
   const response = await fetch(`${openFdaBaseUrl}?${params.toString()}`, {
     headers: {
-      accept: "application/json"
-    }
+      accept: 'application/json',
+    },
   });
 
   if (!response.ok) {
@@ -71,9 +71,9 @@ function buildSearchQuery(query: string) {
 }
 
 function normalizeSearchToken(query: string) {
-  const trimmed = query.trim().replace(/"/g, "");
+  const trimmed = query.trim().replace(/"/g, '');
 
-  if (trimmed.includes(" ")) {
+  if (trimmed.includes(' ')) {
     return `"${trimmed}"`;
   }
 
@@ -83,7 +83,7 @@ function normalizeSearchToken(query: string) {
 function dedupeProducts(records: OpenFdaNdcRecord[]) {
   const seen = new Set<string>();
 
-  return records.filter((record) => {
+  return records.filter(record => {
     const key = record.product_ndc ?? record.product_id ?? record.spl_id;
     if (!key || seen.has(key)) {
       return false;
@@ -96,23 +96,23 @@ function dedupeProducts(records: OpenFdaNdcRecord[]) {
 
 function normalizeOpenFdaRecord(record: OpenFdaNdcRecord) {
   const id = record.product_ndc ?? record.product_id ?? record.spl_id ?? crypto.randomUUID();
-  const name = record.brand_name || record.generic_name || "Unnamed FDA listing";
+  const name = record.brand_name || record.generic_name || 'Unnamed FDA listing';
 
   return {
     id: `fda:${id}`,
     name,
     brandName: record.brand_name ?? name,
-    genericName: record.generic_name ?? "",
-    dosageForm: record.dosage_form ?? "",
-    route: Array.isArray(record.route) ? record.route.join(", ") : "",
-    listingExpirationDate: record.listing_expiration_date ?? "",
-    marketingCategory: record.marketing_category ?? "",
-    source: "openFDA NDC"
+    genericName: record.generic_name ?? '',
+    dosageForm: record.dosage_form ?? '',
+    route: Array.isArray(record.route) ? record.route.join(', ') : '',
+    listingExpirationDate: record.listing_expiration_date ?? '',
+    marketingCategory: record.marketing_category ?? '',
+    source: 'openFDA NDC',
   };
 }
 
 function clampLimit(value: unknown) {
-  const parsed = Number.parseInt(String(value ?? "20"), 10);
+  const parsed = Number.parseInt(String(value ?? '20'), 10);
 
   if (Number.isNaN(parsed)) {
     return 20;

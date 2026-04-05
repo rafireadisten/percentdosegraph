@@ -497,7 +497,7 @@ var require_react_development = __commonJS({
         }
       }
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-      var REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE2 = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE2 = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, didWarnStateUpdateForUnmountedComponent = {}, ReactNoopUpdateQueue = {
+      var REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = /* @__PURE__ */ Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = /* @__PURE__ */ Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = /* @__PURE__ */ Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = /* @__PURE__ */ Symbol.for("react.context"), REACT_FORWARD_REF_TYPE2 = /* @__PURE__ */ Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = /* @__PURE__ */ Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = /* @__PURE__ */ Symbol.for("react.suspense_list"), REACT_MEMO_TYPE2 = /* @__PURE__ */ Symbol.for("react.memo"), REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = /* @__PURE__ */ Symbol.for("react.activity"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, didWarnStateUpdateForUnmountedComponent = {}, ReactNoopUpdateQueue = {
         isMounted: function() {
           return false;
         },
@@ -540,7 +540,7 @@ var require_react_development = __commonJS({
       deprecatedAPIs.constructor = PureComponent2;
       assign2(deprecatedAPIs, Component2.prototype);
       deprecatedAPIs.isPureReactComponent = true;
-      var isArrayImpl = Array.isArray, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = {
+      var isArrayImpl = Array.isArray, REACT_CLIENT_REFERENCE = /* @__PURE__ */ Symbol.for("react.client.reference"), ReactSharedInternals = {
         H: null,
         A: null,
         T: null,
@@ -1350,7 +1350,7 @@ var require_react_dom_development = __commonJS({
         },
         p: 0,
         findDOMNode: null
-      }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), ReactSharedInternals = React45.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
+      }, REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal"), ReactSharedInternals = React45.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
       "function" === typeof Map && null != Map.prototype && "function" === typeof Map.prototype.forEach && "function" === typeof Set && null != Set.prototype && "function" === typeof Set.prototype.clear && "function" === typeof Set.prototype.forEach || console.error(
         "React depends on Map and Set built-in types. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills"
       );
@@ -18517,14 +18517,14 @@ var require_react_dom_client_development = __commonJS({
         ));
       }
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-      var Scheduler = require_scheduler(), React45 = require_react(), ReactDOM = require_react_dom(), assign2 = Object.assign, REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE2 = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE2 = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
-      Symbol.for("react.scope");
-      var REACT_ACTIVITY_TYPE = Symbol.for("react.activity");
-      Symbol.for("react.legacy_hidden");
-      Symbol.for("react.tracing_marker");
-      var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel");
-      Symbol.for("react.view_transition");
-      var MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), isArrayImpl = Array.isArray, ReactSharedInternals = React45.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
+      var Scheduler = require_scheduler(), React45 = require_react(), ReactDOM = require_react_dom(), assign2 = Object.assign, REACT_LEGACY_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.element"), REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = /* @__PURE__ */ Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = /* @__PURE__ */ Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = /* @__PURE__ */ Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = /* @__PURE__ */ Symbol.for("react.context"), REACT_FORWARD_REF_TYPE2 = /* @__PURE__ */ Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = /* @__PURE__ */ Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = /* @__PURE__ */ Symbol.for("react.suspense_list"), REACT_MEMO_TYPE2 = /* @__PURE__ */ Symbol.for("react.memo"), REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy");
+      /* @__PURE__ */ Symbol.for("react.scope");
+      var REACT_ACTIVITY_TYPE = /* @__PURE__ */ Symbol.for("react.activity");
+      /* @__PURE__ */ Symbol.for("react.legacy_hidden");
+      /* @__PURE__ */ Symbol.for("react.tracing_marker");
+      var REACT_MEMO_CACHE_SENTINEL = /* @__PURE__ */ Symbol.for("react.memo_cache_sentinel");
+      /* @__PURE__ */ Symbol.for("react.view_transition");
+      var MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = /* @__PURE__ */ Symbol.for("react.client.reference"), isArrayImpl = Array.isArray, ReactSharedInternals = React45.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
         pending: false,
         data: null,
         method: null,
@@ -26640,7 +26640,6 @@ var getDevModeChecksExecutionInfo = (firstRun, devModeChecks) => {
     }
   };
 };
-var REDUX_PROXY_LABEL = Symbol();
 var proto = Object.getPrototypeOf({});
 var StrongRef = class {
   constructor(value) {
@@ -27244,9 +27243,9 @@ function isAction(action) {
 }
 
 // node_modules/@reduxjs/toolkit/node_modules/immer/dist/immer.mjs
-var NOTHING = Symbol.for("immer-nothing");
-var DRAFTABLE = Symbol.for("immer-draftable");
-var DRAFT_STATE = Symbol.for("immer-state");
+var NOTHING = /* @__PURE__ */ Symbol.for("immer-nothing");
+var DRAFTABLE = /* @__PURE__ */ Symbol.for("immer-draftable");
+var DRAFT_STATE = /* @__PURE__ */ Symbol.for("immer-state");
 var errors = true ? [
   // All error codes, starting by 0:
   function(plugin) {
@@ -29631,7 +29630,6 @@ var createListenerMiddleware = (middlewareOptions = {}) => {
     clearListeners: clearListenerMiddleware
   };
 };
-var ORIGINAL_STATE = Symbol.for("rtk-state-proxy-original");
 
 // node_modules/recharts/es6/state/layoutSlice.js
 var initialState = {
@@ -30674,9 +30672,9 @@ var ReportChartSize = (props) => {
 };
 
 // node_modules/immer/dist/immer.mjs
-var NOTHING2 = Symbol.for("immer-nothing");
-var DRAFTABLE2 = Symbol.for("immer-draftable");
-var DRAFT_STATE2 = Symbol.for("immer-state");
+var NOTHING2 = /* @__PURE__ */ Symbol.for("immer-nothing");
+var DRAFTABLE2 = /* @__PURE__ */ Symbol.for("immer-draftable");
+var DRAFT_STATE2 = /* @__PURE__ */ Symbol.for("immer-state");
 var errors2 = true ? [
   // All error codes, starting by 0:
   function(plugin) {
@@ -35116,7 +35114,7 @@ function initInterpolator(domain, interpolator) {
 }
 
 // node_modules/d3-scale/src/ordinal.js
-var implicit = Symbol("implicit");
+var implicit = /* @__PURE__ */ Symbol("implicit");
 function ordinal() {
   var index = new InternMap(), domain = [], range4 = [], unknown = implicit;
   function scale(d) {
@@ -40396,7 +40394,7 @@ var optionsSlice = createSlice({
   reducers: {
     createEventEmitter: (state) => {
       if (state.eventEmitter == null) {
-        state.eventEmitter = Symbol("rechartsEventEmitter");
+        state.eventEmitter = /* @__PURE__ */ Symbol("rechartsEventEmitter");
       }
     }
   }
@@ -48978,7 +48976,9 @@ function App() {
   const [searchResults, setSearchResults] = (0, import_react56.useState)([]);
   const [searchLoading, setSearchLoading] = (0, import_react56.useState)(false);
   const [searchError, setSearchError] = (0, import_react56.useState)("");
-  const [patientName, setPatientName] = (0, import_react56.useState)(workspaceDefaults.patientName ?? "Example Patient");
+  const [patientName, setPatientName] = (0, import_react56.useState)(
+    workspaceDefaults.patientName ?? "Example Patient"
+  );
   const [workspaceLabel, setWorkspaceLabel] = (0, import_react56.useState)(
     workspaceDefaults.workspaceLabel ?? "Current medication timeline"
   );
@@ -49004,7 +49004,9 @@ function App() {
   const [medicationEntries, setMedicationEntries] = (0, import_react56.useState)(
     () => loadMedicationEntriesFromStorage()
   );
-  const [profiles, setProfiles] = (0, import_react56.useState)(() => normalizeStoredProfiles(loadProfilesFromStorage()));
+  const [profiles, setProfiles] = (0, import_react56.useState)(
+    () => normalizeStoredProfiles(loadProfilesFromStorage())
+  );
   const [activeProfileId, setActiveProfileId] = (0, import_react56.useState)(null);
   const [profileStatus, setProfileStatus] = (0, import_react56.useState)("");
   const [profileName, setProfileName] = (0, import_react56.useState)("");
@@ -49199,14 +49201,14 @@ function App() {
   const chartData = (0, import_react56.useMemo)(() => {
     return buildChartData(filteredEvents, selectedDrugs, range4.startDate, range4.endDate);
   }, [filteredEvents, range4.endDate, range4.startDate, selectedDrugs]);
-  const summary = (0, import_react56.useMemo)(() => summarizeChart(chartData, filteredEvents, selectedDrugs), [
-    chartData,
-    filteredEvents,
-    selectedDrugs
-  ]);
-  const medicationSummary = (0, import_react56.useMemo)(() => summarizeMedicationEntries(medicationEntries), [
-    medicationEntries
-  ]);
+  const summary = (0, import_react56.useMemo)(
+    () => summarizeChart(chartData, filteredEvents, selectedDrugs),
+    [chartData, filteredEvents, selectedDrugs]
+  );
+  const medicationSummary = (0, import_react56.useMemo)(
+    () => summarizeMedicationEntries(medicationEntries),
+    [medicationEntries]
+  );
   function handleAddDrug(drug) {
     setDrugs((current3) => mergeDrugCatalog(current3, [drug]));
     setSelectedDrugIds((current3) => {
@@ -49218,9 +49220,6 @@ function App() {
       }
       return [...current3, drug.id];
     });
-  }
-  function handleRemoveDrug(drugId) {
-    setSelectedDrugIds((current3) => current3.filter((id) => id !== drugId));
   }
   function handleToggleDrugSelection(drugId) {
     setSelectedDrugIds((current3) => {
@@ -49240,9 +49239,12 @@ function App() {
           return drug;
         }
         const parsed = Number(nextValue);
+        const nextMaxDailyDose = Number.isFinite(parsed) && parsed > 0 ? parsed : drug.referenceMaxDailyDose;
         return {
           ...drug,
-          maxDailyDose: Number.isFinite(parsed) && parsed > 0 ? parsed : drug.maxDailyDose
+          maxDailyDose: nextMaxDailyDose,
+          overrideMaxDailyDose: nextMaxDailyDose !== drug.referenceMaxDailyDose ? nextMaxDailyDose : null,
+          isMaxDoseOverridden: nextMaxDailyDose !== drug.referenceMaxDailyDose
         };
       })
     );
@@ -49265,17 +49267,20 @@ function App() {
       return;
     }
     const normalizedEndDate = listTimelineStatus === "historic" && !listEndDate ? listStartDate : listEndDate;
-    const entry = normalizeMedicationEntry({
-      id: `med-${listDrugId}-${listStartDate}-${listRoute}-${Date.now()}`,
-      drugId: listDrugId,
-      startDate: listStartDate,
-      endDate: normalizedEndDate,
-      route: listRoute,
-      timelineStatus: listTimelineStatus,
-      notes: listNotes.trim(),
-      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
-      sourceProfileId: activeProfileId
-    }, medicationEntries.length);
+    const entry = normalizeMedicationEntry(
+      {
+        id: `med-${listDrugId}-${listStartDate}-${listRoute}-${Date.now()}`,
+        drugId: listDrugId,
+        startDate: listStartDate,
+        endDate: normalizedEndDate,
+        route: listRoute,
+        timelineStatus: listTimelineStatus,
+        notes: listNotes.trim(),
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        sourceProfileId: activeProfileId
+      },
+      medicationEntries.length
+    );
     setMedicationEntries((current3) => mergeMedicationEntries(current3, [entry]));
     setSelectedDrugIds((current3) => {
       if (current3.includes(entry.drugId) || current3.length >= MAX_VISIBLE_DRUGS) {
@@ -49300,14 +49305,18 @@ function App() {
     }
     const label = profileName.trim() || generateSequentialProfileLabel(profiles);
     const draftProfile = {
-      id: generateProfileId({
-        selectedDrugIds,
-        route,
-        timeframe,
-        drugNames: selectedDrugs.map((drug) => drug.name)
-      }, profiles.length + 1),
+      id: generateProfileId(
+        {
+          selectedDrugIds,
+          route,
+          timeframe,
+          drugNames: selectedDrugs.map((drug) => drug.name)
+        },
+        profiles.length + 1
+      ),
       label,
       selectedDrugIds,
+      drugStates: buildProfileDrugStates(drugs, selectedDrugIds, medicationEntries),
       medicationEntries,
       patientName,
       workspaceLabel,
@@ -49335,6 +49344,7 @@ function App() {
   }
   function handleApplyProfile(profile) {
     const nextSelectedDrugIds = getSelectedDrugIdsFromProfile(profile);
+    setDrugs((current3) => mergeDrugCatalog(current3, profile.drugStates ?? []));
     setSelectedDrugIds(nextSelectedDrugIds);
     setMedicationEntries(profile.medicationEntries ?? []);
     setPatientName(profile.patientName ?? "Example Patient");
@@ -49347,7 +49357,10 @@ function App() {
     setWorkspaceStatus("");
   }
   function handleMergeProfile(profile) {
-    setMedicationEntries((current3) => mergeMedicationEntries(current3, profile.medicationEntries ?? []));
+    setDrugs((current3) => mergeDrugCatalog(current3, profile.drugStates ?? []));
+    setMedicationEntries(
+      (current3) => mergeMedicationEntries(current3, profile.medicationEntries ?? [])
+    );
     setSelectedDrugIds((current3) => {
       const merged = new Set(current3);
       for (const drugId of getSelectedDrugIdsFromProfile(profile)) {
@@ -49577,7 +49590,10 @@ function App() {
         normalizeStoredProfiles(Array.isArray(imported.profiles) ? imported.profiles : [])
       );
       setSelectedDrugIds(
-        importedSelectedDrugIds.length ? importedSelectedDrugIds.slice(0, MAX_VISIBLE_DRUGS) : getInitialSelectedDrugIds(normalizedDrugs.length ? normalizedDrugs : drugs, importedMedicationEntries)
+        importedSelectedDrugIds.length ? importedSelectedDrugIds.slice(0, MAX_VISIBLE_DRUGS) : getInitialSelectedDrugIds(
+          normalizedDrugs.length ? normalizedDrugs : drugs,
+          importedMedicationEntries
+        )
       );
       setRoute(imported.route ?? "PO");
       setTimeframe(imported.timeframe ?? "1y");
@@ -49596,7 +49612,9 @@ function App() {
     }
   }
   function handleClearWorkspace() {
-    if (!window.confirm("Clear the current workspace, including the medication list, saved profiles, and visible dose history?")) {
+    if (!window.confirm(
+      "Clear the current workspace, including the medication list, saved profiles, and visible dose history?"
+    )) {
       return;
     }
     setSelectedDrugIds([]);
@@ -49675,33 +49693,24 @@ function App() {
         { className: "auth-form" },
         h("h2", null, authMode === "login" ? "Login" : "Register"),
         authError && h("div", { className: "error" }, authError),
-        authMode === "register" && h(
-          "input",
-          {
-            type: "text",
-            placeholder: "Name",
-            value: authName,
-            onChange: (e) => setAuthName(e.target.value)
-          }
-        ),
-        h(
-          "input",
-          {
-            type: "email",
-            placeholder: "Email",
-            value: authEmail,
-            onChange: (e) => setAuthEmail(e.target.value)
-          }
-        ),
-        h(
-          "input",
-          {
-            type: "password",
-            placeholder: "Password",
-            value: authPassword,
-            onChange: (e) => setAuthPassword(e.target.value)
-          }
-        ),
+        authMode === "register" && h("input", {
+          type: "text",
+          placeholder: "Name",
+          value: authName,
+          onChange: (e) => setAuthName(e.target.value)
+        }),
+        h("input", {
+          type: "email",
+          placeholder: "Email",
+          value: authEmail,
+          onChange: (e) => setAuthEmail(e.target.value)
+        }),
+        h("input", {
+          type: "password",
+          placeholder: "Password",
+          value: authPassword,
+          onChange: (e) => setAuthPassword(e.target.value)
+        }),
         h(
           "button",
           {
@@ -49732,6 +49741,16 @@ function App() {
       h("a", { className: "home-link", href: "../index.html" }, "Back to home"),
       h("span", { className: "badge" }, "Reactive Type"),
       h("span", { className: "user-info" }, `Logged in as ${user?.name || user?.email}`),
+      h(
+        "a",
+        {
+          className: "topbar-link",
+          href: "https://github.com/rafireadisten/percentdosegraph/blob/main/MOBILE_DEPLOYMENT.md",
+          target: "_blank",
+          rel: "noopener noreferrer"
+        },
+        "Mobile App"
+      ),
       h("button", { onClick: handleLogout }, "Logout")
     ),
     h(
@@ -49741,7 +49760,11 @@ function App() {
         "article",
         { className: "hero-panel" },
         h("p", { className: "badge" }, "React + Recharts"),
-        h("h1", null, workspaceLabel || "Multi-drug comparison charting for U.S. medication search."),
+        h(
+          "h1",
+          null,
+          workspaceLabel || "Multi-drug comparison charting for U.S. medication search."
+        ),
         h(
           "p",
           null,
@@ -49816,11 +49839,7 @@ function App() {
                 "div",
                 { className: "result-copy" },
                 h("strong", null, drug.name),
-                h(
-                  "p",
-                  null,
-                  buildDrugResultCaption(drug)
-                )
+                h("p", null, buildDrugResultCaption(drug))
               ),
               h(
                 "button",
@@ -50001,11 +50020,7 @@ function App() {
               })
             )
           ),
-          h(
-            "button",
-            { type: "submit", className: "primary-button" },
-            "Add Medication To List"
-          ),
+          h("button", { type: "submit", className: "primary-button" }, "Add Medication To List"),
           listStatus ? h("p", { className: "helper success-text" }, listStatus) : null,
           listError ? h("p", { className: "helper error-text" }, listError) : null
         ),
@@ -50296,7 +50311,11 @@ function App() {
                 )
               )
             )
-          ) : h("p", { className: "helper" }, "Save a graph setup to revisit the same drug set, route, and timeframe quickly.")
+          ) : h(
+            "p",
+            { className: "helper" },
+            "Save a graph setup to revisit the same drug set, route, and timeframe quickly."
+          )
         ),
         h(
           "div",
@@ -50305,11 +50324,7 @@ function App() {
             "div",
             { className: "results-header" },
             h("strong", null, "Selected drugs"),
-            h(
-              "span",
-              { className: "metric-label" },
-              `${selectedDrugs.length}/${MAX_VISIBLE_DRUGS}`
-            )
+            h("span", { className: "metric-label" }, `${selectedDrugs.length}/${MAX_VISIBLE_DRUGS}`)
           ),
           medicationTableRows.length ? medicationTableRows.slice(0, 20).map(
             (row) => h(
@@ -50373,7 +50388,11 @@ function App() {
                 )
               )
             )
-          ) : h("div", { className: "empty small-empty" }, "Add a few medications to start building the list and graph key.")
+          ) : h(
+            "div",
+            { className: "empty small-empty" },
+            "Add a few medications to start building the list and graph key."
+          )
         )
       ),
       h(
@@ -50456,7 +50475,11 @@ function App() {
           h(
             "div",
             { className: "chart-panel tall-chart" },
-            loading ? h("div", { className: "empty" }, "Loading chart data...") : error ? h("div", { className: "empty" }, error) : !selectedDrugs.length ? h("div", { className: "empty" }, "Select one or more drugs to render the chart.") : h(
+            loading ? h("div", { className: "empty" }, "Loading chart data...") : error ? h("div", { className: "empty" }, error) : !selectedDrugs.length ? h(
+              "div",
+              { className: "empty" },
+              "Select one or more drugs to render the chart."
+            ) : h(
               ResponsiveContainer,
               { width: "100%", height: "100%" },
               h(
@@ -50536,14 +50559,22 @@ function App() {
               { className: "insight-card" },
               h("span", { className: "metric-label" }, "Range density"),
               h("strong", null, `${summary.eventCount} events`),
-              h("p", null, `${summary.activeDayCount} day(s) in the range contain at least one selected-drug event.`)
+              h(
+                "p",
+                null,
+                `${summary.activeDayCount} day(s) in the range contain at least one selected-drug event.`
+              )
             ),
             h(
               "article",
               { className: "insight-card" },
               h("span", { className: "metric-label" }, "Legend load"),
               h("strong", null, `${selectedDrugs.length} lines`),
-              h("p", null, selectedDrugs.length > 12 ? "The palette is recycling colors after the 20th line budget, so trim the list if you want a cleaner view." : "You still have room to add more medications before reaching the 20-line comparison cap.")
+              h(
+                "p",
+                null,
+                selectedDrugs.length > 12 ? "The palette is recycling colors after the 20th line budget, so trim the list if you want a cleaner view." : "You still have room to add more medications before reaching the 20-line comparison cap."
+              )
             ),
             h(
               "article",
@@ -50607,15 +50638,7 @@ function App() {
                     h("td", null, row.route),
                     h("td", null, row.plotted ? "Plotted" : "Stored only")
                   )
-                ) : h(
-                  "tr",
-                  null,
-                  h(
-                    "td",
-                    { colSpan: 6 },
-                    "No medication list entries yet."
-                  )
-                )
+                ) : h("tr", null, h("td", { colSpan: 6 }, "No medication list entries yet."))
               )
             )
           )
@@ -50717,6 +50740,8 @@ function resolveApiBasePath() {
   return `${window.location.origin}/api`;
 }
 function normalizeDrugRecord(drug, index) {
+  const referenceMaxDailyDose = Number.isFinite(Number(drug.referenceMaxDailyDose)) && Number(drug.referenceMaxDailyDose) > 0 ? Number(drug.referenceMaxDailyDose) : Number.isFinite(Number(drug.maxDailyDose)) && Number(drug.maxDailyDose) > 0 ? Number(drug.maxDailyDose) : 100;
+  const currentMaxDailyDose = Number.isFinite(Number(drug.overrideMaxDailyDose)) && Number(drug.overrideMaxDailyDose) > 0 ? Number(drug.overrideMaxDailyDose) : Number.isFinite(Number(drug.maxDailyDose)) && Number(drug.maxDailyDose) > 0 ? Number(drug.maxDailyDose) : referenceMaxDailyDose;
   return {
     id: String(drug.id ?? `local-${index + 1}`),
     name: drug.name ?? drug.brandName ?? drug.genericName ?? `Drug ${index + 1}`,
@@ -50726,7 +50751,10 @@ function normalizeDrugRecord(drug, index) {
     dosageForm: drug.dosageForm ?? "",
     source: drug.source ?? "Bundled sample library",
     unit: drug.unit ?? "mg",
-    maxDailyDose: Number.isFinite(Number(drug.maxDailyDose)) && Number(drug.maxDailyDose) > 0 ? Number(drug.maxDailyDose) : 100
+    referenceMaxDailyDose,
+    overrideMaxDailyDose: drug.isMaxDoseOverridden || Number.isFinite(Number(drug.overrideMaxDailyDose)) && Number(drug.overrideMaxDailyDose) > 0 ? currentMaxDailyDose : null,
+    isMaxDoseOverridden: Boolean(drug.isMaxDoseOverridden) || currentMaxDailyDose !== referenceMaxDailyDose,
+    maxDailyDose: currentMaxDailyDose
   };
 }
 function normalizeDoseRecord(dose, index, defaultDrugId) {
@@ -50770,7 +50798,9 @@ function createSeededDoseTimeline(drug, drugIndex) {
   });
 }
 function mergeDoseEvents(current3, next) {
-  const seen = new Set(current3.map((dose) => `${dose.drugId ?? "none"}:${dose.date}:${dose.route}:${dose.amount}`));
+  const seen = new Set(
+    current3.map((dose) => `${dose.drugId ?? "none"}:${dose.date}:${dose.route}:${dose.amount}`)
+  );
   const merged = current3.slice();
   for (const dose of next) {
     const key = `${dose.drugId ?? "none"}:${dose.date}:${dose.route}:${dose.amount}`;
@@ -50835,6 +50865,7 @@ function normalizeStoredProfiles(profiles) {
     label: profile.label ?? profile.name ?? `Profile ${index + 1}`,
     selectedDrugIds: Array.isArray(profile.selectedDrugIds) ? profile.selectedDrugIds.map(String) : [],
     medicationEntries: Array.isArray(profile.medicationEntries) ? profile.medicationEntries.map(normalizeMedicationEntry) : [],
+    drugStates: Array.isArray(profile.drugStates) ? profile.drugStates.map((drug, drugIndex) => normalizeDrugRecord(drug, drugIndex)) : [],
     patientName: profile.patientName ?? "Example Patient",
     workspaceLabel: profile.workspaceLabel ?? profile.label ?? `Profile ${index + 1}`,
     patientNotes: profile.patientNotes ?? "",
@@ -50860,6 +50891,15 @@ function getSelectedDrugIdsFromProfile(profile) {
   return Array.from(
     new Set((profile.medicationEntries ?? []).map((entry) => String(entry.drugId)).filter(Boolean))
   ).slice(0, MAX_VISIBLE_DRUGS);
+}
+function buildProfileDrugStates(drugs, selectedDrugIds, medicationEntries) {
+  const selected = new Set(selectedDrugIds.map(String));
+  for (const entry of medicationEntries ?? []) {
+    if (entry?.drugId) {
+      selected.add(String(entry.drugId));
+    }
+  }
+  return drugs.filter((drug) => selected.has(String(drug.id))).map((drug, index) => normalizeDrugRecord(drug, index));
 }
 function buildRange(doses, timeframe) {
   const endDate = getAnchorDate(doses);
@@ -51088,10 +51128,18 @@ function mergeDrugCatalog(current3, incoming) {
   const byId = new Map(current3.map((drug) => [drug.id, drug]));
   for (const drug of incoming) {
     const normalized = normalizeDrugRecord(drug, byId.size + 1);
-    byId.set(normalized.id, {
-      ...byId.get(normalized.id) ?? {},
-      ...normalized
-    });
+    const existing = byId.get(normalized.id);
+    byId.set(
+      normalized.id,
+      existing ? {
+        ...existing,
+        ...normalized,
+        referenceMaxDailyDose: existing.referenceMaxDailyDose ?? normalized.referenceMaxDailyDose,
+        maxDailyDose: existing.isMaxDoseOverridden && !normalized.isMaxDoseOverridden ? existing.maxDailyDose : normalized.maxDailyDose,
+        overrideMaxDailyDose: existing.isMaxDoseOverridden && !normalized.isMaxDoseOverridden ? existing.overrideMaxDailyDose ?? existing.maxDailyDose : normalized.overrideMaxDailyDose,
+        isMaxDoseOverridden: existing.isMaxDoseOverridden && !normalized.isMaxDoseOverridden ? true : normalized.isMaxDoseOverridden
+      } : normalized
+    );
   }
   return Array.from(byId.values()).sort((left, right) => left.name.localeCompare(right.name));
 }
@@ -51197,6 +51245,7 @@ function mapApiProfileToAppProfile(profile) {
     name: profile.name,
     label: profile.payload?.label ?? profile.name,
     selectedDrugIds: profile.payload?.selectedDrugIds ?? [],
+    drugStates: profile.payload?.drugStates ?? profile.payload?.graphState?.drugStates ?? [],
     medicationEntries: profile.payload?.medicationEntries ?? [],
     patientName: profile.payload?.patientName ?? "Example Patient",
     workspaceLabel: profile.payload?.workspaceLabel ?? profile.name,
@@ -51212,9 +51261,19 @@ function mapAppProfileToApiProfile(profile, accountId) {
     ...accountId ? { accountId } : {},
     name: profile.label,
     payload: {
+      version: 2,
       label: profile.label,
       selectedDrugIds: profile.selectedDrugIds,
+      drugStates: profile.drugStates ?? [],
       medicationEntries: profile.medicationEntries,
+      graphState: {
+        version: 1,
+        selectedDrugIds: profile.selectedDrugIds,
+        drugStates: profile.drugStates ?? [],
+        medicationEntries: profile.medicationEntries,
+        route: profile.route,
+        timeframe: profile.timeframe
+      },
       patientName: profile.patientName,
       workspaceLabel: profile.workspaceLabel,
       patientNotes: profile.patientNotes,
@@ -51332,13 +51391,23 @@ function buildWorkspaceExportPayload(workspace) {
     drugs: workspace.drugs,
     doses: workspace.doses,
     medicationEntries: workspace.medicationEntries,
-    profiles: workspace.profiles
+    profiles: workspace.profiles,
+    graphState: {
+      version: 1,
+      selectedDrugIds: workspace.selectedDrugIds,
+      drugStates: buildProfileDrugStates(
+        workspace.drugs,
+        workspace.selectedDrugIds,
+        workspace.medicationEntries
+      ),
+      medicationEntries: workspace.medicationEntries,
+      route: workspace.route,
+      timeframe: workspace.timeframe
+    }
   };
 }
 function buildDoseEventsCsv(filteredEvents, drugLookup) {
-  const rows = [
-    ["date", "end_date", "drug", "route", "amount", "unit", "percent_max", "notes"]
-  ];
+  const rows = [["date", "end_date", "drug", "route", "amount", "unit", "percent_max", "notes"]];
   for (const event of filteredEvents) {
     const drug = drugLookup.get(String(event.drugId));
     const maxDose = drug?.maxDailyDose ?? 100;
@@ -51382,7 +51451,11 @@ function renderTooltip(active, payload, drugLookup) {
   return h(
     "div",
     { className: "tooltip-card" },
-    h("strong", null, chartPoint.date === chartPoint.endDate ? chartPoint.date : `${chartPoint.date} to ${chartPoint.endDate}`),
+    h(
+      "strong",
+      null,
+      chartPoint.date === chartPoint.endDate ? chartPoint.date : `${chartPoint.date} to ${chartPoint.endDate}`
+    ),
     h(
       "div",
       { className: "tooltip-list" },
@@ -51394,11 +51467,7 @@ function renderTooltip(active, payload, drugLookup) {
           "div",
           { className: "tooltip-row", key: item.dataKey },
           h("span", { className: "tooltip-swatch", style: { backgroundColor: item.color } }),
-          h(
-            "span",
-            { className: "tooltip-name" },
-            drug?.name ?? item.name
-          ),
+          h("span", { className: "tooltip-name" }, drug?.name ?? item.name),
           h(
             "span",
             { className: "tooltip-value" },

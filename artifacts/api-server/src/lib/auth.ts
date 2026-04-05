@@ -1,16 +1,11 @@
-import crypto from "node:crypto";
-import bcrypt from "bcryptjs";
-import passport from "passport";
-import { Strategy as BearerStrategy } from "passport-http-bearer";
-import { Strategy as LocalStrategy } from "passport-local";
-import {
-  getAccountByEmail,
-  getAccountById,
-  sanitizeAccount,
-  type PublicAccount
-} from "./store.js";
+import crypto from 'node:crypto';
+import bcrypt from 'bcryptjs';
+import passport from 'passport';
+import { Strategy as BearerStrategy } from 'passport-http-bearer';
+import { Strategy as LocalStrategy } from 'passport-local';
+import { getAccountByEmail, getAccountById, sanitizeAccount, type PublicAccount } from './store.js';
 
-const AUTH_SECRET = process.env.AUTH_SECRET ?? "percentdosegraph-dev-secret";
+const AUTH_SECRET = process.env.AUTH_SECRET ?? 'percentdosegraph-dev-secret';
 
 type AuthTokenPayload = {
   sub: number;
@@ -27,21 +22,21 @@ export function configurePassport() {
   passport.use(
     new LocalStrategy(
       {
-        usernameField: "email",
-        passwordField: "password",
-        session: false
+        usernameField: 'email',
+        passwordField: 'password',
+        session: false,
       },
       async (email, password, done) => {
         try {
           const account = await getAccountByEmail(email.toLowerCase());
 
           if (!account?.passwordHash) {
-            return done(null, false, { message: "Invalid email or password" });
+            return done(null, false, { message: 'Invalid email or password' });
           }
 
           const matches = await bcrypt.compare(password, account.passwordHash);
           if (!matches || account.isActive === false) {
-            return done(null, false, { message: "Invalid email or password" });
+            return done(null, false, { message: 'Invalid email or password' });
           }
 
           return done(null, sanitizeAccount(account));
@@ -77,16 +72,12 @@ export async function hashPassword(password: string) {
   return bcrypt.hash(password, 12);
 }
 
-export function issueAuthToken(account: {
-  id: number;
-  email: string;
-  role?: string;
-}) {
+export function issueAuthToken(account: { id: number; email: string; role?: string }) {
   const payload: AuthTokenPayload = {
     sub: account.id,
     email: account.email,
-    role: account.role ?? "user",
-    iat: Math.floor(Date.now() / 1000)
+    role: account.role ?? 'user',
+    iat: Math.floor(Date.now() / 1000),
   };
 
   const encodedPayload = base64UrlEncode(JSON.stringify(payload));
@@ -95,7 +86,7 @@ export function issueAuthToken(account: {
 }
 
 export function verifyAuthToken(token: string) {
-  const [encodedPayload, signature] = token.split(".");
+  const [encodedPayload, signature] = token.split('.');
   if (!encodedPayload || !signature) {
     return null;
   }
@@ -114,13 +105,13 @@ export function verifyAuthToken(token: string) {
 }
 
 function signToken(encodedPayload: string) {
-  return crypto.createHmac("sha256", AUTH_SECRET).update(encodedPayload).digest("base64url");
+  return crypto.createHmac('sha256', AUTH_SECRET).update(encodedPayload).digest('base64url');
 }
 
 function base64UrlEncode(value: string) {
-  return Buffer.from(value, "utf8").toString("base64url");
+  return Buffer.from(value, 'utf8').toString('base64url');
 }
 
 function base64UrlDecode(value: string) {
-  return Buffer.from(value, "base64url").toString("utf8");
+  return Buffer.from(value, 'base64url').toString('utf8');
 }

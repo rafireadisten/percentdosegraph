@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -13,29 +13,68 @@
           <p class="eyebrow">Medication Dose Trend Viewer</p>
           <h1>See drug exposure as a percent of the patient-specific maximum dose.</h1>
           <p class="hero-text">
-            Track how dosing changes across a day, week, year, or multi-year period and
-            quickly compare actual dose to a clinician-defined ceiling.
+            Build a medication timeline, compare each dose against a patient-specific ceiling, and
+            review the pattern across days to years without losing the clinical context.
           </p>
         </div>
         <div class="hero-card">
           <p class="card-label">Current view</p>
           <p class="card-value" id="headlinePercent">0%</p>
-          <p class="card-caption">Average daily dose across the selected period</p>
+          <p class="card-caption">Average daily dose in the selected window</p>
         </div>
       </header>
+
+      <div class="workspace-heading">
+        <p class="eyebrow">Workspace snapshot</p>
+        <p class="workspace-heading-copy">
+          Keep the active patient, medication, dose ceiling, and recent events visible while you
+          enter or review data.
+        </p>
+      </div>
+
+      <section class="workspace-strip" aria-label="Current workspace overview">
+        <article class="workspace-card">
+          <p class="card-label">Patient</p>
+          <strong id="workspacePatient">Example Patient</strong>
+          <p id="workspaceMedication" class="workspace-detail">Morphine</p>
+        </article>
+        <article class="workspace-card">
+          <p class="card-label">Route + Window</p>
+          <strong id="workspaceRoute">PO</strong>
+          <p id="workspaceTimeframe" class="workspace-detail">1 year view</p>
+        </article>
+        <article class="workspace-card">
+          <p class="card-label">Reference Ceiling</p>
+          <strong id="workspaceMaxDose">120 mg/day</strong>
+          <p id="workspaceInference" class="workspace-detail">Manual or inferred max dose</p>
+        </article>
+        <article class="workspace-card">
+          <p class="card-label">Dose Events</p>
+          <strong id="workspaceEventCount">0 recorded</strong>
+          <p id="workspaceLastEvent" class="workspace-detail">No doses yet</p>
+        </article>
+      </section>
 
       <main class="layout">
         <section class="panel controls-panel">
           <div class="panel-header">
-            <h2>Clinical Inputs</h2>
-            <p>Define the patient context and the medication ceiling used for normalization.</p>
+            <p class="section-kicker">Step 1</p>
+            <h2>Configure the regimen</h2>
+            <p>Set the patient context and the ceiling used to normalize every dose to `% max`.</p>
           </div>
 
           <form id="settingsForm" class="stack">
             <label>
               Medication
-              <input id="medicationName" name="medicationName" type="text" value="Morphine" />
+              <input
+                id="medicationName"
+                name="medicationName"
+                type="text"
+                value="Morphine"
+                list="medicationSuggestions"
+              />
             </label>
+            <datalist id="medicationSuggestions"></datalist>
             <label>
               Patient
               <input id="patientName" name="patientName" type="text" value="Example Patient" />
@@ -59,14 +98,7 @@
             </label>
             <label>
               Reference maximum dose for this patient and route
-              <input
-                id="maxDose"
-                name="maxDose"
-                type="number"
-                min="0.1"
-                step="0.1"
-                value="120"
-              />
+              <input id="maxDose" name="maxDose" type="number" min="0.1" step="0.1" value="120" />
             </label>
             <label>
               Assessment window
@@ -84,12 +116,18 @@
 
           <div class="reference-panel">
             <div class="panel-header compact">
-              <h2>Reference Match</h2>
-              <p>The app can infer a starting max dose from a small built-in drug library, but you can always adjust it.</p>
+              <p class="section-kicker">Step 2</p>
+              <h2>Match a ceiling</h2>
+              <p>
+                The app can infer a starting max dose from a small built-in drug library, and you
+                can still adjust it manually.
+              </p>
             </div>
             <div class="reference-status">
               <p class="reference-pill" id="inferenceStatus">No reference match</p>
-              <button id="applyInferenceButton" class="secondary-button" type="button">Apply inferred max</button>
+              <button id="applyInferenceButton" class="secondary-button" type="button">
+                Apply inferred max
+              </button>
             </div>
             <div class="reference-meta">
               <p id="inferenceSummary"></p>
@@ -98,18 +136,50 @@
           </div>
 
           <div class="panel-header compact">
-            <h2>Dose Events</h2>
-            <p>Add actual doses by route. Trends only include the currently selected route, so PO and IV stay separate.</p>
+            <p class="section-kicker">Step 3</p>
+            <h2>Add and edit doses</h2>
+            <p>
+              Add actual doses by route. Trends only include the selected route, so PO, IV, and
+              other routes stay separated cleanly.
+            </p>
+            <div class="workflow-actions">
+              <button id="setTodayButton" type="button" class="secondary-button">Use Today</button>
+              <button id="setThreeYearButton" type="button" class="secondary-button">
+                Switch to 3 Years
+              </button>
+            </div>
             <div class="export-controls">
               <button id="importJsonButton" class="secondary-button">Import JSON</button>
               <button id="exportJsonButton" class="secondary-button">Export JSON</button>
               <button id="exportCsvButton" class="secondary-button">Export CSV</button>
-              <button id="clearDataButton" class="secondary-button" style="background: rgba(180, 35, 24, 0.08); color: var(--danger); border-color: rgba(180, 35, 24, 0.18);">Clear All</button>
-              <input type="file" id="importFileInput" accept=".json" style="display: none;" />
+              <button
+                id="clearDataButton"
+                class="secondary-button"
+                style="
+                  background: rgba(180, 35, 24, 0.08);
+                  color: var(--danger);
+                  border-color: rgba(180, 35, 24, 0.18);
+                "
+              >
+                Clear All
+              </button>
+              <input type="file" id="importFileInput" accept=".json" style="display: none" />
             </div>
           </div>
 
           <form id="doseForm" class="dose-form">
+            <div class="form-callout">
+              <div>
+                <p class="card-label">Dose Entry</p>
+                <h3 id="doseFormHeading">Add a dose event</h3>
+                <p id="doseFormHint" class="workspace-detail">
+                  Record one administered daily dose for the selected medication and route.
+                </p>
+              </div>
+              <button id="cancelEditButton" type="button" class="secondary-button hidden">
+                Cancel Edit
+              </button>
+            </div>
             <label>
               Date
               <input id="doseDate" name="doseDate" type="date" required />
@@ -131,7 +201,7 @@
               Dose
               <input id="doseAmount" name="doseAmount" type="number" min="0" step="0.1" required />
             </label>
-            <button type="submit" class="primary-button">Add Dose Event</button>
+            <button id="doseSubmitButton" type="submit" class="primary-button">Add Dose Event</button>
           </form>
 
           <div class="table-wrap">
@@ -142,7 +212,7 @@
                   <th>Route</th>
                   <th>Dose</th>
                   <th>% Max</th>
-                  <th></th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="eventsTableBody"></tbody>
@@ -152,7 +222,8 @@
 
         <section class="panel analytics-panel">
           <div class="panel-header">
-            <h2>Trend</h2>
+            <p class="section-kicker">Step 4</p>
+            <h2>Review the trend</h2>
             <p id="chartSubtitle">Average daily dose as a percentage of the maximum dose.</p>
           </div>
 
@@ -176,7 +247,12 @@
           </div>
 
           <div class="chart-card">
-            <canvas id="doseChart" width="900" height="380" aria-label="Dose percentage chart"></canvas>
+            <canvas
+              id="doseChart"
+              width="900"
+              height="380"
+              aria-label="Dose percentage chart"
+            ></canvas>
           </div>
 
           <div class="summary-grid">
@@ -193,14 +269,20 @@
 
         <section class="panel profiles-panel">
           <div class="panel-header">
-            <h2>Medication Profiles</h2>
-            <p>Save and load named medication snapshots for timeline comparison. Sign in to persist profiles in the backend account store.</p>
+            <p class="section-kicker">Step 5</p>
+            <h2>Save and reopen profiles</h2>
+            <p>
+              Save and load named medication snapshots for timeline comparison. Sign in to persist
+              profiles in the backend account store, or keep them local when you are offline.
+            </p>
           </div>
 
           <div class="auth-panel">
             <div class="auth-panel-header">
               <h3>Account</h3>
-              <p id="authStatusText">Not signed in. Profiles will stay local until you authenticate.</p>
+              <p id="authStatusText">
+                Not signed in. Profiles will stay local until you authenticate.
+              </p>
             </div>
 
             <form id="authForm" class="auth-grid">
@@ -214,12 +296,21 @@
               </label>
               <label>
                 Password
-                <input id="authPassword" name="authPassword" type="password" placeholder="Minimum 8 characters" />
+                <input
+                  id="authPassword"
+                  name="authPassword"
+                  type="password"
+                  placeholder="Minimum 8 characters"
+                />
               </label>
               <div class="auth-actions">
                 <button id="authSubmitButton" type="submit" class="secondary-button">Login</button>
-                <button id="authToggleButton" type="button" class="secondary-button">Need an account?</button>
-                <button id="authLogoutButton" type="button" class="secondary-button hidden">Logout</button>
+                <button id="authToggleButton" type="button" class="secondary-button">
+                  Need an account?
+                </button>
+                <button id="authLogoutButton" type="button" class="secondary-button hidden">
+                  Logout
+                </button>
               </div>
               <p id="authMessage" class="auth-message"></p>
             </form>
@@ -228,14 +319,61 @@
           <div class="profile-controls">
             <label>
               Profile name
-              <input id="profileName" name="profileName" type="text" placeholder="e.g. Patient A - Aug 2023" />
+              <input
+                id="profileName"
+                name="profileName"
+                type="text"
+                placeholder="e.g. Patient A - Aug 2023"
+              />
             </label>
             <button id="saveProfileButton" class="secondary-button">Save Profile</button>
-            <button id="loadProfileButton" class="secondary-button">Load Profile</button>
+            <button id="loadProfileButton" class="secondary-button">Refresh Profiles</button>
+          </div>
+
+          <div class="profile-toolbar">
+            <label>
+              Search profiles
+              <input
+                id="profileSearch"
+                name="profileSearch"
+                type="search"
+                placeholder="Find by patient, medication, or route"
+              />
+            </label>
+            <p id="profileStatusText" class="workspace-detail">No saved profiles yet.</p>
           </div>
 
           <div id="profileList" class="profile-list">
             <p class="empty-state">No saved profiles yet.</p>
+          </div>
+        </section>
+
+        <section class="panel generator-panel">
+          <div class="panel-header">
+            <p class="section-kicker">Demo tools</p>
+            <h2>Random MedGraf Generator</h2>
+            <p>
+              Generate a three-drug cardiovascular profile with stepwise dose changes over
+              three years. The chart plots `% max daily dose` against calendar dates.
+            </p>
+          </div>
+
+          <div class="generator-toolbar">
+            <button id="generateRandomProfileButton" class="primary-button" type="button">
+              Generate 3-Drug Cardio Profile
+            </button>
+            <p id="randomProfileMeta" class="generator-meta"></p>
+          </div>
+
+          <div id="randomProfileSummary" class="generator-summary"></div>
+
+          <div class="chart-card generator-chart-card">
+            <canvas
+              id="randomProfileChart"
+              width="1200"
+              height="420"
+              aria-label="Random cardiovascular medication profile chart"
+            ></canvas>
           </div>
         </section>
       </main>

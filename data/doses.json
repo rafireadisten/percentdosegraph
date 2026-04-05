@@ -1,21 +1,5 @@
 [
   {
-    "id": 1,
-    "drugId": 1,
-    "date": "2024-01-15",
-    "route": "PO",
-    "amount": 65,
-    "notes": "Morning dose"
-  },
-  {
-    "id": 2,
-    "drugId": 1,
-    "date": "2024-01-17",
-    "route": "PO",
-    "amount": 70,
-    "notes": "Increased dose"
-  },
-  {
     "id": 3,
     "drugId": 1,
     "date": "2024-01-20",
@@ -25,18 +9,15 @@
   },
   {
     "id": 4,
-    "drugId": 1,
-    "date": "2024-02-01",
+    "date": "2025-11-07",
     "route": "PO",
-    "amount": 92,
-    "notes": "Pain flare"
+    "amount": 10,
+    "notes": ""
   },
   {
     "id": 5,
-    "drugId": 1,
-    "date": "2024-02-15",
+    "date": "2026-04-04",
     "route": "PO",
-    "amount": 85,
-    "notes": "Stable dose"
+    "amount": 5
   }
 ]

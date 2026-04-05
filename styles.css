@@ -19,7 +19,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   color: var(--text);
   background:
     radial-gradient(circle at top left, rgba(13, 124, 102, 0.15), transparent 26%),
@@ -49,6 +49,49 @@ select {
   gap: 24px;
   align-items: stretch;
   margin-bottom: 24px;
+}
+
+.workspace-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.workspace-heading-copy {
+  margin-bottom: 0;
+  max-width: 62ch;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.workspace-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.workspace-card {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(255, 250, 242, 0.86);
+  box-shadow: 0 10px 30px rgba(44, 29, 9, 0.08);
+  min-height: 132px;
+}
+
+.workspace-card strong {
+  display: block;
+  font-size: 1.15rem;
+  margin-bottom: 6px;
+}
+
+.workspace-detail {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.5;
 }
 
 .hero-copy,
@@ -145,7 +188,33 @@ th {
   margin-top: 22px;
 }
 
+.section-kicker {
+  margin: 0 0 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--warning);
+}
+
+.panel-header h2 {
+  margin-bottom: 6px;
+  font-size: 1.35rem;
+}
+
+.panel-header p {
+  max-width: 68ch;
+  line-height: 1.55;
+}
+
 .export-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.workflow-actions {
   display: flex;
   gap: 8px;
   margin-top: 12px;
@@ -160,6 +229,17 @@ th {
 .dose-form {
   display: grid;
   gap: 14px;
+}
+
+.form-callout {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.66);
 }
 
 label {
@@ -192,7 +272,9 @@ select:focus {
   color: white;
   background: linear-gradient(135deg, #0d7c66, #1d4d4f);
   cursor: pointer;
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
   box-shadow: 0 12px 24px rgba(13, 124, 102, 0.22);
 }
 
@@ -308,6 +390,13 @@ tbody tr:last-child td {
   cursor: pointer;
 }
 
+.table-action.secondary {
+  border-color: rgba(13, 124, 102, 0.16);
+  background: rgba(13, 124, 102, 0.08);
+  color: var(--accent);
+  margin-right: 8px;
+}
+
 .metrics-grid,
 .summary-grid {
   display: grid;
@@ -365,7 +454,7 @@ canvas {
 }
 
 .mono {
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
 }
 
 .profile-controls {
@@ -429,6 +518,80 @@ canvas {
   gap: 8px;
 }
 
+.profile-toolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.profile-toolbar label {
+  flex: 1;
+  min-width: 240px;
+}
+
+.generator-panel {
+  grid-column: 1 / -1;
+}
+
+.generator-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.generator-meta {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.generator-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.generator-drug-card {
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.generator-drug-card h4,
+.generator-drug-card p {
+  margin-bottom: 6px;
+}
+
+.generator-drug-card p:last-child {
+  margin-bottom: 0;
+}
+
+.generator-chart-card {
+  padding: 16px;
+}
+
+.generator-regimen {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.generator-regimen p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
 .profile-item {
   display: flex;
   align-items: center;
@@ -457,6 +620,7 @@ canvas {
 .profile-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .empty-state {
@@ -468,10 +632,17 @@ canvas {
 
 @media (max-width: 1100px) {
   .hero,
+  .workspace-strip,
   .layout,
   .metrics-grid,
-  .summary-grid {
+  .summary-grid,
+  .generator-summary {
     grid-template-columns: 1fr;
+  }
+
+  .workspace-heading {
+    flex-direction: column;
+    align-items: start;
   }
 
   .hero-copy {
@@ -499,6 +670,33 @@ canvas {
   .reference-status {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .form-callout {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .profile-controls {
+    align-items: stretch;
+  }
+
+  .profile-controls .secondary-button,
+  .profile-controls label {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .workflow-actions,
+  .export-controls,
+  .auth-actions {
+    flex-direction: column;
+  }
+
+  .workflow-actions .secondary-button,
+  .export-controls .secondary-button,
+  .auth-actions .secondary-button {
+    width: 100%;
   }
 
   h1 {
