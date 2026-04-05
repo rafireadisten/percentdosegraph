@@ -14,7 +14,7 @@ const watchPaths = [
   'frontend-react/app.js',
   'frontend-react/styles.css',
   'artifacts/api-server/src',
-  'lib'
+  'lib',
 ];
 
 let buildInProgress = false;
@@ -42,7 +42,10 @@ runAutoBuild();
 watchPaths.forEach(watchPath => {
   if (fs.existsSync(watchPath)) {
     fs.watch(watchPath, { recursive: true }, (eventType, filename) => {
-      if (filename && (filename.endsWith('.js') || filename.endsWith('.ts') || filename.endsWith('.css'))) {
+      if (
+        filename &&
+        (filename.endsWith('.js') || filename.endsWith('.ts') || filename.endsWith('.css'))
+      ) {
         console.log(`📝 Change detected in ${filename}`);
         runAutoBuild();
       }
