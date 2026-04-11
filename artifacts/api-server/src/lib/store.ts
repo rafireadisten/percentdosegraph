@@ -34,6 +34,7 @@ type DrugRecord = {
   genericName?: string;
   drugClass?: string;
   maxDailyDose?: number;
+  routeMaxDoses?: Record<string, number>;
   maxSingleDose?: number;
   unit?: string;
   notes?: string;

@@ -293,6 +293,18 @@ textarea {
   margin-top: 0;
 }
 
+.auth-panel-shell {
+  gap: 0.75rem;
+}
+
+.auth-inline-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 .entry-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -607,6 +619,12 @@ textarea {
     padding-right: 0;
   }
 
+  .auth-inline-actions,
+  .auth-inline-status {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .tall-chart {
     height: 460px;
   }
@@ -680,6 +698,22 @@ textarea {
   gap: 1rem;
 }
 
+.auth-inline-form {
+  width: 100%;
+  max-width: none;
+  padding: 1rem;
+  border-radius: 18px;
+  box-shadow: none;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.auth-inline-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 .auth-form input {
   padding: 0.75rem;
   border: 1px solid var(--border);
@@ -704,6 +738,11 @@ textarea {
   cursor: not-allowed;
 }
 
+.auth-form .secondary-button {
+  background: rgba(33, 49, 58, 0.1);
+  color: var(--ink);
+}
+
 .auth-form .error {
   color: var(--danger);
   font-size: 0.9rem;
@@ -712,4 +751,79 @@ textarea {
 .user-info {
   font-size: 0.9rem;
   color: var(--muted);
+}
+
+/* Random Profile Generator Styles */
+.random-profile-container {
+  margin-top: 1rem;
+}
+
+.random-profile-meta {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--panel);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.random-profile-meta p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.random-profile-chart {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--panel);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.random-profile-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.generator-drug-card {
+  padding: 1rem;
+  background: var(--panel);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.generator-drug-card .card-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.generator-drug-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.generator-drug-card p {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.generator-regimen {
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+}
+
+.generator-regimen p {
+  margin: 0.25rem 0;
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+
+.generator-regimen strong {
+  color: var(--line);
 }

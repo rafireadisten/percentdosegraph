@@ -3,12 +3,24 @@ const API_BASE_PATH = resolveApiBasePath();
 const AUTH_TOKEN_STORAGE_KEY = 'percentdosegraph:static-auth-token';
 const AUTH_ACCOUNT_STORAGE_KEY = 'percentdosegraph:static-auth-account';
 const LOCAL_PROFILES_STORAGE_KEY = 'percentdosegraph:static-local-profiles';
+const CURRENT_DOSE_NOTE = 'Current dose segment';
+const STATIC_CHART_COLORS = [
+  '#0d7c66',
+  '#2956bf',
+  '#bc6c25',
+  '#8a3ffc',
+  '#c93d71',
+  '#1d4d4f',
+  '#7d5a12',
+  '#2f855a',
+];
 
 let drugReferenceLibrary = [];
 
 const state = {
   settings: {
     medicationName: 'Morphine',
+    medicationId: '',
     patientName: 'Example Patient',
     medicationRoute: 'PO',
     doseUnit: 'mg/day',
@@ -18,13 +30,20 @@ const state = {
   inference: {
     match: null,
     matches: [],
+    catalogMatch: null,
+    matchScore: -1,
     isOverridden: false,
+  },
+  libraryStatus: {
+    referenceLoaded: false,
+    catalogLoaded: false,
   },
   doseEvents: [],
   profiles: [],
   editingDoseId: null,
   profileSearch: '',
   profileStorageMode: 'local',
+  catalogDrugs: [],
   cardiovascularDrugs: [],
   randomProfile: {
     drugs: [],
@@ -56,27 +75,32 @@ const elements = {
   settingsForm: document.getElementById('settingsForm'),
   doseForm: document.getElementById('doseForm'),
   medicationName: document.getElementById('medicationName'),
+  medicationMatchStatus: document.getElementById('medicationMatchStatus'),
+  medicationSuggestions: document.getElementById('medicationSuggestions'),
   patientName: document.getElementById('patientName'),
   medicationRoute: document.getElementById('medicationRoute'),
   doseUnit: document.getElementById('doseUnit'),
   maxDose: document.getElementById('maxDose'),
   timeframe: document.getElementById('timeframe'),
-  doseDate: document.getElementById('doseDate'),
+  doseStartDate: document.getElementById('doseStartDate'),
+  doseEndDate: document.getElementById('doseEndDate'),
   doseRoute: document.getElementById('doseRoute'),
   doseAmount: document.getElementById('doseAmount'),
+  doseStatus: document.getElementById('doseStatus'),
+  doseStatusCurrentButton: document.getElementById('doseStatusCurrentButton'),
+  doseStatusEndedButton: document.getElementById('doseStatusEndedButton'),
   eventsTableBody: document.getElementById('eventsTableBody'),
   chartSubtitle: document.getElementById('chartSubtitle'),
   headlinePercent: document.getElementById('headlinePercent'),
-  averagePercent: document.getElementById('averagePercent'),
-  peakPercent: document.getElementById('peakPercent'),
-  totalDose: document.getElementById('totalDose'),
   highDays: document.getElementById('highDays'),
+  chartLegend: document.getElementById('chartLegend'),
   interpretationText: document.getElementById('interpretationText'),
   rangeText: document.getElementById('rangeText'),
   doseChart: document.getElementById('doseChart'),
   inferenceStatus: document.getElementById('inferenceStatus'),
   inferenceSummary: document.getElementById('inferenceSummary'),
   referenceList: document.getElementById('referenceList'),
+  referencePanel: document.getElementById('referencePanel'),
   applyInferenceButton: document.getElementById('applyInferenceButton'),
   exportJsonButton: document.getElementById('exportJsonButton'),
   exportCsvButton: document.getElementById('exportCsvButton'),
@@ -101,7 +125,6 @@ const elements = {
   randomProfileCanvas: document.getElementById('randomProfileChart'),
   randomProfileSummary: document.getElementById('randomProfileSummary'),
   randomProfileMeta: document.getElementById('randomProfileMeta'),
-  medicationSuggestions: document.getElementById('medicationSuggestions'),
   workspacePatient: document.getElementById('workspacePatient'),
   workspaceMedication: document.getElementById('workspaceMedication'),
   workspaceRoute: document.getElementById('workspaceRoute'),
@@ -111,20 +134,48 @@ const elements = {
   workspaceEventCount: document.getElementById('workspaceEventCount'),
   workspaceLastEvent: document.getElementById('workspaceLastEvent'),
   setTodayButton: document.getElementById('setTodayButton'),
-  setThreeYearButton: document.getElementById('setThreeYearButton'),
+  setTwoYearButton: document.getElementById('setTwoYearButton'),
   doseFormHeading: document.getElementById('doseFormHeading'),
   doseFormHint: document.getElementById('doseFormHint'),
   cancelEditButton: document.getElementById('cancelEditButton'),
   doseSubmitButton: document.getElementById('doseSubmitButton'),
+  doseSubmitAndAddButton: document.getElementById('doseSubmitAndAddButton'),
   profileSearch: document.getElementById('profileSearch'),
   profileStatusText: document.getElementById('profileStatusText'),
 };
 
+function getDoseStatusValue() {
+  return elements.doseStatus.value === 'ended' ? 'ended' : 'current';
+}
+
+function syncDoseDateConstraints() {
+  elements.doseEndDate.min = elements.doseStartDate.value || '';
+}
+
+function setDoseStatus(status) {
+  const normalizedStatus = status === 'ended' ? 'ended' : 'current';
+  elements.doseStatus.value = normalizedStatus;
+  elements.doseStatusCurrentButton.classList.toggle('active', normalizedStatus === 'current');
+  elements.doseStatusEndedButton.classList.toggle('active', normalizedStatus === 'ended');
+  elements.doseStatusEndedButton.classList.toggle('ended', normalizedStatus === 'ended');
+  elements.doseEndDate.disabled = normalizedStatus === 'current';
+
+  if (normalizedStatus === 'current') {
+    elements.doseEndDate.value = '';
+    elements.doseEndDate.required = false;
+  } else {
+    elements.doseEndDate.required = true;
+  }
+
+  syncDoseDateConstraints();
+}
+
 restoreAuthSession();
 syncFormFromState();
+setDoseStatus('current');
 initialize();
 
-elements.settingsForm.addEventListener('input', event => {
+function handleSettingsFormUpdate(event) {
   const previousRoute = state.settings.medicationRoute;
   const previousDrug = state.settings.medicationName;
 
@@ -132,7 +183,7 @@ elements.settingsForm.addEventListener('input', event => {
   state.settings.patientName = elements.patientName.value.trim() || 'Patient';
   state.settings.medicationRoute = elements.medicationRoute.value;
   state.settings.doseUnit = elements.doseUnit.value.trim() || 'units/day';
-  state.settings.timeframe = elements.timeframe.value;
+  state.settings.timeframe = normalizeTimeframe(elements.timeframe.value);
 
   if (event.target === elements.maxDose) {
     state.settings.maxDose = Math.max(Number(elements.maxDose.value) || 0, 0.1);
@@ -143,10 +194,40 @@ elements.settingsForm.addEventListener('input', event => {
       normalizeDrugName(previousDrug) !== normalizeDrugName(state.settings.medicationName);
 
     refreshInference({ preserveManual: !(routeChanged || drugChanged) });
+
+    if (state.inference.match && !state.inference.isOverridden) {
+      elements.maxDose.value = state.settings.maxDose;
+      elements.doseUnit.value = state.settings.doseUnit;
+    }
+
+    if (
+      event.target === elements.medicationName &&
+      event.type === 'change' &&
+      state.inference.catalogMatch &&
+      state.inference.matchScore >= 2
+    ) {
+      state.settings.medicationName = state.inference.catalogMatch.name;
+      elements.medicationName.value = state.settings.medicationName;
+    }
   }
 
   elements.doseRoute.value = state.settings.medicationRoute;
   render();
+}
+
+elements.settingsForm.addEventListener('input', handleSettingsFormUpdate);
+elements.settingsForm.addEventListener('change', handleSettingsFormUpdate);
+
+elements.doseStartDate.addEventListener('input', () => {
+  syncDoseDateConstraints();
+});
+
+elements.doseStatusCurrentButton.addEventListener('click', () => {
+  setDoseStatus('current');
+});
+
+elements.doseStatusEndedButton.addEventListener('click', () => {
+  setDoseStatus('ended');
 });
 
 elements.applyInferenceButton.addEventListener('click', () => {
@@ -174,7 +255,7 @@ elements.importFileInput.addEventListener('change', async event => {
 });
 
 elements.clearDataButton.addEventListener('click', async () => {
-  if (confirm('Are you sure you want to clear all dose events? This cannot be undone.')) {
+  if (confirm('Are you sure you want to clear all dose segments? This cannot be undone.')) {
     await clearDoseEvents();
   }
 });
@@ -204,12 +285,22 @@ elements.authLogoutButton.addEventListener('click', async () => {
 });
 
 elements.setTodayButton.addEventListener('click', () => {
-  elements.doseDate.value = formatDateInput(new Date());
+  elements.doseStartDate.value = formatDateInput(new Date());
+  syncDoseDateConstraints();
 });
 
-elements.setThreeYearButton.addEventListener('click', () => {
-  state.settings.timeframe = '3y';
+elements.setTwoYearButton.addEventListener('click', () => {
+  state.settings.timeframe = '2y';
   render();
+});
+
+elements.chartLegend.addEventListener('click', event => {
+  const button = event.target.closest('[data-action="remove-medication"]');
+  if (!button) {
+    return;
+  }
+
+  removeMedicationGroup(button.dataset.drugKey);
 });
 
 elements.cancelEditButton.addEventListener('click', () => {
@@ -230,17 +321,49 @@ elements.generateRandomProfileButton.addEventListener('click', () => {
 elements.doseForm.addEventListener('submit', async event => {
   event.preventDefault();
 
-  const date = elements.doseDate.value;
+  const startDate = elements.doseStartDate.value;
+  const endDate = elements.doseEndDate.value;
   const route = elements.doseRoute.value;
   const amount = Number(elements.doseAmount.value);
+  const status = getDoseStatusValue();
+  const saveAndAddAnother =
+    event.submitter?.id === 'doseSubmitAndAddButton' && !state.editingDoseId;
 
-  if (!date || Number.isNaN(amount) || amount < 0) {
+  if (!startDate || Number.isNaN(amount) || amount <= 0) {
     return;
   }
 
-  const nextEvent = { date, route, amount };
+  if (status === 'ended' && !endDate) {
+    elements.doseEndDate.focus();
+    return;
+  }
+
+  if (endDate && endDate < startDate) {
+    elements.doseEndDate.focus();
+    return;
+  }
+
+  const nextEvent = normalizeDoseEvent({
+    date: startDate,
+    endDate: status === 'current' ? '' : endDate,
+    route,
+    amount,
+    medicationId: state.settings.medicationId,
+    medicationName: state.settings.medicationName,
+    maxDose: state.settings.maxDose,
+    doseUnit: state.settings.doseUnit,
+    status,
+    notes: status === 'current' ? CURRENT_DOSE_NOTE : '',
+  });
   const editingDoseIndex = state.doseEvents.findIndex(item => item.id === state.editingDoseId);
   const editingDose = editingDoseIndex >= 0 ? state.doseEvents[editingDoseIndex] : null;
+  const apiPayload = {
+    date: nextEvent.date,
+    endDate: nextEvent.endDate || undefined,
+    route: nextEvent.route,
+    amount: nextEvent.amount,
+    notes: nextEvent.isCurrent ? CURRENT_DOSE_NOTE : '',
+  };
 
   if (editingDose) {
     const updatedPayload = normalizeDoseEvent({
@@ -248,9 +371,12 @@ elements.doseForm.addEventListener('submit', async event => {
       ...nextEvent,
     });
 
-    if (!String(editingDose.id).startsWith('local-') && !String(editingDose.id).startsWith('seed-')) {
+    if (
+      !String(editingDose.id).startsWith('local-') &&
+      !String(editingDose.id).startsWith('seed-')
+    ) {
       try {
-        const updated = await apiPut(`/doses/${editingDose.id}`, nextEvent);
+        const updated = await apiPut(`/doses/${editingDose.id}`, apiPayload);
         state.doseEvents.splice(editingDoseIndex, 1, normalizeDoseEvent(updated));
       } catch (error) {
         console.warn('Updating dose locally because API update failed:', error);
@@ -261,7 +387,7 @@ elements.doseForm.addEventListener('submit', async event => {
     }
   } else {
     try {
-      const created = await apiPost('/doses', nextEvent);
+      const created = await apiPost('/doses', apiPayload);
       state.doseEvents.push(normalizeDoseEvent(created));
     } catch (error) {
       console.warn('Saving dose locally because API create failed:', error);
@@ -273,8 +399,16 @@ elements.doseForm.addEventListener('submit', async event => {
   }
 
   state.doseEvents.sort((a, b) => a.date.localeCompare(b.date));
-  resetDoseForm();
+  if (saveAndAddAnother) {
+    prepareNextDoseForm(nextEvent);
+  } else {
+    resetDoseForm();
+  }
   render();
+
+  if (saveAndAddAnother) {
+    elements.doseStartDate.focus();
+  }
 });
 
 elements.eventsTableBody.addEventListener('click', async event => {
@@ -307,6 +441,23 @@ elements.eventsTableBody.addEventListener('click', async event => {
   state.doseEvents.splice(index, 1);
   render();
 });
+
+function removeMedicationGroup(drugKey) {
+  if (!drugKey) {
+    return;
+  }
+
+  state.doseEvents = state.doseEvents.filter(event => getDoseEventDrugKey(event) !== drugKey);
+
+  if (state.editingDoseId) {
+    const editingStillExists = state.doseEvents.some(event => event.id === state.editingDoseId);
+    if (!editingStillExists) {
+      resetDoseForm();
+    }
+  }
+
+  render();
+}
 
 elements.profileList.addEventListener('click', async event => {
   const button = event.target.closest('button[data-profile-id]');
@@ -344,57 +495,69 @@ async function initialize() {
 }
 
 async function loadDrugReferenceLibrary() {
-  const candidatePaths = ['./drug-library.json', '../drug-library.json'];
+  const candidatePaths = ['./drug-library.json', '../drug-library.json', '/drug-library.json'];
 
   try {
-    let response = null;
-
     for (const path of candidatePaths) {
-      const attempt = await fetch(path);
-      if (attempt.ok) {
-        response = attempt;
-        break;
+      try {
+        const attempt = await fetch(path);
+        const contentType = attempt.headers.get('content-type') || '';
+
+        if (!attempt.ok || !contentType.includes('application/json')) {
+          continue;
+        }
+
+        drugReferenceLibrary = await attempt.json();
+        state.libraryStatus.referenceLoaded = true;
+        renderMedicationSuggestions();
+        return;
+      } catch {
+        continue;
       }
     }
-
-    if (!response) {
-      throw new Error('Unable to load drug-library.json from known paths');
-    }
-
-    drugReferenceLibrary = await response.json();
-    renderMedicationSuggestions();
+    throw new Error('Unable to load drug-library.json from known paths');
   } catch (error) {
     console.error(error);
     drugReferenceLibrary = [];
+    state.libraryStatus.referenceLoaded = false;
     elements.inferenceSummary.textContent =
       'Reference library failed to load. Inference is unavailable until drug-library.json is served correctly.';
+    elements.medicationMatchStatus.textContent =
+      'Drug library failed to load. Serve the static app over localhost so medication matching can work.';
   }
 }
 
 async function loadCardiovascularDrugLibrary() {
-  const candidatePaths = ['./data/drugs.json', '../data/drugs.json'];
+  const candidatePaths = ['./data/drugs.json', '../data/drugs.json', '/data/drugs.json'];
 
   try {
-    let response = null;
-
     for (const path of candidatePaths) {
-      const attempt = await fetch(path);
-      if (attempt.ok) {
-        response = attempt;
-        break;
+      try {
+        const attempt = await fetch(path);
+        const contentType = attempt.headers.get('content-type') || '';
+
+        if (!attempt.ok || !contentType.includes('application/json')) {
+          continue;
+        }
+
+        const library = await attempt.json();
+        state.libraryStatus.catalogLoaded = true;
+        state.catalogDrugs = library;
+        state.cardiovascularDrugs = library.filter(drug => isCardiovascularDrugClass(drug.drugClass));
+        renderMedicationSuggestions();
+        return;
+      } catch {
+        continue;
       }
     }
-
-    if (!response) {
-      throw new Error('Unable to load cardiovascular source data from known paths');
-    }
-
-    const library = await response.json();
-    state.cardiovascularDrugs = library.filter(drug => isCardiovascularDrugClass(drug.drugClass));
-    renderMedicationSuggestions();
+    throw new Error('Unable to load cardiovascular source data from known paths');
   } catch (error) {
     console.error(error);
+    state.libraryStatus.catalogLoaded = false;
+    state.catalogDrugs = [];
     state.cardiovascularDrugs = [];
+    elements.medicationMatchStatus.textContent =
+      'Drug catalog failed to load. Serve the static app over localhost so medication matching can work.';
   }
 }
 
@@ -405,31 +568,27 @@ async function loadDoseEvents() {
       .map(normalizeDoseEvent)
       .sort((a, b) => a.date.localeCompare(b.date));
   } catch (error) {
-    console.warn('Falling back to seeded dose events:', error);
+    console.warn('Falling back to seeded dose segments:', error);
     state.doseEvents = seedDoseEvents();
   }
 }
 
 function render() {
   const range = buildRange(state.settings.timeframe);
-  const filteredEvents = getFilteredEvents();
-  const dailyPoints = buildDailySeries(
-    range.startDate,
-    range.endDate,
-    filteredEvents,
-    state.settings.maxDose
-  );
-  const chartPoints = bucketSeries(dailyPoints);
-  const metrics = summarize(dailyPoints);
+  const filteredEvents = getFilteredEvents(range);
+  const drugGroups = getVisibleDrugGroups(filteredEvents);
+  const dailyPoints = buildMultiDrugDailySeries(range.startDate, range.endDate, drugGroups);
+  const metrics = summarize(dailyPoints, drugGroups);
 
   syncFormFromState();
+  renderMedicationMatchState();
   renderReferenceState();
   renderEventsTable(filteredEvents);
   renderMetrics(metrics);
   renderNarrative(range, metrics);
-  renderChart(chartPoints);
+  renderChart(dailyPoints, drugGroups);
   renderAuthState();
-  renderWorkspaceSummary();
+  renderWorkspaceSummary(range, filteredEvents);
   renderDoseFormState();
   renderRandomProfile();
 }
@@ -464,44 +623,151 @@ function syncFormFromState() {
   elements.medicationRoute.value = state.settings.medicationRoute;
   elements.doseUnit.value = state.settings.doseUnit;
   elements.maxDose.value = state.settings.maxDose;
+  state.settings.timeframe = normalizeTimeframe(state.settings.timeframe);
   elements.timeframe.value = state.settings.timeframe;
-  elements.doseDate.value = elements.doseDate.value || formatDateInput(new Date());
+  elements.doseStartDate.value = elements.doseStartDate.value || formatDateInput(new Date());
   elements.doseRoute.value = state.settings.medicationRoute;
+  syncDoseDateConstraints();
 }
 
-function renderWorkspaceSummary() {
-  const filteredEvents = getFilteredEvents();
-  const lastEvent = filteredEvents.length ? filteredEvents[filteredEvents.length - 1] : null;
+function getDoseEventDrugName(event) {
+  return event.medicationName || 'Medication';
+}
+
+function getDoseEventMaxDose(event) {
+  const fallback = Number(state.settings.maxDose) || 1;
+  const eventMaxDose = Number(event.maxDose);
+  return eventMaxDose > 0 ? eventMaxDose : fallback;
+}
+
+function getDoseEventUnit(event) {
+  return event.doseUnit || state.settings.doseUnit;
+}
+
+function getDoseEventDrugKey(event) {
+  return normalizeDrugName(getDoseEventDrugName(event));
+}
+
+function getVisibleDrugGroups(events) {
+  const grouped = new Map();
+
+  for (const event of events) {
+    const key = getDoseEventDrugKey(event);
+    if (!grouped.has(key)) {
+      grouped.set(key, {
+        key,
+        name: getDoseEventDrugName(event),
+        route: event.route,
+        maxDose: getDoseEventMaxDose(event),
+        unit: getDoseEventUnit(event),
+        events: [],
+      });
+    }
+
+    const group = grouped.get(key);
+    group.events.push(event);
+    group.maxDose = Math.max(group.maxDose, getDoseEventMaxDose(event));
+  }
+
+  return Array.from(grouped.values()).sort((left, right) => left.name.localeCompare(right.name));
+}
+
+function isDoseEventCurrent(event) {
+  return event.status === 'current' || event.isCurrent === true;
+}
+
+function getDoseEventStatusLabel(event) {
+  return isDoseEventCurrent(event) ? 'Current' : 'Ended';
+}
+
+function getDoseEventRangeEnd(event, fallbackEndKey) {
+  return event.endDate || (isDoseEventCurrent(event) ? fallbackEndKey : event.date);
+}
+
+function getDoseEventAnchorEnd(event) {
+  return getDoseEventRangeEnd(event, formatDateInput(new Date()));
+}
+
+function getLatestVisibleDoseEvent(events, rangeEndKey) {
+  return events.reduce((latest, event) => {
+    if (!latest) {
+      return event;
+    }
+
+    const latestEnd = getDoseEventRangeEnd(latest, rangeEndKey);
+    const eventEnd = getDoseEventRangeEnd(event, rangeEndKey);
+
+    if (eventEnd !== latestEnd) {
+      return eventEnd > latestEnd ? event : latest;
+    }
+
+    return event.date > latest.date ? event : latest;
+  }, null);
+}
+
+function prepareNextDoseForm(referenceEvent) {
+  state.editingDoseId = null;
+
+  const nextStartDate = referenceEvent.endDate
+    ? formatDateInput(addDays(new Date(`${referenceEvent.endDate}T00:00:00`), 1))
+    : formatDateInput(new Date());
+
+  elements.doseStartDate.value = nextStartDate;
+  elements.doseEndDate.value = '';
+  elements.doseRoute.value = referenceEvent.route;
+  elements.doseAmount.value = referenceEvent.amount;
+  state.settings.medicationId = referenceEvent.medicationId ?? '';
+  state.settings.medicationName = getDoseEventDrugName(referenceEvent);
+  state.settings.maxDose = getDoseEventMaxDose(referenceEvent);
+  state.settings.doseUnit = getDoseEventUnit(referenceEvent);
+  syncFormFromState();
+  setDoseStatus('current');
+}
+
+function renderWorkspaceSummary(range, filteredEvents = getFilteredEvents(range)) {
+  const rangeEndKey = formatDateInput(range.endDate);
+  const lastEvent = filteredEvents.length ? getLatestVisibleDoseEvent(filteredEvents, rangeEndKey) : null;
+  const visibleDrugGroups = getVisibleDrugGroups(filteredEvents);
+  const visibleRoutes = [...new Set(filteredEvents.map(event => event.route).filter(Boolean))];
   const referenceLabel = state.inference.match
     ? `${state.inference.match.drug} ${state.inference.match.route}${state.inference.isOverridden ? ' adjusted' : ' inferred'}`
     : 'Manual ceiling';
 
   elements.workspacePatient.textContent = state.settings.patientName;
-  elements.workspaceMedication.textContent = state.settings.medicationName;
-  elements.workspaceRoute.textContent = state.settings.medicationRoute;
+  elements.workspaceMedication.textContent = visibleDrugGroups.length
+    ? visibleDrugGroups.map(group => group.name).join(' · ')
+    : `${state.settings.medicationName} only`;
+  elements.workspaceRoute.textContent = visibleRoutes.length
+    ? visibleRoutes.length === 1
+      ? visibleRoutes[0]
+      : 'Mixed routes'
+    : state.settings.medicationRoute;
   elements.workspaceTimeframe.textContent = formatTimeframeLabel(state.settings.timeframe);
   elements.workspaceMaxDose.textContent = `${formatNumber(state.settings.maxDose)} ${state.settings.doseUnit}`;
   elements.workspaceInference.textContent = referenceLabel;
-  elements.workspaceEventCount.textContent = `${filteredEvents.length} recorded`;
+  elements.workspaceEventCount.textContent = `${filteredEvents.length} in view`;
   elements.workspaceLastEvent.textContent = lastEvent
-    ? `Latest ${formatDisplayDate(new Date(`${lastEvent.date}T00:00:00`))} · ${formatNumber(lastEvent.amount)} ${displayEventUnit()}`
-    : 'No doses yet';
+    ? isDoseEventCurrent(lastEvent)
+      ? `Current dose since ${formatDisplayDate(new Date(`${lastEvent.date}T00:00:00`))} · ${formatNumber(lastEvent.amount)} ${displayEventUnit()}`
+      : `Latest segment ended ${formatDisplayDate(new Date(`${getDoseEventRangeEnd(lastEvent, rangeEndKey)}T00:00:00`))} · ${formatNumber(lastEvent.amount)} ${displayEventUnit()}`
+    : `No dose segments in ${formatTimeframeLabel(state.settings.timeframe).replace(' view', '')}`;
 }
 
 function renderDoseFormState() {
   const isEditing = Boolean(state.editingDoseId);
   elements.cancelEditButton.classList.toggle('hidden', !isEditing);
-  elements.doseFormHeading.textContent = isEditing ? 'Edit dose event' : 'Add a dose event';
+  elements.doseSubmitAndAddButton.classList.toggle('hidden', isEditing);
+  elements.doseFormHeading.textContent = isEditing ? 'Edit dose segment' : 'Add a dose segment';
   elements.doseFormHint.textContent = isEditing
-    ? 'Update the recorded dose, route, or date and save the revision.'
-    : 'Record one administered daily dose for the selected medication and route.';
-  elements.doseSubmitButton.textContent = isEditing ? 'Update Dose Event' : 'Add Dose Event';
+    ? 'Update the recorded start date, end date, status, route, or dose and save the revision.'
+    : 'Record one dose segment for the selected medication and route, then add another segment if the dosing changes.';
+  elements.doseSubmitButton.textContent = isEditing ? 'Update Dose Segment' : 'Save Dose Segment';
 }
 
 function renderMedicationSuggestions() {
   const suggestions = [
     ...drugReferenceLibrary.map(entry => entry.drug).filter(Boolean),
-    ...state.cardiovascularDrugs.map(entry => entry.name).filter(Boolean),
+    ...state.catalogDrugs.map(entry => entry.name).filter(Boolean),
   ];
   const uniqueSuggestions = [...new Set(suggestions)].sort((a, b) => a.localeCompare(b));
 
@@ -511,13 +777,16 @@ function renderMedicationSuggestions() {
 }
 
 function refreshInference({ preserveManual }) {
-  const matches = findReferenceMatches(
+  const resolution = resolveMedicationBinding(
     state.settings.medicationName,
     state.settings.medicationRoute
   );
 
-  state.inference.matches = matches;
-  state.inference.match = matches[0] || null;
+  state.settings.medicationId = resolution.medicationId;
+  state.inference.matches = resolution.referenceMatches;
+  state.inference.match = resolution.match;
+  state.inference.catalogMatch = resolution.catalogMatch;
+  state.inference.matchScore = resolution.matchScore;
 
   if (!preserveManual) {
     state.inference.isOverridden = false;
@@ -542,13 +811,13 @@ function applyInferredMaxDose() {
 function renderReferenceState() {
   const match = state.inference.match;
 
+  elements.referencePanel.classList.toggle('hidden', !match);
   elements.applyInferenceButton.disabled = !match;
 
   if (!match) {
-    elements.inferenceStatus.textContent = 'No reference match';
+    elements.inferenceStatus.textContent = '';
     elements.inferenceStatus.className = 'reference-pill';
-    elements.inferenceSummary.textContent =
-      'No built-in drug + route reference matched the current regimen. Enter the reference max dose manually.';
+    elements.inferenceSummary.textContent = '';
     elements.referenceList.innerHTML = '';
     return;
   }
@@ -577,24 +846,67 @@ function renderReferenceState() {
     .join('');
 }
 
-function renderEventsTable(filteredEvents) {
-  const maxDose = state.settings.maxDose;
+function renderMedicationMatchState() {
+  const typedName = state.settings.medicationName.trim();
+  const catalogMatch = state.inference.catalogMatch;
+  const referenceMatch = state.inference.match;
 
-  if (!filteredEvents.length) {
-    elements.eventsTableBody.innerHTML = `<tr><td colspan="5">No ${state.settings.medicationRoute} dose events in the current view yet.</td></tr>`;
+  if (!state.libraryStatus.referenceLoaded && !state.libraryStatus.catalogLoaded) {
+    elements.medicationMatchStatus.textContent =
+      'Drug libraries did not load, so medication matching is unavailable right now.';
     return;
   }
 
-  elements.eventsTableBody.innerHTML = filteredEvents
+  if (!state.libraryStatus.catalogLoaded && referenceMatch) {
+    elements.medicationMatchStatus.textContent = `Reference max dose matched ${referenceMatch.drug} ${referenceMatch.route}, but the broader drug catalog did not load.`;
+    return;
+  }
+
+  if (!state.libraryStatus.referenceLoaded && catalogMatch) {
+    elements.medicationMatchStatus.textContent = `Linked to ${catalogMatch.name} (ID ${catalogMatch.id}), but the reference max-dose library did not load.`;
+    return;
+  }
+
+  if (!typedName) {
+    elements.medicationMatchStatus.textContent =
+      'Type or choose a medication to link it to the local library.';
+    return;
+  }
+
+  if (catalogMatch && referenceMatch) {
+    elements.medicationMatchStatus.textContent = `Linked to ${catalogMatch.name} (ID ${catalogMatch.id}) with a ${referenceMatch.route} reference max dose match.`;
+    return;
+  }
+
+  if (catalogMatch) {
+    elements.medicationMatchStatus.textContent = `Linked to ${catalogMatch.name} (ID ${catalogMatch.id}), but no ${state.settings.medicationRoute} reference max dose is available.`;
+    return;
+  }
+
+  elements.medicationMatchStatus.textContent =
+    'No catalog-linked medication match is available for the current selection.';
+}
+
+function renderEventsTable(filteredEvents) {
+  if (!filteredEvents.length) {
+    elements.eventsTableBody.innerHTML = `<tr><td colspan="8">No dose segments fall inside the current ${formatTimeframeLabel(state.settings.timeframe).replace(' view', '')}.</td></tr>`;
+    return;
+  }
+
+  elements.eventsTableBody.innerHTML = [...filteredEvents]
+    .sort((left, right) => right.date.localeCompare(left.date))
     .map(event => {
-      const percent = ((event.amount / maxDose) * 100).toFixed(1);
+      const percent = ((event.amount / getDoseEventMaxDose(event)) * 100).toFixed(1);
       const index = state.doseEvents.indexOf(event);
 
       return `
         <tr>
+          <td>${escapeHtml(getDoseEventDrugName(event))}</td>
           <td class="mono">${event.date}</td>
+          <td class="mono">${event.endDate || 'Ongoing'}</td>
+          <td><span class="status-badge ${isDoseEventCurrent(event) ? 'current' : 'ended'}">${getDoseEventStatusLabel(event)}</span></td>
           <td>${event.route}</td>
-          <td>${formatNumber(event.amount)} ${displayEventUnit()}</td>
+          <td>${formatNumber(event.amount)} ${getDoseEventUnit(event).replace('/day', '')}</td>
           <td>${percent}%</td>
           <td>
             <button class="table-action secondary" data-action="edit" data-index="${index}">Edit</button>
@@ -608,9 +920,16 @@ function renderEventsTable(filteredEvents) {
 
 function startEditingDoseEvent(doseEvent) {
   state.editingDoseId = doseEvent.id;
-  elements.doseDate.value = doseEvent.date;
+  state.settings.medicationId = doseEvent.medicationId ?? '';
+  state.settings.medicationName = getDoseEventDrugName(doseEvent);
+  state.settings.maxDose = getDoseEventMaxDose(doseEvent);
+  state.settings.doseUnit = getDoseEventUnit(doseEvent);
+  syncFormFromState();
+  elements.doseStartDate.value = doseEvent.date;
+  elements.doseEndDate.value = doseEvent.endDate || '';
   elements.doseRoute.value = doseEvent.route;
   elements.doseAmount.value = doseEvent.amount;
+  setDoseStatus(isDoseEventCurrent(doseEvent) ? 'current' : 'ended');
   renderDoseFormState();
   elements.doseAmount.focus();
   elements.doseForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -619,39 +938,34 @@ function startEditingDoseEvent(doseEvent) {
 function resetDoseForm() {
   state.editingDoseId = null;
   elements.doseForm.reset();
-  elements.doseDate.value = formatDateInput(new Date());
+  elements.doseStartDate.value = formatDateInput(new Date());
+  elements.doseEndDate.value = '';
   elements.doseRoute.value = state.settings.medicationRoute;
   elements.doseAmount.value = '';
+  setDoseStatus('current');
 }
 
 function renderMetrics(metrics) {
-  elements.headlinePercent.textContent = `${metrics.averagePercent.toFixed(1)}%`;
-  elements.averagePercent.textContent = `${metrics.averagePercent.toFixed(1)}%`;
-  elements.peakPercent.textContent = `${metrics.peakPercent.toFixed(1)}%`;
-  elements.totalDose.textContent = `${formatNumber(metrics.totalDose)} ${displayEventUnit()}`;
+  elements.headlinePercent.textContent = `${metrics.daysAbove80}`;
   elements.highDays.textContent = `${metrics.daysAbove80}`;
 }
 
 function renderNarrative(range, metrics) {
-  elements.chartSubtitle.textContent = `${state.settings.medicationName} ${state.settings.medicationRoute} for ${state.settings.patientName}, expressed as a percentage of ${formatNumber(state.settings.maxDose)} ${state.settings.doseUnit}.`;
+  const comparedLabel =
+    metrics.drugCount > 1
+      ? `${metrics.drugCount} drugs compared on the same timeline`
+      : `${state.settings.medicationName} ${state.settings.medicationRoute}`;
+  elements.chartSubtitle.textContent = `${comparedLabel} for ${state.settings.patientName}, shown as ordinal stepwise dose segments and expressed as percent of each drug's own max daily dose.`;
   elements.rangeText.textContent = `${formatDisplayDate(range.startDate)} through ${formatDisplayDate(range.endDate)} (${range.totalDays} days).`;
-
-  let riskBand = 'well below';
-
-  if (metrics.averagePercent >= 80) {
-    riskBand = 'near or above';
-  } else if (metrics.averagePercent >= 50) {
-    riskBand = 'approaching';
-  }
 
   const referenceText = state.inference.match
     ? `The current max dose is anchored to a listed reference entry for ${state.inference.match.drug} ${state.inference.match.route}${state.inference.isOverridden ? ', then manually adjusted' : ''}.`
     : 'No reference entry was found, so the current max dose is fully manual.';
 
-  elements.interpretationText.textContent = `${state.settings.medicationName} ${state.settings.medicationRoute} averaged ${metrics.averagePercent.toFixed(1)}% of the patient-specific maximum dose during the selected window, with a peak daily exposure of ${metrics.peakPercent.toFixed(1)}%. This pattern is ${riskBand} the defined ceiling on average, and ${metrics.daysAbove80} day(s) exceeded 80% of max. ${referenceText}`;
+  elements.interpretationText.textContent = `${metrics.drugCount > 1 ? `The ${metrics.drugCount} visible drugs` : `${state.settings.medicationName} ${state.settings.medicationRoute}`} are shown as recorded ordinal dose segments across the selected window. ${metrics.daysAbove80} day(s) exceeded 80% of the defined maximum dose. ${referenceText}`;
 }
 
-function renderChart(points) {
+function renderChart(points, drugGroups) {
   const canvas = elements.doseChart;
   const ctx = canvas.getContext('2d');
   const width = canvas.width;
@@ -659,43 +973,81 @@ function renderChart(points) {
   const padding = { top: 22, right: 22, bottom: 54, left: 60 };
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
-  const maxY = Math.max(100, ...points.map(point => point.percentOfMax), 10);
+  const maxY = Math.max(
+    100,
+    ...points.flatMap(point =>
+      drugGroups.map(group => Number(point.series?.[group.key]?.percentOfMax ?? 0))
+    ),
+    10
+  );
 
   ctx.clearRect(0, 0, width, height);
 
   drawRoundedRect(ctx, 0, 0, width, height, 18, '#fffaf5');
   drawGrid(ctx, padding, chartWidth, chartHeight, maxY);
+  renderChartLegend(drugGroups);
 
-  if (!points.length) {
+  if (!points.length || !drugGroups.length) {
     return;
   }
 
-  const xStep = points.length > 1 ? chartWidth / (points.length - 1) : chartWidth / 2;
+  const xForIndex = index =>
+    points.length > 1 ? padding.left + (chartWidth * index) / (points.length - 1) : padding.left + chartWidth / 2;
 
-  ctx.save();
-  ctx.beginPath();
+  drugGroups.forEach((group, groupIndex) => {
+    const color = STATIC_CHART_COLORS[groupIndex % STATIC_CHART_COLORS.length];
+    const seriesValues = points.map(point => Number(point.series?.[group.key]?.percentOfMax ?? 0));
+    const hasAnyValue = seriesValues.some(value => value > 0);
 
-  points.forEach((point, index) => {
-    const x = padding.left + xStep * index;
-    const y = padding.top + chartHeight - (point.percentOfMax / maxY) * chartHeight;
-
-    if (index === 0) {
-      ctx.moveTo(x, y);
-    } else {
-      ctx.lineTo(x, y);
+    if (!hasAnyValue) {
+      return;
     }
+
+    ctx.save();
+    ctx.beginPath();
+
+    seriesValues.forEach((value, index) => {
+      const x = xForIndex(index);
+      const y = padding.top + chartHeight - (value / maxY) * chartHeight;
+
+      if (index === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        const previousValue = seriesValues[index - 1];
+        const previousY = padding.top + chartHeight - (previousValue / maxY) * chartHeight;
+        ctx.lineTo(x, previousY);
+        ctx.lineTo(x, y);
+      }
+    });
+
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = color;
+    ctx.stroke();
+    ctx.restore();
+
+    points.forEach((point, index) => {
+      if (
+        points.length > 36 &&
+        index % Math.ceil(points.length / 12) !== 0 &&
+        index !== points.length - 1
+      ) {
+        return;
+      }
+
+      const value = Number(point.series?.[group.key]?.percentOfMax ?? 0);
+      if (value <= 0) {
+        return;
+      }
+
+      const x = xForIndex(index);
+      const y = padding.top + chartHeight - (value / maxY) * chartHeight;
+
+      ctx.beginPath();
+      ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+    });
   });
-
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = '#0d7c66';
-  ctx.stroke();
-
-  ctx.lineTo(padding.left + xStep * (points.length - 1), padding.top + chartHeight);
-  ctx.lineTo(padding.left, padding.top + chartHeight);
-  ctx.closePath();
-  ctx.fillStyle = 'rgba(13, 124, 102, 0.14)';
-  ctx.fill();
-  ctx.restore();
 
   points.forEach((point, index) => {
     if (
@@ -706,19 +1058,30 @@ function renderChart(points) {
       return;
     }
 
-    const x = padding.left + xStep * index;
-    const y = padding.top + chartHeight - (point.percentOfMax / maxY) * chartHeight;
-
-    ctx.beginPath();
-    ctx.arc(x, y, 3.5, 0, Math.PI * 2);
-    ctx.fillStyle = point.percentOfMax >= 80 ? '#bc6c25' : '#0d7c66';
-    ctx.fill();
-
+    const x = xForIndex(index);
     ctx.fillStyle = '#69594b';
     ctx.font = '12px monospace';
     ctx.textAlign = 'center';
     ctx.fillText(shortDate(point.date), x, padding.top + chartHeight + 22);
   });
+}
+
+function renderChartLegend(drugGroups) {
+  if (!elements.chartLegend) {
+    return;
+  }
+
+  if (!drugGroups.length) {
+    elements.chartLegend.innerHTML = '';
+    return;
+  }
+
+  elements.chartLegend.innerHTML = drugGroups
+    .map((group, index) => {
+      const color = STATIC_CHART_COLORS[index % STATIC_CHART_COLORS.length];
+      return `<span class="legend-chip"><span class="legend-swatch" style="background:${color}"></span>${escapeHtml(group.name)} <button class="table-action secondary" type="button" data-action="remove-medication" data-drug-key="${escapeHtml(group.key)}">Remove</button></span>`;
+    })
+    .join('');
 }
 
 function renderRandomProfile() {
@@ -940,16 +1303,39 @@ function drawRoundedRect(ctx, x, y, width, height, radius, fill) {
 }
 
 function buildRange(timeframe) {
-  const endDate = getTimelineAnchorDate();
+  const normalizedTimeframe = normalizeTimeframe(timeframe);
+  const anchorDate = getTimelineAnchorDate();
+  const timelineEvents = getTimelineRangeEvents();
+  const latestEvent = timelineEvents.reduce((latest, event) => {
+    if (!latest) {
+      return event;
+    }
+
+    return getDoseEventAnchorEnd(event) > getDoseEventAnchorEnd(latest) ? event : latest;
+  }, null);
+  const earliestEvent = timelineEvents.reduce((earliest, event) => {
+    if (!earliest) {
+      return event;
+    }
+
+    return event.date < earliest.date ? event : earliest;
+  }, null);
+  const endDate = latestEvent ? new Date(`${getDoseEventAnchorEnd(latestEvent)}T00:00:00`) : anchorDate;
   endDate.setHours(0, 0, 0, 0);
 
   const startDate = new Date(endDate);
 
-  switch (timeframe) {
+  switch (normalizedTimeframe) {
     case '1d':
       break;
     case '7d':
       startDate.setDate(startDate.getDate() - 6);
+      break;
+    case '30d':
+      startDate.setDate(startDate.getDate() - 29);
+      break;
+    case '90d':
+      startDate.setDate(startDate.getDate() - 89);
       break;
     case '1y':
       startDate.setFullYear(startDate.getFullYear() - 1);
@@ -959,20 +1345,15 @@ function buildRange(timeframe) {
       startDate.setFullYear(startDate.getFullYear() - 2);
       startDate.setDate(startDate.getDate() + 1);
       break;
-    case '3y':
-      startDate.setFullYear(startDate.getFullYear() - 3);
-      startDate.setDate(startDate.getDate() + 1);
-      break;
-    case '5y':
-      startDate.setFullYear(startDate.getFullYear() - 5);
-      startDate.setDate(startDate.getDate() + 1);
-      break;
-    case '10y':
-      startDate.setFullYear(startDate.getFullYear() - 10);
-      startDate.setDate(startDate.getDate() + 1);
-      break;
     default:
       break;
+  }
+
+  if (earliestEvent) {
+    const earliestDate = new Date(`${earliestEvent.date}T00:00:00`);
+    if (earliestDate > startDate) {
+      startDate.setTime(earliestDate.getTime());
+    }
   }
 
   return {
@@ -982,14 +1363,47 @@ function buildRange(timeframe) {
   };
 }
 
-function buildDailySeries(startDate, endDate, events, maxDose) {
-  const totals = new Map();
+function getTimelineRangeEvents() {
+  return state.doseEvents.filter(event => {
+    const amount = Number(event.amount);
+    return !Number.isNaN(amount) && amount > 0;
+  });
+}
 
-  events.forEach(event => {
-    if (!totals.has(event.date)) {
-      totals.set(event.date, 0);
-    }
-    totals.set(event.date, totals.get(event.date) + event.amount);
+function buildMultiDrugDailySeries(startDate, endDate, drugGroups) {
+  const totals = new Map();
+  const rangeStartKey = formatDateInput(startDate);
+  const rangeEndKey = formatDateInput(endDate);
+
+  drugGroups.forEach(group => {
+    group.events.forEach(event => {
+      const eventStartKey = event.date;
+      const eventEndKey = getDoseEventRangeEnd(event, rangeEndKey);
+      const overlapStart = eventStartKey > rangeStartKey ? eventStartKey : rangeStartKey;
+      const overlapEnd = eventEndKey < rangeEndKey ? eventEndKey : rangeEndKey;
+
+      if (overlapStart > overlapEnd) {
+        return;
+      }
+
+      const currentDate = new Date(`${overlapStart}T12:00:00`);
+      const finalDate = new Date(`${overlapEnd}T12:00:00`);
+
+      while (currentDate <= finalDate) {
+        const key = formatDateInput(currentDate);
+        if (!totals.has(key)) {
+          totals.set(key, {});
+        }
+
+        const daySeries = totals.get(key);
+        const currentSeries = daySeries[group.key] ?? { totalDose: 0, percentOfMax: 0 };
+        currentSeries.totalDose += event.amount;
+        currentSeries.percentOfMax +=
+          getDoseEventMaxDose(event) > 0 ? (event.amount / getDoseEventMaxDose(event)) * 100 : 0;
+        daySeries[group.key] = currentSeries;
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    });
   });
 
   const dayCount = Math.round((endDate - startDate) / MS_PER_DAY) + 1;
@@ -998,26 +1412,32 @@ function buildDailySeries(startDate, endDate, events, maxDose) {
   for (let offset = 0; offset < dayCount; offset += 1) {
     const current = new Date(startDate.getTime() + offset * MS_PER_DAY);
     const key = formatDateInput(current);
-    const dose = totals.get(key) || 0;
+    const series = totals.get(key) || {};
+    const totalDose = Object.values(series).reduce((sum, entry) => sum + Number(entry.totalDose || 0), 0);
+    const peakPercentOfMax = Object.values(series).reduce(
+      (peak, entry) => Math.max(peak, Number(entry.percentOfMax || 0)),
+      0
+    );
     points.push({
       date: formatDateInput(current),
-      averageDose: dose,
-      totalDose: dose,
+      totalDose,
       bucketDays: 1,
-      percentOfMax: maxDose > 0 ? (dose / maxDose) * 100 : 0,
+      percentOfMax: peakPercentOfMax,
+      series,
     });
   }
 
   return points;
 }
 
-function summarize(points) {
+function summarize(points, drugGroups) {
   if (!points.length) {
     return {
       averagePercent: 0,
       peakPercent: 0,
       totalDose: 0,
       daysAbove80: 0,
+      drugCount: drugGroups.length,
     };
   }
 
@@ -1031,73 +1451,151 @@ function summarize(points) {
     peakPercent,
     totalDose,
     daysAbove80,
+    drugCount: drugGroups.length,
   };
 }
 
-function getFilteredEvents() {
-  return state.doseEvents.filter(event => event.route === state.settings.medicationRoute);
-}
+function getFilteredEvents(range = buildRange(state.settings.timeframe)) {
+  const startKey = formatDateInput(range.startDate);
+  const endKey = formatDateInput(range.endDate);
 
-function bucketSeries(points) {
-  if (!points.length) {
-    return [];
-  }
+  return state.doseEvents.filter(event => {
+    const eventEndKey = getDoseEventRangeEnd(event, endKey);
 
-  const targetPoints = choosePointCount(points.length);
-  const bucketSize = Math.max(1, Math.ceil(points.length / targetPoints));
-  const buckets = [];
-
-  for (let index = 0; index < points.length; index += bucketSize) {
-    const bucketPoints = points.slice(index, index + bucketSize);
-    const totalDose = bucketPoints.reduce((sum, point) => sum + point.totalDose, 0);
-    const bucketDays = bucketPoints.length;
-    const averageDose = totalDose / bucketDays;
-    const percentOfMax =
-      bucketPoints.reduce((sum, point) => sum + point.percentOfMax, 0) / bucketDays;
-
-    buckets.push({
-      date: bucketPoints[0].date,
-      averageDose,
-      totalDose,
-      bucketDays,
-      percentOfMax,
-    });
-  }
-
-  return buckets;
+    return event.date <= endKey && eventEndKey >= startKey;
+  });
 }
 
 function findReferenceMatches(drugName, route) {
   const normalizedName = normalizeDrugName(drugName);
+  if (!normalizedName) {
+    return [];
+  }
 
-  return drugReferenceLibrary.filter(entry => {
-    if (entry.route !== route) {
-      return false;
-    }
+  const routeMatches = drugReferenceLibrary.filter(entry => entry.route === route);
+  const scoredMatches = routeMatches
+    .map(entry => {
+      const names = [entry.drug, ...(entry.aliases || [])].map(normalizeDrugName);
+      const score = Math.max(...names.map(name => scoreNormalizedMedicationMatch(normalizedName, name)));
 
-    const names = [entry.drug, ...(entry.aliases || [])].map(normalizeDrugName);
-    return names.includes(normalizedName);
-  });
+      return { entry, score };
+    })
+    .filter(match => match.score > 0)
+    .sort((left, right) => {
+      if (right.score !== left.score) {
+        return right.score - left.score;
+      }
+
+      return String(left.entry.drug || '').localeCompare(String(right.entry.drug || ''));
+    });
+
+  return scoredMatches.map(match => match.entry);
+}
+
+function findCatalogMatches(drugName, route) {
+  const normalizedName = normalizeDrugName(drugName);
+  if (!normalizedName) {
+    return [];
+  }
+
+  return state.catalogDrugs
+    .map(drug => {
+      const names = [...new Set([drug.name, drug.genericName].filter(Boolean).map(normalizeDrugName))];
+      const nameScore = Math.max(...names.map(name => scoreNormalizedMedicationMatch(normalizedName, name)));
+      const routeScore =
+        drug.routeMaxDoses && Object.prototype.hasOwnProperty.call(drug.routeMaxDoses, route)
+          ? 2
+          : !drug.routeMaxDoses && route === 'PO'
+            ? 1
+            : 0;
+
+      return {
+        drug,
+        score: nameScore,
+        routeScore,
+      };
+    })
+    .filter(match => match.score > 0)
+    .sort((left, right) => {
+      if (right.score !== left.score) {
+        return right.score - left.score;
+      }
+      if (right.routeScore !== left.routeScore) {
+        return right.routeScore - left.routeScore;
+      }
+      return String(left.drug.name || '').localeCompare(String(right.drug.name || ''));
+    })
+    .map(match => match.drug);
+}
+
+function buildCatalogReferenceMatch(drug, route) {
+  if (!drug) {
+    return null;
+  }
+
+  const routeMaxDose =
+    drug.routeMaxDoses && Object.prototype.hasOwnProperty.call(drug.routeMaxDoses, route)
+      ? Number(drug.routeMaxDoses[route])
+      : route === 'PO'
+        ? Number(drug.maxDailyDose)
+        : NaN;
+
+  if (!Number.isFinite(routeMaxDose) || routeMaxDose <= 0) {
+    return null;
+  }
+
+  return {
+    drug: drug.name,
+    aliases: [],
+    route,
+    maxDose: routeMaxDose,
+    unit: `${drug.unit}/day`,
+    source: 'Bundled catalog reference',
+    note: drug.notes || 'Bundled catalog reference used for static inference.',
+  };
+}
+
+function resolveMedicationBinding(drugName, route) {
+  const referenceMatches = findReferenceMatches(drugName, route);
+  const catalogMatches = findCatalogMatches(drugName, route);
+  const catalogMatch = catalogMatches[0] || null;
+  const match = referenceMatches[0] || buildCatalogReferenceMatch(catalogMatch, route);
+  const normalizedName = normalizeDrugName(drugName);
+  const matchScore = match
+    ? scoreNormalizedMedicationMatch(normalizedName, normalizeDrugName(match.drug))
+    : -1;
+
+  return {
+    medicationId: catalogMatch ? String(catalogMatch.id) : '',
+    catalogMatch,
+    referenceMatches,
+    match,
+    matchScore,
+  };
+}
+
+function scoreNormalizedMedicationMatch(input, candidate) {
+  if (!input || !candidate) {
+    return -1;
+  }
+
+  if (candidate === input) {
+    return 3;
+  }
+
+  if (candidate.startsWith(input)) {
+    return 2;
+  }
+
+  if (candidate.includes(input)) {
+    return 1;
+  }
+
+  return -1;
 }
 
 function normalizeDrugName(value) {
   return value.trim().toLowerCase().replace(/\s+/g, ' ');
-}
-
-function choosePointCount(dayCount) {
-  if (dayCount <= 14) {
-    return dayCount;
-  }
-
-  if (dayCount <= 120) {
-    return 30;
-  }
-
-  if (dayCount <= 365 * 3) {
-    return 36;
-  }
-
-  return 48;
 }
 
 function generateRandomMedGrafProfile() {
@@ -1479,18 +1977,23 @@ function formatNumber(value) {
   }).format(value);
 }
 
+function normalizeTimeframe(timeframe) {
+  const normalized = String(timeframe || '1y');
+  const supported = new Set(['1d', '7d', '30d', '90d', '1y', '2y']);
+  return supported.has(normalized) ? normalized : '2y';
+}
+
 function formatTimeframeLabel(timeframe) {
   const labels = {
     '1d': '1 day view',
     '7d': '1 week view',
+    '30d': '30 day view',
+    '90d': '90 day view',
     '1y': '1 year view',
     '2y': '2 year view',
-    '3y': '3 year view',
-    '5y': '5 year view',
-    '10y': '10 year view',
   };
 
-  return labels[timeframe] || timeframe;
+  return labels[normalizeTimeframe(timeframe)] || timeframe;
 }
 
 function escapeHtml(value) {
@@ -1523,12 +2026,20 @@ function exportDataAsJson() {
 }
 
 function exportDataAsCsv() {
-  const headers = ['Date', 'Route', 'Dose', 'Percent of Max'];
-  const rows = state.doseEvents
-    .filter(event => event.route === state.settings.medicationRoute)
+  const headers = ['Drug', 'Start Date', 'End Date', 'Status', 'Route', 'Dose', 'Percent of Max'];
+  const visibleEvents = getFilteredEvents();
+  const rows = visibleEvents
     .map(event => {
-      const percent = ((event.amount / state.settings.maxDose) * 100).toFixed(1);
-      return [event.date, event.route, event.amount, percent];
+      const percent = ((event.amount / getDoseEventMaxDose(event)) * 100).toFixed(1);
+      return [
+        getDoseEventDrugName(event),
+        event.date,
+        event.endDate || 'Ongoing',
+        getDoseEventStatusLabel(event),
+        event.route,
+        event.amount,
+        percent,
+      ];
     });
 
   const csvContent = [headers, ...rows]
@@ -1680,7 +2191,11 @@ function renderProfileList() {
       <div class="profile-item">
         <div class="profile-info">
           <h4>${escapeHtml(profile.name)}</h4>
-          <p>${escapeHtml(profile.settings.medicationName)} (${escapeHtml(profile.settings.medicationRoute)}) · ${profile.doseEvents.length} dose events · ${formatProfileStorageLabel(profile)}</p>
+          <p>${escapeHtml(
+            [
+              ...new Set(profile.doseEvents.map(event => getDoseEventDrugName(event)).filter(Boolean)),
+            ].join(', ') || profile.settings.medicationName
+          )} (${escapeHtml(profile.settings.medicationRoute)}) · ${profile.doseEvents.length} dose segments · ${formatProfileStorageLabel(profile)}</p>
           <p>Saved ${formatDisplayDate(new Date(profile.createdAt))}</p>
         </div>
         <div class="profile-actions">
@@ -1702,7 +2217,7 @@ function loadProfile(profileId) {
   }
 
   if (
-    confirm(`Load profile "${profile.name}"? This will replace current settings and dose events.`)
+    confirm(`Load profile "${profile.name}"? This will replace current settings and dose segments.`)
   ) {
     restoreStaticGraphState(profile.graphState ?? null, profile.settings);
     state.doseEvents = profile.doseEvents.map(normalizeDoseEvent);
@@ -1818,12 +2333,27 @@ async function clearDoseEvents() {
 }
 
 function normalizeDoseEvent(event) {
+  const startDate = event.date ?? event.startDate ?? formatDateInput(new Date());
+  const notes = event.notes ?? '';
+  const markedCurrent =
+    event.isCurrent === true ||
+    event.status === 'current' ||
+    String(notes).toLowerCase().includes(CURRENT_DOSE_NOTE.toLowerCase());
+  const endDate = markedCurrent ? '' : event.endDate ?? startDate;
+
   return {
-    id: event.id ?? `local-${event.date}-${event.route}-${event.amount}`,
-    date: event.date,
+    id: event.id ?? `local-${startDate}-${event.route}-${event.amount}`,
+    date: startDate,
+    endDate,
+    medicationId: event.medicationId ?? '',
+    medicationName: event.medicationName ?? event.drugName ?? event.name ?? state.settings.medicationName,
+    maxDose: Number(event.maxDose ?? event.maxDailyDose ?? state.settings.maxDose),
+    doseUnit: event.doseUnit ?? event.unit ?? state.settings.doseUnit,
     route: event.route,
     amount: Number(event.amount),
-    notes: event.notes ?? '',
+    notes: markedCurrent ? CURRENT_DOSE_NOTE : notes,
+    status: markedCurrent ? 'current' : 'ended',
+    isCurrent: markedCurrent,
   };
 }
 
@@ -1881,41 +2411,50 @@ function formatProfileStorageLabel(profile) {
 function buildStaticGraphStateSnapshot() {
   const sortedEvents = [...state.doseEvents].sort((left, right) => left.date.localeCompare(right.date));
   const firstDoseDate = sortedEvents[0]?.date ?? '';
-  const lastDoseDate = sortedEvents[sortedEvents.length - 1]?.date ?? '';
   const referenceMaxDose = state.inference.match?.maxDose ?? null;
+  const groupedDrugs = getVisibleDrugGroups(sortedEvents);
 
   return {
     version: 1,
     patientName: state.settings.patientName,
     route: state.settings.medicationRoute,
     timeframe: state.settings.timeframe,
-    selectedDrugIds: [normalizeDrugName(state.settings.medicationName)],
-    drugStates: [
-      {
-        id: normalizeDrugName(state.settings.medicationName),
-        name: state.settings.medicationName,
-        route: state.settings.medicationRoute,
-        unit: state.settings.doseUnit,
-        referenceMaxDailyDose: referenceMaxDose,
-        overrideMaxDailyDose: state.inference.isOverridden ? state.settings.maxDose : null,
-        maxDailyDose: state.settings.maxDose,
-        isMaxDoseOverridden: state.inference.isOverridden,
-      },
-    ],
-    medicationEntries: [
-      {
-        id: `entry-${normalizeDrugName(state.settings.medicationName)}`,
-        name: state.settings.medicationName,
-        route: state.settings.medicationRoute,
-        startDate: firstDoseDate,
-        endDate: '',
-        stopDate: lastDoseDate,
-        timelineStatus: 'current',
-        referenceMaxDailyDose: referenceMaxDose,
-        overrideMaxDailyDose: state.inference.isOverridden ? state.settings.maxDose : null,
-        maxDailyDose: state.settings.maxDose,
-      },
-    ],
+    selectedDrugIds: groupedDrugs.map(group => group.key),
+    drugStates: groupedDrugs.map(group => ({
+      id: group.key,
+      name: group.name,
+      route: group.route,
+      unit: group.unit,
+      referenceMaxDailyDose:
+        group.name === state.settings.medicationName ? referenceMaxDose : null,
+      overrideMaxDailyDose: group.maxDose,
+      maxDailyDose: group.maxDose,
+      isMaxDoseOverridden: true,
+    })),
+    medicationEntries: groupedDrugs.map(group => {
+      const groupEvents = [...group.events].sort((left, right) => left.date.localeCompare(right.date));
+      const groupHasCurrent = groupEvents.some(isDoseEventCurrent);
+      const groupLastDate = groupEvents.reduce(
+        (latest, event) => {
+          const eventEnd = getDoseEventAnchorEnd(event);
+          return eventEnd > latest ? eventEnd : latest;
+        },
+        groupEvents[0]?.date ?? ''
+      );
+
+      return {
+        id: `entry-${group.key}`,
+        name: group.name,
+        route: group.route,
+        startDate: groupEvents[0]?.date ?? firstDoseDate,
+        endDate: groupHasCurrent ? '' : groupLastDate,
+        stopDate: groupLastDate,
+        timelineStatus: groupHasCurrent ? 'current' : 'historic',
+        referenceMaxDailyDose: null,
+        overrideMaxDailyDose: group.maxDose,
+        maxDailyDose: group.maxDose,
+      };
+    }),
   };
 }
 
@@ -1933,7 +2472,7 @@ function restoreStaticGraphState(graphState, fallbackSettings) {
       Number(primaryDrugState?.maxDailyDose) > 0
         ? Number(primaryDrugState.maxDailyDose)
         : nextSettings.maxDose,
-    timeframe: graphState?.timeframe ?? nextSettings.timeframe,
+    timeframe: normalizeTimeframe(graphState?.timeframe ?? nextSettings.timeframe),
   };
 
   refreshInference({ preserveManual: Boolean(primaryDrugState?.isMaxDoseOverridden) });
@@ -2105,44 +2644,58 @@ async function readApiResponse(response) {
 }
 
 function getTimelineAnchorDate() {
-  if (!state.doseEvents.length) {
+  const routeEvents = state.doseEvents.filter(event => event.route === state.settings.medicationRoute);
+  const anchorEvents = routeEvents.length ? routeEvents : state.doseEvents;
+
+  if (!anchorEvents.length) {
     return new Date();
   }
 
-  const latestDate = state.doseEvents.reduce((latest, event) => {
-    return event.date > latest ? event.date : latest;
-  }, state.doseEvents[0].date);
+  if (anchorEvents.some(isDoseEventCurrent)) {
+    return new Date();
+  }
+
+  const latestDate = anchorEvents.reduce((latest, event) => {
+    const eventEnd = getDoseEventAnchorEnd(event);
+    return eventEnd > latest ? eventEnd : latest;
+  }, getDoseEventAnchorEnd(anchorEvents[0]));
 
   return new Date(`${latestDate}T00:00:00`);
 }
 
 function seedDoseEvents() {
   const today = new Date();
-  const events = [];
   const samples = [
-    { daysAgo: 4, route: 'PO', amount: 62 },
-    { daysAgo: 9, route: 'PO', amount: 70 },
-    { daysAgo: 15, route: 'IV', amount: 24 },
-    { daysAgo: 28, route: 'PO', amount: 88 },
-    { daysAgo: 44, route: 'PO', amount: 82 },
-    { daysAgo: 76, route: 'PO', amount: 96 },
-    { daysAgo: 120, route: 'PO', amount: 68 },
-    { daysAgo: 180, route: 'PO', amount: 90 },
-    { daysAgo: 240, route: 'PO', amount: 74 },
-    { daysAgo: 300, route: 'IV', amount: 20 },
-    { daysAgo: 344, route: 'PO', amount: 60 },
+    { id: 'seed-po-1', startDaysAgo: 340, endDaysAgo: 241, route: 'PO', amount: 60 },
+    { id: 'seed-po-2', startDaysAgo: 240, endDaysAgo: 181, route: 'PO', amount: 74 },
+    { id: 'seed-po-3', startDaysAgo: 180, endDaysAgo: 121, route: 'PO', amount: 90 },
+    { id: 'seed-po-4', startDaysAgo: 120, endDaysAgo: 77, route: 'PO', amount: 68 },
+    { id: 'seed-po-5', startDaysAgo: 76, endDaysAgo: 29, route: 'PO', amount: 96 },
+    { id: 'seed-po-6', startDaysAgo: 28, endDaysAgo: 10, route: 'PO', amount: 82 },
+    { id: 'seed-po-7', startDaysAgo: 9, endDaysAgo: null, route: 'PO', amount: 70, status: 'current' },
+    { id: 'seed-iv-1', startDaysAgo: 300, endDaysAgo: 286, route: 'IV', amount: 20 },
+    { id: 'seed-iv-2', startDaysAgo: 15, endDaysAgo: 11, route: 'IV', amount: 24 },
   ];
 
-  samples.forEach(sample => {
-    const date = new Date(today);
-    date.setDate(date.getDate() - sample.daysAgo);
-    events.push({
-      id: `seed-${sample.daysAgo}-${sample.route}`,
-      date: formatDateInput(date),
-      route: sample.route,
-      amount: sample.amount,
-    });
-  });
+  return samples
+    .map(sample => {
+      const startDate = addDays(today, -sample.startDaysAgo);
+      const endDate = sample.endDaysAgo === null ? '' : formatDateInput(addDays(today, -sample.endDaysAgo));
+      const drugName = sample.route === 'IV' ? 'Hydromorphone' : 'Morphine';
+      const maxDose = sample.route === 'IV' ? 30 : 120;
+      const doseUnit = 'mg/day';
 
-  return events.sort((a, b) => a.date.localeCompare(b.date));
+      return normalizeDoseEvent({
+        id: sample.id,
+        date: formatDateInput(startDate),
+        endDate,
+        medicationName: drugName,
+        maxDose,
+        doseUnit,
+        route: sample.route,
+        amount: sample.amount,
+        status: sample.status ?? 'ended',
+      });
+    })
+    .sort((a, b) => a.date.localeCompare(b.date));
 }

@@ -231,6 +231,17 @@ th {
   gap: 14px;
 }
 
+.dose-form-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dose-form-actions .primary-button,
+.dose-form-actions .secondary-button {
+  flex: 1 1 180px;
+}
+
 .form-callout {
   display: flex;
   justify-content: space-between;
@@ -262,6 +273,71 @@ input:focus,
 select:focus {
   outline: 2px solid rgba(13, 124, 102, 0.24);
   border-color: var(--accent);
+}
+
+.status-field {
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.64);
+}
+
+.status-label {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.status-toggle-group {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.status-toggle {
+  border: 1px solid rgba(67, 48, 28, 0.14);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-weight: 600;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.74);
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.status-toggle.active {
+  border-color: rgba(13, 124, 102, 0.3);
+  background: rgba(13, 124, 102, 0.12);
+  color: var(--accent);
+}
+
+.status-toggle.ended.active {
+  border-color: rgba(188, 108, 37, 0.28);
+  background: rgba(188, 108, 37, 0.14);
+  color: var(--warning);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-badge.current {
+  background: rgba(13, 124, 102, 0.12);
+  color: var(--accent);
+}
+
+.status-badge.ended {
+  background: rgba(188, 108, 37, 0.14);
+  color: var(--warning);
 }
 
 .primary-button {
@@ -434,6 +510,32 @@ tbody tr:last-child td {
 .chart-card {
   padding: 18px;
   overflow: hidden;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  display: inline-block;
 }
 
 canvas {
@@ -689,13 +791,20 @@ canvas {
 
   .workflow-actions,
   .export-controls,
-  .auth-actions {
+  .auth-actions,
+  .dose-form-actions {
     flex-direction: column;
+  }
+
+  .status-toggle-group {
+    grid-template-columns: 1fr;
   }
 
   .workflow-actions .secondary-button,
   .export-controls .secondary-button,
-  .auth-actions .secondary-button {
+  .auth-actions .secondary-button,
+  .dose-form-actions .primary-button,
+  .dose-form-actions .secondary-button {
     width: 100%;
   }
 

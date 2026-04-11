@@ -19,8 +19,8 @@
         </div>
         <div class="hero-card">
           <p class="card-label">Current view</p>
-          <p class="card-value" id="headlinePercent">0%</p>
-          <p class="card-caption">Average daily dose in the selected window</p>
+          <p class="card-value" id="headlinePercent">0</p>
+          <p class="card-caption">Days above 80% of max in the selected window</p>
         </div>
       </header>
 
@@ -34,9 +34,9 @@
 
       <section class="workspace-strip" aria-label="Current workspace overview">
         <article class="workspace-card">
-          <p class="card-label">Patient</p>
+          <p class="card-label">Patient + Drugs</p>
           <strong id="workspacePatient">Example Patient</strong>
-          <p id="workspaceMedication" class="workspace-detail">Morphine</p>
+          <p id="workspaceMedication" class="workspace-detail">Morphine only</p>
         </article>
         <article class="workspace-card">
           <p class="card-label">Route + Window</p>
@@ -49,9 +49,9 @@
           <p id="workspaceInference" class="workspace-detail">Manual or inferred max dose</p>
         </article>
         <article class="workspace-card">
-          <p class="card-label">Dose Events</p>
-          <strong id="workspaceEventCount">0 recorded</strong>
-          <p id="workspaceLastEvent" class="workspace-detail">No doses yet</p>
+          <p class="card-label">Dose Segments</p>
+          <strong id="workspaceEventCount">0 in view</strong>
+          <p id="workspaceLastEvent" class="workspace-detail">No dose segments yet</p>
         </article>
       </section>
 
@@ -74,6 +74,9 @@
                 list="medicationSuggestions"
               />
             </label>
+            <p id="medicationMatchStatus" class="workspace-detail">
+              Type or choose a medication to link it to the local library.
+            </p>
             <datalist id="medicationSuggestions"></datalist>
             <label>
               Patient
@@ -105,26 +108,25 @@
               <select id="timeframe" name="timeframe">
                 <option value="1d">1 day</option>
                 <option value="7d">1 week</option>
+                <option value="30d">30 days</option>
+                <option value="90d">90 days</option>
                 <option value="1y" selected>1 year</option>
                 <option value="2y">2 years</option>
-                <option value="3y">3 years</option>
-                <option value="5y">5 years</option>
-                <option value="10y">10 years</option>
               </select>
             </label>
           </form>
 
-          <div class="reference-panel">
+          <div id="referencePanel" class="reference-panel hidden">
             <div class="panel-header compact">
               <p class="section-kicker">Step 2</p>
-              <h2>Match a ceiling</h2>
+              <h2>Inferred ceiling</h2>
               <p>
-                The app can infer a starting max dose from a small built-in drug library, and you
-                can still adjust it manually.
+                When the built-in library finds a drug and route match, you can apply that ceiling
+                here or keep your manual value.
               </p>
             </div>
             <div class="reference-status">
-              <p class="reference-pill" id="inferenceStatus">No reference match</p>
+              <p class="reference-pill" id="inferenceStatus">Reference match available</p>
               <button id="applyInferenceButton" class="secondary-button" type="button">
                 Apply inferred max
               </button>
@@ -139,13 +141,14 @@
             <p class="section-kicker">Step 3</p>
             <h2>Add and edit doses</h2>
             <p>
-              Add actual doses by route. Trends only include the selected route, so PO, IV, and
-              other routes stay separated cleanly.
+              Add dose segments with a start date, optional end date, and an active or ended state.
+              Use additional entries to represent titrations, repeat the same dose later, or capture
+              a new dose level for the same drug and route.
             </p>
             <div class="workflow-actions">
               <button id="setTodayButton" type="button" class="secondary-button">Use Today</button>
-              <button id="setThreeYearButton" type="button" class="secondary-button">
-                Switch to 3 Years
+              <button id="setTwoYearButton" type="button" class="secondary-button">
+                Switch to 2 Years
               </button>
             </div>
             <div class="export-controls">
@@ -171,9 +174,10 @@
             <div class="form-callout">
               <div>
                 <p class="card-label">Dose Entry</p>
-                <h3 id="doseFormHeading">Add a dose event</h3>
+                <h3 id="doseFormHeading">Add a dose segment</h3>
                 <p id="doseFormHint" class="workspace-detail">
-                  Record one administered daily dose for the selected medication and route.
+                  Record the start and optional stop of a dose segment for the selected medication
+                  and route.
                 </p>
               </div>
               <button id="cancelEditButton" type="button" class="secondary-button hidden">
@@ -181,8 +185,12 @@
               </button>
             </div>
             <label>
-              Date
-              <input id="doseDate" name="doseDate" type="date" required />
+              Start Date
+              <input id="doseStartDate" name="doseStartDate" type="date" required />
+            </label>
+            <label>
+              End Date
+              <input id="doseEndDate" name="doseEndDate" type="date" />
             </label>
             <label>
               Route
@@ -201,14 +209,44 @@
               Dose
               <input id="doseAmount" name="doseAmount" type="number" min="0" step="0.1" required />
             </label>
-            <button id="doseSubmitButton" type="submit" class="primary-button">Add Dose Event</button>
+            <div class="status-field">
+              <span class="status-label">Dose Status</span>
+              <input id="doseStatus" name="doseStatus" type="hidden" value="current" />
+              <div class="status-toggle-group" role="group" aria-label="Dose status selector">
+                <button
+                  id="doseStatusCurrentButton"
+                  type="button"
+                  class="status-toggle active"
+                >
+                  Still on this dose
+                </button>
+                <button id="doseStatusEndedButton" type="button" class="status-toggle">
+                  Dose ended or changed
+                </button>
+              </div>
+              <p class="workspace-detail">
+                Current dose segments continue through today on the graph. Ended segments use the
+                end date you provide.
+              </p>
+            </div>
+            <div class="dose-form-actions">
+              <button id="doseSubmitButton" type="submit" class="primary-button">
+                Save Dose Segment
+              </button>
+              <button id="doseSubmitAndAddButton" type="submit" class="secondary-button">
+                Save &amp; Add Another
+              </button>
+            </div>
           </form>
 
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>Date</th>
+                  <th>Drug</th>
+                  <th>Start</th>
+                  <th>End</th>
+                  <th>Status</th>
                   <th>Route</th>
                   <th>Dose</th>
                   <th>% Max</th>
@@ -224,22 +262,12 @@
           <div class="panel-header">
             <p class="section-kicker">Step 4</p>
             <h2>Review the trend</h2>
-            <p id="chartSubtitle">Average daily dose as a percentage of the maximum dose.</p>
+            <p id="chartSubtitle">
+              Stepwise ordinal dose segments shown as a percentage of each medication's maximum dose.
+            </p>
           </div>
 
           <div class="metrics-grid">
-            <article class="metric">
-              <span>Average</span>
-              <strong id="averagePercent">0%</strong>
-            </article>
-            <article class="metric">
-              <span>Peak day</span>
-              <strong id="peakPercent">0%</strong>
-            </article>
-            <article class="metric">
-              <span>Total administered</span>
-              <strong id="totalDose">0</strong>
-            </article>
             <article class="metric">
               <span>Days above 80%</span>
               <strong id="highDays">0</strong>
@@ -253,6 +281,7 @@
               height="380"
               aria-label="Dose percentage chart"
             ></canvas>
+            <div id="chartLegend" class="chart-legend" aria-label="Active comparison legend"></div>
           </div>
 
           <div class="summary-grid">

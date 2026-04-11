@@ -48961,6 +48961,119 @@ var CHART_COLORS = [
   "#22543d",
   "#744210"
 ];
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+function createRandomMedicationSchedule(drug, startDate, endDate) {
+  const segments = [];
+  let currentDate = new Date(startDate);
+  const maxDose = drug.maxDailyDose;
+  const segmentCount = Math.floor(Math.random() * 3) + 2;
+  for (let i = 0; i < segmentCount; i++) {
+    const dose = Math.floor(Math.random() * maxDose * 0.8) + maxDose * 0.1;
+    const percentOfMax = dose / maxDose * 100;
+    let segmentEndDate;
+    if (i === segmentCount - 1) {
+      segmentEndDate = new Date(endDate);
+    } else {
+      const monthsToAdd = Math.floor(Math.random() * 12) + 1;
+      segmentEndDate = new Date(currentDate);
+      segmentEndDate.setMonth(segmentEndDate.getMonth() + monthsToAdd);
+      if (segmentEndDate > endDate) segmentEndDate = new Date(endDate);
+    }
+    segments.push({
+      startDate: new Date(currentDate),
+      endDate: segmentEndDate,
+      dose: Math.round(dose * 10) / 10,
+      // Round to 1 decimal
+      percentOfMax: Math.round(percentOfMax),
+      label: `Dose ${i + 1}`,
+      status: i === segmentCount - 1 ? "ongoing" : "discontinued"
+    });
+    currentDate = new Date(segmentEndDate);
+    currentDate.setDate(currentDate.getDate() + 1);
+    if (currentDate > endDate) break;
+  }
+  return segments;
+}
+function generateRandomMedGrafProfile(drugs) {
+  const cardiovascularDrugs = drugs.filter(
+    (drug) => drug.drugClass?.toLowerCase().includes("statin") || drug.drugClass?.toLowerCase().includes("ace") || drug.drugClass?.toLowerCase().includes("arb") || drug.drugClass?.toLowerCase().includes("beta") || drug.drugClass?.toLowerCase().includes("calcium")
+  );
+  const sourceDrugs = cardiovascularDrugs.length >= 3 ? cardiovascularDrugs : [
+    {
+      id: "fallback-atorvastatin",
+      name: "Atorvastatin",
+      drugClass: "Statin",
+      maxDailyDose: 80,
+      routeMaxDoses: { PO: 80 },
+      unit: "mg",
+      notes: "Fallback cardiovascular demo entry."
+    },
+    {
+      id: "fallback-losartan",
+      name: "Losartan",
+      drugClass: "ARB",
+      maxDailyDose: 100,
+      routeMaxDoses: { PO: 100 },
+      unit: "mg",
+      notes: "Fallback cardiovascular demo entry."
+    },
+    {
+      id: "fallback-lisinopril",
+      name: "Lisinopril",
+      drugClass: "ACE inhibitor",
+      maxDailyDose: 40,
+      routeMaxDoses: { PO: 40 },
+      unit: "mg",
+      notes: "Fallback cardiovascular demo entry."
+    }
+  ];
+  const selectedDrugs = shuffleArray([...sourceDrugs]).slice(0, 3);
+  const endDate = /* @__PURE__ */ new Date();
+  endDate.setHours(0, 0, 0, 0);
+  const startDate = new Date(endDate);
+  startDate.setFullYear(startDate.getFullYear() - 3);
+  startDate.setDate(startDate.getDate() + 1);
+  const monthCount = 37;
+  const regimens = selectedDrugs.map((drug) => createRandomMedicationSchedule(drug, startDate, endDate));
+  const points = Array.from({ length: monthCount }, (_, index) => {
+    const currentDate = new Date(startDate);
+    currentDate.setMonth(startDate.getMonth() + index);
+    const values = regimens.map((segments, regimenIndex) => {
+      const activeSegment = segments.find((segment) => {
+        const segmentStart = formatDateKey(segment.startDate);
+        const segmentEnd = formatDateKey(segment.endDate);
+        const currentKey = formatDateKey(currentDate);
+        return currentKey >= segmentStart && currentKey <= segmentEnd;
+      });
+      if (!activeSegment) {
+        return 0;
+      }
+      return activeSegment.dose / selectedDrugs[regimenIndex].maxDailyDose * 100;
+    });
+    return {
+      date: formatDateKey(currentDate),
+      label: formatShortDate(currentDate),
+      ...values.reduce((acc, value, idx) => {
+        acc[`drug${idx}`] = Number(value.toFixed(2));
+        return acc;
+      }, {})
+    };
+  });
+  return {
+    drugs: selectedDrugs,
+    points,
+    regimens,
+    startDate,
+    endDate: new Date(points[points.length - 1].date)
+  };
+}
 function App() {
   const workspaceDefaults = loadWorkspaceFromStorage();
   const sessionDefaults = loadAuthSessionFromStorage();
@@ -49020,6 +49133,8 @@ function App() {
   const [authName, setAuthName] = (0, import_react56.useState)("");
   const [authLoading, setAuthLoading] = (0, import_react56.useState)(false);
   const [authError, setAuthError] = (0, import_react56.useState)("");
+  const [randomProfile, setRandomProfile] = (0, import_react56.useState)(null);
+  const [generatingRandom, setGeneratingRandom] = (0, import_react56.useState)(false);
   (0, import_react56.useEffect)(() => {
     saveProfilesToStorage(profiles);
   }, [profiles]);
@@ -49638,6 +49753,17 @@ function App() {
   function handlePrintReport() {
     window.print();
   }
+  function handleGenerateRandomProfile() {
+    setGeneratingRandom(true);
+    try {
+      const profile = generateRandomMedGrafProfile(drugs);
+      setRandomProfile(profile);
+    } catch (error2) {
+      console.error("Failed to generate random profile:", error2);
+    } finally {
+      setGeneratingRandom(false);
+    }
+  }
   async function handleAuth() {
     setAuthLoading(true);
     setAuthError("");
@@ -49671,8 +49797,9 @@ function App() {
     setAuthToken("");
     setUser(null);
     setIsAuthenticated(false);
-    setProfiles([]);
+    setProfiles(normalizeStoredProfiles(loadProfilesFromStorage()));
     setActiveProfileId(null);
+    setProfileStatus("Signed out. Local browser profiles are still available.");
   }
   (0, import_react56.useEffect)(() => {
     if (sessionDefaults.account) {
@@ -49683,55 +49810,6 @@ function App() {
   if (!authReady) {
     return h("div", { className: "auth-container" }, h("p", null, "Restoring session..."));
   }
-  if (!isAuthenticated) {
-    return h(
-      "div",
-      { className: "auth-container" },
-      h("h1", null, "MedGraf Account Management"),
-      h(
-        "div",
-        { className: "auth-form" },
-        h("h2", null, authMode === "login" ? "Login" : "Register"),
-        authError && h("div", { className: "error" }, authError),
-        authMode === "register" && h("input", {
-          type: "text",
-          placeholder: "Name",
-          value: authName,
-          onChange: (e) => setAuthName(e.target.value)
-        }),
-        h("input", {
-          type: "email",
-          placeholder: "Email",
-          value: authEmail,
-          onChange: (e) => setAuthEmail(e.target.value)
-        }),
-        h("input", {
-          type: "password",
-          placeholder: "Password",
-          value: authPassword,
-          onChange: (e) => setAuthPassword(e.target.value)
-        }),
-        h(
-          "button",
-          {
-            onClick: handleAuth,
-            disabled: authLoading
-          },
-          authLoading ? "Loading..." : authMode === "login" ? "Login" : "Register"
-        ),
-        h(
-          "button",
-          { onClick: () => setAuthMode(authMode === "login" ? "register" : "login") },
-          authMode === "login" ? "Need an account? Register" : "Have an account? Login"
-        ),
-        h(
-          "p",
-          { className: "helper" },
-          "Accounts now persist medication profiles in the backend. Sign in to load and manage your saved lists."
-        )
-      )
-    );
-  }
   return h(
     "div",
     { className: "shell" },
@@ -49740,7 +49818,11 @@ function App() {
       { className: "topbar" },
       h("a", { className: "home-link", href: "../index.html" }, "Back to home"),
       h("span", { className: "badge" }, "Reactive Type"),
-      h("span", { className: "user-info" }, `Logged in as ${user?.name || user?.email}`),
+      h(
+        "span",
+        { className: "user-info" },
+        isAuthenticated ? `Signed in as ${user?.name || user?.email}` : "Guest mode active"
+      ),
       h(
         "a",
         {
@@ -49751,7 +49833,11 @@ function App() {
         },
         "Mobile App"
       ),
-      h("button", { onClick: handleLogout }, "Logout")
+      isAuthenticated ? h(
+        "button",
+        { type: "button", className: "pill-button secondary-button", onClick: handleLogout },
+        "Logout"
+      ) : null
     ),
     h(
       "section",
@@ -49768,7 +49854,7 @@ function App() {
         h(
           "p",
           null,
-          `${patientName} \xB7 Plot up to 20 medications at once, compare each against its own ceiling, and expand the selector with official FDA-listed U.S. drug names when you need more than the bundled sample library.`
+          `${patientName} \xB7 Plot up to 20 medications at once, compare each against its own ceiling, and expand the selector with official FDA-listed U.S. drug names when you need more than the bundled sample library. ${isAuthenticated ? "Account sync is active for saved profiles." : "You can use the full graph immediately without signing in; accounts only add backend profile sync."}`
         )
       ),
       h(
@@ -50400,6 +50486,78 @@ function App() {
         null,
         h(
           "section",
+          { className: "workspace-panel auth-panel-shell" },
+          h("h2", null, isAuthenticated ? "Account sync" : "Optional account sign-in"),
+          h(
+            "p",
+            null,
+            isAuthenticated ? "Your saved medication-list profiles can sync with the backend while local browser storage remains available as a fallback." : "The graph, dose entry, imports, exports, and local profiles all work in guest mode. Sign in only if you want backend-synced profiles."
+          ),
+          isAuthenticated ? h(
+            "div",
+            { className: "auth-inline-status" },
+            h(
+              "p",
+              { className: "helper" },
+              `Currently signed in as ${user?.name || user?.email}.`
+            ),
+            h(
+              "button",
+              {
+                type: "button",
+                className: "pill-button secondary-button",
+                onClick: handleLogout
+              },
+              "Logout"
+            )
+          ) : h(
+            "div",
+            { className: "auth-form auth-inline-form" },
+            authError ? h("div", { className: "error" }, authError) : null,
+            authMode === "register" ? h("input", {
+              type: "text",
+              placeholder: "Name",
+              value: authName,
+              onChange: (e) => setAuthName(e.target.value)
+            }) : null,
+            h("input", {
+              type: "email",
+              placeholder: "Email",
+              value: authEmail,
+              onChange: (e) => setAuthEmail(e.target.value)
+            }),
+            h("input", {
+              type: "password",
+              placeholder: "Password",
+              value: authPassword,
+              onChange: (e) => setAuthPassword(e.target.value)
+            }),
+            h(
+              "div",
+              { className: "auth-inline-actions" },
+              h(
+                "button",
+                {
+                  type: "button",
+                  onClick: handleAuth,
+                  disabled: authLoading
+                },
+                authLoading ? "Loading..." : authMode === "login" ? "Login" : "Register"
+              ),
+              h(
+                "button",
+                {
+                  type: "button",
+                  className: "secondary-button",
+                  onClick: () => setAuthMode(authMode === "login" ? "register" : "login")
+                },
+                authMode === "login" ? "Need an account?" : "Have an account?"
+              )
+            )
+          )
+        ),
+        h(
+          "section",
           { className: "panel" },
           h(
             "div",
@@ -50726,6 +50884,173 @@ function App() {
             )
           )
         )
+      ),
+      h(
+        "section",
+        { className: "panel" },
+        h("h2", null, "3-Drug Hypothetical Profile Generator"),
+        h(
+          "p",
+          null,
+          "Generate a synthetic 3-year cardiovascular medication timeline with realistic dose changes to demonstrate charting capabilities."
+        ),
+        h(
+          "div",
+          { className: "field" },
+          h(
+            "button",
+            {
+              type: "button",
+              className: "primary-button",
+              onClick: handleGenerateRandomProfile,
+              disabled: generatingRandom
+            },
+            generatingRandom ? "Generating..." : "Generate Random Profile"
+          )
+        ),
+        randomProfile ? h(
+          "div",
+          { className: "random-profile-container" },
+          h(
+            "div",
+            { className: "random-profile-meta" },
+            h(
+              "p",
+              null,
+              `${formatDisplayDate(randomProfile.startDate)} through ${formatDisplayDate(randomProfile.endDate)} \xB7 ${randomProfile.drugs.length} cardiovascular medications`
+            )
+          ),
+          h(
+            "div",
+            { className: "random-profile-chart" },
+            h(
+              ResponsiveContainer,
+              { width: "100%", height: 300 },
+              h(
+                LineChart,
+                {
+                  data: randomProfile.points,
+                  margin: { top: 12, right: 18, left: 0, bottom: 12 }
+                },
+                h(CartesianGrid, {
+                  stroke: "rgba(33, 49, 58, 0.12)",
+                  strokeDasharray: "4 4"
+                }),
+                h(XAxis, {
+                  dataKey: "label",
+                  tickLine: false,
+                  axisLine: false,
+                  minTickGap: 50
+                }),
+                h(YAxis, {
+                  tickLine: false,
+                  axisLine: false,
+                  width: 56,
+                  domain: [0, 100],
+                  tickFormatter: (value) => `${value}%`
+                }),
+                h(Tooltip, {
+                  content: ({ active, payload, label }) => {
+                    if (!active || !payload?.length) return null;
+                    return h(
+                      "div",
+                      { className: "tooltip" },
+                      h("p", null, label),
+                      ...payload.map(
+                        (entry, index) => h(
+                          "p",
+                          {
+                            key: index,
+                            style: { color: entry.color }
+                          },
+                          `${entry.name}: ${entry.value}%`
+                        )
+                      )
+                    );
+                  }
+                }),
+                h(Legend, {
+                  verticalAlign: "top",
+                  height: 36,
+                  wrapperStyle: { fontSize: "12px" }
+                }),
+                h(ReferenceLine, {
+                  y: 50,
+                  stroke: "rgba(33, 49, 58, 0.18)",
+                  strokeDasharray: "4 4"
+                }),
+                h(ReferenceLine, {
+                  y: 80,
+                  stroke: "var(--danger)",
+                  strokeDasharray: "5 5"
+                }),
+                h(ReferenceLine, {
+                  y: 100,
+                  stroke: "rgba(191, 79, 41, 0.45)",
+                  strokeDasharray: "3 3"
+                }),
+                randomProfile.drugs.map(
+                  (drug, index) => h(Line, {
+                    key: drug.id,
+                    type: "monotone",
+                    dataKey: `drug${index}`,
+                    name: drug.name,
+                    stroke: CHART_COLORS[index % CHART_COLORS.length],
+                    strokeWidth: 2.4,
+                    dot: false,
+                    connectNulls: true,
+                    isAnimationActive: false
+                  })
+                )
+              )
+            )
+          ),
+          h(
+            "div",
+            { className: "random-profile-summary" },
+            randomProfile.drugs.map(
+              (drug, index) => h(
+                "article",
+                { key: drug.id, className: "generator-drug-card" },
+                h("p", { className: "card-label" }, drug.drugClass),
+                h("h3", null, drug.name),
+                h(
+                  "p",
+                  null,
+                  h("strong", null, "Reference max daily dose:"),
+                  ` ${drug.maxDailyDose} ${drug.unit}`
+                ),
+                h("p", null, drug.notes || "Generated synthetic regimen for demonstration."),
+                h(
+                  "div",
+                  { className: "generator-regimen" },
+                  randomProfile.regimens[index].map(
+                    (segment, segIndex) => h(
+                      "p",
+                      { key: segIndex },
+                      h(
+                        "strong",
+                        null,
+                        `${segment.label} ${segment.dose} ${drug.unit}/day`
+                      ),
+                      `: ${formatDisplayDate(segment.startDate)} to `,
+                      segment.status === "ongoing" ? "present and continuing" : formatDisplayDate(segment.endDate),
+                      ` (${segment.percentOfMax}% max)`
+                    )
+                  ),
+                  randomProfile.regimens[index].some((segment) => segment.status === "discontinued") ? h(
+                    "p",
+                    null,
+                    h("strong", null, "Discontinued:"),
+                    ` ${formatDisplayDate(
+                      randomProfile.regimens[index][randomProfile.regimens[index].length - 1].endDate
+                    )}`
+                  ) : null
+                )
+              )
+            )
+          )
+        ) : null
       )
     )
   );
@@ -50751,6 +51076,7 @@ function normalizeDrugRecord(drug, index) {
     dosageForm: drug.dosageForm ?? "",
     source: drug.source ?? "Bundled sample library",
     unit: drug.unit ?? "mg",
+    routeMaxDoses: drug.routeMaxDoses ?? {},
     referenceMaxDailyDose,
     overrideMaxDailyDose: drug.isMaxDoseOverridden || Number.isFinite(Number(drug.overrideMaxDailyDose)) && Number(drug.overrideMaxDailyDose) > 0 ? currentMaxDailyDose : null,
     isMaxDoseOverridden: Boolean(drug.isMaxDoseOverridden) || currentMaxDailyDose !== referenceMaxDailyDose,
@@ -50931,6 +51257,7 @@ function getFilteredEvents(doses, selectedDrugIds, route, startDate, endDate, me
   });
 }
 function buildChartData(events, selectedDrugs, startDate, endDate) {
+  const route = events.length > 0 ? events[0].route : "PO";
   const byDrugAndDate = /* @__PURE__ */ new Map();
   for (const event of events) {
     const eventStart = /* @__PURE__ */ new Date(`${event.date}T12:00:00`);
@@ -50955,7 +51282,8 @@ function buildChartData(events, selectedDrugs, startDate, endDate) {
     };
     for (const drug of selectedDrugs) {
       const amount = byDrugAndDate.get(`${drug.id}:${dateKey}`) ?? 0;
-      const percent = drug.maxDailyDose > 0 ? amount / drug.maxDailyDose * 100 : 0;
+      const routeSpecificMax = drug.routeMaxDoses?.[route] ?? drug.maxDailyDose;
+      const percent = routeSpecificMax > 0 ? amount / routeSpecificMax * 100 : 0;
       point4[getSeriesKey(drug.id)] = Number(percent.toFixed(2));
       point4[getDoseKey(drug.id)] = Number(amount.toFixed(2));
       if (amount > 0) {
