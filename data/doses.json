@@ -1,25 +1,39 @@
 [
   {
     "id": 1,
-    "date": "2026-02-11",
-    "endDate": "2026-03-11",
+    "date": "2026-04-12",
     "route": "PO",
-    "amount": 300,
-    "notes": ""
+    "amount": 1500,
+    "notes": "Current dose segment"
   },
   {
     "id": 2,
     "date": "2026-03-12",
+    "endDate": "2026-04-11",
     "route": "PO",
-    "amount": 600,
-    "notes": "Current dose segment"
+    "amount": 3000,
+    "notes": ""
   },
   {
     "id": 3,
-    "date": "2026-03-11",
-    "endDate": "2026-04-11",
+    "date": "2026-02-12",
+    "endDate": "2026-03-11",
+    "route": "PO",
+    "amount": 1000,
+    "notes": ""
+  },
+  {
+    "id": 4,
+    "date": "2026-03-12",
+    "route": "PO",
+    "amount": 1000,
+    "notes": "Current dose segment"
+  },
+  {
+    "id": 5,
+    "date": "2026-02-12",
     "route": "PO",
     "amount": 800,
-    "notes": ""
+    "notes": "Current dose segment"
   }
 ]
