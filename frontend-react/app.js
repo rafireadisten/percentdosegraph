@@ -672,17 +672,23 @@ function App() {
       return;
     }
 
-    const label = profileName.trim() || generateSequentialProfileLabel(profiles);
+    const existingProfile = activeProfileId
+      ? profiles.find(profile => profile.id === activeProfileId)
+      : null;
+    const existingLabel = existingProfile?.label ?? existingProfile?.name;
+    const id = existingProfile?.id ?? generateProfileId(
+      {
+        selectedDrugIds,
+        route,
+        timeframe,
+        drugNames: selectedDrugs.map(drug => drug.name),
+      },
+      profiles.length + 1
+    );
+    const label = profileName.trim() || existingLabel || generateSequentialProfileLabel(profiles);
     const draftProfile = {
-      id: generateProfileId(
-        {
-          selectedDrugIds,
-          route,
-          timeframe,
-          drugNames: selectedDrugs.map(drug => drug.name),
-        },
-        profiles.length + 1
-      ),
+      id,
+      patientId: existingProfile?.patientId ?? String(id),
       label,
       selectedDrugIds,
       drugStates: buildProfileDrugStates(drugs, selectedDrugIds, medicationEntries),
@@ -693,7 +699,7 @@ function App() {
       route,
       timeframe,
       savedListDate: formatDateKey(new Date()),
-      createdAt: new Date().toISOString(),
+      createdAt: existingProfile?.createdAt ?? new Date().toISOString(),
     };
 
     try {
@@ -1310,8 +1316,16 @@ function App() {
               id: 'patientName',
               type: 'text',
               value: patientName,
+              disabled: Boolean(activeProfileId),
               onChange: event => setPatientName(event.target.value),
-            })
+            }),
+            activeProfileId
+              ? h(
+                  'p',
+                  { className: 'helper' },
+                  'Patient assignment is fixed for the current profile. Create a new profile to track a different patient.'
+                )
+              : null
           ),
           h(
             'div',
@@ -1584,7 +1598,7 @@ function App() {
               onClick: handleSaveProfile,
               disabled: !selectedDrugs.length && !medicationEntries.length,
             },
-            'Save med list profile'
+            activeProfileId ? 'Save profile updates' : 'Save med list profile'
           ),
           h(
             'div',
@@ -2609,6 +2623,7 @@ function normalizeStoredProfiles(profiles) {
   return profiles.map((profile, index) => ({
     ...profile,
     id: String(profile.id ?? `profile-${index + 1}`),
+    patientId: String(profile.patientId ?? profile.id ?? `profile-${index + 1}`),
     label: profile.label ?? profile.name ?? `Profile ${index + 1}`,
     selectedDrugIds: Array.isArray(profile.selectedDrugIds)
       ? profile.selectedDrugIds.map(String)
@@ -3138,6 +3153,7 @@ function mapApiProfileToAppProfile(profile) {
     selectedDrugIds: profile.payload?.selectedDrugIds ?? [],
     drugStates: profile.payload?.drugStates ?? profile.payload?.graphState?.drugStates ?? [],
     medicationEntries: profile.payload?.medicationEntries ?? [],
+    patientId: String(profile.payload?.patientId ?? profile.id),
     patientName: profile.payload?.patientName ?? 'Example Patient',
     workspaceLabel: profile.payload?.workspaceLabel ?? profile.name,
     patientNotes: profile.payload?.patientNotes ?? '',
@@ -3154,6 +3170,9 @@ function mapAppProfileToApiProfile(profile, accountId) {
     name: profile.label,
     payload: {
       version: 2,
+      ...(isNumericIdentifier(profile.id)
+        ? { patientId: String(profile.id) }
+        : {}),
       label: profile.label,
       selectedDrugIds: profile.selectedDrugIds,
       drugStates: profile.drugStates ?? [],

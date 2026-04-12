@@ -130,3 +130,58 @@ The bundled `drug-library.json` is a starter reference library for inference and
 - Added clear all data button for resetting the application
 - Integrated expanded drug library from Replit resources
 - Added medication profiles for saving/loading configurations
+
+## Mobile App Development
+
+A React Native mobile app skeleton is ready for rapid development. It shares the same backend API and business logic as the web app.
+
+### Quick Start
+
+```bash
+# Setup mobile development environment
+npm run dev:mobile:ios          # Start iOS simulator
+npm run dev:mobile:android      # Start Android emulator
+npm run dev:mobile              # Interactive mode (choose platform)
+```
+
+### Mobile Architecture
+
+```
+mobile/
+├── app/                  # React Native Expo app (START HERE)
+│   ├── src/
+│   │   ├── screens/     # UI screens
+│   │   ├── hooks/       # Data fetching hooks
+│   │   └── components/  # Reusable UI components
+├── shared/              # Shared code with web app
+│   ├── api/            # API client + validation
+│   └── store/          # State management (Zustand)
+└── ARCHITECTURE.md     # Full development guide
+```
+
+### Key Features
+
+- **Shared Backend**: Uses the same API as web app
+- **Offline Support**: Local data persists when offline
+- **Automatic Sync**: Profiles and doses sync when reconnected
+- **No Code Duplication**: Business logic lives in `shared/`
+- **Rapid Development**: Clone screens, add hooks, deploy
+
+### Integration Points
+
+For rapid development, add features here:
+
+1. **New Screen**: `mobile/app/src/screens/MyScreen.tsx`
+2. **Data Hook**: `mobile/app/src/hooks/useMyData.ts`
+3. **API Method**: `mobile/shared/api/apiClient.ts`
+4. **Global State**: `mobile/shared/store/index.ts`
+
+See [mobile/INTEGRATION_POINTS.md](mobile/INTEGRATION_POINTS.md) for detailed plug points and patterns.
+
+### Build for Production
+
+```bash
+npm run build:mobile:production  # Build iOS + Android
+```
+
+Requires EAS (Expo Application Services) account. See [mobile/ARCHITECTURE.md](mobile/ARCHITECTURE.md) for details.

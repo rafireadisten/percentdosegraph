@@ -409,10 +409,10 @@
     "drug": "Amoxicillin",
     "aliases": ["amoxil"],
     "route": "PO",
-    "maxDose": 3000,
+    "maxDose": 1750,
     "unit": "mg/day",
-    "source": "Expanded static starter library",
-    "note": "Common outpatient antibiotic total daily dose reference."
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Adult tablet regimens: 875 mg every 12 hours or 500 mg every 8 hours."
   },
   {
     "drug": "Simvastatin",
@@ -1661,5 +1661,176 @@
     "unit": "mg/day",
     "source": "Expanded library from Replit",
     "note": "Common oral antineuropathic reference ceiling for static comparison."
+  },
+  {
+    "drug": "Amoxicillin/Clavulanate",
+    "aliases": ["augmentin"],
+    "route": "PO",
+    "maxDose": 1750,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Standard adult tablet regimens use 875 mg every 12 hours or 500 mg every 8 hours based on the amoxicillin component."
+  },
+  {
+    "drug": "Penicillin V Potassium",
+    "aliases": ["pen vk", "veetids"],
+    "route": "PO",
+    "maxDose": 2000,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Usual adult oral regimens use 250 mg to 500 mg every 6 to 8 hours."
+  },
+  {
+    "drug": "Dicloxacillin",
+    "aliases": ["dynapen"],
+    "route": "PO",
+    "maxDose": 1000,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Adult oral dosage table includes 250 mg every 6 hours on an empty stomach."
+  },
+  {
+    "drug": "Cephalexin",
+    "aliases": ["keflex"],
+    "route": "PO",
+    "maxDose": 4000,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Adults: dosage ranges from 1 g to 4 g daily in divided doses."
+  },
+  {
+    "drug": "Cefadroxil",
+    "aliases": ["duricef"],
+    "route": "PO",
+    "maxDose": 2000,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Adult oral regimens use 1 g to 2 g per day in a single dose or divided twice daily."
+  },
+  {
+    "drug": "Cefuroxime Axetil",
+    "aliases": ["ceftin"],
+    "route": "PO",
+    "maxDose": 1000,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Adult dosage guidelines include 250 mg or 500 mg every 12 hours."
+  },
+  {
+    "drug": "Cefdinir",
+    "aliases": ["omnicef"],
+    "route": "PO",
+    "maxDose": 600,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Adults and adolescents: 300 mg every 12 hours or 600 mg once daily."
+  },
+  {
+    "drug": "Cefpodoxime",
+    "aliases": ["vantin"],
+    "route": "PO",
+    "maxDose": 800,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Adult oral regimens commonly use 100 mg to 400 mg every 12 hours depending on infection type."
+  },
+  {
+    "drug": "Cefixime",
+    "aliases": ["suprax"],
+    "route": "PO",
+    "maxDose": 400,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "The recommended adult dose is 400 mg daily, given once daily or divided every 12 hours."
+  },
+  {
+    "drug": "Azithromycin",
+    "aliases": ["zithromax", "z-pak", "zpak"],
+    "route": "PO",
+    "maxDose": 500,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Common adult tablet regimens use 500 mg once daily for 3 days or 500 mg on day 1 followed by 250 mg daily."
+  },
+  {
+    "drug": "Clarithromycin",
+    "aliases": ["biaxin"],
+    "route": "PO",
+    "maxDose": 1000,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Adults: clarithromycin tablets 250 mg or 500 mg every 12 hours."
+  },
+  {
+    "drug": "Erythromycin",
+    "aliases": ["ery-tab", "erythrocin"],
+    "route": "PO",
+    "maxDose": 1000,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Usual adult oral dosing uses one 250 mg tablet four times daily or one 500 mg tablet every 12 hours."
+  },
+  {
+    "drug": "Doxycycline",
+    "aliases": ["vibramycin", "doryx"],
+    "route": "PO",
+    "maxDose": 200,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "The usual adult dosage is 200 mg on day 1, administered 100 mg every 12 hours, followed by 100 mg daily."
+  },
+  {
+    "drug": "Minocycline",
+    "aliases": ["minocin"],
+    "route": "PO",
+    "maxDose": 200,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "The usual adult dosage is 200 mg initially followed by 100 mg every 12 hours."
+  },
+  {
+    "drug": "Clindamycin",
+    "aliases": ["cleocin"],
+    "route": "PO",
+    "maxDose": 1800,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Adults: serious infections 150 mg to 300 mg every 6 hours; more severe infections 300 mg to 450 mg every 6 hours."
+  },
+  {
+    "drug": "Nitrofurantoin",
+    "aliases": ["macrobid"],
+    "route": "PO",
+    "maxDose": 200,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Adults and pediatric patients over 12 years: one 100 mg capsule every 12 hours for seven days."
+  },
+  {
+    "drug": "Ciprofloxacin",
+    "aliases": ["cipro"],
+    "route": "PO",
+    "maxDose": 1500,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Adult dosage guidelines include 500 mg to 750 mg every 12 hours for multiple infections."
+  },
+  {
+    "drug": "Levofloxacin",
+    "aliases": ["levaquin"],
+    "route": "PO",
+    "maxDose": 750,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "The usual adult dose is 250 mg, 500 mg, or 750 mg orally every 24 hours depending on infection type."
+  },
+  {
+    "drug": "Fosfomycin",
+    "aliases": ["monurol"],
+    "route": "PO",
+    "maxDose": 3000,
+    "unit": "mg/day",
+    "source": "DailyMed adult oral dosage reference",
+    "note": "Adult oral dosing uses a single 3 g sachet dose for uncomplicated urinary tract infection."
   }
 ]

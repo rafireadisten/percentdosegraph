@@ -20,7 +20,8 @@
   "workspaces": [
     "artifacts/api-server",
     "lib/db",
-    "lib/api-zod"
+    "lib/api-zod",
+    "mobile/app"
   ],
   "scripts": {
     "dev": "npm run dev:web",
@@ -54,7 +55,11 @@
     "auto-deploy": "npm run build:deploy && echo '🚀 Auto-deploy to /deploy folder completed'",
     "build:mobile:ios": "echo 'iOS app built - see mobile-apps/ios/README.md'",
     "build:mobile:android": "cd mobile-apps/android && ./gradlew assembleDebug",
-    "setup:mobile": "bash scripts/setup-mobile.sh"
+    "setup:mobile": "bash scripts/setup-mobile.sh",
+    "dev:mobile": "npm --workspace percentdosegraph-mobile run dev",
+    "dev:mobile:ios": "npm --workspace percentdosegraph-mobile run dev:ios",
+    "dev:mobile:android": "npm --workspace percentdosegraph-mobile run dev:android",
+    "build:mobile:production": "npm --workspace percentdosegraph-mobile run build:ios && npm --workspace percentdosegraph-mobile run build:android"
   },
   "dependencies": {
     "react": "^19.2.4",

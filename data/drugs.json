@@ -361,10 +361,13 @@
     "name": "Amoxicillin",
     "genericName": "Amoxicillin",
     "drugClass": "Penicillin antibiotic",
-    "maxDailyDose": 3000,
-    "maxSingleDose": 1000,
+    "maxDailyDose": 1750,
+    "routeMaxDoses": {
+      "PO": 1750
+    },
+    "maxSingleDose": 875,
     "unit": "mg",
-    "notes": "Expanded static starter drug library."
+    "notes": "DailyMed adult oral tablet regimens: 875 mg every 12 hours or 500 mg every 8 hours."
   },
   {
     "id": 34,
@@ -1728,5 +1731,252 @@
     "maxSingleDose": 1200,
     "unit": "mg",
     "notes": "Bundled starter ceiling for demo comparison only."
+  },
+  {
+    "id": 133,
+    "name": "Amoxicillin/Clavulanate",
+    "genericName": "Amoxicillin/clavulanate potassium",
+    "drugClass": "Penicillin/beta-lactamase inhibitor antibiotic",
+    "maxDailyDose": 1750,
+    "routeMaxDoses": {
+      "PO": 1750
+    },
+    "maxSingleDose": 875,
+    "unit": "mg",
+    "notes": "DailyMed standard adult tablet regimens use 875 mg every 12 hours or 500 mg every 8 hours based on the amoxicillin component."
+  },
+  {
+    "id": 134,
+    "name": "Penicillin V Potassium",
+    "genericName": "Penicillin V potassium",
+    "drugClass": "Penicillin antibiotic",
+    "maxDailyDose": 2000,
+    "routeMaxDoses": {
+      "PO": 2000
+    },
+    "maxSingleDose": 500,
+    "unit": "mg",
+    "notes": "DailyMed adult oral regimens commonly use 250 mg to 500 mg every 6 to 8 hours."
+  },
+  {
+    "id": 135,
+    "name": "Dicloxacillin",
+    "genericName": "Dicloxacillin sodium",
+    "drugClass": "Penicillin antibiotic",
+    "maxDailyDose": 1000,
+    "routeMaxDoses": {
+      "PO": 1000
+    },
+    "maxSingleDose": 250,
+    "unit": "mg",
+    "notes": "DailyMed adult oral regimens commonly use 250 mg every 6 hours on an empty stomach."
+  },
+  {
+    "id": 136,
+    "name": "Cephalexin",
+    "genericName": "Cephalexin",
+    "drugClass": "Cephalosporin antibiotic",
+    "maxDailyDose": 4000,
+    "routeMaxDoses": {
+      "PO": 4000
+    },
+    "maxSingleDose": 1000,
+    "unit": "mg",
+    "notes": "DailyMed adult oral dosage ranges from 1 g to 4 g daily in divided doses."
+  },
+  {
+    "id": 137,
+    "name": "Cefadroxil",
+    "genericName": "Cefadroxil",
+    "drugClass": "Cephalosporin antibiotic",
+    "maxDailyDose": 2000,
+    "routeMaxDoses": {
+      "PO": 2000
+    },
+    "maxSingleDose": 1000,
+    "unit": "mg",
+    "notes": "DailyMed adult oral regimens use 1 g to 2 g per day in a single dose or divided twice daily."
+  },
+  {
+    "id": 138,
+    "name": "Cefuroxime Axetil",
+    "genericName": "Cefuroxime axetil",
+    "drugClass": "Cephalosporin antibiotic",
+    "maxDailyDose": 1000,
+    "routeMaxDoses": {
+      "PO": 1000
+    },
+    "maxSingleDose": 500,
+    "unit": "mg",
+    "notes": "DailyMed adult oral regimens commonly use 250 mg or 500 mg every 12 hours."
+  },
+  {
+    "id": 139,
+    "name": "Cefdinir",
+    "genericName": "Cefdinir",
+    "drugClass": "Cephalosporin antibiotic",
+    "maxDailyDose": 600,
+    "routeMaxDoses": {
+      "PO": 600
+    },
+    "maxSingleDose": 600,
+    "unit": "mg",
+    "notes": "DailyMed adult oral regimens use 300 mg every 12 hours or 600 mg once daily."
+  },
+  {
+    "id": 140,
+    "name": "Cefpodoxime",
+    "genericName": "Cefpodoxime proxetil",
+    "drugClass": "Cephalosporin antibiotic",
+    "maxDailyDose": 800,
+    "routeMaxDoses": {
+      "PO": 800
+    },
+    "maxSingleDose": 400,
+    "unit": "mg",
+    "notes": "DailyMed adult oral regimens commonly use 100 mg to 400 mg every 12 hours depending on infection type."
+  },
+  {
+    "id": 141,
+    "name": "Cefixime",
+    "genericName": "Cefixime",
+    "drugClass": "Cephalosporin antibiotic",
+    "maxDailyDose": 400,
+    "routeMaxDoses": {
+      "PO": 400
+    },
+    "maxSingleDose": 400,
+    "unit": "mg",
+    "notes": "DailyMed adult oral regimens use 400 mg once daily or 200 mg every 12 hours."
+  },
+  {
+    "id": 142,
+    "name": "Azithromycin",
+    "genericName": "Azithromycin",
+    "drugClass": "Macrolide antibiotic",
+    "maxDailyDose": 500,
+    "routeMaxDoses": {
+      "PO": 500
+    },
+    "maxSingleDose": 500,
+    "unit": "mg",
+    "notes": "DailyMed common adult tablet regimens use 500 mg once daily for 3 days or 500 mg on day 1 followed by 250 mg daily."
+  },
+  {
+    "id": 143,
+    "name": "Clarithromycin",
+    "genericName": "Clarithromycin",
+    "drugClass": "Macrolide antibiotic",
+    "maxDailyDose": 1000,
+    "routeMaxDoses": {
+      "PO": 1000
+    },
+    "maxSingleDose": 500,
+    "unit": "mg",
+    "notes": "DailyMed adult tablet regimens commonly use 250 mg or 500 mg every 12 hours."
+  },
+  {
+    "id": 144,
+    "name": "Erythromycin",
+    "genericName": "Erythromycin base",
+    "drugClass": "Macrolide antibiotic",
+    "maxDailyDose": 1000,
+    "routeMaxDoses": {
+      "PO": 1000
+    },
+    "maxSingleDose": 500,
+    "unit": "mg",
+    "notes": "DailyMed usual adult oral dosing uses one 250 mg tablet four times daily or one 500 mg tablet every 12 hours."
+  },
+  {
+    "id": 145,
+    "name": "Doxycycline",
+    "genericName": "Doxycycline hyclate",
+    "drugClass": "Tetracycline antibiotic",
+    "maxDailyDose": 200,
+    "routeMaxDoses": {
+      "PO": 200
+    },
+    "maxSingleDose": 100,
+    "unit": "mg",
+    "notes": "DailyMed adult oral dosing commonly uses 200 mg on day 1 as 100 mg every 12 hours, followed by 100 mg daily; selected infections use 100 mg every 12 hours."
+  },
+  {
+    "id": 146,
+    "name": "Minocycline",
+    "genericName": "Minocycline hydrochloride",
+    "drugClass": "Tetracycline antibiotic",
+    "maxDailyDose": 200,
+    "routeMaxDoses": {
+      "PO": 200
+    },
+    "maxSingleDose": 200,
+    "unit": "mg",
+    "notes": "DailyMed adult oral dosing commonly uses 200 mg initially followed by 100 mg every 12 hours."
+  },
+  {
+    "id": 147,
+    "name": "Clindamycin",
+    "genericName": "Clindamycin hydrochloride",
+    "drugClass": "Lincosamide antibiotic",
+    "maxDailyDose": 1800,
+    "routeMaxDoses": {
+      "PO": 1800
+    },
+    "maxSingleDose": 450,
+    "unit": "mg",
+    "notes": "DailyMed adult oral regimens use 150 mg to 300 mg every 6 hours for serious infections and 300 mg to 450 mg every 6 hours for more severe infections."
+  },
+  {
+    "id": 148,
+    "name": "Nitrofurantoin",
+    "genericName": "Nitrofurantoin monohydrate/macrocrystals",
+    "drugClass": "Nitrofuran antibiotic",
+    "maxDailyDose": 200,
+    "routeMaxDoses": {
+      "PO": 200
+    },
+    "maxSingleDose": 100,
+    "unit": "mg",
+    "notes": "DailyMed adult oral monohydrate/macrocrystal regimens use one 100 mg capsule every 12 hours for seven days."
+  },
+  {
+    "id": 149,
+    "name": "Ciprofloxacin",
+    "genericName": "Ciprofloxacin",
+    "drugClass": "Fluoroquinolone antibiotic",
+    "maxDailyDose": 1500,
+    "routeMaxDoses": {
+      "PO": 1500
+    },
+    "maxSingleDose": 750,
+    "unit": "mg",
+    "notes": "DailyMed adult oral regimens commonly use 250 mg to 750 mg every 12 hours depending on infection type."
+  },
+  {
+    "id": 150,
+    "name": "Levofloxacin",
+    "genericName": "Levofloxacin",
+    "drugClass": "Fluoroquinolone antibiotic",
+    "maxDailyDose": 750,
+    "routeMaxDoses": {
+      "PO": 750
+    },
+    "maxSingleDose": 750,
+    "unit": "mg",
+    "notes": "DailyMed adult oral regimens commonly use 250 mg, 500 mg, or 750 mg every 24 hours depending on infection type."
+  },
+  {
+    "id": 151,
+    "name": "Fosfomycin",
+    "genericName": "Fosfomycin tromethamine",
+    "drugClass": "Phosphonic acid antibiotic",
+    "maxDailyDose": 3000,
+    "routeMaxDoses": {
+      "PO": 3000
+    },
+    "maxSingleDose": 3000,
+    "unit": "mg",
+    "notes": "DailyMed adult oral dosing uses a single 3 g sachet dose for uncomplicated urinary tract infection."
   }
 ]

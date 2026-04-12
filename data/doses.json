@@ -35,5 +35,20 @@
     "route": "PO",
     "amount": 800,
     "notes": "Current dose segment"
+  },
+  {
+    "id": 6,
+    "date": "2026-03-11",
+    "route": "PO",
+    "amount": 20,
+    "notes": "Current dose segment"
+  },
+  {
+    "id": 7,
+    "date": "2026-01-10",
+    "endDate": "2026-03-10",
+    "route": "PO",
+    "amount": 10,
+    "notes": ""
   }
 ]

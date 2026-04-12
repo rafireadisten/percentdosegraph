@@ -106,6 +106,16 @@ router.put(
         return;
       }
 
+      const existingPatientId = String(existing.payload?.patientId ?? existing.id);
+      const updatedPatientId = parsed.data.payload?.patientId;
+      if (
+        updatedPatientId !== undefined &&
+        String(updatedPatientId) !== existingPatientId
+      ) {
+        res.status(400).json({ error: 'Patient ID cannot be changed for an existing profile.' });
+        return;
+      }
+
       const profile = await updateProfileById(id, parsed.data);
 
       res.json(profile);
