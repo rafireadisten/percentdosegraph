@@ -3,6 +3,8 @@ const API_BASE_PATH = resolveApiBasePath();
 const AUTH_TOKEN_STORAGE_KEY = 'percentdosegraph:static-auth-token';
 const AUTH_ACCOUNT_STORAGE_KEY = 'percentdosegraph:static-auth-account';
 const LOCAL_PROFILES_STORAGE_KEY = 'percentdosegraph:static-local-profiles';
+const STATIC_ACCOUNTS_STORAGE_KEY = 'percentdosegraph:static-accounts';
+const STATIC_ACCOUNT_PROFILES_STORAGE_KEY = 'percentdosegraph:static-account-profiles';
 const CURRENT_DOSE_NOTE = 'Current dose segment';
 const STATIC_CHART_COLORS = [
   '#0d7c66',
@@ -19,7 +21,7 @@ let drugReferenceLibrary = [];
 
 const state = {
   settings: {
-    medicationName: 'Morphine',
+    medicationName: '',
     medicationId: '',
     patientName: 'Example Patient',
     medicationRoute: 'PO',
@@ -113,7 +115,9 @@ const elements = {
   profileList: document.getElementById('profileList'),
   authForm: document.getElementById('authForm'),
   authNameLabel: document.getElementById('authNameLabel'),
+  authDeveloperLabel: document.getElementById('authDeveloperLabel'),
   authName: document.getElementById('authName'),
+  authIsDeveloper: document.getElementById('authIsDeveloper'),
   authEmail: document.getElementById('authEmail'),
   authPassword: document.getElementById('authPassword'),
   authSubmitButton: document.getElementById('authSubmitButton'),
@@ -179,7 +183,7 @@ function handleSettingsFormUpdate(event) {
   const previousRoute = state.settings.medicationRoute;
   const previousDrug = state.settings.medicationName;
 
-  state.settings.medicationName = elements.medicationName.value.trim() || 'Medication';
+  state.settings.medicationName = elements.medicationName.value.trim();
   state.settings.patientName = elements.patientName.value.trim() || 'Patient';
   state.settings.medicationRoute = elements.medicationRoute.value;
   state.settings.doseUnit = elements.doseUnit.value.trim() || 'units/day';
@@ -568,8 +572,8 @@ async function loadDoseEvents() {
       .map(normalizeDoseEvent)
       .sort((a, b) => a.date.localeCompare(b.date));
   } catch (error) {
-    console.warn('Falling back to seeded dose segments:', error);
-    state.doseEvents = seedDoseEvents();
+    console.warn('Dose API unavailable. Starting with an empty static timeline:', error);
+    state.doseEvents = [];
   }
 }
 
@@ -599,21 +603,23 @@ function renderAuthState() {
   const account = state.auth.account;
 
   elements.authNameLabel.classList.toggle('hidden', mode !== 'register' || isAuthenticated);
+  elements.authDeveloperLabel.classList.toggle('hidden', mode !== 'register' || isAuthenticated);
   elements.authToggleButton.classList.toggle('hidden', isAuthenticated);
   elements.authLogoutButton.classList.toggle('hidden', !isAuthenticated);
   elements.authSubmitButton.classList.toggle('hidden', isAuthenticated);
   elements.authEmail.disabled = isAuthenticated;
   elements.authPassword.disabled = isAuthenticated;
   elements.authName.disabled = isAuthenticated;
+  elements.authIsDeveloper.disabled = isAuthenticated;
   elements.authSubmitButton.textContent = mode === 'login' ? 'Login' : 'Register';
   elements.authToggleButton.textContent =
     mode === 'login' ? 'Need an account?' : 'Have an account?';
 
   if (isAuthenticated) {
-    elements.authStatusText.textContent = `Signed in as ${account.name || account.email}. Backend profile persistence is active.`;
+    elements.authStatusText.textContent = `Signed in as ${account.name || account.email} (${formatAccountDesignation(account)}). Profiles saved now belong to this browser-local account.`;
   } else {
     elements.authStatusText.textContent =
-      'Not signed in. Profiles will stay local until you authenticate.';
+      'Not signed in. Guest profiles stay on this device until you register or log in.';
   }
 }
 
@@ -736,7 +742,9 @@ function renderWorkspaceSummary(range, filteredEvents = getFilteredEvents(range)
   elements.workspacePatient.textContent = state.settings.patientName;
   elements.workspaceMedication.textContent = visibleDrugGroups.length
     ? visibleDrugGroups.map(group => group.name).join(' · ')
-    : `${state.settings.medicationName} only`;
+    : state.settings.medicationName
+      ? `${state.settings.medicationName} only`
+      : 'No medication selected yet';
   elements.workspaceRoute.textContent = visibleRoutes.length
     ? visibleRoutes.length === 1
       ? visibleRoutes[0]
@@ -2080,15 +2088,10 @@ async function importDataFromJson(file) {
 
 async function loadProfiles() {
   if (state.auth.account?.id) {
-    try {
-      const apiProfiles = await apiGet(`/accounts/${state.auth.account.id}/profiles`);
-      state.profiles = apiProfiles.map(normalizeProfile);
-      state.profileStorageMode = 'account';
-      renderProfileList();
-      return;
-    } catch (error) {
-      console.warn('Falling back to local profiles because account profile load failed:', error);
-    }
+    state.profiles = readAccountProfiles(state.auth.account.id);
+    state.profileStorageMode = 'account';
+    renderProfileList();
+    return;
   }
 
   const localProfiles = readLocalProfiles();
@@ -2134,25 +2137,18 @@ async function saveProfile() {
   };
 
   if (state.auth.account?.id) {
-    try {
-      const createdProfile = await apiPost(
-        `/accounts/${state.auth.account.id}/profiles`,
-        profilePayload
-      );
-      state.profiles.push(normalizeProfile(createdProfile));
-      state.profileStorageMode = 'account';
-    } catch (error) {
-      console.warn('Saving profile locally because API create failed:', error);
-      const localProfile = normalizeProfile({
-        id: `local-${Date.now()}`,
-        name: profileName,
-        payload: profilePayload.payload,
-        createdAt: new Date().toISOString(),
-      });
-      state.profiles.push(localProfile);
-      state.profileStorageMode = 'local';
-      persistLocalProfiles();
-    }
+    const now = new Date().toISOString();
+    const accountProfile = normalizeProfile({
+      id: `account-${state.auth.account.id}-${Date.now()}`,
+      accountId: state.auth.account.id,
+      name: profileName,
+      payload: profilePayload.payload,
+      createdAt: now,
+      updatedAt: now,
+    });
+    state.profiles.push(accountProfile);
+    state.profileStorageMode = 'account';
+    persistAccountProfiles(state.auth.account.id, state.profiles);
   } else {
     const localProfile = normalizeProfile({
       id: `local-${Date.now()}`,
@@ -2236,16 +2232,10 @@ async function deleteProfile(profileId) {
     return;
   }
 
-  if (!String(profile.id).startsWith('local-')) {
-    try {
-      await apiDelete(`/profiles/${profile.id}`);
-    } catch (error) {
-      console.warn('Deleting profile locally because API delete failed:', error);
-    }
-  }
-
   state.profiles = state.profiles.filter(entry => entry.id !== profileId);
-  if (String(profile.id).startsWith('local-') || state.profileStorageMode === 'local') {
+  if (state.auth.account?.id && profile.accountId === String(state.auth.account.id)) {
+    persistAccountProfiles(state.auth.account.id, state.profiles);
+  } else if (String(profile.id).startsWith('local-') || state.profileStorageMode === 'local') {
     persistLocalProfiles();
   }
   renderProfileList();
@@ -2262,20 +2252,13 @@ async function renameProfile(profileId) {
     return;
   }
 
-  if (!String(profile.id).startsWith('local-')) {
-    try {
-      const updated = await apiPut(`/profiles/${profile.id}`, { name: nextName });
-      const index = state.profiles.findIndex(entry => entry.id === profileId);
-      state.profiles.splice(index, 1, normalizeProfile(updated));
-      renderProfileList();
-      return;
-    } catch (error) {
-      console.warn('Renaming profile locally because API update failed:', error);
-    }
-  }
-
   profile.name = nextName;
-  persistLocalProfiles();
+  profile.updatedAt = new Date().toISOString();
+  if (state.auth.account?.id && profile.accountId === String(state.auth.account.id)) {
+    persistAccountProfiles(state.auth.account.id, state.profiles);
+  } else {
+    persistLocalProfiles();
+  }
   renderProfileList();
 }
 
@@ -2306,7 +2289,7 @@ function getVisibleProfiles() {
 
 function formatProfileStorageSummary() {
   if (state.profileStorageMode === 'account') {
-    return 'account-backed';
+    return 'account-owned';
   }
 
   if (state.profileStorageMode === 'seeded') {
@@ -2365,11 +2348,13 @@ function normalizeProfile(profile) {
 
   return {
     id: String(profile.id),
+    accountId: profile.accountId ? String(profile.accountId) : null,
     name: profile.name,
     settings,
     graphState,
     doseEvents: doseEvents.map(normalizeDoseEvent),
     createdAt: profile.createdAt ?? new Date().toISOString(),
+    updatedAt: profile.updatedAt ?? profile.createdAt ?? new Date().toISOString(),
   };
 }
 
@@ -2397,12 +2382,12 @@ function persistLocalProfiles() {
 }
 
 function formatProfileStorageLabel(profile) {
-  if (String(profile.id).startsWith('local-')) {
-    return 'local profile';
+  if (profile.accountId) {
+    return 'account profile';
   }
 
-  if (state.profileStorageMode === 'account') {
-    return 'account profile';
+  if (String(profile.id).startsWith('local-')) {
+    return 'local profile';
   }
 
   return 'seeded profile';
@@ -2489,12 +2474,11 @@ async function hydrateAuthSession() {
     return;
   }
 
-  try {
-    const payload = await apiGet('/auth/me');
-    state.auth.account = payload.account;
-    persistAuthSession(state.auth.token, payload.account);
-  } catch (error) {
-    console.warn('Clearing stale static auth session:', error);
+  const storedAccount = findStaticAccountById(state.auth.account?.id);
+  if (storedAccount) {
+    state.auth.account = sanitizeStaticAccount(storedAccount);
+    persistAuthSession(state.auth.token, state.auth.account);
+  } else {
     clearAuthSession();
   }
 
@@ -2506,6 +2490,7 @@ async function handleAuthSubmit() {
   const email = elements.authEmail.value.trim().toLowerCase();
   const password = elements.authPassword.value;
   const name = elements.authName.value.trim();
+  const isDeveloper = elements.authIsDeveloper.checked;
 
   if (!email || !password || (mode === 'register' && !name)) {
     setAuthMessage('Complete the required account fields first.', 'error');
@@ -2521,20 +2506,29 @@ async function handleAuthSubmit() {
   setAuthMessage(mode === 'login' ? 'Signing in...' : 'Creating your account...');
 
   try {
-    const endpoint = mode === 'login' ? '/auth/login' : '/auth/register';
-    const payload = mode === 'login' ? { email, password } : { name, email, password };
-    const authPayload = await apiPost(endpoint, payload, { skipAuth: true });
+    let account;
 
-    state.auth.token = authPayload.token;
-    state.auth.account = authPayload.account;
-    persistAuthSession(authPayload.token, authPayload.account);
-    elements.authPassword.value = '';
-    if (mode === 'register') {
-      elements.authName.value = '';
+    if (mode === 'login') {
+      account = await loginStaticAccount(email, password);
+    } else {
+      account = await registerStaticAccount(name, email, password, { isDeveloper });
       state.auth.mode = 'login';
+      elements.authName.value = '';
+      elements.authIsDeveloper.checked = false;
     }
 
-    setAuthMessage('Signed in. Backend profile persistence is ready.', 'success');
+    const token = createStaticSessionToken(account);
+    state.auth.token = token;
+    state.auth.account = sanitizeStaticAccount(account);
+    persistAuthSession(token, state.auth.account);
+    migrateGuestProfilesToAccount(account.id);
+    elements.authPassword.value = '';
+    setAuthMessage(
+      mode === 'login'
+        ? `Signed in. ${formatAccountDesignation(state.auth.account)} access is active for this browser account.`
+        : `Account created. ${formatAccountDesignation(state.auth.account)} access is active for this browser account.`,
+      'success'
+    );
     renderAuthState();
     await loadProfiles();
   } catch (error) {
@@ -2580,6 +2574,214 @@ function clearAuthSession() {
   state.auth.token = '';
   state.auth.account = null;
   setAuthMessage('Signed out.');
+}
+
+function readStaticAccounts() {
+  try {
+    const stored = window.localStorage.getItem(STATIC_ACCOUNTS_STORAGE_KEY);
+    if (!stored) {
+      return [];
+    }
+
+    const accounts = JSON.parse(stored);
+    return Array.isArray(accounts) ? accounts : [];
+  } catch (error) {
+    console.warn('Failed to read static accounts:', error);
+    return [];
+  }
+}
+
+function persistStaticAccounts(accounts) {
+  try {
+    window.localStorage.setItem(STATIC_ACCOUNTS_STORAGE_KEY, JSON.stringify(accounts));
+  } catch (error) {
+    console.warn('Failed to persist static accounts:', error);
+  }
+}
+
+function readStaticAccountProfilesMap() {
+  try {
+    const stored = window.localStorage.getItem(STATIC_ACCOUNT_PROFILES_STORAGE_KEY);
+    if (!stored) {
+      return {};
+    }
+
+    const profilesByAccount = JSON.parse(stored);
+    return profilesByAccount && typeof profilesByAccount === 'object' ? profilesByAccount : {};
+  } catch (error) {
+    console.warn('Failed to read account profiles:', error);
+    return {};
+  }
+}
+
+function persistStaticAccountProfilesMap(profilesByAccount) {
+  try {
+    window.localStorage.setItem(
+      STATIC_ACCOUNT_PROFILES_STORAGE_KEY,
+      JSON.stringify(profilesByAccount)
+    );
+  } catch (error) {
+    console.warn('Failed to persist account profiles:', error);
+  }
+}
+
+function readAccountProfiles(accountId) {
+  const profilesByAccount = readStaticAccountProfilesMap();
+  const accountProfiles = profilesByAccount[String(accountId)];
+  return Array.isArray(accountProfiles) ? accountProfiles.map(normalizeProfile) : [];
+}
+
+function persistAccountProfiles(accountId, profiles) {
+  const profilesByAccount = readStaticAccountProfilesMap();
+  profilesByAccount[String(accountId)] = profiles.map(profile => ({
+    id: profile.id,
+    accountId: profile.accountId ?? String(accountId),
+    name: profile.name,
+    payload: {
+      settings: profile.settings,
+      doseEvents: profile.doseEvents.map(event =>
+        Object.fromEntries(Object.entries(event).filter(([key]) => key !== 'id'))
+      ),
+      graphState: profile.graphState,
+    },
+    createdAt: profile.createdAt,
+    updatedAt: profile.updatedAt ?? profile.createdAt,
+  }));
+  persistStaticAccountProfilesMap(profilesByAccount);
+}
+
+function findStaticAccountByEmail(email) {
+  const normalizedEmail = String(email).trim().toLowerCase();
+  return readStaticAccounts().find(account => account.email === normalizedEmail) || null;
+}
+
+function findStaticAccountById(accountId) {
+  const normalizedId = String(accountId || '');
+  if (!normalizedId) {
+    return null;
+  }
+
+  return readStaticAccounts().find(account => String(account.id) === normalizedId) || null;
+}
+
+function sanitizeStaticAccount(account) {
+  return {
+    id: String(account.id),
+    name: account.name,
+    email: account.email,
+    isDeveloper: account.isDeveloper === true,
+    createdAt: account.createdAt,
+    updatedAt: account.updatedAt ?? account.createdAt,
+  };
+}
+
+function formatAccountDesignation(account) {
+  return account?.isDeveloper ? 'developer' : 'standard';
+}
+
+async function hashStaticPassword(password) {
+  if (window.crypto?.subtle && window.TextEncoder) {
+    const encoded = new TextEncoder().encode(password);
+    const digest = await window.crypto.subtle.digest('SHA-256', encoded);
+    return Array.from(new Uint8Array(digest), value => value.toString(16).padStart(2, '0')).join('');
+  }
+
+  return `plain:${password}`;
+}
+
+function createStaticSessionToken(account) {
+  const randomPart =
+    window.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  return `static-${account.id}-${randomPart}`;
+}
+
+async function registerStaticAccount(name, email, password, options = {}) {
+  const normalizedEmail = email.trim().toLowerCase();
+  const accounts = readStaticAccounts();
+
+  if (accounts.some(account => account.email === normalizedEmail)) {
+    throw new Error('An account with that email already exists in this browser.');
+  }
+
+  const now = new Date().toISOString();
+  const account = {
+    id: `acct-${Date.now()}`,
+    name,
+    email: normalizedEmail,
+    isDeveloper: options.isDeveloper === true,
+    passwordHash: await hashStaticPassword(password),
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  accounts.push(account);
+  persistStaticAccounts(accounts);
+  return account;
+}
+
+async function loginStaticAccount(email, password) {
+  const account = findStaticAccountByEmail(email);
+  if (!account) {
+    throw new Error('No browser-local account was found for that email.');
+  }
+
+  const passwordHash = await hashStaticPassword(password);
+  if (account.passwordHash !== passwordHash) {
+    throw new Error('Incorrect password for this browser-local account.');
+  }
+
+  return account;
+}
+
+function migrateGuestProfilesToAccount(accountId) {
+  const guestProfiles = readLocalProfiles();
+  if (!guestProfiles.length) {
+    return;
+  }
+
+  const existingProfiles = readAccountProfiles(accountId);
+  const existingSignatures = new Set(
+    existingProfiles.map(profile => buildProfileMigrationSignature(profile))
+  );
+  const now = new Date().toISOString();
+  const migratedProfiles = [];
+
+  for (const profile of guestProfiles) {
+    const signature = buildProfileMigrationSignature(profile);
+    if (existingSignatures.has(signature)) {
+      continue;
+    }
+
+    existingSignatures.add(signature);
+    migratedProfiles.push(
+      normalizeProfile({
+        id: `account-${accountId}-${Date.now()}-${migratedProfiles.length + 1}`,
+        accountId,
+        name: profile.name,
+        payload: {
+          settings: profile.settings,
+          doseEvents: profile.doseEvents.map(event =>
+            Object.fromEntries(Object.entries(event).filter(([key]) => key !== 'id'))
+          ),
+          graphState: profile.graphState,
+        },
+        createdAt: profile.createdAt,
+        updatedAt: now,
+      })
+    );
+  }
+
+  if (migratedProfiles.length) {
+    persistAccountProfiles(accountId, [...existingProfiles, ...migratedProfiles]);
+  }
+}
+
+function buildProfileMigrationSignature(profile) {
+  return JSON.stringify({
+    name: profile.name,
+    settings: profile.settings,
+    doseEvents: profile.doseEvents,
+  });
 }
 
 async function apiGet(path, options) {
@@ -2661,41 +2863,4 @@ function getTimelineAnchorDate() {
   }, getDoseEventAnchorEnd(anchorEvents[0]));
 
   return new Date(`${latestDate}T00:00:00`);
-}
-
-function seedDoseEvents() {
-  const today = new Date();
-  const samples = [
-    { id: 'seed-po-1', startDaysAgo: 340, endDaysAgo: 241, route: 'PO', amount: 60 },
-    { id: 'seed-po-2', startDaysAgo: 240, endDaysAgo: 181, route: 'PO', amount: 74 },
-    { id: 'seed-po-3', startDaysAgo: 180, endDaysAgo: 121, route: 'PO', amount: 90 },
-    { id: 'seed-po-4', startDaysAgo: 120, endDaysAgo: 77, route: 'PO', amount: 68 },
-    { id: 'seed-po-5', startDaysAgo: 76, endDaysAgo: 29, route: 'PO', amount: 96 },
-    { id: 'seed-po-6', startDaysAgo: 28, endDaysAgo: 10, route: 'PO', amount: 82 },
-    { id: 'seed-po-7', startDaysAgo: 9, endDaysAgo: null, route: 'PO', amount: 70, status: 'current' },
-    { id: 'seed-iv-1', startDaysAgo: 300, endDaysAgo: 286, route: 'IV', amount: 20 },
-    { id: 'seed-iv-2', startDaysAgo: 15, endDaysAgo: 11, route: 'IV', amount: 24 },
-  ];
-
-  return samples
-    .map(sample => {
-      const startDate = addDays(today, -sample.startDaysAgo);
-      const endDate = sample.endDaysAgo === null ? '' : formatDateInput(addDays(today, -sample.endDaysAgo));
-      const drugName = sample.route === 'IV' ? 'Hydromorphone' : 'Morphine';
-      const maxDose = sample.route === 'IV' ? 30 : 120;
-      const doseUnit = 'mg/day';
-
-      return normalizeDoseEvent({
-        id: sample.id,
-        date: formatDateInput(startDate),
-        endDate,
-        medicationName: drugName,
-        maxDose,
-        doseUnit,
-        route: sample.route,
-        amount: sample.amount,
-        status: sample.status ?? 'ended',
-      });
-    })
-    .sort((a, b) => a.date.localeCompare(b.date));
 }

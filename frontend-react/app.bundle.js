@@ -51207,7 +51207,7 @@ function getInitialSelectedDrugIds(drugs, medicationEntries) {
   if (entryDrugIds.length) {
     return entryDrugIds;
   }
-  return drugs.slice(0, Math.min(5, drugs.length)).map((drug) => drug.id);
+  return [];
 }
 function getSelectedDrugIdsFromProfile(profile) {
   const selectedDrugIds = Array.isArray(profile.selectedDrugIds) ? profile.selectedDrugIds.map(String) : [];

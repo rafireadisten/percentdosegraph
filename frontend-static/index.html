@@ -70,7 +70,6 @@
                 id="medicationName"
                 name="medicationName"
                 type="text"
-                value="Morphine"
                 list="medicationSuggestions"
               />
             </label>
@@ -301,8 +300,9 @@
             <p class="section-kicker">Step 5</p>
             <h2>Save and reopen profiles</h2>
             <p>
-              Save and load named medication snapshots for timeline comparison. Sign in to persist
-              profiles in the backend account store, or keep them local when you are offline.
+              Save and load named medication snapshots for timeline comparison. Register or sign in
+              to keep profiles grouped under a browser-local account, or stay in guest mode and
+              keep them as local-only profiles on this device.
             </p>
           </div>
 
@@ -310,7 +310,7 @@
             <div class="auth-panel-header">
               <h3>Account</h3>
               <p id="authStatusText">
-                Not signed in. Profiles will stay local until you authenticate.
+                Not signed in. Guest profiles stay on this device until you register or log in.
               </p>
             </div>
 
@@ -318,6 +318,18 @@
               <label id="authNameLabel" class="auth-name-field hidden">
                 Name
                 <input id="authName" name="authName" type="text" placeholder="Your name" />
+              </label>
+              <label id="authDeveloperLabel" class="auth-name-field hidden">
+                <span>Account designation</span>
+                <span style="display: flex; align-items: center; gap: 0.55rem; margin-top: 0.4rem">
+                  <input
+                    id="authIsDeveloper"
+                    name="authIsDeveloper"
+                    type="checkbox"
+                    style="width: auto; margin: 0"
+                  />
+                  <span>Developer / engineer account</span>
+                </span>
               </label>
               <label>
                 Email
