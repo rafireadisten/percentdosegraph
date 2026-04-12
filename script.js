@@ -5,6 +5,8 @@ const AUTH_ACCOUNT_STORAGE_KEY = 'percentdosegraph:static-auth-account';
 const LOCAL_PROFILES_STORAGE_KEY = 'percentdosegraph:static-local-profiles';
 const STATIC_ACCOUNTS_STORAGE_KEY = 'percentdosegraph:static-accounts';
 const STATIC_ACCOUNT_PROFILES_STORAGE_KEY = 'percentdosegraph:static-account-profiles';
+const STATIC_WORKSPACE_STORAGE_KEY = 'percentdosegraph:static-workspace';
+const STATIC_ACCOUNT_WORKSPACES_STORAGE_KEY = 'percentdosegraph:static-account-workspaces';
 const CURRENT_DOSE_NOTE = 'Current dose segment';
 const STATIC_CHART_COLORS = [
   '#0d7c66',
@@ -59,6 +61,7 @@ const state = {
     account: null,
     mode: 'login',
   },
+  persistenceReady: false,
 };
 
 function resolveApiBasePath() {
@@ -493,8 +496,10 @@ async function initialize() {
   await loadCardiovascularDrugLibrary();
   await loadDoseEvents();
   await loadProfiles();
+  const restoredWorkspace = restorePersistedWorkspace();
   generateRandomMedGrafProfile();
-  refreshInference({ preserveManual: false });
+  refreshInference({ preserveManual: restoredWorkspace ? state.inference.isOverridden : false });
+  state.persistenceReady = true;
   render();
 }
 
@@ -595,6 +600,10 @@ function render() {
   renderWorkspaceSummary(range, filteredEvents);
   renderDoseFormState();
   renderRandomProfile();
+
+  if (state.persistenceReady) {
+    persistCurrentWorkspace();
+  }
 }
 
 function renderAuthState() {
@@ -2215,9 +2224,7 @@ function loadProfile(profileId) {
   if (
     confirm(`Load profile "${profile.name}"? This will replace current settings and dose segments.`)
   ) {
-    restoreStaticGraphState(profile.graphState ?? null, profile.settings);
-    state.doseEvents = profile.doseEvents.map(normalizeDoseEvent);
-    resetDoseForm();
+    applyProfileToWorkspace(profile);
     render();
   }
 }
@@ -2358,6 +2365,10 @@ function normalizeProfile(profile) {
   };
 }
 
+function serializeDoseEvent(event) {
+  return Object.fromEntries(Object.entries(event).filter(([key]) => key !== 'id'));
+}
+
 function readLocalProfiles() {
   try {
     const stored = window.localStorage.getItem(LOCAL_PROFILES_STORAGE_KEY);
@@ -2379,6 +2390,61 @@ function persistLocalProfiles() {
   } catch (error) {
     console.warn('Failed to persist local profiles:', error);
   }
+}
+
+function readGuestWorkspaceSnapshot() {
+  try {
+    const stored = window.localStorage.getItem(STATIC_WORKSPACE_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : null;
+  } catch (error) {
+    console.warn('Failed to read guest workspace snapshot:', error);
+    return null;
+  }
+}
+
+function persistGuestWorkspaceSnapshot(snapshot) {
+  try {
+    window.localStorage.setItem(STATIC_WORKSPACE_STORAGE_KEY, JSON.stringify(snapshot));
+  } catch (error) {
+    console.warn('Failed to persist guest workspace snapshot:', error);
+  }
+}
+
+function readAccountWorkspaceSnapshotsMap() {
+  try {
+    const stored = window.localStorage.getItem(STATIC_ACCOUNT_WORKSPACES_STORAGE_KEY);
+    if (!stored) {
+      return {};
+    }
+
+    const workspacesByAccount = JSON.parse(stored);
+    return workspacesByAccount && typeof workspacesByAccount === 'object' ? workspacesByAccount : {};
+  } catch (error) {
+    console.warn('Failed to read account workspaces:', error);
+    return {};
+  }
+}
+
+function persistAccountWorkspaceSnapshotsMap(workspacesByAccount) {
+  try {
+    window.localStorage.setItem(
+      STATIC_ACCOUNT_WORKSPACES_STORAGE_KEY,
+      JSON.stringify(workspacesByAccount)
+    );
+  } catch (error) {
+    console.warn('Failed to persist account workspaces:', error);
+  }
+}
+
+function readAccountWorkspaceSnapshot(accountId) {
+  const workspacesByAccount = readAccountWorkspaceSnapshotsMap();
+  return workspacesByAccount[String(accountId)] ?? null;
+}
+
+function persistAccountWorkspaceSnapshot(accountId, snapshot) {
+  const workspacesByAccount = readAccountWorkspaceSnapshotsMap();
+  workspacesByAccount[String(accountId)] = snapshot;
+  persistAccountWorkspaceSnapshotsMap(workspacesByAccount);
 }
 
 function formatProfileStorageLabel(profile) {
@@ -2441,6 +2507,80 @@ function buildStaticGraphStateSnapshot() {
       };
     }),
   };
+}
+
+function buildCurrentWorkspaceSnapshot() {
+  return {
+    version: 1,
+    settings: { ...state.settings },
+    doseEvents: state.doseEvents.map(serializeDoseEvent),
+    graphState: buildStaticGraphStateSnapshot(),
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+function persistCurrentWorkspace() {
+  const snapshot = buildCurrentWorkspaceSnapshot();
+
+  if (state.auth.account?.id) {
+    persistAccountWorkspaceSnapshot(state.auth.account.id, snapshot);
+    return;
+  }
+
+  persistGuestWorkspaceSnapshot(snapshot);
+}
+
+function applyWorkspaceSnapshot(snapshot) {
+  if (!snapshot || typeof snapshot !== 'object') {
+    return false;
+  }
+
+  restoreStaticGraphState(snapshot.graphState ?? null, snapshot.settings ?? state.settings);
+  state.doseEvents = Array.isArray(snapshot.doseEvents)
+    ? snapshot.doseEvents.map(normalizeDoseEvent).sort((left, right) => left.date.localeCompare(right.date))
+    : [];
+  resetDoseForm();
+  return true;
+}
+
+function applyProfileToWorkspace(profile) {
+  restoreStaticGraphState(profile.graphState ?? null, profile.settings);
+  state.doseEvents = profile.doseEvents
+    .map(normalizeDoseEvent)
+    .sort((left, right) => left.date.localeCompare(right.date));
+  resetDoseForm();
+}
+
+function getLatestRestorableProfile() {
+  if (state.profileStorageMode === 'seeded') {
+    return null;
+  }
+
+  return [...state.profiles]
+    .filter(profile => Array.isArray(profile.doseEvents) && profile.doseEvents.length)
+    .sort((left, right) => {
+      const leftTime = new Date(left.updatedAt ?? left.createdAt).getTime();
+      const rightTime = new Date(right.updatedAt ?? right.createdAt).getTime();
+      return rightTime - leftTime;
+    })[0] ?? null;
+}
+
+function restorePersistedWorkspace() {
+  const snapshot =
+    (state.auth.account?.id ? readAccountWorkspaceSnapshot(state.auth.account.id) : null) ??
+    readGuestWorkspaceSnapshot();
+
+  if (applyWorkspaceSnapshot(snapshot)) {
+    return true;
+  }
+
+  const latestProfile = getLatestRestorableProfile();
+  if (!latestProfile) {
+    return false;
+  }
+
+  applyProfileToWorkspace(latestProfile);
+  return true;
 }
 
 function restoreStaticGraphState(graphState, fallbackSettings) {

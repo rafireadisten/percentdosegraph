@@ -32,6 +32,7 @@ const TIMEFRAME_OPTIONS = [
 const PROFILES_STORAGE_KEY = 'percentdosegraph:react-profiles';
 const MEDICATION_LIST_STORAGE_KEY = 'percentdosegraph:react-medication-list';
 const WORKSPACE_STORAGE_KEY = 'percentdosegraph:react-workspace';
+const LAST_WORKSPACE_STORAGE_KEY = 'percentdosegraph:react-last-workspace';
 const AUTH_TOKEN_STORAGE_KEY = 'percentdosegraph:auth-token';
 const AUTH_ACCOUNT_STORAGE_KEY = 'percentdosegraph:auth-account';
 const CHART_COLORS = [
@@ -279,6 +280,40 @@ function App() {
   }, [patientName, patientNotes, route, timeframe, workspaceLabel]);
 
   useEffect(() => {
+    if (loading || !authReady) {
+      return;
+    }
+
+    saveLastWorkspaceToStorage(
+      buildWorkspaceExportPayload({
+        patientName,
+        workspaceLabel,
+        patientNotes,
+        route,
+        timeframe,
+        selectedDrugIds,
+        drugs,
+        doses,
+        medicationEntries,
+        profiles,
+      })
+    );
+  }, [
+    authReady,
+    doses,
+    drugs,
+    loading,
+    medicationEntries,
+    patientName,
+    patientNotes,
+    profiles,
+    route,
+    selectedDrugIds,
+    timeframe,
+    workspaceLabel,
+  ]);
+
+  useEffect(() => {
     let cancelled = false;
 
     async function restoreAuth() {
@@ -347,6 +382,7 @@ function App() {
 
     async function load() {
       try {
+        const storedWorkspace = loadLastWorkspaceFromStorage();
         const [nextDrugs, nextDoses] = await Promise.all([loadDrugs(), loadDoses()]);
 
         if (cancelled) {
@@ -355,17 +391,45 @@ function App() {
 
         const normalizedDrugs = nextDrugs.map(normalizeDrugRecord);
         const seededDoses = addSeededComparisonDoses(nextDoses, normalizedDrugs);
-        const defaultDrugId = normalizedDrugs[0]?.id ?? null;
+        const storedDrugs = Array.isArray(storedWorkspace?.drugs)
+          ? storedWorkspace.drugs.map(normalizeDrugRecord)
+          : [];
+        const mergedDrugs = mergeDrugCatalog(normalizedDrugs, storedDrugs);
+        const defaultDrugId = mergedDrugs[0]?.id ?? normalizedDrugs[0]?.id ?? null;
         const normalizedDoses = seededDoses.map((dose, index) =>
           normalizeDoseRecord(dose, index, defaultDrugId)
         );
+        const restoredMedicationEntries = Array.isArray(storedWorkspace?.medicationEntries)
+          ? storedWorkspace.medicationEntries.map(normalizeMedicationEntry)
+          : medicationEntries;
+        const restoredDoses = Array.isArray(storedWorkspace?.doses)
+          ? storedWorkspace.doses.map((dose, index) =>
+              normalizeDoseRecord(dose, index, defaultDrugId)
+            )
+          : normalizedDoses;
+        const restoredSelectedDrugIds = Array.isArray(storedWorkspace?.selectedDrugIds)
+          ? storedWorkspace.selectedDrugIds.map(String).slice(0, MAX_VISIBLE_DRUGS)
+          : getInitialSelectedDrugIds(mergedDrugs, restoredMedicationEntries);
+        const defaultSelection = restoredSelectedDrugIds[0] ?? defaultDrugId ?? '';
 
-        setDrugs(normalizedDrugs);
-        setDoses(normalizedDoses);
-        const initialSelection = getInitialSelectedDrugIds(normalizedDrugs, medicationEntries);
-        const defaultSelection = initialSelection[0] ?? defaultDrugId ?? '';
-
-        setSelectedDrugIds(initialSelection);
+        setDrugs(mergedDrugs);
+        setDoses(restoredDoses);
+        setMedicationEntries(restoredMedicationEntries);
+        setSelectedDrugIds(restoredSelectedDrugIds);
+        if (storedWorkspace) {
+          setRoute(storedWorkspace.route ?? workspaceDefaults.route ?? 'PO');
+          setTimeframe(storedWorkspace.timeframe ?? workspaceDefaults.timeframe ?? '1y');
+          setPatientName(storedWorkspace.patientName ?? workspaceDefaults.patientName ?? 'Example Patient');
+          setWorkspaceLabel(
+            storedWorkspace.workspaceLabel ??
+              workspaceDefaults.workspaceLabel ??
+              'Current medication timeline'
+          );
+          setPatientNotes(storedWorkspace.patientNotes ?? workspaceDefaults.patientNotes ?? '');
+          if (Array.isArray(storedWorkspace.profiles)) {
+            setProfiles(normalizeStoredProfiles(storedWorkspace.profiles));
+          }
+        }
         setEntryDrugId(String(defaultSelection));
         setListDrugId(String(defaultSelection));
       } catch (loadError) {
@@ -3026,6 +3090,23 @@ function saveMedicationEntriesToStorage(entries) {
 function saveWorkspaceToStorage(workspace) {
   try {
     window.localStorage.setItem(WORKSPACE_STORAGE_KEY, JSON.stringify(workspace));
+  } catch {
+    // ignore storage errors
+  }
+}
+
+function loadLastWorkspaceFromStorage() {
+  try {
+    const raw = window.localStorage.getItem(LAST_WORKSPACE_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveLastWorkspaceToStorage(workspace) {
+  try {
+    window.localStorage.setItem(LAST_WORKSPACE_STORAGE_KEY, JSON.stringify(workspace));
   } catch {
     // ignore storage errors
   }

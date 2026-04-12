@@ -2,6 +2,13 @@
 
 All notable project changes should be recorded in this file.
 
+## 2026-04-12
+
+### `feat: persist and restore the last workspace`
+- Added automatic workspace save and restore for the static frontend so the most recent graph state returns on reload.
+- Added full last-workspace snapshot persistence for the React frontend, including graph inputs and restored timeline state.
+- Verified the restored graph flow against the browser-local `rafi@readisten.com` storage path and local web/API startup.
+
 ## 2026-04-05
 
 ### `feat: update core app and api flows` (`d904658`)
