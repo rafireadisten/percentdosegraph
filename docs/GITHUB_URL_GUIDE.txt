@@ -109,6 +109,5 @@ Then run:
 STUCK?
 ━━━━
 
-See detailed guide: GITHUB_HOW_TO.md
+See detailed guide: docs/GITHUB_HOW_TO.md
 Or open in browser: github-setup.html
-

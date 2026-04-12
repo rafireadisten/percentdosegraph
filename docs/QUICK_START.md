@@ -59,10 +59,10 @@ percentdosegraph/
 │   └── Dockerfile            ← Docker config
 ├── frontend-react/           ← React app with auth
 ├── frontend-static/          ← Static HTML version
-├── GITHUB_SETUP.md          ← Detailed setup guide
-├── GITHUB_DEVOPS.md         ← Deployment platforms
-├── GITHUB_INTEGRATION.md    ← Overview
-├── DEPLOYMENT.md            ← Checklist
+├── docs/GITHUB_SETUP.md     ← Detailed setup guide
+├── docs/GITHUB_DEVOPS.md    ← Deployment platforms
+├── docs/GITHUB_INTEGRATION.md ← Overview
+├── docs/DEPLOYMENT.md       ← Checklist
 └── docker-compose.yml       ← Local full-stack
 ```
 

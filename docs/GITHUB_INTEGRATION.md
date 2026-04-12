@@ -81,9 +81,9 @@ npm run dev:full
 | `.github/workflows/test.yml` | Run tests on all commits | ✅ Created |
 | `Dockerfile` | Containerize API server | ✅ Created |
 | `docker-compose.yml` | Local full-stack development | ✅ Created |
-| `GITHUB_SETUP.md` | Detailed setup instructions | ✅ Created |
-| `GITHUB_DEVOPS.md` | Deployment platform guides | ✅ Created |
-| `DEPLOYMENT.md` | Production checklist | ✅ Created |
+| `docs/GITHUB_SETUP.md` | Detailed setup instructions | ✅ Created |
+| `docs/GITHUB_DEVOPS.md` | Deployment platform guides | ✅ Created |
+| `docs/DEPLOYMENT.md` | Production checklist | ✅ Created |
 | `artifacts/api-server/.env` | Local secrets (not tracked) | 🔧 Create locally |
 
 ## Daily Workflow
@@ -127,8 +127,8 @@ git push origin main
 - Pages: `https://YOUR_USERNAME.github.io/percentdosegraph`
 
 ### Deployed API (Choose One)
-- Railway: Follow `GITHUB_DEVOPS.md` 
-- Render: Follow `GITHUB_DEVOPS.md`
+- Railway: Follow `docs/GITHUB_DEVOPS.md` 
+- Render: Follow `docs/GITHUB_DEVOPS.md`
 - Your own server: Use Docker image
 
 ## Important Files Already Committed
@@ -156,7 +156,7 @@ git push origin main
 3. **Configure GitHub Secrets** (Settings → Secrets)
 4. **Watch Actions tab** after first push (auto-deploys on success)
 5. **Clone on machine 2**: `git clone https://github.com/YOUR_USERNAME/percentdosegraph.git`
-6. **Deploy API** to Railway/Render (instructions in `GITHUB_DEVOPS.md`)
+6. **Deploy API** to Railway/Render (instructions in `docs/GITHUB_DEVOPS.md`)
 
 ## Architecture Overview
 

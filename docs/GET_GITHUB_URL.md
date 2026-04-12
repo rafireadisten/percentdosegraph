@@ -17,10 +17,10 @@ cd /Users/readisten/Documents/percentdosegraph
 ---
 
 ### Method 2: **Manual Setup** (No tools needed)
-Just follow the 3 steps in: **GITHUB_HOW_TO.md**
+Just follow the 3 steps in: **docs/GITHUB_HOW_TO.md**
 
 ```bash
-cat GITHUB_HOW_TO.md
+cat docs/GITHUB_HOW_TO.md
 ```
 
 This file has:
@@ -48,7 +48,7 @@ This gives you:
 
 ### Method 4: **Plain Text Reference** (Just read)
 ```bash
-cat GITHUB_URL_GUIDE.txt
+cat docs/GITHUB_URL_GUIDE.txt
 ```
 
 Shows you:
@@ -94,8 +94,8 @@ Where `YOUR_USERNAME` is your GitHub account login.
 |------|-------------|----------|
 | `setup-github.sh` | Automated setup script | If you have GitHub CLI |
 | `github-setup.html` | Browser-based guide | Visual learners |
-| `GITHUB_HOW_TO.md` | Text instructions | Step-by-step followers |
-| `GITHUB_URL_GUIDE.txt` | Plain text reference | Quick lookup |
+| `docs/GITHUB_HOW_TO.md` | Text instructions | Step-by-step followers |
+| `docs/GITHUB_URL_GUIDE.txt` | Plain text reference | Quick lookup |
 
 ---
 
