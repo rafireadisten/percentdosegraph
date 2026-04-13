@@ -4,6 +4,11 @@ All notable project changes should be recorded in this file.
 
 ## 2026-04-12
 
+### `feat: add plot-line hover definitions to both graph modes`
+- Added hover definitions to the React Recharts comparison chart so hovering a plotted line shows the drug, dose normalization context, and active time frame window.
+- Added matching hover definitions to the static canvas chart with line hit-testing and an overlay card for the same plot-line metadata.
+- Rebuilt the React bundle and verified the frontend tests plus static script syntax checks after the chart hover changes.
+
 ### `feat: persist and restore the last workspace` (`1a17c69`)
 - Added automatic workspace save and restore for the static frontend so the most recent graph state returns on reload.
 - Added full last-workspace snapshot persistence for the React frontend, including graph inputs and restored timeline state.

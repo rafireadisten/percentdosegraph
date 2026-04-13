@@ -244,6 +244,7 @@ function App() {
   const [activeProfileId, setActiveProfileId] = useState(null);
   const [profileStatus, setProfileStatus] = useState('');
   const [profileName, setProfileName] = useState('');
+  const [hoveredLineDrugId, setHoveredLineDrugId] = useState(null);
 
   // Auth state
   const [isAuthenticated, setIsAuthenticated] = useState(Boolean(sessionDefaults.token));
@@ -556,6 +557,25 @@ function App() {
     () => summarizeMedicationEntries(medicationEntries),
     [medicationEntries]
   );
+
+  const hoveredLineDefinition = useMemo(() => {
+    if (!hoveredLineDrugId) {
+      return null;
+    }
+
+    const drug = drugLookup.get(String(hoveredLineDrugId));
+    if (!drug) {
+      return null;
+    }
+
+    return buildLineDefinition(drug, {
+      timeframe,
+      route,
+      range,
+      filteredEvents,
+      medicationEntries,
+    });
+  }, [drugLookup, filteredEvents, hoveredLineDrugId, medicationEntries, range, route, timeframe]);
 
   function handleAddDrug(drug) {
     setDrugs(current => mergeDrugCatalog(current, [drug]));
@@ -1990,7 +2010,23 @@ function App() {
           ),
           h(
             'div',
-            { className: 'chart-panel tall-chart' },
+            { className: 'chart-panel tall-chart line-hover-chart-panel' },
+            hoveredLineDefinition
+              ? h(
+                  'aside',
+                  { className: 'line-hover-card', 'aria-live': 'polite' },
+                  h('p', { className: 'line-hover-eyebrow' }, 'Hovered plot line'),
+                  h('strong', null, hoveredLineDefinition.drugName),
+                  h(
+                    'dl',
+                    { className: 'line-hover-definition' },
+                    h('dt', null, 'Dose'),
+                    h('dd', null, hoveredLineDefinition.doseText),
+                    h('dt', null, 'Time frame'),
+                    h('dd', null, hoveredLineDefinition.timeframeText)
+                  )
+                )
+              : null,
             loading
               ? h('div', { className: 'empty' }, 'Loading chart data...')
               : error
@@ -2064,6 +2100,10 @@ function App() {
                             dot: false,
                             connectNulls: true,
                             isAnimationActive: false,
+                            onMouseEnter: () => setHoveredLineDrugId(String(drug.id)),
+                            onMouseLeave: () => setHoveredLineDrugId(current =>
+                              current === String(drug.id) ? null : current
+                            ),
                           })
                         ),
                         chartData.length > 20
@@ -3445,6 +3485,42 @@ function renderTooltip(active, payload, drugLookup) {
       ? h('p', { className: 'tooltip-more' }, `+${visibleItems.length - 8} more active series`)
       : null
   );
+}
+
+function buildLineDefinition(drug, context) {
+  const timeframeLabel =
+    TIMEFRAME_OPTIONS.find(option => option.value === context.timeframe)?.label ?? context.timeframe;
+  const routeEntries = context.medicationEntries.filter(
+    entry => String(entry.drugId) === String(drug.id) && entry.route === context.route
+  );
+  const routeEvents = context.filteredEvents.filter(
+    event => String(event.drugId) === String(drug.id) && event.route === context.route
+  );
+  const visibleAmounts = routeEvents
+    .map(event => Number(event.amount))
+    .filter(amount => Number.isFinite(amount) && amount > 0);
+  const visibleDoseRange = visibleAmounts.length
+    ? `${Math.min(...visibleAmounts).toFixed(1)} to ${Math.max(...visibleAmounts).toFixed(1)} ${drug.unit}`
+    : null;
+  const medicationWindow = routeEntries.length
+    ? routeEntries
+        .map(entry =>
+          entry.endDate && entry.endDate !== entry.startDate
+            ? `${entry.startDate} to ${entry.endDate}`
+            : entry.startDate
+        )
+        .join('; ')
+    : null;
+
+  return {
+    drugName: drug.name,
+    doseText: visibleDoseRange
+      ? `Visible doses span ${visibleDoseRange} on ${context.route}; percentages are normalized to ${drug.maxDailyDose} ${drug.unit}/day.`
+      : `Percentages are normalized to ${drug.maxDailyDose} ${drug.unit}/day for ${context.route}.`,
+    timeframeText: medicationWindow
+      ? `${timeframeLabel} chart window (${context.range.startDate} to ${context.range.endDate}); medication list window: ${medicationWindow}.`
+      : `${timeframeLabel} chart window (${context.range.startDate} to ${context.range.endDate}).`,
+  };
 }
 
 function getAnchorDate(doses) {

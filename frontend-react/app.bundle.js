@@ -49124,6 +49124,7 @@ function App() {
   const [activeProfileId, setActiveProfileId] = (0, import_react56.useState)(null);
   const [profileStatus, setProfileStatus] = (0, import_react56.useState)("");
   const [profileName, setProfileName] = (0, import_react56.useState)("");
+  const [hoveredLineDrugId, setHoveredLineDrugId] = (0, import_react56.useState)(null);
   const [isAuthenticated, setIsAuthenticated] = (0, import_react56.useState)(Boolean(sessionDefaults.token));
   const [user, setUser] = (0, import_react56.useState)(sessionDefaults.account);
   const [authReady, setAuthReady] = (0, import_react56.useState)(false);
@@ -49377,6 +49378,22 @@ function App() {
     () => summarizeMedicationEntries(medicationEntries),
     [medicationEntries]
   );
+  const hoveredLineDefinition = (0, import_react56.useMemo)(() => {
+    if (!hoveredLineDrugId) {
+      return null;
+    }
+    const drug = drugLookup.get(String(hoveredLineDrugId));
+    if (!drug) {
+      return null;
+    }
+    return buildLineDefinition(drug, {
+      timeframe,
+      route,
+      range: range4,
+      filteredEvents,
+      medicationEntries
+    });
+  }, [drugLookup, filteredEvents, hoveredLineDrugId, medicationEntries, range4, route, timeframe]);
   function handleAddDrug(drug) {
     setDrugs((current3) => mergeDrugCatalog(current3, [drug]));
     setSelectedDrugIds((current3) => {
@@ -49471,17 +49488,21 @@ function App() {
       setProfileStatus("Add medications before saving a medication list profile.");
       return;
     }
-    const label = profileName.trim() || generateSequentialProfileLabel(profiles);
+    const existingProfile = activeProfileId ? profiles.find((profile) => profile.id === activeProfileId) : null;
+    const existingLabel = existingProfile?.label ?? existingProfile?.name;
+    const id = existingProfile?.id ?? generateProfileId(
+      {
+        selectedDrugIds,
+        route,
+        timeframe,
+        drugNames: selectedDrugs.map((drug) => drug.name)
+      },
+      profiles.length + 1
+    );
+    const label = profileName.trim() || existingLabel || generateSequentialProfileLabel(profiles);
     const draftProfile = {
-      id: generateProfileId(
-        {
-          selectedDrugIds,
-          route,
-          timeframe,
-          drugNames: selectedDrugs.map((drug) => drug.name)
-        },
-        profiles.length + 1
-      ),
+      id,
+      patientId: existingProfile?.patientId ?? String(id),
       label,
       selectedDrugIds,
       drugStates: buildProfileDrugStates(drugs, selectedDrugIds, medicationEntries),
@@ -49492,7 +49513,7 @@ function App() {
       route,
       timeframe,
       savedListDate: formatDateKey(/* @__PURE__ */ new Date()),
-      createdAt: (/* @__PURE__ */ new Date()).toISOString()
+      createdAt: existingProfile?.createdAt ?? (/* @__PURE__ */ new Date()).toISOString()
     };
     try {
       const saved = await saveProfileToApi(draftProfile, profiles, user, authToken);
@@ -50033,8 +50054,14 @@ function App() {
               id: "patientName",
               type: "text",
               value: patientName,
+              disabled: Boolean(activeProfileId),
               onChange: (event) => setPatientName(event.target.value)
-            })
+            }),
+            activeProfileId ? h(
+              "p",
+              { className: "helper" },
+              "Patient assignment is fixed for the current profile. Create a new profile to track a different patient."
+            ) : null
           ),
           h(
             "div",
@@ -50305,7 +50332,7 @@ function App() {
               onClick: handleSaveProfile,
               disabled: !selectedDrugs.length && !medicationEntries.length
             },
-            "Save med list profile"
+            activeProfileId ? "Save profile updates" : "Save med list profile"
           ),
           h(
             "div",
@@ -50685,7 +50712,21 @@ function App() {
           ),
           h(
             "div",
-            { className: "chart-panel tall-chart" },
+            { className: "chart-panel tall-chart line-hover-chart-panel" },
+            hoveredLineDefinition ? h(
+              "aside",
+              { className: "line-hover-card", "aria-live": "polite" },
+              h("p", { className: "line-hover-eyebrow" }, "Hovered plot line"),
+              h("strong", null, hoveredLineDefinition.drugName),
+              h(
+                "dl",
+                { className: "line-hover-definition" },
+                h("dt", null, "Dose"),
+                h("dd", null, hoveredLineDefinition.doseText),
+                h("dt", null, "Time frame"),
+                h("dd", null, hoveredLineDefinition.timeframeText)
+              )
+            ) : null,
             loading ? h("div", { className: "empty" }, "Loading chart data...") : error ? h("div", { className: "empty" }, error) : !selectedDrugs.length ? h(
               "div",
               { className: "empty" },
@@ -50751,7 +50792,11 @@ function App() {
                     strokeWidth: index < 6 ? 2.4 : 1.8,
                     dot: false,
                     connectNulls: true,
-                    isAnimationActive: false
+                    isAnimationActive: false,
+                    onMouseEnter: () => setHoveredLineDrugId(String(drug.id)),
+                    onMouseLeave: () => setHoveredLineDrugId(
+                      (current3) => current3 === String(drug.id) ? null : current3
+                    )
                   })
                 ),
                 chartData.length > 20 ? h(Brush, {
@@ -51241,6 +51286,7 @@ function normalizeStoredProfiles(profiles) {
   return profiles.map((profile, index) => ({
     ...profile,
     id: String(profile.id ?? `profile-${index + 1}`),
+    patientId: String(profile.patientId ?? profile.id ?? `profile-${index + 1}`),
     label: profile.label ?? profile.name ?? `Profile ${index + 1}`,
     selectedDrugIds: Array.isArray(profile.selectedDrugIds) ? profile.selectedDrugIds.map(String) : [],
     medicationEntries: Array.isArray(profile.medicationEntries) ? profile.medicationEntries.map(normalizeMedicationEntry) : [],
@@ -51642,6 +51688,7 @@ function mapApiProfileToAppProfile(profile) {
     selectedDrugIds: profile.payload?.selectedDrugIds ?? [],
     drugStates: profile.payload?.drugStates ?? profile.payload?.graphState?.drugStates ?? [],
     medicationEntries: profile.payload?.medicationEntries ?? [],
+    patientId: String(profile.payload?.patientId ?? profile.id),
     patientName: profile.payload?.patientName ?? "Example Patient",
     workspaceLabel: profile.payload?.workspaceLabel ?? profile.name,
     patientNotes: profile.payload?.patientNotes ?? "",
@@ -51657,6 +51704,7 @@ function mapAppProfileToApiProfile(profile, accountId) {
     name: profile.label,
     payload: {
       version: 2,
+      ...isNumericIdentifier(profile.id) ? { patientId: String(profile.id) } : {},
       label: profile.label,
       selectedDrugIds: profile.selectedDrugIds,
       drugStates: profile.drugStates ?? [],
@@ -51874,6 +51922,25 @@ function renderTooltip(active, payload, drugLookup) {
     ),
     visibleItems.length > 8 ? h("p", { className: "tooltip-more" }, `+${visibleItems.length - 8} more active series`) : null
   );
+}
+function buildLineDefinition(drug, context) {
+  const timeframeLabel = TIMEFRAME_OPTIONS.find((option) => option.value === context.timeframe)?.label ?? context.timeframe;
+  const routeEntries = context.medicationEntries.filter(
+    (entry) => String(entry.drugId) === String(drug.id) && entry.route === context.route
+  );
+  const routeEvents = context.filteredEvents.filter(
+    (event) => String(event.drugId) === String(drug.id) && event.route === context.route
+  );
+  const visibleAmounts = routeEvents.map((event) => Number(event.amount)).filter((amount) => Number.isFinite(amount) && amount > 0);
+  const visibleDoseRange = visibleAmounts.length ? `${Math.min(...visibleAmounts).toFixed(1)} to ${Math.max(...visibleAmounts).toFixed(1)} ${drug.unit}` : null;
+  const medicationWindow = routeEntries.length ? routeEntries.map(
+    (entry) => entry.endDate && entry.endDate !== entry.startDate ? `${entry.startDate} to ${entry.endDate}` : entry.startDate
+  ).join("; ") : null;
+  return {
+    drugName: drug.name,
+    doseText: visibleDoseRange ? `Visible doses span ${visibleDoseRange} on ${context.route}; percentages are normalized to ${drug.maxDailyDose} ${drug.unit}/day.` : `Percentages are normalized to ${drug.maxDailyDose} ${drug.unit}/day for ${context.route}.`,
+    timeframeText: medicationWindow ? `${timeframeLabel} chart window (${context.range.startDate} to ${context.range.endDate}); medication list window: ${medicationWindow}.` : `${timeframeLabel} chart window (${context.range.startDate} to ${context.range.endDate}).`
+  };
 }
 function getAnchorDate(doses) {
   if (!doses.length) {

@@ -56,6 +56,10 @@ const state = {
     startDate: null,
     endDate: null,
   },
+  chartHover: {
+    drugKey: null,
+    renderModel: null,
+  },
   auth: {
     token: '',
     account: null,
@@ -98,6 +102,7 @@ const elements = {
   chartSubtitle: document.getElementById('chartSubtitle'),
   headlinePercent: document.getElementById('headlinePercent'),
   highDays: document.getElementById('highDays'),
+  chartHoverCard: document.getElementById('chartHoverCard'),
   chartLegend: document.getElementById('chartLegend'),
   interpretationText: document.getElementById('interpretationText'),
   rangeText: document.getElementById('rangeText'),
@@ -308,6 +313,14 @@ elements.chartLegend.addEventListener('click', event => {
   }
 
   removeMedicationGroup(button.dataset.drugKey);
+});
+
+elements.doseChart.addEventListener('mousemove', event => {
+  handleDoseChartHover(event);
+});
+
+elements.doseChart.addEventListener('mouseleave', () => {
+  setHoveredDrugGroup(null);
 });
 
 elements.cancelEditButton.addEventListener('click', () => {
@@ -1003,8 +1016,18 @@ function renderChart(points, drugGroups) {
   drawRoundedRect(ctx, 0, 0, width, height, 18, '#fffaf5');
   drawGrid(ctx, padding, chartWidth, chartHeight, maxY);
   renderChartLegend(drugGroups);
+  state.chartHover.renderModel = {
+    points,
+    drugGroups,
+    padding,
+    chartWidth,
+    chartHeight,
+    maxY,
+    range: buildRange(state.settings.timeframe),
+  };
 
   if (!points.length || !drugGroups.length) {
+    setHoveredDrugGroup(null);
     return;
   }
 
@@ -1081,6 +1104,13 @@ function renderChart(points, drugGroups) {
     ctx.textAlign = 'center';
     ctx.fillText(shortDate(point.date), x, padding.top + chartHeight + 22);
   });
+
+  if (
+    state.chartHover.drugKey &&
+    !drugGroups.some(group => group.key === state.chartHover.drugKey)
+  ) {
+    setHoveredDrugGroup(null);
+  }
 }
 
 function renderChartLegend(drugGroups) {
@@ -1099,6 +1129,167 @@ function renderChartLegend(drugGroups) {
       return `<span class="legend-chip"><span class="legend-swatch" style="background:${color}"></span>${escapeHtml(group.name)} <button class="table-action secondary" type="button" data-action="remove-medication" data-drug-key="${escapeHtml(group.key)}">Remove</button></span>`;
     })
     .join('');
+}
+
+function handleDoseChartHover(event) {
+  const renderModel = state.chartHover.renderModel;
+  if (!renderModel?.points?.length || !renderModel.drugGroups?.length) {
+    setHoveredDrugGroup(null);
+    return;
+  }
+
+  const rect = elements.doseChart.getBoundingClientRect();
+  const scaleX = elements.doseChart.width / rect.width;
+  const scaleY = elements.doseChart.height / rect.height;
+  const x = (event.clientX - rect.left) * scaleX;
+  const y = (event.clientY - rect.top) * scaleY;
+  const hoveredGroup = findHoveredDrugGroup(renderModel, x, y);
+
+  setHoveredDrugGroup(hoveredGroup);
+}
+
+function findHoveredDrugGroup(renderModel, x, y) {
+  const { points, drugGroups, padding, chartWidth, chartHeight, maxY } = renderModel;
+  const minX = padding.left;
+  const maxX = padding.left + chartWidth;
+  const minY = padding.top;
+  const maxYCoord = padding.top + chartHeight;
+
+  if (x < minX || x > maxX || y < minY || y > maxYCoord) {
+    return null;
+  }
+
+  const xForIndex = index =>
+    points.length > 1 ? padding.left + (chartWidth * index) / (points.length - 1) : padding.left + chartWidth / 2;
+
+  let bestGroup = null;
+  let bestDistance = Number.POSITIVE_INFINITY;
+
+  drugGroups.forEach(group => {
+    const values = points.map(point => Number(point.series?.[group.key]?.percentOfMax ?? 0));
+    if (!values.some(value => value > 0)) {
+      return;
+    }
+
+    for (let index = 0; index < values.length; index += 1) {
+      const value = values[index];
+      const pointX = xForIndex(index);
+      const pointY = padding.top + chartHeight - (value / maxY) * chartHeight;
+
+      if (index === 0) {
+        bestDistance = maybeUpdateBestDistance(x, y, pointX, pointY, pointX, pointY, bestDistance, value, group, result => {
+          bestGroup = result.group;
+          bestDistance = result.distance;
+        });
+        continue;
+      }
+
+      const previousValue = values[index - 1];
+      const previousX = xForIndex(index - 1);
+      const previousY = padding.top + chartHeight - (previousValue / maxY) * chartHeight;
+
+      bestDistance = maybeUpdateBestDistance(x, y, previousX, previousY, pointX, previousY, bestDistance, value || previousValue, group, result => {
+        bestGroup = result.group;
+        bestDistance = result.distance;
+      });
+      bestDistance = maybeUpdateBestDistance(x, y, pointX, previousY, pointX, pointY, bestDistance, value || previousValue, group, result => {
+        bestGroup = result.group;
+        bestDistance = result.distance;
+      });
+    }
+  });
+
+  return bestDistance <= 12 ? bestGroup : null;
+}
+
+function maybeUpdateBestDistance(x, y, x1, y1, x2, y2, currentBest, seriesValue, group, onBetter) {
+  if (seriesValue <= 0) {
+    return currentBest;
+  }
+
+  const distance = distanceToSegment(x, y, x1, y1, x2, y2);
+  if (distance < currentBest) {
+    onBetter({ distance, group });
+    return distance;
+  }
+
+  return currentBest;
+}
+
+function distanceToSegment(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+
+  if (dx === 0 && dy === 0) {
+    return Math.hypot(px - x1, py - y1);
+  }
+
+  const t = Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / (dx * dx + dy * dy)));
+  const closestX = x1 + t * dx;
+  const closestY = y1 + t * dy;
+  return Math.hypot(px - closestX, py - closestY);
+}
+
+function setHoveredDrugGroup(group) {
+  const nextKey = group?.key ?? null;
+  if (state.chartHover.drugKey === nextKey) {
+    return;
+  }
+
+  state.chartHover.drugKey = nextKey;
+  renderChartHoverCard(group);
+}
+
+function renderChartHoverCard(group) {
+  if (!elements.chartHoverCard) {
+    return;
+  }
+
+  if (!group) {
+    elements.chartHoverCard.classList.add('hidden');
+    elements.chartHoverCard.innerHTML = '';
+    return;
+  }
+
+  const definition = buildStaticLineDefinition(group, state.chartHover.renderModel?.range);
+  elements.chartHoverCard.innerHTML = `
+    <p class="chart-hover-eyebrow">Hovered plot line</p>
+    <strong>${escapeHtml(definition.drugName)}</strong>
+    <dl class="chart-hover-definition">
+      <dt>Dose</dt>
+      <dd>${escapeHtml(definition.doseText)}</dd>
+      <dt>Time frame</dt>
+      <dd>${escapeHtml(definition.timeframeText)}</dd>
+    </dl>
+  `;
+  elements.chartHoverCard.classList.remove('hidden');
+}
+
+function buildStaticLineDefinition(group, range) {
+  const amounts = group.events
+    .map(event => Number(event.amount))
+    .filter(amount => Number.isFinite(amount) && amount > 0);
+  const doseRange = amounts.length
+    ? `${formatNumber(Math.min(...amounts))} to ${formatNumber(Math.max(...amounts))} ${group.unit.replace('/day', '')}`
+    : null;
+  const eventWindow = group.events
+    .map(event => {
+      const endDate = getDoseEventRangeEnd(event, formatDateInput(new Date()));
+      return endDate && endDate !== event.date
+        ? `${event.date} to ${endDate}`
+        : event.date;
+    })
+    .join('; ');
+
+  return {
+    drugName: group.name,
+    doseText: doseRange
+      ? `Visible doses span ${doseRange} on ${group.route}; percentages are normalized to ${formatNumber(group.maxDose)} ${group.unit}.`
+      : `Percentages are normalized to ${formatNumber(group.maxDose)} ${group.unit} for ${group.route}.`,
+    timeframeText: range
+      ? `${formatTimeframeLabel(state.settings.timeframe)} (${formatDisplayDate(range.startDate)} to ${formatDisplayDate(range.endDate)}); visible segments: ${eventWindow}.`
+      : `${formatTimeframeLabel(state.settings.timeframe)}.`,
+  };
 }
 
 function renderRandomProfile() {
