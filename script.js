@@ -638,7 +638,7 @@ function renderAuthState() {
     mode === 'login' ? 'Need an account?' : 'Have an account?';
 
   if (isAuthenticated) {
-    elements.authStatusText.textContent = `Signed in as ${account.name || account.email} (${formatAccountDesignation(account)}). Profiles saved now belong to this browser-local account.`;
+    elements.authStatusText.textContent = `Signed in as ${account.name || account.email} (${formatAccountDesignation(account)}). Profiles saved now belong to this ${account.source === 'api' ? 'saved account' : 'browser-local account'}.`;
   } else {
     elements.authStatusText.textContent =
       'Not signed in. Guest profiles stay on this device until you register or log in.';
@@ -2296,6 +2296,18 @@ async function importDataFromJson(file) {
 
 async function loadProfiles() {
   if (state.auth.account?.id) {
+    if (state.auth.account.source === 'api') {
+      try {
+        const apiProfiles = await apiGet(`/profiles?accountId=${encodeURIComponent(state.auth.account.id)}`);
+        state.profiles = Array.isArray(apiProfiles) ? apiProfiles.map(normalizeProfile) : [];
+        state.profileStorageMode = 'account';
+        renderProfileList();
+        return;
+      } catch (error) {
+        console.warn('Failed to load API-backed profiles, falling back to browser-local account profiles:', error);
+      }
+    }
+
     state.profiles = readAccountProfiles(state.auth.account.id);
     state.profileStorageMode = 'account';
     renderProfileList();
@@ -2345,18 +2357,28 @@ async function saveProfile() {
   };
 
   if (state.auth.account?.id) {
-    const now = new Date().toISOString();
-    const accountProfile = normalizeProfile({
-      id: `account-${state.auth.account.id}-${Date.now()}`,
-      accountId: state.auth.account.id,
-      name: profileName,
-      payload: profilePayload.payload,
-      createdAt: now,
-      updatedAt: now,
-    });
-    state.profiles.push(accountProfile);
-    state.profileStorageMode = 'account';
-    persistAccountProfiles(state.auth.account.id, state.profiles);
+    if (state.auth.account.source === 'api') {
+      const createdProfile = await apiPost('/profiles', {
+        accountId: Number(state.auth.account.id),
+        name: profileName,
+        payload: profilePayload.payload,
+      });
+      state.profiles.push(normalizeProfile(createdProfile));
+      state.profileStorageMode = 'account';
+    } else {
+      const now = new Date().toISOString();
+      const accountProfile = normalizeProfile({
+        id: `account-${state.auth.account.id}-${Date.now()}`,
+        accountId: state.auth.account.id,
+        name: profileName,
+        payload: profilePayload.payload,
+        createdAt: now,
+        updatedAt: now,
+      });
+      state.profiles.push(accountProfile);
+      state.profileStorageMode = 'account';
+      persistAccountProfiles(state.auth.account.id, state.profiles);
+    }
   } else {
     const localProfile = normalizeProfile({
       id: `local-${Date.now()}`,
@@ -2440,7 +2462,11 @@ async function deleteProfile(profileId) {
 
   state.profiles = state.profiles.filter(entry => entry.id !== profileId);
   if (state.auth.account?.id && profile.accountId === String(state.auth.account.id)) {
-    persistAccountProfiles(state.auth.account.id, state.profiles);
+    if (state.auth.account.source === 'api') {
+      await apiDelete(`/profiles/${profile.id}`);
+    } else {
+      persistAccountProfiles(state.auth.account.id, state.profiles);
+    }
   } else if (String(profile.id).startsWith('local-') || state.profileStorageMode === 'local') {
     persistLocalProfiles();
   }
@@ -2461,7 +2487,18 @@ async function renameProfile(profileId) {
   profile.name = nextName;
   profile.updatedAt = new Date().toISOString();
   if (state.auth.account?.id && profile.accountId === String(state.auth.account.id)) {
-    persistAccountProfiles(state.auth.account.id, state.profiles);
+    if (state.auth.account.source === 'api') {
+      await apiPut(`/profiles/${profile.id}`, {
+        name: profile.name,
+        payload: {
+          settings: profile.settings,
+          doseEvents: profile.doseEvents.map(serializeDoseEvent),
+          graphState: profile.graphState,
+        },
+      });
+    } else {
+      persistAccountProfiles(state.auth.account.id, state.profiles);
+    }
   } else {
     persistLocalProfiles();
   }
@@ -2813,12 +2850,22 @@ async function hydrateAuthSession() {
     return;
   }
 
-  const storedAccount = findStaticAccountById(state.auth.account?.id);
-  if (storedAccount) {
-    state.auth.account = sanitizeStaticAccount(storedAccount);
-    persistAuthSession(state.auth.token, state.auth.account);
+  if (isStaticSessionToken(state.auth.token)) {
+    const storedAccount = findStaticAccountById(state.auth.account?.id);
+    if (storedAccount) {
+      state.auth.account = sanitizeStaticAccount(storedAccount);
+      persistAuthSession(state.auth.token, state.auth.account);
+    } else {
+      clearAuthSession();
+    }
   } else {
-    clearAuthSession();
+    try {
+      state.auth.account = await fetchApiSessionAccount();
+      persistAuthSession(state.auth.token, state.auth.account);
+    } catch (error) {
+      console.warn('Failed to restore API-backed auth session:', error);
+      clearAuthSession();
+    }
   }
 
   renderAuthState();
@@ -2846,25 +2893,36 @@ async function handleAuthSubmit() {
 
   try {
     let account;
+    let token;
 
     if (mode === 'login') {
-      account = await loginStaticAccount(email, password);
+      try {
+        account = await loginStaticAccount(email, password);
+        token = createStaticSessionToken(account);
+      } catch {
+        const apiSession = await loginApiAccount(email, password);
+        account = apiSession.account;
+        token = apiSession.token;
+      }
     } else {
       account = await registerStaticAccount(name, email, password, { isDeveloper });
+      token = createStaticSessionToken(account);
       state.auth.mode = 'login';
       elements.authName.value = '';
       elements.authIsDeveloper.checked = false;
     }
 
-    const token = createStaticSessionToken(account);
     state.auth.token = token;
-    state.auth.account = sanitizeStaticAccount(account);
+    state.auth.account =
+      account.source === 'api' ? account : sanitizeStaticAccount(account);
     persistAuthSession(token, state.auth.account);
-    migrateGuestProfilesToAccount(account.id);
+    if (state.auth.account.source === 'static') {
+      migrateGuestProfilesToAccount(account.id);
+    }
     elements.authPassword.value = '';
     setAuthMessage(
       mode === 'login'
-        ? `Signed in. ${formatAccountDesignation(state.auth.account)} access is active for this browser account.`
+        ? `Signed in. ${formatAccountDesignation(state.auth.account)} access is active for this ${state.auth.account.source === 'api' ? 'saved account' : 'browser account'}.`
         : `Account created. ${formatAccountDesignation(state.auth.account)} access is active for this browser account.`,
       'success'
     );
@@ -3008,7 +3066,21 @@ function sanitizeStaticAccount(account) {
     id: String(account.id),
     name: account.name,
     email: account.email,
+    source: 'static',
     isDeveloper: account.isDeveloper === true,
+    createdAt: account.createdAt,
+    updatedAt: account.updatedAt ?? account.createdAt,
+  };
+}
+
+function sanitizeApiAccount(account) {
+  return {
+    id: String(account.id),
+    name: account.name,
+    email: account.email,
+    source: 'api',
+    isDeveloper: account.role === 'admin' || account.role === 'developer',
+    role: account.role ?? 'user',
     createdAt: account.createdAt,
     updatedAt: account.updatedAt ?? account.createdAt,
   };
@@ -3070,6 +3142,36 @@ async function loginStaticAccount(email, password) {
   }
 
   return account;
+}
+
+async function loginApiAccount(email, password) {
+  const response = await apiPost(
+    '/auth/login',
+    { email, password },
+    { skipAuth: true }
+  );
+
+  if (!response?.account || !response?.token) {
+    throw new Error('The account service returned an invalid response.');
+  }
+
+  return {
+    account: sanitizeApiAccount(response.account),
+    token: response.token,
+  };
+}
+
+async function fetchApiSessionAccount() {
+  const response = await apiGet('/auth/me');
+  if (!response?.account) {
+    throw new Error('No authenticated account was returned.');
+  }
+
+  return sanitizeApiAccount(response.account);
+}
+
+function isStaticSessionToken(token) {
+  return String(token || '').startsWith('static-');
 }
 
 function migrateGuestProfilesToAccount(accountId) {
