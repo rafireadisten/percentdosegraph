@@ -67,6 +67,20 @@ function shuffleArray(array) {
   return shuffled;
 }
 
+function isCardiovascularDrug(drug) {
+  const normalizedClass = String(drug?.drugClass ?? '').toLowerCase();
+
+  return (
+    normalizedClass.includes('cardio') ||
+    normalizedClass.includes('statin') ||
+    normalizedClass.includes('ace') ||
+    normalizedClass.includes('arb') ||
+    normalizedClass.includes('beta') ||
+    normalizedClass.includes('calcium') ||
+    normalizedClass.includes('diuretic')
+  );
+}
+
 function createRandomMedicationSchedule(drug, startDate, endDate) {
   const segments = [];
   let currentDate = new Date(startDate);
@@ -110,13 +124,7 @@ function createRandomMedicationSchedule(drug, startDate, endDate) {
 
 function generateRandomMedGrafProfile(drugs) {
   // Use cardiovascular drugs if available, otherwise fallback drugs
-  const cardiovascularDrugs = drugs.filter(drug => 
-    drug.drugClass?.toLowerCase().includes('statin') ||
-    drug.drugClass?.toLowerCase().includes('ace') ||
-    drug.drugClass?.toLowerCase().includes('arb') ||
-    drug.drugClass?.toLowerCase().includes('beta') ||
-    drug.drugClass?.toLowerCase().includes('calcium')
-  );
+  const cardiovascularDrugs = drugs.filter(isCardiovascularDrug);
   
   const sourceDrugs = cardiovascularDrugs.length >= 3 ? cardiovascularDrugs : [
     {
@@ -145,7 +153,16 @@ function generateRandomMedGrafProfile(drugs) {
       routeMaxDoses: { PO: 40 },
       unit: 'mg',
       notes: 'Fallback cardiovascular demo entry.',
-    }
+    },
+    {
+      id: 'fallback-hydrochlorothiazide',
+      name: 'Hydrochlorothiazide',
+      drugClass: 'Thiazide diuretic',
+      maxDailyDose: 50,
+      routeMaxDoses: { PO: 50 },
+      unit: 'mg',
+      notes: 'Fallback cardiovascular demo entry.',
+    },
   ];
 
   const selectedDrugs = shuffleArray([...sourceDrugs]).slice(0, 3);

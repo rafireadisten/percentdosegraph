@@ -1842,6 +1842,14 @@ function generateRandomMedGrafProfile() {
           unit: 'mg',
           notes: 'Fallback cardiovascular demo entry.',
         },
+        {
+          id: 'fallback-hydrochlorothiazide',
+          name: 'Hydrochlorothiazide',
+          drugClass: 'Thiazide diuretic',
+          maxDailyDose: 50,
+          unit: 'mg',
+          notes: 'Fallback cardiovascular demo entry.',
+        },
       ];
 
   const selectedDrugs = shuffleArray([...sourceDrugs]).slice(0, 3);

@@ -1978,5 +1978,44 @@
     "maxSingleDose": 3000,
     "unit": "mg",
     "notes": "DailyMed adult oral dosing uses a single 3 g sachet dose for uncomplicated urinary tract infection."
+  },
+  {
+    "id": 152,
+    "name": "Furosemide",
+    "genericName": "Furosemide",
+    "drugClass": "Loop diuretic",
+    "maxDailyDose": 600,
+    "routeMaxDoses": {
+      "PO": 600
+    },
+    "maxSingleDose": 160,
+    "unit": "mg",
+    "notes": "Expanded cardiovascular drug library."
+  },
+  {
+    "id": 153,
+    "name": "Torsemide",
+    "genericName": "Torsemide",
+    "drugClass": "Loop diuretic",
+    "maxDailyDose": 200,
+    "routeMaxDoses": {
+      "PO": 200
+    },
+    "maxSingleDose": 100,
+    "unit": "mg",
+    "notes": "Expanded cardiovascular drug library."
+  },
+  {
+    "id": 154,
+    "name": "Spironolactone",
+    "genericName": "Spironolactone",
+    "drugClass": "Potassium-sparing diuretic",
+    "maxDailyDose": 200,
+    "routeMaxDoses": {
+      "PO": 200
+    },
+    "maxSingleDose": 100,
+    "unit": "mg",
+    "notes": "Expanded cardiovascular drug library."
   }
 ]
