@@ -2017,5 +2017,356 @@
     "maxSingleDose": 100,
     "unit": "mg",
     "notes": "Expanded cardiovascular drug library."
+  },
+  {
+    "id": 155,
+    "name": "Metoprolol Tartrate",
+    "genericName": "Metoprolol",
+    "drugClass": "Beta blocker",
+    "maxDailyDose": 450,
+    "routeMaxDoses": {
+      "PO": 450
+    },
+    "maxSingleDose": 225,
+    "unit": "mg",
+    "notes": "Immediate-release metoprolol formulation added to distinguish tartrate from succinate."
+  },
+  {
+    "id": 156,
+    "name": "Glipizide",
+    "genericName": "Glipizide",
+    "drugClass": "Sulfonylurea",
+    "maxDailyDose": 40,
+    "routeMaxDoses": {
+      "PO": 40
+    },
+    "maxSingleDose": 20,
+    "unit": "mg",
+    "notes": "Oral antidiabetic starter entry."
+  },
+  {
+    "id": 157,
+    "name": "Glimepiride",
+    "genericName": "Glimepiride",
+    "drugClass": "Sulfonylurea",
+    "maxDailyDose": 8,
+    "routeMaxDoses": {
+      "PO": 8
+    },
+    "maxSingleDose": 8,
+    "unit": "mg",
+    "notes": "Oral antidiabetic starter entry."
+  },
+  {
+    "id": 158,
+    "name": "Glyburide",
+    "genericName": "Glyburide",
+    "drugClass": "Sulfonylurea",
+    "maxDailyDose": 20,
+    "routeMaxDoses": {
+      "PO": 20
+    },
+    "maxSingleDose": 10,
+    "unit": "mg",
+    "notes": "Oral antidiabetic starter entry."
+  },
+  {
+    "id": 159,
+    "name": "Pioglitazone",
+    "genericName": "Pioglitazone",
+    "drugClass": "Thiazolidinedione",
+    "maxDailyDose": 45,
+    "routeMaxDoses": {
+      "PO": 45
+    },
+    "maxSingleDose": 45,
+    "unit": "mg",
+    "notes": "Oral antidiabetic starter entry."
+  },
+  {
+    "id": 160,
+    "name": "Sitagliptin",
+    "genericName": "Sitagliptin",
+    "drugClass": "DPP-4 inhibitor",
+    "maxDailyDose": 100,
+    "routeMaxDoses": {
+      "PO": 100
+    },
+    "maxSingleDose": 100,
+    "unit": "mg",
+    "notes": "Oral antidiabetic starter entry."
+  },
+  {
+    "id": 161,
+    "name": "Linagliptin",
+    "genericName": "Linagliptin",
+    "drugClass": "DPP-4 inhibitor",
+    "maxDailyDose": 5,
+    "routeMaxDoses": {
+      "PO": 5
+    },
+    "maxSingleDose": 5,
+    "unit": "mg",
+    "notes": "Oral antidiabetic starter entry."
+  },
+  {
+    "id": 162,
+    "name": "Empagliflozin",
+    "genericName": "Empagliflozin",
+    "drugClass": "SGLT2 inhibitor",
+    "maxDailyDose": 25,
+    "routeMaxDoses": {
+      "PO": 25
+    },
+    "maxSingleDose": 25,
+    "unit": "mg",
+    "notes": "Oral antidiabetic starter entry."
+  },
+  {
+    "id": 163,
+    "name": "Canagliflozin",
+    "genericName": "Canagliflozin",
+    "drugClass": "SGLT2 inhibitor",
+    "maxDailyDose": 300,
+    "routeMaxDoses": {
+      "PO": 300
+    },
+    "maxSingleDose": 300,
+    "unit": "mg",
+    "notes": "Oral antidiabetic starter entry."
+  },
+  {
+    "id": 164,
+    "name": "Oral Semaglutide",
+    "genericName": "Semaglutide",
+    "brandName": "Rybelsus",
+    "drugClass": "GLP-1 receptor agonist",
+    "maxDailyDose": 14,
+    "routeMaxDoses": {
+      "PO": 14
+    },
+    "maxSingleDose": 14,
+    "unit": "mg",
+    "notes": "Oral antidiabetic starter entry."
+  },
+  {
+    "id": 165,
+    "name": "Alogliptin",
+    "genericName": "Alogliptin",
+    "drugClass": "DPP-4 inhibitor",
+    "maxDailyDose": 25,
+    "routeMaxDoses": {
+      "PO": 25
+    },
+    "maxSingleDose": 25,
+    "unit": "mg",
+    "notes": "Expanded oral antidiabetic drug library."
+  },
+  {
+    "id": 166,
+    "name": "Dapagliflozin",
+    "genericName": "Dapagliflozin",
+    "drugClass": "SGLT2 inhibitor",
+    "maxDailyDose": 10,
+    "routeMaxDoses": {
+      "PO": 10
+    },
+    "maxSingleDose": 10,
+    "unit": "mg",
+    "notes": "Expanded oral antidiabetic drug library."
+  },
+  {
+    "id": 167,
+    "name": "Repaglinide",
+    "genericName": "Repaglinide",
+    "drugClass": "Meglitinide",
+    "maxDailyDose": 16,
+    "routeMaxDoses": {
+      "PO": 16
+    },
+    "maxSingleDose": 4,
+    "unit": "mg",
+    "notes": "Expanded oral antidiabetic drug library."
+  },
+  {
+    "id": 168,
+    "name": "Acarbose",
+    "genericName": "Acarbose",
+    "drugClass": "Alpha-glucosidase inhibitor",
+    "maxDailyDose": 300,
+    "routeMaxDoses": {
+      "PO": 300
+    },
+    "maxSingleDose": 100,
+    "unit": "mg",
+    "notes": "Expanded oral antidiabetic drug library."
+  },
+  {
+    "id": 169,
+    "name": "Saxagliptin",
+    "genericName": "Saxagliptin",
+    "drugClass": "DPP-4 inhibitor",
+    "maxDailyDose": 5,
+    "routeMaxDoses": {
+      "PO": 5
+    },
+    "maxSingleDose": 5,
+    "unit": "mg",
+    "notes": "Expanded oral antidiabetic drug library."
+  },
+  {
+    "id": 170,
+    "name": "Ertugliflozin",
+    "genericName": "Ertugliflozin",
+    "drugClass": "SGLT2 inhibitor",
+    "maxDailyDose": 15,
+    "routeMaxDoses": {
+      "PO": 15
+    },
+    "maxSingleDose": 15,
+    "unit": "mg",
+    "notes": "Expanded oral antidiabetic drug library."
+  },
+  {
+    "id": 171,
+    "name": "Nateglinide",
+    "genericName": "Nateglinide",
+    "drugClass": "Meglitinide",
+    "maxDailyDose": 360,
+    "routeMaxDoses": {
+      "PO": 360
+    },
+    "maxSingleDose": 120,
+    "unit": "mg",
+    "notes": "Expanded oral antidiabetic drug library."
+  },
+  {
+    "id": 172,
+    "name": "Miglitol",
+    "genericName": "Miglitol",
+    "drugClass": "Alpha-glucosidase inhibitor",
+    "maxDailyDose": 300,
+    "routeMaxDoses": {
+      "PO": 300
+    },
+    "maxSingleDose": 100,
+    "unit": "mg",
+    "notes": "Expanded oral antidiabetic drug library."
+  },
+  {
+    "id": 173,
+    "name": "Insulin Detemir",
+    "genericName": "Insulin Detemir",
+    "drugClass": "Long-acting insulin",
+    "maxDailyDose": 120,
+    "maxSingleDose": 80,
+    "unit": "units",
+    "notes": "Basal insulin entry added to expand long-acting insulin coverage."
+  },
+  {
+    "id": 174,
+    "name": "Insulin Degludec",
+    "genericName": "Insulin Degludec",
+    "drugClass": "Long-acting insulin",
+    "maxDailyDose": 120,
+    "maxSingleDose": 80,
+    "unit": "units",
+    "notes": "Basal insulin entry added to expand long-acting insulin coverage."
+  },
+  {
+    "id": 175,
+    "name": "Insulin Glargine U-300",
+    "genericName": "Insulin Glargine",
+    "brandName": "Toujeo",
+    "drugClass": "Long-acting insulin",
+    "maxDailyDose": 120,
+    "maxSingleDose": 80,
+    "unit": "units",
+    "notes": "Concentrated basal insulin entry added to expand long-acting insulin coverage."
+  },
+  {
+    "id": 176,
+    "name": "Insulin Aspart",
+    "genericName": "Insulin Aspart",
+    "drugClass": "Rapid-acting insulin",
+    "maxDailyDose": 80,
+    "maxSingleDose": 30,
+    "unit": "units",
+    "notes": "Prandial insulin entry added to expand short-acting insulin coverage."
+  },
+  {
+    "id": 177,
+    "name": "Insulin Glulisine",
+    "genericName": "Insulin Glulisine",
+    "drugClass": "Rapid-acting insulin",
+    "maxDailyDose": 80,
+    "maxSingleDose": 30,
+    "unit": "units",
+    "notes": "Prandial insulin entry added to expand short-acting insulin coverage."
+  },
+  {
+    "id": 178,
+    "name": "Regular Insulin",
+    "genericName": "Insulin Regular",
+    "drugClass": "Short-acting insulin",
+    "maxDailyDose": 80,
+    "maxSingleDose": 30,
+    "unit": "units",
+    "notes": "Prandial insulin entry added to expand short-acting insulin coverage."
+  },
+  {
+    "id": 179,
+    "name": "Semaglutide Injection",
+    "genericName": "Semaglutide",
+    "brandName": "Ozempic",
+    "drugClass": "GLP-1 receptor agonist",
+    "maxDailyDose": 2,
+    "maxSingleDose": 2,
+    "unit": "mg",
+    "notes": "Weekly GLP-1 receptor agonist entry added to expand incretin coverage."
+  },
+  {
+    "id": 180,
+    "name": "Liraglutide",
+    "genericName": "Liraglutide",
+    "brandName": "Victoza",
+    "drugClass": "GLP-1 receptor agonist",
+    "maxDailyDose": 1.8,
+    "maxSingleDose": 1.8,
+    "unit": "mg",
+    "notes": "Daily GLP-1 receptor agonist entry added to expand incretin coverage."
+  },
+  {
+    "id": 181,
+    "name": "Dulaglutide",
+    "genericName": "Dulaglutide",
+    "brandName": "Trulicity",
+    "drugClass": "GLP-1 receptor agonist",
+    "maxDailyDose": 4.5,
+    "maxSingleDose": 4.5,
+    "unit": "mg",
+    "notes": "Weekly GLP-1 receptor agonist entry added to expand incretin coverage."
+  },
+  {
+    "id": 182,
+    "name": "Exenatide",
+    "genericName": "Exenatide",
+    "brandName": "Byetta",
+    "drugClass": "GLP-1 receptor agonist",
+    "maxDailyDose": 20,
+    "maxSingleDose": 10,
+    "unit": "mcg",
+    "notes": "Twice-daily GLP-1 receptor agonist entry added to expand incretin coverage."
+  },
+  {
+    "id": 183,
+    "name": "Lixisenatide",
+    "genericName": "Lixisenatide",
+    "brandName": "Adlyxin",
+    "drugClass": "GLP-1 receptor agonist",
+    "maxDailyDose": 20,
+    "maxSingleDose": 20,
+    "unit": "mcg",
+    "notes": "Daily GLP-1 receptor agonist entry added to expand incretin coverage."
   }
 ]

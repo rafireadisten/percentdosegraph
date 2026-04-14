@@ -48940,6 +48940,7 @@ var WORKSPACE_STORAGE_KEY = "percentdosegraph:react-workspace";
 var LAST_WORKSPACE_STORAGE_KEY = "percentdosegraph:react-last-workspace";
 var AUTH_TOKEN_STORAGE_KEY = "percentdosegraph:auth-token";
 var AUTH_ACCOUNT_STORAGE_KEY = "percentdosegraph:auth-account";
+var LEGAL_ACK_STORAGE_KEY = "percentdosegraph:legal-acknowledgements";
 var CHART_COLORS = [
   "#0d8f78",
   "#bf4f29",
@@ -48969,6 +48970,10 @@ function shuffleArray(array) {
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
+}
+function isCardiovascularDrug(drug) {
+  const normalizedClass = String(drug?.drugClass ?? "").toLowerCase();
+  return normalizedClass.includes("cardio") || normalizedClass.includes("statin") || normalizedClass.includes("ace") || normalizedClass.includes("arb") || normalizedClass.includes("beta") || normalizedClass.includes("calcium") || normalizedClass.includes("diuretic");
 }
 function createRandomMedicationSchedule(drug, startDate, endDate) {
   const segments = [];
@@ -49003,9 +49008,7 @@ function createRandomMedicationSchedule(drug, startDate, endDate) {
   return segments;
 }
 function generateRandomMedGrafProfile(drugs) {
-  const cardiovascularDrugs = drugs.filter(
-    (drug) => drug.drugClass?.toLowerCase().includes("statin") || drug.drugClass?.toLowerCase().includes("ace") || drug.drugClass?.toLowerCase().includes("arb") || drug.drugClass?.toLowerCase().includes("beta") || drug.drugClass?.toLowerCase().includes("calcium")
-  );
+  const cardiovascularDrugs = drugs.filter(isCardiovascularDrug);
   const sourceDrugs = cardiovascularDrugs.length >= 3 ? cardiovascularDrugs : [
     {
       id: "fallback-atorvastatin",
@@ -49031,6 +49034,15 @@ function generateRandomMedGrafProfile(drugs) {
       drugClass: "ACE inhibitor",
       maxDailyDose: 40,
       routeMaxDoses: { PO: 40 },
+      unit: "mg",
+      notes: "Fallback cardiovascular demo entry."
+    },
+    {
+      id: "fallback-hydrochlorothiazide",
+      name: "Hydrochlorothiazide",
+      drugClass: "Thiazide diuretic",
+      maxDailyDose: 50,
+      routeMaxDoses: { PO: 50 },
       unit: "mg",
       notes: "Fallback cardiovascular demo entry."
     }
@@ -49078,6 +49090,7 @@ function generateRandomMedGrafProfile(drugs) {
 function App() {
   const workspaceDefaults = loadWorkspaceFromStorage();
   const sessionDefaults = loadAuthSessionFromStorage();
+  const legalDefaults = loadLegalAcknowledgementsFromStorage();
   const importFileRef = (0, import_react56.useRef)(null);
   const [drugs, setDrugs] = (0, import_react56.useState)([]);
   const [doses, setDoses] = (0, import_react56.useState)([]);
@@ -49135,6 +49148,11 @@ function App() {
   const [authName, setAuthName] = (0, import_react56.useState)("");
   const [authLoading, setAuthLoading] = (0, import_react56.useState)(false);
   const [authError, setAuthError] = (0, import_react56.useState)("");
+  const [legalAcknowledgements, setLegalAcknowledgements] = (0, import_react56.useState)({
+    acceptedEula: Boolean(legalDefaults.acceptedEula),
+    acceptedHipaaNotice: Boolean(legalDefaults.acceptedHipaaNotice),
+    acceptedBaaRepresentation: Boolean(legalDefaults.acceptedBaaRepresentation)
+  });
   const [randomProfile, setRandomProfile] = (0, import_react56.useState)(null);
   const [generatingRandom, setGeneratingRandom] = (0, import_react56.useState)(false);
   (0, import_react56.useEffect)(() => {
@@ -49143,6 +49161,9 @@ function App() {
   (0, import_react56.useEffect)(() => {
     saveMedicationEntriesToStorage(medicationEntries);
   }, [medicationEntries]);
+  (0, import_react56.useEffect)(() => {
+    saveLegalAcknowledgementsToStorage(legalAcknowledgements);
+  }, [legalAcknowledgements]);
   (0, import_react56.useEffect)(() => {
     saveWorkspaceToStorage({
       patientName,
@@ -49484,6 +49505,13 @@ function App() {
     setMedicationEntries((current3) => current3.filter((entry) => entry.id !== entryId));
   }
   async function handleSaveProfile() {
+    if (!requireComplianceAcknowledgements(
+      "saving synced or local profiles",
+      setProfileStatus,
+      setProfileStatus
+    ) || !requireDeidentifiedPatientLabel("saving a profile", setProfileStatus, setProfileStatus)) {
+      return;
+    }
     if (!selectedDrugIds.length && !medicationEntries.length) {
       setProfileStatus("Add medications before saving a medication list profile.");
       return;
@@ -49506,6 +49534,7 @@ function App() {
       label,
       selectedDrugIds,
       drugStates: buildProfileDrugStates(drugs, selectedDrugIds, medicationEntries),
+      doses: buildProfileDoseEvents(doses, selectedDrugIds, medicationEntries),
       medicationEntries,
       patientName,
       workspaceLabel,
@@ -49521,7 +49550,7 @@ function App() {
       setProfiles((current3) => upsertProfile(current3, normalizedProfile));
       setActiveProfileId(normalizedProfile.id);
       setProfileStatus(
-        `Saved ${normalizedProfile.label} with ${medicationEntries.length} medication entries.`
+        `Saved ${normalizedProfile.label} with ${medicationEntries.length} medication entries and ${(normalizedProfile.doses ?? []).length} dose events.`
       );
     } catch (profileError) {
       console.warn("Saving profile locally because API save failed:", profileError);
@@ -49536,19 +49565,28 @@ function App() {
     setDrugs((current3) => mergeDrugCatalog(current3, profile.drugStates ?? []));
     setSelectedDrugIds(nextSelectedDrugIds);
     setMedicationEntries(profile.medicationEntries ?? []);
+    setDoses((profile.doses ?? []).map((dose, index) => normalizeDoseRecord(dose, index)));
     setPatientName(profile.patientName ?? "Example Patient");
     setWorkspaceLabel(profile.workspaceLabel ?? profile.label ?? "Current medication timeline");
     setPatientNotes(profile.patientNotes ?? "");
     setRoute(profile.route);
     setTimeframe(profile.timeframe);
     setActiveProfileId(profile.id);
-    setProfileStatus(`Opened ${profile.label} from ${profile.savedListDate ?? "a previous save"}.`);
+    setProfileStatus(
+      `Opened ${profile.label} from ${profile.savedListDate ?? "a previous save"} and replaced the current dose timeline with ${(profile.doses ?? []).length} saved dose events.`
+    );
     setWorkspaceStatus("");
   }
   function handleMergeProfile(profile) {
     setDrugs((current3) => mergeDrugCatalog(current3, profile.drugStates ?? []));
     setMedicationEntries(
       (current3) => mergeMedicationEntries(current3, profile.medicationEntries ?? [])
+    );
+    setDoses(
+      (current3) => mergeDoseEvents(
+        current3,
+        (profile.doses ?? []).map((dose, index) => normalizeDoseRecord(dose, index))
+      )
     );
     setSelectedDrugIds((current3) => {
       const merged = new Set(current3);
@@ -49561,7 +49599,9 @@ function App() {
       return Array.from(merged);
     });
     setActiveProfileId(profile.id);
-    setProfileStatus(`Added medications from ${profile.label} into the current list.`);
+    setProfileStatus(
+      `Added medications and ${(profile.doses ?? []).length} saved dose events from ${profile.label} into the current list.`
+    );
     setWorkspaceStatus("");
   }
   async function handleRenameProfile(profile) {
@@ -49722,6 +49762,17 @@ function App() {
     setWorkspaceStatus("");
   }
   function handleExportJson() {
+    if (!requireComplianceAcknowledgements(
+      "exporting workspace data",
+      setWorkspaceStatus,
+      setWorkspaceStatus
+    ) || !requireDeidentifiedPatientLabel(
+      "exporting workspace data",
+      setWorkspaceStatus,
+      setWorkspaceStatus
+    )) {
+      return;
+    }
     const payload = buildWorkspaceExportPayload({
       patientName,
       workspaceLabel,
@@ -49742,6 +49793,17 @@ function App() {
     setWorkspaceStatus("Exported the current workspace as JSON.");
   }
   function handleExportCsv() {
+    if (!requireComplianceAcknowledgements(
+      "exporting dose-event data",
+      setWorkspaceStatus,
+      setWorkspaceStatus
+    ) || !requireDeidentifiedPatientLabel(
+      "exporting dose-event data",
+      setWorkspaceStatus,
+      setWorkspaceStatus
+    )) {
+      return;
+    }
     if (!filteredEvents.length) {
       setWorkspaceStatus("There are no visible dose events to export for the current filter.");
       return;
@@ -49755,6 +49817,13 @@ function App() {
     setWorkspaceStatus("Exported the visible dose-event table as CSV.");
   }
   function handleImportWorkspaceClick() {
+    if (!requireComplianceAcknowledgements(
+      "importing workspace data",
+      setWorkspaceStatus,
+      setWorkspaceStatus
+    )) {
+      return;
+    }
     importFileRef.current?.click();
   }
   async function handleImportWorkspace(event) {
@@ -49839,6 +49908,13 @@ function App() {
     }
   }
   async function handleAuth() {
+    if (!requireComplianceAcknowledgements("using account sync", setAuthError, setAuthError) || !requireDeidentifiedPatientLabel(
+      "using account sync with patient-linked data",
+      setAuthError,
+      setAuthError
+    )) {
+      return;
+    }
     setAuthLoading(true);
     setAuthError("");
     try {
@@ -49881,6 +49957,32 @@ function App() {
     }
   }, []);
   const canAddMore = selectedDrugIds.length < MAX_VISIBLE_DRUGS;
+  const hasAcceptedComplianceRequirements = legalAcknowledgements.acceptedEula && legalAcknowledgements.acceptedHipaaNotice && legalAcknowledgements.acceptedBaaRepresentation;
+  const patientIdentifierWarning = getDirectIdentifierWarning(patientName);
+  function updateLegalAcknowledgement(key, checked) {
+    setLegalAcknowledgements((current3) => ({
+      ...current3,
+      [key]: checked
+    }));
+  }
+  function requireComplianceAcknowledgements(actionLabel, setStatus, setFailure) {
+    if (hasAcceptedComplianceRequirements) {
+      return true;
+    }
+    const message = `Accept the EULA, commercial licensing, HIPAA notice, and BAA acknowledgement before ${actionLabel}.`;
+    setFailure?.(message);
+    setStatus?.("");
+    return false;
+  }
+  function requireDeidentifiedPatientLabel(actionLabel, setStatus, setFailure) {
+    if (!patientIdentifierWarning) {
+      return true;
+    }
+    const message = `${patientIdentifierWarning} Update the patient label before ${actionLabel}.`;
+    setFailure?.(message);
+    setStatus?.("");
+    return false;
+  }
   if (!authReady) {
     return h("div", { className: "auth-container" }, h("p", null, "Restoring session..."));
   }
@@ -50057,6 +50159,11 @@ function App() {
               disabled: Boolean(activeProfileId),
               onChange: (event) => setPatientName(event.target.value)
             }),
+            patientIdentifierWarning ? h("p", { className: "helper error-text" }, patientIdentifierWarning) : h(
+              "p",
+              { className: "helper" },
+              "Use a de-identified chart label such as initials, an internal study code, or a medical record alias. Exact first and last names should not be used."
+            ),
             activeProfileId ? h(
               "p",
               { className: "helper" },
@@ -50433,7 +50540,7 @@ function App() {
                 h(
                   "p",
                   null,
-                  `${profile.patientName ?? "Patient"} \xB7 ${getSelectedDrugIdsFromProfile(profile).length} medication(s) \xB7 ${profile.route} \xB7 ${TIMEFRAME_OPTIONS.find((option) => option.value === profile.timeframe)?.label ?? profile.timeframe}`
+                  `${profile.patientName ?? "Patient"} \xB7 ${getSelectedDrugIdsFromProfile(profile).length} medication(s) \xB7 ${(profile.doses ?? []).length} dose event(s) \xB7 ${profile.route} \xB7 ${TIMEFRAME_OPTIONS.find((option) => option.value === profile.timeframe)?.label ?? profile.timeframe}`
                 ),
                 h(
                   "div",
@@ -50573,24 +50680,116 @@ function App() {
             null,
             isAuthenticated ? "Your saved medication-list profiles can sync with the backend while local browser storage remains available as a fallback." : "The graph, dose entry, imports, exports, and local profiles all work in guest mode. Sign in only if you want backend-synced profiles."
           ),
-          isAuthenticated ? h(
+          h(
             "div",
-            { className: "auth-inline-status" },
+            { className: "compliance-panel" },
+            h("p", { className: "metric-label" }, "Compliance and licensing notices"),
             h(
               "p",
               { className: "helper" },
-              `Currently signed in as ${user?.name || user?.email}.`
+              "Review and accept these notices before using account sync, imports, exports, or saved profiles that may contain patient-linked context."
             ),
             h(
-              "button",
+              "label",
+              { className: "checkbox-row" },
+              h("input", {
+                type: "checkbox",
+                checked: legalAcknowledgements.acceptedEula,
+                onChange: (event) => updateLegalAcknowledgement("acceptedEula", event.target.checked)
+              }),
+              h(
+                "span",
+                null,
+                "I accept the EULA and understand commercial deployment requires an appropriate commercial license or internal approval."
+              )
+            ),
+            h(
+              "label",
+              { className: "checkbox-row" },
+              h("input", {
+                type: "checkbox",
+                checked: legalAcknowledgements.acceptedHipaaNotice,
+                onChange: (event) => updateLegalAcknowledgement("acceptedHipaaNotice", event.target.checked)
+              }),
+              h(
+                "span",
+                null,
+                "I acknowledge the HIPAA notice: directly identifying patient data should be anonymized, and exact first and last names should not be used in this workspace."
+              )
+            ),
+            h(
+              "label",
+              { className: "checkbox-row" },
+              h("input", {
+                type: "checkbox",
+                checked: legalAcknowledgements.acceptedBaaRepresentation,
+                onChange: (event) => updateLegalAcknowledgement("acceptedBaaRepresentation", event.target.checked)
+              }),
+              h(
+                "span",
+                null,
+                "I represent that any required BAA or equivalent authorization for identifiable health data has been reviewed and approved before account sync or sharing."
+              )
+            ),
+            h(
+              "div",
+              { className: "notice-card legal-copy" },
+              h("strong", null, "HIPAA notice"),
+              h(
+                "p",
+                null,
+                "This product can display and store user-entered clinical context. Treat exported files, synced profiles, and printed reports as sensitive content, and de-identify data before use unless your organization has approved identifiable use."
+              )
+            ),
+            h(
+              "div",
               {
-                type: "button",
-                className: "pill-button secondary-button",
-                onClick: handleLogout
+                className: `notice-card ${hasAcceptedComplianceRequirements ? "notice-success" : "notice-warning"}`
               },
-              "Logout"
+              h(
+                "strong",
+                null,
+                hasAcceptedComplianceRequirements ? "Compliance notices accepted" : "Compliance notices still require acknowledgement"
+              ),
+              h(
+                "p",
+                null,
+                hasAcceptedComplianceRequirements ? "Account sync, imports, exports, and profile saves are enabled." : "Until all three notices are accepted, account sync, imports, exports, and profile saves stay blocked."
+              )
             )
-          ) : h(
+          ),
+          isAuthenticated ? [
+            h(
+              "div",
+              { className: "auth-inline-status", key: "auth-status" },
+              h(
+                "p",
+                { className: "helper" },
+                `Currently signed in as ${user?.name || user?.email}.`
+              ),
+              h(
+                "button",
+                {
+                  type: "button",
+                  className: "pill-button secondary-button",
+                  onClick: handleLogout
+                },
+                "Logout"
+              )
+            ),
+            h(
+              "div",
+              { className: "account-data-grid", key: "account-data" },
+              buildAccountDataRows(user).map(
+                (row) => h(
+                  "div",
+                  { className: "account-data-row", key: row.label },
+                  h("span", { className: "metric-label" }, row.label),
+                  h("strong", null, row.value)
+                )
+              )
+            )
+          ] : h(
             "div",
             { className: "auth-form auth-inline-form" },
             authError ? h("div", { className: "error" }, authError) : null,
@@ -51290,6 +51489,7 @@ function normalizeStoredProfiles(profiles) {
     label: profile.label ?? profile.name ?? `Profile ${index + 1}`,
     selectedDrugIds: Array.isArray(profile.selectedDrugIds) ? profile.selectedDrugIds.map(String) : [],
     medicationEntries: Array.isArray(profile.medicationEntries) ? profile.medicationEntries.map(normalizeMedicationEntry) : [],
+    doses: Array.isArray(profile.doses) ? profile.doses.map((dose, doseIndex) => normalizeDoseRecord(dose, doseIndex)) : [],
     drugStates: Array.isArray(profile.drugStates) ? profile.drugStates.map((drug, drugIndex) => normalizeDrugRecord(drug, drugIndex)) : [],
     patientName: profile.patientName ?? "Example Patient",
     workspaceLabel: profile.workspaceLabel ?? profile.label ?? `Profile ${index + 1}`,
@@ -51325,6 +51525,15 @@ function buildProfileDrugStates(drugs, selectedDrugIds, medicationEntries) {
     }
   }
   return drugs.filter((drug) => selected.has(String(drug.id))).map((drug, index) => normalizeDrugRecord(drug, index));
+}
+function buildProfileDoseEvents(doses, selectedDrugIds, medicationEntries) {
+  const selected = new Set(selectedDrugIds.map(String));
+  for (const entry of medicationEntries ?? []) {
+    if (entry?.drugId) {
+      selected.add(String(entry.drugId));
+    }
+  }
+  return (doses ?? []).filter((dose) => selected.has(String(dose.drugId))).map((dose, index) => normalizeDoseRecord(dose, index));
 }
 function buildRange(doses, timeframe) {
   const endDate = getAnchorDate(doses);
@@ -51634,6 +51843,14 @@ function loadAuthSessionFromStorage() {
     };
   }
 }
+function loadLegalAcknowledgementsFromStorage() {
+  try {
+    const raw = window.localStorage.getItem(LEGAL_ACK_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
 function saveProfilesToStorage(profiles) {
   try {
     window.localStorage.setItem(PROFILES_STORAGE_KEY, JSON.stringify(profiles));
@@ -51649,6 +51866,12 @@ function saveMedicationEntriesToStorage(entries) {
 function saveWorkspaceToStorage(workspace) {
   try {
     window.localStorage.setItem(WORKSPACE_STORAGE_KEY, JSON.stringify(workspace));
+  } catch {
+  }
+}
+function saveLegalAcknowledgementsToStorage(acknowledgements) {
+  try {
+    window.localStorage.setItem(LEGAL_ACK_STORAGE_KEY, JSON.stringify(acknowledgements));
   } catch {
   }
 }
@@ -51687,6 +51910,7 @@ function mapApiProfileToAppProfile(profile) {
     label: profile.payload?.label ?? profile.name,
     selectedDrugIds: profile.payload?.selectedDrugIds ?? [],
     drugStates: profile.payload?.drugStates ?? profile.payload?.graphState?.drugStates ?? [],
+    doses: profile.payload?.doses ?? profile.payload?.graphState?.doses ?? [],
     medicationEntries: profile.payload?.medicationEntries ?? [],
     patientId: String(profile.payload?.patientId ?? profile.id),
     patientName: profile.payload?.patientName ?? "Example Patient",
@@ -51708,11 +51932,13 @@ function mapAppProfileToApiProfile(profile, accountId) {
       label: profile.label,
       selectedDrugIds: profile.selectedDrugIds,
       drugStates: profile.drugStates ?? [],
+      doses: profile.doses ?? [],
       medicationEntries: profile.medicationEntries,
       graphState: {
         version: 1,
         selectedDrugIds: profile.selectedDrugIds,
         drugStates: profile.drugStates ?? [],
+        doses: profile.doses ?? [],
         medicationEntries: profile.medicationEntries,
         route: profile.route,
         timeframe: profile.timeframe
@@ -51848,6 +52074,38 @@ function buildWorkspaceExportPayload(workspace) {
       timeframe: workspace.timeframe
     }
   };
+}
+function buildAccountDataRows(account) {
+  if (!account) {
+    return [];
+  }
+  return [
+    { label: "Account ID", value: String(account.id ?? "Unknown") },
+    { label: "Display name", value: account.name ?? "Not set" },
+    { label: "Email", value: account.email ?? "Not set" },
+    { label: "Role", value: account.role ?? "user" },
+    { label: "Status", value: account.isActive === false ? "Inactive" : "Active" }
+  ];
+}
+function getDirectIdentifierWarning(value) {
+  const normalized = String(value ?? "").trim();
+  if (!normalized) {
+    return "";
+  }
+  if (looksLikeFullName(normalized)) {
+    return "Potential direct identifier detected: this patient label looks like an exact first-and-last name.";
+  }
+  return "";
+}
+function looksLikeFullName(value) {
+  if (/@/.test(value) || /\d/.test(value)) {
+    return false;
+  }
+  const tokens = value.trim().split(/\s+/).filter(Boolean);
+  if (tokens.length !== 2) {
+    return false;
+  }
+  return tokens.every((token) => /^[A-Z][a-z'-]{1,}$/.test(token));
 }
 function buildDoseEventsCsv(filteredEvents, drugLookup) {
   const rows = [["date", "end_date", "drug", "route", "amount", "unit", "percent_max", "notes"]];
