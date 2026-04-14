@@ -49138,7 +49138,6 @@ function App() {
   const [profileStatus, setProfileStatus] = (0, import_react56.useState)("");
   const [profileName, setProfileName] = (0, import_react56.useState)("");
   const [hoveredLineDrugId, setHoveredLineDrugId] = (0, import_react56.useState)(null);
-  const [maxDoseDrafts, setMaxDoseDrafts] = (0, import_react56.useState)({});
   const [isAuthenticated, setIsAuthenticated] = (0, import_react56.useState)(Boolean(sessionDefaults.token));
   const [user, setUser] = (0, import_react56.useState)(sessionDefaults.account);
   const [authReady, setAuthReady] = (0, import_react56.useState)(false);
@@ -49439,12 +49438,6 @@ function App() {
       return [...current3, drugId];
     });
   }
-  function handleMaxDoseDraftChange(drugId, nextValue) {
-    setMaxDoseDrafts((current3) => ({
-      ...current3,
-      [String(drugId)]: nextValue
-    }));
-  }
   function handleMaxDoseChange(drugId, nextValue) {
     setDrugs(
       (current3) => current3.map((drug) => {
@@ -49461,23 +49454,6 @@ function App() {
         };
       })
     );
-  }
-  function commitMaxDoseChange(drugId) {
-    const draftValue = maxDoseDrafts[String(drugId)];
-    const drug = drugs.find((item) => item.id === String(drugId));
-    if (!drug) {
-      return;
-    }
-    if (draftValue === void 0) {
-      handleMaxDoseChange(drugId, String(drug.maxDailyDose ?? ""));
-      return;
-    }
-    handleMaxDoseChange(drugId, draftValue);
-    setMaxDoseDrafts((current3) => {
-      const nextDrafts = { ...current3 };
-      delete nextDrafts[String(drugId)];
-      return nextDrafts;
-    });
   }
   function handleMedicationEntrySubmit(event) {
     event.preventDefault();
@@ -50658,17 +50634,11 @@ function App() {
                   { className: "small-label" },
                   "Max/day",
                   h("input", {
-                    type: "text",
-                    inputMode: "decimal",
-                    value: maxDoseDrafts[String(row.drugId)] ?? String(row.maxDailyDose ?? ""),
-                    onChange: (event) => handleMaxDoseDraftChange(row.drugId, event.target.value),
-                    onBlur: () => commitMaxDoseChange(row.drugId),
-                    onKeyDown: (event) => {
-                      if (event.key === "Enter") {
-                        event.preventDefault();
-                        commitMaxDoseChange(row.drugId);
-                      }
-                    }
+                    type: "number",
+                    min: "0.1",
+                    step: "0.1",
+                    value: row.maxDailyDose ?? "",
+                    onChange: (event) => handleMaxDoseChange(row.drugId, event.target.value)
                   })
                 ),
                 h(
@@ -51415,7 +51385,7 @@ function normalizeDoseRecord(dose, index, defaultDrugId) {
     id: String(dose.id ?? `dose-${index + 1}`),
     drugId: String(dose.drugId ?? defaultDrugId),
     date: dose.date,
-    endDate: dose.endDate ?? "",
+    endDate: dose.endDate || dose.date,
     route: dose.route ?? "PO",
     amount: Number(dose.amount ?? 0),
     notes: dose.notes ?? ""
@@ -51578,9 +51548,8 @@ function getFilteredEvents(doses, selectedDrugIds, route, startDate, endDate, me
   const startKey = formatDateKey(startDate);
   const endKey = formatDateKey(endDate);
   const medicationByDrug = groupMedicationEntriesByDrug(medicationEntries);
-  const timelineDoses = resolveDoseTimeline(doses, endKey);
-  return timelineDoses.filter((dose) => {
-    const eventEndDate = dose.resolvedEndDate ?? dose.endDate ?? dose.date;
+  return doses.filter((dose) => {
+    const eventEndDate = dose.endDate ?? dose.date;
     const matchingEntries = (medicationByDrug.get(String(dose.drugId)) ?? []).filter(
       (entry) => entry.route === dose.route
     );
@@ -51600,7 +51569,7 @@ function buildChartData(events, selectedDrugs, startDate, endDate) {
   const byDrugAndDate = /* @__PURE__ */ new Map();
   for (const event of events) {
     const eventStart = /* @__PURE__ */ new Date(`${event.date}T12:00:00`);
-    const eventEnd = /* @__PURE__ */ new Date(`${event.resolvedEndDate ?? event.endDate ?? event.date}T12:00:00`);
+    const eventEnd = /* @__PURE__ */ new Date(`${event.endDate ?? event.date}T12:00:00`);
     const cursor2 = new Date(eventStart);
     while (cursor2 <= eventEnd) {
       const currentDate = formatDateKey(cursor2);
@@ -51633,48 +51602,6 @@ function buildChartData(events, selectedDrugs, startDate, endDate) {
     cursor.setDate(cursor.getDate() + 1);
   }
   return bucketSeries(points, selectedDrugs);
-}
-function resolveDoseTimeline(doses, fallbackEndDate) {
-  const normalizedDoses = Array.isArray(doses) ? doses.map((dose, index) => normalizeDoseRecord(dose, index)) : [];
-  const grouped = /* @__PURE__ */ new Map();
-  for (const dose of normalizedDoses) {
-    const key = `${dose.drugId}:${dose.route}`;
-    if (!grouped.has(key)) {
-      grouped.set(key, []);
-    }
-    grouped.get(key).push(dose);
-  }
-  const resolved = [];
-  for (const entries of grouped.values()) {
-    const sortedEntries = entries.slice().sort(
-      (left, right) => String(left.date).localeCompare(String(right.date)) || String(left.id).localeCompare(String(right.id))
-    );
-    for (let index = 0; index < sortedEntries.length; index += 1) {
-      const dose = sortedEntries[index];
-      const nextDose = sortedEntries[index + 1];
-      const explicitEndDate = dose.endDate || "";
-      let resolvedEndDate = explicitEndDate || dose.date;
-      if (!explicitEndDate) {
-        if (nextDose?.date) {
-          resolvedEndDate = getPreviousDateKey(nextDose.date, dose.date);
-        } else {
-          resolvedEndDate = fallbackEndDate || dose.date;
-        }
-      }
-      resolved.push({
-        ...dose,
-        ordinal: index + 1,
-        resolvedEndDate: resolvedEndDate < dose.date ? dose.date : resolvedEndDate
-      });
-    }
-  }
-  return resolved;
-}
-function getPreviousDateKey(dateKey, minimumDateKey) {
-  const date2 = /* @__PURE__ */ new Date(`${dateKey}T12:00:00`);
-  date2.setDate(date2.getDate() - 1);
-  const previousDateKey = formatDateKey(date2);
-  return previousDateKey < minimumDateKey ? minimumDateKey : previousDateKey;
 }
 function bucketSeries(points, selectedDrugs) {
   if (!points.length) {
@@ -52275,20 +52202,16 @@ function buildLineDefinition(drug, context) {
 }
 function getAnchorDate(doses) {
   if (!doses.length) {
-    const today2 = /* @__PURE__ */ new Date();
-    today2.setHours(0, 0, 0, 0);
-    return today2;
+    const today = /* @__PURE__ */ new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
   }
-  const today = /* @__PURE__ */ new Date();
-  today.setHours(0, 0, 0, 0);
-  const todayKey = formatDateKey(today);
-  const resolvedDoses = resolveDoseTimeline(doses, todayKey);
-  const latestDose = resolvedDoses.reduce((latest3, dose) => {
-    const latestDate = dose.resolvedEndDate ?? dose.endDate ?? dose.date;
-    const previousLatestDate = latest3.resolvedEndDate ?? latest3.endDate ?? latest3.date;
+  const latestDose = doses.reduce((latest3, dose) => {
+    const latestDate = dose.endDate ?? dose.date;
+    const previousLatestDate = latest3.endDate ?? latest3.date;
     return latestDate > previousLatestDate ? dose : latest3;
-  }, resolvedDoses[0]);
-  return /* @__PURE__ */ new Date(`${latestDose.resolvedEndDate ?? latestDose.endDate ?? latestDose.date}T12:00:00`);
+  }, doses[0]);
+  return /* @__PURE__ */ new Date(`${latestDose.endDate ?? latestDose.date}T12:00:00`);
 }
 function formatShortDate(date2) {
   return new Intl.DateTimeFormat("en-US", {

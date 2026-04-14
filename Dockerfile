@@ -21,6 +21,6 @@ RUN npm --workspace @workspace/api-server run build
 EXPOSE 3001
 
 ENV NODE_ENV=production
-ENV JWT_SECRET=${JWT_SECRET:-default-secret-change-in-production}
+ENV AUTH_SECRET=${AUTH_SECRET:-default-secret-change-in-production}
 
 CMD ["npm", "--workspace", "@workspace/api-server", "start"]

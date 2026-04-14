@@ -2,6 +2,15 @@
 
 All notable project changes should be recorded in this file.
 
+## 2026-04-14
+
+### `feat: publish deployment workflows and improve continuous dose graphing`
+- Added a dedicated GitHub Pages publishing workflow and a Railway API deployment workflow so the web frontend and backend can be deployed from GitHub Actions.
+- Updated deployment packaging and docs, including the `deploy/` output, Pages SPA fallback, and production API secret naming (`AUTH_SECRET`).
+- Changed dose timeline logic so entries without an explicit end date continue at the same dose until the next same-medication dose change, or through the current anchor date when no later change exists.
+- Updated the max daily dose editor to use free-form numeric text with commit-on-blur or Enter, avoiding forced `0.1` step behavior during manual edits.
+- Rebuilt the React bundle and deploy artifacts after the deployment and graphing updates.
+
 ## 2026-04-12
 
 ### `feat: add plot-line hover definitions to both graph modes`

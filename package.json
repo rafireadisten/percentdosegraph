@@ -33,7 +33,7 @@
     "build:web": "esbuild frontend-react/app.js --bundle --format=esm --platform=browser --outfile=frontend-react/app.bundle.js",
     "build:api": "npm --workspace @workspace/api-server run build",
     "build:all": "npm run build:web && npm run build:api",
-    "build:deploy": "npm run build:all && cp frontend-react/app.bundle.js deploy/ && cp frontend-react/index.html deploy/ && cp frontend-react/styles.css deploy/",
+    "build:deploy": "npm run build:all && mkdir -p deploy && cp frontend-react/app.bundle.js deploy/ && cp frontend-react/index.html deploy/ && cp frontend-react/styles.css deploy/ && cp frontend-react/index.html deploy/404.html",
     "watch:web": "nodemon --watch frontend-react --ext js,css --exec \"npm run build:web\"",
     "start": "npm run dev:full",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .eslintignore",
