@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PercentDoseGraph Frontends</title>
+    <title>Simple MedGraphF</title>
     <style>
       :root {
         --bg: #f6f1e8;
@@ -119,34 +119,36 @@
   <body>
     <main>
       <section class="hero">
-        <p class="eyebrow">PercentDoseGraph</p>
-        <h1>See medication doses on a graph as a percentage of maximum daily dose.</h1>
+        <p class="eyebrow">Simple MedGraphF</p>
+        <h1>Choose the easiest MedGraph front page for quick charting or account-based workflow.</h1>
         <p>
-          Medication dosing is rarely shown as a chart. This app makes it easy to visualize each
-          dose on a graph, compare it to a patient-specific ceiling, and spot trends across days
-          to years. Choose the lightweight static version or the reactive React experience.
+          Simple MedGraphF gives you two clear starting points. Use the static page for basic
+          medication graphing with the core fields only, or open the React page when you want
+          account registration, saved profiles, imports, exports, and backend sync.
         </p>
       </section>
 
       <section class="chooser" aria-label="Frontend type chooser">
         <article class="card">
-          <span class="label">Static Type</span>
-          <h2>Plain HTML, CSS, and JavaScript</h2>
+          <span class="label">Basic Static</span>
+          <h2>Fast dose graphing with the core fields</h2>
           <p>
-            Uses the original canvas chart and form logic with no React dependency. This is the
-            simplest version to open directly in a browser.
+            Open the simple front page for medication name, patient label, route, max dose, and
+            dose timeline entry. This is the fastest path when you just want the basic graphing
+            functions without registration.
           </p>
-          <a class="link" href="./frontend-static/">Open Static Type</a>
+          <a class="link" href="./frontend-static/">Open Basic Static Page</a>
         </article>
 
         <article class="card">
-          <span class="label">Reactive Type</span>
-          <h2>React plus Recharts</h2>
+          <span class="label">React Account</span>
+          <h2>Registration, saved profiles, and sync</h2>
           <p>
-            Uses a reactive component model and a Recharts line chart. This version is scaffolded as
-            a separate frontend so we can evolve it independently.
+            Open the React front page for the richer workflow: account registration, sign-in,
+            saved medication profiles, account sync, JSON import and export, and the larger
+            multi-drug workspace.
           </p>
-          <a class="link" href="./frontend-react/">Open Reactive Type</a>
+          <a class="link" href="./frontend-react/">Open React Account Page</a>
         </article>
       </section>
     </main>

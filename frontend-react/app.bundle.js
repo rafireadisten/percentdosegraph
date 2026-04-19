@@ -50016,12 +50016,12 @@ function App() {
     h(
       "div",
       { className: "topbar" },
-      h("a", { className: "home-link", href: "../index.html" }, "Back to home"),
-      h("span", { className: "badge" }, "Reactive Type"),
+      h("a", { className: "home-link", href: "../index.html" }, "Back to Simple MedGraphF"),
+      h("span", { className: "badge" }, "React Account"),
       h(
         "span",
         { className: "user-info" },
-        isAuthenticated ? `Signed in as ${user?.name || user?.email}` : "Guest mode active"
+        isAuthenticated ? `Signed in as ${user?.name || user?.email}` : "Guest mode available"
       ),
       h(
         "a",
@@ -50045,16 +50045,16 @@ function App() {
       h(
         "article",
         { className: "hero-panel" },
-        h("p", { className: "badge" }, "React + Recharts"),
+        h("p", { className: "badge" }, "Simple MedGraphF"),
         h(
           "h1",
           null,
-          workspaceLabel || "Multi-drug comparison charting for U.S. medication search."
+          workspaceLabel || "Simple MedGraphF account workspace for charting, saved profiles, and sign-in."
         ),
         h(
           "p",
           null,
-          `${patientName} \xB7 Plot up to 20 medications at once, compare each against its own ceiling, and expand the selector with official FDA-listed U.S. drug names when you need more than the bundled sample library. ${isAuthenticated ? "Account sync is active for saved profiles." : "You can use the full graph immediately without signing in; accounts only add backend profile sync."}`
+          `${patientName} \xB7 Use this React page when you want the richer MedGraph workflow: multi-drug charting, saved profiles, account registration, sign-in, import and export, and backend sync. ${isAuthenticated ? "Account sync is active for saved profiles." : "You can still graph in guest mode, then register when you want synced profiles."}`
         )
       ),
       h(
@@ -50704,11 +50704,11 @@ function App() {
         h(
           "section",
           { className: "workspace-panel auth-panel-shell" },
-          h("h2", null, isAuthenticated ? "Account sync" : "Optional account sign-in"),
+          h("h2", null, isAuthenticated ? "Account sync" : "Account registration and sign-in"),
           h(
             "p",
             null,
-            isAuthenticated ? "Your saved medication-list profiles can sync with the backend while local browser storage remains available as a fallback." : "The graph, dose entry, imports, exports, and local profiles all work in guest mode. Sign in only if you want backend-synced profiles."
+            isAuthenticated ? "Your saved medication-list profiles can sync with the backend while local browser storage remains available as a fallback." : "Register or sign in here when you want saved profiles and backend sync. Guest mode still lets you use the graph and basic medication entry tools."
           ),
           h(
             "div",
