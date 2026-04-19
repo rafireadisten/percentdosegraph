@@ -25,10 +25,10 @@ const state = {
   settings: {
     medicationName: '',
     medicationId: '',
-    patientName: 'Example Patient',
+    patientName: '',
     medicationRoute: 'PO',
-    doseUnit: 'mg/day',
-    maxDose: 120,
+    doseUnit: '',
+    maxDose: '',
     timeframe: '1y',
   },
   inference: {
@@ -47,6 +47,8 @@ const state = {
   editingDoseId: null,
   profileSearch: '',
   profileStorageMode: 'local',
+  activeProfileId: null,
+  profileSyncTimer: null,
   catalogDrugs: [],
   cardiovascularDrugs: [],
   randomProfile: {
@@ -59,6 +61,7 @@ const state = {
   chartHover: {
     drugKey: null,
     renderModel: null,
+    selectedDateKey: null,
   },
   auth: {
     token: '',
@@ -87,6 +90,7 @@ const elements = {
   medicationMatchStatus: document.getElementById('medicationMatchStatus'),
   medicationSuggestions: document.getElementById('medicationSuggestions'),
   patientName: document.getElementById('patientName'),
+  patientProfileStatus: document.getElementById('patientProfileStatus'),
   medicationRoute: document.getElementById('medicationRoute'),
   doseUnit: document.getElementById('doseUnit'),
   maxDose: document.getElementById('maxDose'),
@@ -192,13 +196,14 @@ function handleSettingsFormUpdate(event) {
   const previousDrug = state.settings.medicationName;
 
   state.settings.medicationName = elements.medicationName.value.trim();
-  state.settings.patientName = elements.patientName.value.trim() || 'Patient';
+  state.settings.patientName = elements.patientName.value.trim();
   state.settings.medicationRoute = elements.medicationRoute.value;
-  state.settings.doseUnit = elements.doseUnit.value.trim() || 'units/day';
+  state.settings.doseUnit = elements.doseUnit.value.trim();
   state.settings.timeframe = normalizeTimeframe(elements.timeframe.value);
 
   if (event.target === elements.maxDose) {
-    state.settings.maxDose = Math.max(Number(elements.maxDose.value) || 0, 0.1);
+    const nextMaxDose = parsePositiveNumber(elements.maxDose.value);
+    state.settings.maxDose = nextMaxDose === null ? '' : nextMaxDose;
     state.inference.isOverridden = true;
   } else {
     const routeChanged = previousRoute !== state.settings.medicationRoute;
@@ -223,6 +228,8 @@ function handleSettingsFormUpdate(event) {
     }
   }
 
+  syncLoadedProfileIdentity();
+  queueActiveProfileSync();
   elements.doseRoute.value = state.settings.medicationRoute;
   render();
 }
@@ -321,6 +328,18 @@ elements.doseChart.addEventListener('mousemove', event => {
 
 elements.doseChart.addEventListener('mouseleave', () => {
   setHoveredDrugGroup(null);
+});
+
+elements.doseChart.addEventListener('click', () => {
+  const hoveredGroup = getHoveredDrugGroup();
+  const editableEvent = getEditableDoseEventForHoverSelection(hoveredGroup);
+
+  if (!editableEvent) {
+    return;
+  }
+
+  startEditingDoseEvent(editableEvent);
+  render();
 });
 
 elements.cancelEditButton.addEventListener('click', () => {
@@ -433,15 +452,21 @@ elements.doseForm.addEventListener('submit', async event => {
 
 elements.eventsTableBody.addEventListener('click', async event => {
   const button = event.target.closest('button[data-index]');
+  const row = event.target.closest('tr[data-index]');
 
-  if (!button) {
+  if (!button && !row) {
     return;
   }
 
-  const index = Number(button.dataset.index);
+  const index = Number((button ?? row).dataset.index);
   const doseEvent = state.doseEvents[index];
 
   if (!doseEvent) {
+    return;
+  }
+
+  if (!button) {
+    startEditingDoseEvent(doseEvent);
     return;
   }
 
@@ -501,6 +526,23 @@ elements.profileList.addEventListener('click', async event => {
   if (button.dataset.action === 'delete') {
     await deleteProfile(profileId);
   }
+});
+
+elements.chartHoverCard?.addEventListener('click', event => {
+  const button = event.target.closest('button[data-action="edit-hovered-dose"]');
+  if (!button) {
+    return;
+  }
+
+  const hoveredGroup = getHoveredDrugGroup();
+  const editableEvent = getEditableDoseEventForHoverSelection(hoveredGroup);
+
+  if (!editableEvent) {
+    return;
+  }
+
+  startEditingDoseEvent(editableEvent);
+  render();
 });
 
 async function initialize() {
@@ -605,6 +647,7 @@ function render() {
   syncFormFromState();
   renderMedicationMatchState();
   renderReferenceState();
+  renderPatientProfileStatus();
   renderEventsTable(filteredEvents);
   renderMetrics(metrics);
   renderNarrative(range, metrics);
@@ -650,12 +693,94 @@ function syncFormFromState() {
   elements.patientName.value = state.settings.patientName;
   elements.medicationRoute.value = state.settings.medicationRoute;
   elements.doseUnit.value = state.settings.doseUnit;
-  elements.maxDose.value = state.settings.maxDose;
+  elements.maxDose.value = state.settings.maxDose === '' ? '' : String(state.settings.maxDose);
   state.settings.timeframe = normalizeTimeframe(state.settings.timeframe);
   elements.timeframe.value = state.settings.timeframe;
   elements.doseStartDate.value = elements.doseStartDate.value || formatDateInput(new Date());
   elements.doseRoute.value = state.settings.medicationRoute;
   syncDoseDateConstraints();
+}
+
+function getActiveProfile() {
+  if (!state.activeProfileId) {
+    return null;
+  }
+
+  return state.profiles.find(profile => profile.id === String(state.activeProfileId)) ?? null;
+}
+
+function canPersistProfile(profile) {
+  if (!profile) {
+    return false;
+  }
+
+  if (profile.accountId) {
+    return true;
+  }
+
+  return String(profile.id).startsWith('local-');
+}
+
+function resolveProfileIdentityName(profile = null) {
+  const typedPatientName = state.settings.patientName.trim();
+
+  if (typedPatientName) {
+    return typedPatientName;
+  }
+
+  return profile?.name ?? '';
+}
+
+function syncLoadedProfileIdentity() {
+  const activeProfile = getActiveProfile();
+  if (!activeProfile) {
+    return;
+  }
+
+  const nextProfileName = resolveProfileIdentityName(activeProfile);
+  if (!nextProfileName || nextProfileName === activeProfile.name) {
+    return;
+  }
+
+  activeProfile.name = nextProfileName;
+}
+
+function renderPatientProfileStatus() {
+  if (!elements.patientProfileStatus) {
+    return;
+  }
+
+  const activeProfile = getActiveProfile();
+  const typedPatientName = state.settings.patientName.trim();
+  const matchingProfile = typedPatientName
+    ? state.profiles.find(
+        profile =>
+          profile.id !== state.activeProfileId &&
+          String(profile.name || '').trim().toLowerCase() === typedPatientName.toLowerCase()
+      ) ?? null
+    : null;
+
+  if (activeProfile) {
+    const activeLabel = activeProfile.name || 'Unnamed profile';
+    elements.patientProfileStatus.textContent =
+      typedPatientName && typedPatientName !== activeLabel
+        ? `Loaded profile ID: ${activeLabel}. Step 1 changes are saving back to this profile, and a new patient name will rename that same profile ID.`
+        : `Loaded profile ID: ${activeLabel}. Step 1 changes save back to this same profile.`;
+    return;
+  }
+
+  if (matchingProfile) {
+    elements.patientProfileStatus.textContent = `Patient name matches existing profile ID "${matchingProfile.name}". Load that profile to edit it in place.`;
+    return;
+  }
+
+  if (typedPatientName) {
+    elements.patientProfileStatus.textContent = `Patient name "${typedPatientName}" will be used as the new profile ID when you save.`;
+    return;
+  }
+
+  elements.patientProfileStatus.textContent =
+    'Patient name can become the saved profile ID for this workspace.';
 }
 
 function getDoseEventDrugName(event) {
@@ -761,7 +886,7 @@ function renderWorkspaceSummary(range, filteredEvents = getFilteredEvents(range)
     ? `${state.inference.match.drug} ${state.inference.match.route}${state.inference.isOverridden ? ' adjusted' : ' inferred'}`
     : 'Manual ceiling';
 
-  elements.workspacePatient.textContent = state.settings.patientName;
+  elements.workspacePatient.textContent = state.settings.patientName || 'Patient not set';
   elements.workspaceMedication.textContent = visibleDrugGroups.length
     ? visibleDrugGroups.map(group => group.name).join(' · ')
     : state.settings.medicationName
@@ -773,7 +898,7 @@ function renderWorkspaceSummary(range, filteredEvents = getFilteredEvents(range)
       : 'Mixed routes'
     : state.settings.medicationRoute;
   elements.workspaceTimeframe.textContent = formatTimeframeLabel(state.settings.timeframe);
-  elements.workspaceMaxDose.textContent = `${formatNumber(state.settings.maxDose)} ${state.settings.doseUnit}`;
+  elements.workspaceMaxDose.textContent = formatWorkspaceMaxDose();
   elements.workspaceInference.textContent = referenceLabel;
   elements.workspaceEventCount.textContent = `${filteredEvents.length} in view`;
   elements.workspaceLastEvent.textContent = lastEvent
@@ -796,7 +921,7 @@ function renderDoseFormState() {
 
 function renderMedicationSuggestions() {
   const suggestions = [
-    ...drugReferenceLibrary.map(entry => entry.drug).filter(Boolean),
+    ...drugReferenceLibrary.flatMap(entry => [entry.drug, ...(entry.aliases || [])]).filter(Boolean),
     ...state.catalogDrugs.map(entry => entry.name).filter(Boolean),
   ];
   const uniqueSuggestions = [...new Set(suggestions)].sort((a, b) => a.localeCompare(b));
@@ -930,7 +1055,7 @@ function renderEventsTable(filteredEvents) {
       const index = state.doseEvents.indexOf(event);
 
       return `
-        <tr>
+        <tr data-index="${index}" class="dose-row">
           <td>${escapeHtml(getDoseEventDrugName(event))}</td>
           <td class="mono">${event.date}</td>
           <td class="mono">${event.endDate || 'Ongoing'}</td>
@@ -1144,7 +1269,9 @@ function handleDoseChartHover(event) {
   const x = (event.clientX - rect.left) * scaleX;
   const y = (event.clientY - rect.top) * scaleY;
   const hoveredGroup = findHoveredDrugGroup(renderModel, x, y);
+  const selectedDateKey = hoveredGroup ? findNearestPointDateKey(renderModel, x) : null;
 
+  state.chartHover.selectedDateKey = selectedDateKey;
   setHoveredDrugGroup(hoveredGroup);
 }
 
@@ -1240,6 +1367,107 @@ function setHoveredDrugGroup(group) {
   renderChartHoverCard(group);
 }
 
+function getHoveredDrugGroup() {
+  if (!state.chartHover.drugKey || !state.chartHover.renderModel?.drugGroups?.length) {
+    return null;
+  }
+
+  return (
+    state.chartHover.renderModel.drugGroups.find(group => group.key === state.chartHover.drugKey) ??
+    null
+  );
+}
+
+function getPreferredEditableDoseEvent(group) {
+  if (!group?.events?.length) {
+    return null;
+  }
+
+  return group.events.reduce((latest, event) => {
+    if (!latest) {
+      return event;
+    }
+
+    const latestEnd = getDoseEventAnchorEnd(latest);
+    const eventEnd = getDoseEventAnchorEnd(event);
+
+    if (eventEnd !== latestEnd) {
+      return eventEnd > latestEnd ? event : latest;
+    }
+
+    return event.date > latest.date ? event : latest;
+  }, null);
+}
+
+function getEditableDoseEventForHoverSelection(group) {
+  if (!group) {
+    return null;
+  }
+
+  const selectedDateKey = state.chartHover.selectedDateKey;
+  if (!selectedDateKey) {
+    return getPreferredEditableDoseEvent(group);
+  }
+
+  return getEditableDoseEventForDate(group, selectedDateKey) ?? getPreferredEditableDoseEvent(group);
+}
+
+function getEditableDoseEventForDate(group, dateKey) {
+  if (!group?.events?.length || !dateKey) {
+    return null;
+  }
+
+  const matchingEvents = group.events.filter(event => {
+    const eventStart = event.date;
+    const eventEnd = getDoseEventAnchorEnd(event);
+    return eventStart <= dateKey && eventEnd >= dateKey;
+  });
+
+  if (!matchingEvents.length) {
+    return null;
+  }
+
+  return matchingEvents.reduce((best, event) => {
+    if (!best) {
+      return event;
+    }
+
+    const bestEnd = getDoseEventAnchorEnd(best);
+    const eventEnd = getDoseEventAnchorEnd(event);
+
+    if (event.date !== best.date) {
+      return event.date > best.date ? event : best;
+    }
+
+    return eventEnd > bestEnd ? event : best;
+  }, null);
+}
+
+function findNearestPointDateKey(renderModel, x) {
+  const { points, padding, chartWidth } = renderModel;
+  if (!points?.length) {
+    return null;
+  }
+
+  const xForIndex = index =>
+    points.length > 1
+      ? padding.left + (chartWidth * index) / (points.length - 1)
+      : padding.left + chartWidth / 2;
+
+  let nearestIndex = 0;
+  let nearestDistance = Number.POSITIVE_INFINITY;
+
+  points.forEach((point, index) => {
+    const distance = Math.abs(x - xForIndex(index));
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearestIndex = index;
+    }
+  });
+
+  return points[nearestIndex]?.date ?? null;
+}
+
 function renderChartHoverCard(group) {
   if (!elements.chartHoverCard) {
     return;
@@ -1252,6 +1480,7 @@ function renderChartHoverCard(group) {
   }
 
   const definition = buildStaticLineDefinition(group, state.chartHover.renderModel?.range);
+  const editableEvent = getEditableDoseEventForHoverSelection(group);
   elements.chartHoverCard.innerHTML = `
     <p class="chart-hover-eyebrow">Hovered plot line</p>
     <strong>${escapeHtml(definition.drugName)}</strong>
@@ -1261,6 +1490,11 @@ function renderChartHoverCard(group) {
       <dt>Time frame</dt>
       <dd>${escapeHtml(definition.timeframeText)}</dd>
     </dl>
+    ${
+      editableEvent
+        ? `<button type="button" class="table-action secondary chart-hover-edit" data-action="edit-hovered-dose">Edit plotted dose near cursor</button>`
+        : ''
+    }
   `;
   elements.chartHoverCard.classList.remove('hidden');
 }
@@ -2159,7 +2393,7 @@ function monthsBetween(startDate, endDate) {
 }
 
 function displayEventUnit() {
-  return state.settings.doseUnit.replace('/day', '');
+  return (state.settings.doseUnit || 'units').replace('/day', '');
 }
 
 function formatDateInput(date) {
@@ -2188,9 +2422,35 @@ function shortDate(dateString) {
 }
 
 function formatNumber(value) {
+  if (!Number.isFinite(Number(value))) {
+    return 'Not set';
+  }
+
   return new Intl.NumberFormat('en-US', {
     maximumFractionDigits: 1,
-  }).format(value);
+  }).format(Number(value));
+}
+
+function parsePositiveNumber(value) {
+  const trimmed = String(value ?? '').trim();
+
+  if (!trimmed) {
+    return null;
+  }
+
+  const parsed = Number(trimmed);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+}
+
+function formatWorkspaceMaxDose() {
+  const hasMaxDose = Number.isFinite(Number(state.settings.maxDose)) && Number(state.settings.maxDose) > 0;
+  const unitLabel = state.settings.doseUnit || 'units/day';
+
+  if (!hasMaxDose) {
+    return `Not set ${unitLabel}`;
+  }
+
+  return `${formatNumber(state.settings.maxDose)} ${unitLabel}`;
 }
 
 function normalizeTimeframe(timeframe) {
@@ -2340,21 +2600,20 @@ async function loadProfiles() {
 }
 
 async function saveProfile() {
+  const activeProfile = getActiveProfile();
   const profileName =
     elements.profileName.value.trim() ||
-    `${state.settings.patientName} · ${state.settings.medicationName} · ${formatDateInput(new Date())}`;
-  const graphState = buildStaticGraphStateSnapshot();
+    resolveProfileIdentityName(activeProfile) ||
+    `${state.settings.medicationName || 'Medication'} · ${formatDateInput(new Date())}`;
+  const profilePayload = buildProfilePayload(profileName);
 
-  const profilePayload = {
-    name: profileName,
-    payload: {
-      settings: { ...state.settings },
-      doseEvents: state.doseEvents.map(event =>
-        Object.fromEntries(Object.entries(event).filter(([key]) => key !== 'id'))
-      ),
-      graphState,
-    },
-  };
+  if (activeProfile && canPersistProfile(activeProfile)) {
+    await updatePersistedProfile(activeProfile, profilePayload);
+    renderProfileList();
+    elements.profileName.value = '';
+    render();
+    return;
+  }
 
   if (state.auth.account?.id) {
     if (state.auth.account.source === 'api') {
@@ -2363,7 +2622,9 @@ async function saveProfile() {
         name: profileName,
         payload: profilePayload.payload,
       });
-      state.profiles.push(normalizeProfile(createdProfile));
+      const normalizedProfile = normalizeProfile(createdProfile);
+      state.profiles.push(normalizedProfile);
+      state.activeProfileId = normalizedProfile.id;
       state.profileStorageMode = 'account';
     } else {
       const now = new Date().toISOString();
@@ -2376,6 +2637,7 @@ async function saveProfile() {
         updatedAt: now,
       });
       state.profiles.push(accountProfile);
+      state.activeProfileId = accountProfile.id;
       state.profileStorageMode = 'account';
       persistAccountProfiles(state.auth.account.id, state.profiles);
     }
@@ -2387,6 +2649,7 @@ async function saveProfile() {
       createdAt: new Date().toISOString(),
     });
     state.profiles.push(localProfile);
+    state.activeProfileId = localProfile.id;
     state.profileStorageMode = 'local';
     persistLocalProfiles();
   }
@@ -2396,6 +2659,10 @@ async function saveProfile() {
 }
 
 function renderProfileList() {
+  if (state.activeProfileId && !getActiveProfile()) {
+    state.activeProfileId = null;
+  }
+
   if (!state.profiles.length) {
     elements.profileStatusText.textContent = 'No saved profiles yet.';
     elements.profileList.innerHTML = '<p class="empty-state">No saved profiles yet.</p>';
@@ -2414,7 +2681,7 @@ function renderProfileList() {
   elements.profileList.innerHTML = filteredProfiles
     .map(
       profile => `
-      <div class="profile-item">
+      <div class="profile-item ${profile.id === state.activeProfileId ? 'active' : ''}">
         <div class="profile-info">
           <h4>${escapeHtml(profile.name)}</h4>
           <p>${escapeHtml(
@@ -2422,7 +2689,7 @@ function renderProfileList() {
               ...new Set(profile.doseEvents.map(event => getDoseEventDrugName(event)).filter(Boolean)),
             ].join(', ') || profile.settings.medicationName
           )} (${escapeHtml(profile.settings.medicationRoute)}) · ${profile.doseEvents.length} dose segments · ${formatProfileStorageLabel(profile)}</p>
-          <p>Saved ${formatDisplayDate(new Date(profile.createdAt))}</p>
+          <p>${profile.id === state.activeProfileId ? 'Loaded in Step 1 · ' : ''}Saved ${formatDisplayDate(new Date(profile.createdAt))}</p>
         </div>
         <div class="profile-actions">
           <button class="table-action secondary" data-action="load" data-profile-id="${profile.id}">Load</button>
@@ -2461,6 +2728,9 @@ async function deleteProfile(profileId) {
   }
 
   state.profiles = state.profiles.filter(entry => entry.id !== profileId);
+  if (state.activeProfileId === String(profileId)) {
+    state.activeProfileId = null;
+  }
   if (state.auth.account?.id && profile.accountId === String(state.auth.account.id)) {
     if (state.auth.account.source === 'api') {
       await apiDelete(`/profiles/${profile.id}`);
@@ -2485,6 +2755,13 @@ async function renameProfile(profileId) {
   }
 
   profile.name = nextName;
+  profile.settings = {
+    ...profile.settings,
+    patientName: nextName,
+  };
+  if (state.activeProfileId === profile.id) {
+    state.settings.patientName = nextName;
+  }
   profile.updatedAt = new Date().toISOString();
   if (state.auth.account?.id && profile.accountId === String(state.auth.account.id)) {
     if (state.auth.account.source === 'api') {
@@ -2502,7 +2779,7 @@ async function renameProfile(profileId) {
   } else {
     persistLocalProfiles();
   }
-  renderProfileList();
+  render();
 }
 
 function getVisibleProfiles() {
@@ -2599,6 +2876,82 @@ function normalizeProfile(profile) {
     createdAt: profile.createdAt ?? new Date().toISOString(),
     updatedAt: profile.updatedAt ?? profile.createdAt ?? new Date().toISOString(),
   };
+}
+
+function buildProfilePayload(profileName) {
+  const resolvedPatientName = profileName || state.settings.patientName.trim();
+  const graphState = {
+    ...buildStaticGraphStateSnapshot(),
+    patientName: resolvedPatientName,
+  };
+
+  return {
+    name: profileName,
+    payload: {
+      settings: {
+        ...state.settings,
+        patientName: resolvedPatientName,
+      },
+      doseEvents: state.doseEvents.map(event =>
+        Object.fromEntries(Object.entries(event).filter(([key]) => key !== 'id'))
+      ),
+      graphState,
+    },
+  };
+}
+
+async function updatePersistedProfile(profile, profilePayload) {
+  profile.name = profilePayload.name;
+  profile.settings = profilePayload.payload.settings;
+  profile.graphState = profilePayload.payload.graphState;
+  profile.doseEvents = profilePayload.payload.doseEvents.map(normalizeDoseEvent);
+  profile.updatedAt = new Date().toISOString();
+
+  if (state.auth.account?.id && profile.accountId === String(state.auth.account.id)) {
+    if (state.auth.account.source === 'api') {
+      await apiPut(`/profiles/${profile.id}`, {
+        name: profile.name,
+        payload: profilePayload.payload,
+      });
+    } else {
+      persistAccountProfiles(state.auth.account.id, state.profiles);
+    }
+    return;
+  }
+
+  persistLocalProfiles();
+}
+
+function queueActiveProfileSync() {
+  const activeProfile = getActiveProfile();
+  if (!activeProfile || !canPersistProfile(activeProfile)) {
+    return;
+  }
+
+  window.clearTimeout(state.profileSyncTimer);
+  state.profileSyncTimer = window.setTimeout(() => {
+    void syncActiveProfileToWorkspace();
+  }, 450);
+}
+
+async function syncActiveProfileToWorkspace() {
+  const activeProfile = getActiveProfile();
+  if (!activeProfile || !canPersistProfile(activeProfile)) {
+    return;
+  }
+
+  const profileName = resolveProfileIdentityName(activeProfile) || activeProfile.name;
+  if (!profileName) {
+    return;
+  }
+
+  try {
+    await updatePersistedProfile(activeProfile, buildProfilePayload(profileName));
+    renderProfileList();
+    renderPatientProfileStatus();
+  } catch (error) {
+    console.warn('Unable to sync the loaded profile after Step 1 changes:', error);
+  }
 }
 
 function serializeDoseEvent(event) {
@@ -2748,6 +3101,7 @@ function buildStaticGraphStateSnapshot() {
 function buildCurrentWorkspaceSnapshot() {
   return {
     version: 1,
+    activeProfileId: state.activeProfileId,
     settings: { ...state.settings },
     doseEvents: state.doseEvents.map(serializeDoseEvent),
     graphState: buildStaticGraphStateSnapshot(),
@@ -2775,15 +3129,18 @@ function applyWorkspaceSnapshot(snapshot) {
   state.doseEvents = Array.isArray(snapshot.doseEvents)
     ? snapshot.doseEvents.map(normalizeDoseEvent).sort((left, right) => left.date.localeCompare(right.date))
     : [];
+  state.activeProfileId = snapshot.activeProfileId ? String(snapshot.activeProfileId) : null;
   resetDoseForm();
   return true;
 }
 
 function applyProfileToWorkspace(profile) {
   restoreStaticGraphState(profile.graphState ?? null, profile.settings);
+  state.settings.patientName = profile.name || profile.settings.patientName || '';
   state.doseEvents = profile.doseEvents
     .map(normalizeDoseEvent)
     .sort((left, right) => left.date.localeCompare(right.date));
+  state.activeProfileId = profile.id;
   resetDoseForm();
 }
 

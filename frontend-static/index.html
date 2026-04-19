@@ -3,22 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PercentDoseGraph Static Type</title>
+    <title>Simple MedGraphF Basic</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body>
     <div class="app-shell">
       <header class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">Medication Dose Trend Viewer</p>
-          <h1>See drug exposure as a percent of the patient-specific maximum dose.</h1>
+          <p class="eyebrow">Simple MedGraphF Basic</p>
+          <h1>Use the simple front page for core medication dose graphing.</h1>
           <p class="hero-text">
-            Build a medication timeline, compare each dose against a patient-specific ceiling, and
-            review the pattern across days to years without losing the clinical context.
+            Enter the medication, patient label, route, reference max dose, and dose dates in one
+            place. This basic page focuses on the core graph functions without requiring account
+            registration.
           </p>
         </div>
         <div class="hero-card">
-          <p class="card-label">Current view</p>
+          <p class="card-label">Basic functions</p>
           <p class="card-value" id="headlinePercent">0</p>
           <p class="card-caption">Days above 80% of max in the selected window</p>
         </div>
@@ -28,7 +29,8 @@
         <p class="eyebrow">Workspace snapshot</p>
         <p class="workspace-heading-copy">
           Keep the active patient, medication, dose ceiling, and recent events visible while you
-          enter or review data.
+          enter or review data. For account registration, saved profiles, and backend sync, use the
+          React account page.
         </p>
       </div>
 
@@ -79,8 +81,11 @@
             <datalist id="medicationSuggestions"></datalist>
             <label>
               Patient
-              <input id="patientName" name="patientName" type="text" value="Example Patient" />
+              <input id="patientName" name="patientName" type="text" />
             </label>
+            <p id="patientProfileStatus" class="workspace-detail">
+              Patient name can become the saved profile ID for this workspace.
+            </p>
             <label>
               Route of administration
               <select id="medicationRoute" name="medicationRoute">
@@ -96,11 +101,11 @@
             </label>
             <label>
               Dose unit
-              <input id="doseUnit" name="doseUnit" type="text" value="mg/day" />
+              <input id="doseUnit" name="doseUnit" type="text" />
             </label>
             <label>
               Reference maximum dose for this patient and route
-              <input id="maxDose" name="maxDose" type="number" min="0.1" step="0.1" value="120" />
+              <input id="maxDose" name="maxDose" type="text" inputmode="decimal" />
             </label>
             <label>
               Assessment window

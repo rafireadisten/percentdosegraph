@@ -94,6 +94,14 @@ select {
   line-height: 1.5;
 }
 
+.dose-row {
+  cursor: pointer;
+}
+
+.dose-row:hover {
+  background: rgba(13, 124, 102, 0.06);
+}
+
 .hero-copy,
 .hero-card,
 .panel {
@@ -562,6 +570,10 @@ tbody tr:last-child td {
   line-height: 1.45;
 }
 
+.chart-hover-edit {
+  margin-top: 12px;
+}
+
 .chart-legend {
   display: flex;
   flex-wrap: wrap;
@@ -756,6 +768,12 @@ canvas {
 
 .profile-item:hover {
   background: rgba(255, 252, 247, 0.94);
+}
+
+.profile-item.active {
+  border-color: rgba(13, 124, 102, 0.35);
+  box-shadow: 0 0 0 1px rgba(13, 124, 102, 0.12);
+  background: rgba(226, 246, 239, 0.86);
 }
 
 .profile-info h4 {
