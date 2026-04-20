@@ -4,6 +4,12 @@ All notable project changes should be recorded in this file.
 
 ## 2026-04-20
 
+<!-- MARKER: PDG-RHEUM-ORAL-2026-04-20 -->
+### `feat: add top oral rheumatology drugs with multilingual alias coverage`
+- <!-- MARKER: PDG-RHEUM-DB-DATA-2026-04-20 --> Added five oral rheumatology medications to `data/drugs.json`: Methotrexate, Hydroxychloroquine, Leflunomide, Sulfasalazine, and Tofacitinib.
+- <!-- MARKER: PDG-RHEUM-DB-REF-2026-04-20 --> Added matching PO reference entries to `drug-library.json` for max-dose inference and static library suggestion workflows.
+- <!-- MARKER: PDG-RHEUM-ALIASES-2026-04-20 --> Included English generic/brand fields and Romanian alias mappings (`roAliases`) for each added rheumatology medication.
+
 <!-- MARKER: PDG-CHANGESET-2026-04-20 -->
 ### `feat: expand multilingual drug matching and retain active graph interactions`
 - <!-- MARKER: PDG-RO-ALIASES-2026-04-20 --> Added Romanian brand/generic alias coverage to both reference and catalog drug datasets using `roAliases` so Romanian medication names resolve to the same normalized drug match as existing English aliases.

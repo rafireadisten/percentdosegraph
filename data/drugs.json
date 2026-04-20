@@ -2868,5 +2868,97 @@
     "maxSingleDose": 20,
     "unit": "mcg",
     "notes": "Daily GLP-1 receptor agonist entry added to expand incretin coverage."
+  },
+  {
+    "id": 184,
+    "name": "Methotrexate",
+    "genericName": "Methotrexate",
+    "brandName": "Trexall",
+    "aliases": [
+      "Rheumatrex",
+      "Trexall"
+    ],
+    "roAliases": [
+      "metotrexat",
+      "ebetrexat"
+    ],
+    "drugClass": "Conventional synthetic DMARD",
+    "maxDailyDose": 25,
+    "maxSingleDose": 25,
+    "unit": "mg",
+    "notes": "Oral rheumatology starter reference. Commonly prescribed as weekly dosing; scalar retained for trend comparison workflows."
+  },
+  {
+    "id": 185,
+    "name": "Hydroxychloroquine",
+    "genericName": "Hydroxychloroquine",
+    "brandName": "Plaquenil",
+    "aliases": [
+      "Plaquenil"
+    ],
+    "roAliases": [
+      "hidroxiclorochina",
+      "plaquenil"
+    ],
+    "drugClass": "Conventional synthetic DMARD",
+    "maxDailyDose": 400,
+    "maxSingleDose": 400,
+    "unit": "mg",
+    "notes": "Oral rheumatology starter reference used for comparison trending in autoimmune disease regimens."
+  },
+  {
+    "id": 186,
+    "name": "Leflunomide",
+    "genericName": "Leflunomide",
+    "brandName": "Arava",
+    "aliases": [
+      "Arava"
+    ],
+    "roAliases": [
+      "leflunomida",
+      "arava"
+    ],
+    "drugClass": "Conventional synthetic DMARD",
+    "maxDailyDose": 20,
+    "maxSingleDose": 20,
+    "unit": "mg",
+    "notes": "Oral rheumatology starter reference for disease-modifying therapy comparison."
+  },
+  {
+    "id": 187,
+    "name": "Sulfasalazine",
+    "genericName": "Sulfasalazine",
+    "brandName": "Azulfidine",
+    "aliases": [
+      "Azulfidine",
+      "Salazopyrin"
+    ],
+    "roAliases": [
+      "sulfasalazina",
+      "salazopirina"
+    ],
+    "drugClass": "Conventional synthetic DMARD",
+    "maxDailyDose": 3000,
+    "maxSingleDose": 1000,
+    "unit": "mg",
+    "notes": "Oral rheumatology starter reference for inflammatory arthritis trend comparisons."
+  },
+  {
+    "id": 188,
+    "name": "Tofacitinib",
+    "genericName": "Tofacitinib",
+    "brandName": "Xeljanz",
+    "aliases": [
+      "Xeljanz"
+    ],
+    "roAliases": [
+      "tofacitinib",
+      "xeljanz"
+    ],
+    "drugClass": "Targeted synthetic DMARD (JAK inhibitor)",
+    "maxDailyDose": 11,
+    "maxSingleDose": 11,
+    "unit": "mg",
+    "notes": "Oral rheumatology starter reference for JAK inhibitor regimen comparison."
   }
 ]

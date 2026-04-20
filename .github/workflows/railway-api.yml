@@ -12,6 +12,13 @@ on:
       - '.github/workflows/railway-api.yml'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-api-main
+  cancel-in-progress: true
+
 jobs:
   deploy-api:
     runs-on: ubuntu-latest
@@ -35,6 +42,20 @@ jobs:
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli
+
+      - name: Validate Railway secrets
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
+        run: |
+          if [ -z "${RAILWAY_TOKEN}" ]; then
+            echo "RAILWAY_TOKEN is missing in repository or environment secrets." >&2
+            exit 1
+          fi
+          if [ -z "${RAILWAY_SERVICE_ID}" ]; then
+            echo "RAILWAY_SERVICE_ID is missing in repository or environment secrets." >&2
+            exit 1
+          fi
 
       - name: Deploy API to Railway
         env:

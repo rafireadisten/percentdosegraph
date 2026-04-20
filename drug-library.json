@@ -2719,5 +2719,82 @@
     "roAliases": [
       "monurol"
     ]
+  },
+  {
+    "drug": "Methotrexate",
+    "aliases": [
+      "Rheumatrex",
+      "Trexall"
+    ],
+    "roAliases": [
+      "metotrexat",
+      "ebetrexat"
+    ],
+    "route": "PO",
+    "maxDose": 25,
+    "unit": "mg/week",
+    "source": "Expanded oral rheumatology starter library",
+    "note": "Weekly oral DMARD reference retained for trend comparison workflows."
+  },
+  {
+    "drug": "Hydroxychloroquine",
+    "aliases": [
+      "Plaquenil"
+    ],
+    "roAliases": [
+      "hidroxiclorochina",
+      "plaquenil"
+    ],
+    "route": "PO",
+    "maxDose": 400,
+    "unit": "mg/day",
+    "source": "Expanded oral rheumatology starter library",
+    "note": "Oral rheumatology starter reference for autoimmune maintenance comparisons."
+  },
+  {
+    "drug": "Leflunomide",
+    "aliases": [
+      "Arava"
+    ],
+    "roAliases": [
+      "leflunomida",
+      "arava"
+    ],
+    "route": "PO",
+    "maxDose": 20,
+    "unit": "mg/day",
+    "source": "Expanded oral rheumatology starter library",
+    "note": "Oral DMARD reference retained for trend comparison workflows."
+  },
+  {
+    "drug": "Sulfasalazine",
+    "aliases": [
+      "Azulfidine",
+      "Salazopyrin"
+    ],
+    "roAliases": [
+      "sulfasalazina",
+      "salazopirina"
+    ],
+    "route": "PO",
+    "maxDose": 3000,
+    "unit": "mg/day",
+    "source": "Expanded oral rheumatology starter library",
+    "note": "Oral anti-inflammatory DMARD reference for comparison trending."
+  },
+  {
+    "drug": "Tofacitinib",
+    "aliases": [
+      "Xeljanz"
+    ],
+    "roAliases": [
+      "tofacitinib",
+      "xeljanz"
+    ],
+    "route": "PO",
+    "maxDose": 11,
+    "unit": "mg/day",
+    "source": "Expanded oral rheumatology starter library",
+    "note": "Oral targeted synthetic DMARD (JAK inhibitor) reference for trend comparisons."
   }
 ]
