@@ -49138,6 +49138,7 @@ function App() {
   const [profileStatus, setProfileStatus] = (0, import_react56.useState)("");
   const [profileName, setProfileName] = (0, import_react56.useState)("");
   const [hoveredLineDrugId, setHoveredLineDrugId] = (0, import_react56.useState)(null);
+  const [selectedChartBucket, setSelectedChartBucket] = (0, import_react56.useState)(null);
   const [maxDoseDrafts, setMaxDoseDrafts] = (0, import_react56.useState)({});
   const [isAuthenticated, setIsAuthenticated] = (0, import_react56.useState)(Boolean(sessionDefaults.token));
   const [user, setUser] = (0, import_react56.useState)(sessionDefaults.account);
@@ -49416,6 +49417,20 @@ function App() {
       medicationEntries
     });
   }, [drugLookup, filteredEvents, hoveredLineDrugId, medicationEntries, range4, route, timeframe]);
+  const selectedChartEvents = (0, import_react56.useMemo)(() => {
+    if (!selectedChartBucket?.date || !selectedChartBucket?.endDate) {
+      return [];
+    }
+    const bucketStart = selectedChartBucket.date;
+    const bucketEnd = selectedChartBucket.endDate;
+    return filteredEvents.filter((event) => {
+      if (selectedChartBucket.drugId && String(event.drugId) !== String(selectedChartBucket.drugId)) {
+        return false;
+      }
+      const eventEndDate = event.resolvedEndDate ?? event.endDate ?? event.date;
+      return rangesOverlap(event.date, eventEndDate, bucketStart, bucketEnd);
+    });
+  }, [filteredEvents, selectedChartBucket]);
   function handleAddDrug(drug) {
     setDrugs((current3) => mergeDrugCatalog(current3, [drug]));
     setSelectedDrugIds((current3) => {
@@ -49699,6 +49714,40 @@ function App() {
       handleCancelDoseEdit();
     }
     setWorkspaceStatus("Deleted the selected dose event.");
+  }
+  function handleChartClick(state) {
+    const activePayload = state?.activePayload;
+    const activeLabel = state?.activeLabel;
+    if (!Array.isArray(activePayload) || !activePayload.length || !activeLabel) {
+      return;
+    }
+    const clickedSeries = activePayload.find((item) => String(item?.dataKey ?? "").startsWith("series:"));
+    const clickedPoint = clickedSeries?.payload ?? activePayload[0]?.payload;
+    if (!clickedSeries || !clickedPoint?.date) {
+      return;
+    }
+    const drugId = String(clickedSeries.dataKey).replace("series:", "");
+    const drug = drugLookup.get(drugId);
+    const matchingEvents = filteredEvents.filter((event) => {
+      if (String(event.drugId) !== drugId) {
+        return false;
+      }
+      const eventEndDate = event.resolvedEndDate ?? event.endDate ?? event.date;
+      return rangesOverlap(event.date, eventEndDate, clickedPoint.date, clickedPoint.endDate ?? clickedPoint.date);
+    });
+    setSelectedChartBucket({
+      drugId,
+      drugName: drug?.name ?? clickedSeries.name ?? "Selected drug",
+      label: activeLabel,
+      date: clickedPoint.date,
+      endDate: clickedPoint.endDate ?? clickedPoint.date,
+      percent: Number(clickedSeries.value ?? 0),
+      doseAmount: Number(clickedPoint[getDoseKey(drugId)] ?? 0),
+      eventCount: matchingEvents.length
+    });
+    setWorkspaceStatus(
+      matchingEvents.length ? `Selected ${matchingEvents.length} plotted dose event(s) for ${drug?.name ?? "the chosen drug"} from ${clickedPoint.date} to ${clickedPoint.endDate ?? clickedPoint.date}.` : `Selected the plotted ${drug?.name ?? "drug"} point for ${clickedPoint.date}.`
+    );
   }
   async function handleDoseEntrySubmit(event) {
     event.preventDefault();
@@ -50967,7 +51016,8 @@ function App() {
                 LineChart,
                 {
                   data: chartData,
-                  margin: { top: 12, right: 18, left: 0, bottom: 12 }
+                  margin: { top: 12, right: 18, left: 0, bottom: 12 },
+                  onClick: handleChartClick
                 },
                 h(CartesianGrid, {
                   stroke: "rgba(33, 49, 58, 0.12)",
@@ -51070,6 +51120,99 @@ function App() {
                 null,
                 medicationEntries.length ? `${medicationSummary.currentCount} current, ${medicationSummary.historicCount} historic, and ${medicationSummary.plannedCount} planned entry/entries are available for this patient list.` : "Add a few medications from the list entry module to start a reusable medication history."
               )
+            )
+          ),
+          h(
+            "section",
+            { className: "panel" },
+            h("h2", null, "Graph interaction"),
+            h(
+              "p",
+              null,
+              "This graph is rendered as F(x) = y where x is time and y is the selected medication dose expressed as % of max daily dose. Click any plotted line segment to inspect the underlying dose event(s) and jump into editing."
+            ),
+            selectedChartBucket ? h(
+              import_react56.default.Fragment,
+              null,
+              h(
+                "p",
+                { className: "helper" },
+                `${selectedChartBucket.drugName} \xB7 ${selectedChartBucket.label} \xB7 ${selectedChartBucket.percent.toFixed(1)}% max dose \xB7 ${selectedChartBucket.doseAmount.toFixed(1)} total visible units across ${selectedChartBucket.date === selectedChartBucket.endDate ? selectedChartBucket.date : `${selectedChartBucket.date} to ${selectedChartBucket.endDate}`}`
+              ),
+              h(
+                "div",
+                { className: "table-wrap" },
+                h(
+                  "table",
+                  { className: "table" },
+                  h(
+                    "thead",
+                    null,
+                    h(
+                      "tr",
+                      null,
+                      h("th", null, "Date"),
+                      h("th", null, "End"),
+                      h("th", null, "Dose"),
+                      h("th", null, "% Max"),
+                      h("th", null, "Notes"),
+                      h("th", null, "Actions")
+                    )
+                  ),
+                  h(
+                    "tbody",
+                    null,
+                    selectedChartEvents.length ? selectedChartEvents.map((event) => {
+                      const drug = drugLookup.get(event.drugId);
+                      const maxDose = drug?.maxDailyDose ?? 100;
+                      const percent = maxDose > 0 ? event.amount / maxDose * 100 : 0;
+                      return h(
+                        "tr",
+                        { key: `chart-selection-${event.id}` },
+                        h("td", null, event.date),
+                        h("td", null, event.endDate ?? event.resolvedEndDate ?? "\u2014"),
+                        h("td", null, `${event.amount.toFixed(1)} ${drug?.unit ?? "mg"}`),
+                        h("td", null, `${percent.toFixed(1)}%`),
+                        h("td", null, event.notes || "\u2014"),
+                        h(
+                          "td",
+                          { className: "table-actions" },
+                          h(
+                            "button",
+                            {
+                              type: "button",
+                              className: "pill-button secondary-button compact-button",
+                              onClick: () => handleStartDoseEdit(event)
+                            },
+                            "Edit"
+                          ),
+                          h(
+                            "button",
+                            {
+                              type: "button",
+                              className: "remove-button compact-button",
+                              onClick: () => handleDeleteDose(event.id)
+                            },
+                            "Delete"
+                          )
+                        )
+                      );
+                    }) : h(
+                      "tr",
+                      null,
+                      h(
+                        "td",
+                        { colSpan: 6 },
+                        "This plotted bucket does not map cleanly to a single editable event. Try a shorter timeframe for more granular point selection."
+                      )
+                    )
+                  )
+                )
+              )
+            ) : h(
+              "div",
+              { className: "empty small-empty" },
+              "Click a plotted line segment to review and edit the dose events behind that point."
             )
           )
         ),

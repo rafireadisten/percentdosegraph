@@ -2,6 +2,15 @@
 
 All notable project changes should be recorded in this file.
 
+## 2026-04-20
+
+<!-- MARKER: PDG-CHANGESET-2026-04-20 -->
+### `feat: expand multilingual drug matching and retain active graph interactions`
+- <!-- MARKER: PDG-RO-ALIASES-2026-04-20 --> Added Romanian brand/generic alias coverage to both reference and catalog drug datasets using `roAliases` so Romanian medication names resolve to the same normalized drug match as existing English aliases.
+- <!-- MARKER: PDG-STATIC-MATCH-2026-04-20 --> Updated static app inference and suggestion logic to include `roAliases` in match scoring and alias graph expansion.
+- <!-- MARKER: PDG-GRAPH-INTERACTION-2026-04-20 --> Retained the in-progress React graph click-selection interaction updates and related bundle refresh in the current workspace snapshot.
+- <!-- MARKER: PDG-LOCAL-SAMPLE-DATA-2026-04-20 --> Retained current local sample dose timeline updates in `data/doses.json` for the active working state.
+
 ## 2026-04-14
 
 ### `feat: publish deployment workflows and improve continuous dose graphing`

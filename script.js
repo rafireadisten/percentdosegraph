@@ -20,6 +20,8 @@ const STATIC_CHART_COLORS = [
 ];
 
 let drugReferenceLibrary = [];
+// MARKER: PDG-RO-ALIASES-2026-04-20
+let referenceAliasLookup = new Map();
 
 const state = {
   settings: {
@@ -572,6 +574,7 @@ async function loadDrugReferenceLibrary() {
         }
 
         drugReferenceLibrary = await attempt.json();
+        rebuildReferenceAliasLookup();
         state.libraryStatus.referenceLoaded = true;
         renderMedicationSuggestions();
         return;
@@ -583,6 +586,7 @@ async function loadDrugReferenceLibrary() {
   } catch (error) {
     console.error(error);
     drugReferenceLibrary = [];
+    rebuildReferenceAliasLookup();
     state.libraryStatus.referenceLoaded = false;
     elements.inferenceSummary.textContent =
       'Reference library failed to load. Inference is unavailable until drug-library.json is served correctly.';
@@ -921,8 +925,10 @@ function renderDoseFormState() {
 
 function renderMedicationSuggestions() {
   const suggestions = [
-    ...drugReferenceLibrary.flatMap(entry => [entry.drug, ...(entry.aliases || [])]).filter(Boolean),
-    ...state.catalogDrugs.map(entry => entry.name).filter(Boolean),
+    ...drugReferenceLibrary.flatMap(entry => getReferenceEntrySearchNames(entry)).filter(Boolean),
+    ...state.catalogDrugs
+      .flatMap(drug => getCatalogDrugSearchNames(drug))
+      .filter(Boolean),
   ];
   const uniqueSuggestions = [...new Set(suggestions)].sort((a, b) => a.localeCompare(b));
 
@@ -1917,7 +1923,7 @@ function findReferenceMatches(drugName, route) {
   const routeMatches = drugReferenceLibrary.filter(entry => entry.route === route);
   const scoredMatches = routeMatches
     .map(entry => {
-      const names = [entry.drug, ...(entry.aliases || [])].map(normalizeDrugName);
+      const names = getReferenceEntryNormalizedNames(entry);
       const score = Math.max(...names.map(name => scoreNormalizedMedicationMatch(normalizedName, name)));
 
       return { entry, score };
@@ -1942,7 +1948,7 @@ function findCatalogMatches(drugName, route) {
 
   return state.catalogDrugs
     .map(drug => {
-      const names = [...new Set([drug.name, drug.genericName].filter(Boolean).map(normalizeDrugName))];
+      const names = getCatalogDrugNormalizedNames(drug);
       const nameScore = Math.max(...names.map(name => scoreNormalizedMedicationMatch(normalizedName, name)));
       const routeScore =
         drug.routeMaxDoses && Object.prototype.hasOwnProperty.call(drug.routeMaxDoses, route)
@@ -1988,7 +1994,8 @@ function buildCatalogReferenceMatch(drug, route) {
 
   return {
     drug: drug.name,
-    aliases: [],
+    aliases: getCatalogDrugSearchNames(drug)
+      .filter(name => normalizeDrugName(name) !== normalizeDrugName(drug.name)),
     route,
     maxDose: routeMaxDose,
     unit: `${drug.unit}/day`,
@@ -2004,7 +2011,11 @@ function resolveMedicationBinding(drugName, route) {
   const match = referenceMatches[0] || buildCatalogReferenceMatch(catalogMatch, route);
   const normalizedName = normalizeDrugName(drugName);
   const matchScore = match
-    ? scoreNormalizedMedicationMatch(normalizedName, normalizeDrugName(match.drug))
+    ? Math.max(
+        ...getReferenceEntryNormalizedNames(match).map(name =>
+          scoreNormalizedMedicationMatch(normalizedName, name)
+        )
+      )
     : -1;
 
   return {
@@ -2038,6 +2049,110 @@ function scoreNormalizedMedicationMatch(input, candidate) {
 
 function normalizeDrugName(value) {
   return value.trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function getReferenceEntrySearchNames(entry) {
+  if (!entry) {
+    return [];
+  }
+
+  return [entry.drug, ...(entry.aliases || []), ...(entry.roAliases || [])].filter(Boolean);
+}
+
+function getReferenceEntryNormalizedNames(entry) {
+  return [...new Set(getReferenceEntrySearchNames(entry).map(normalizeDrugName))];
+}
+
+function rebuildReferenceAliasLookup() {
+  // MARKER: PDG-STATIC-MATCH-2026-04-20
+  const adjacency = new Map();
+
+  const ensureNode = name => {
+    if (!adjacency.has(name)) {
+      adjacency.set(name, new Set());
+    }
+  };
+
+  drugReferenceLibrary.forEach(entry => {
+    const names = getReferenceEntryNormalizedNames(entry);
+
+    names.forEach(name => {
+      ensureNode(name);
+    });
+
+    for (let index = 0; index < names.length; index += 1) {
+      for (let neighborIndex = index + 1; neighborIndex < names.length; neighborIndex += 1) {
+        const left = names[index];
+        const right = names[neighborIndex];
+        adjacency.get(left).add(right);
+        adjacency.get(right).add(left);
+      }
+    }
+  });
+
+  const lookup = new Map();
+  const visited = new Set();
+
+  adjacency.forEach((_, start) => {
+    if (visited.has(start)) {
+      return;
+    }
+
+    const stack = [start];
+    const component = new Set();
+    visited.add(start);
+
+    while (stack.length) {
+      const current = stack.pop();
+      component.add(current);
+
+      adjacency.get(current).forEach(neighbor => {
+        if (!visited.has(neighbor)) {
+          visited.add(neighbor);
+          stack.push(neighbor);
+        }
+      });
+    }
+
+    component.forEach(name => {
+      lookup.set(name, component);
+    });
+  });
+
+  referenceAliasLookup = lookup;
+}
+
+function getCatalogDrugSearchNames(drug) {
+  if (!drug) {
+    return [];
+  }
+
+  const directNames = [
+    drug.name,
+    drug.genericName,
+    drug.brandName,
+    ...(Array.isArray(drug.aliases) ? drug.aliases : []),
+    ...(Array.isArray(drug.roAliases) ? drug.roAliases : []),
+  ].filter(Boolean);
+
+  const expandedNormalizedNames = new Set(directNames.map(normalizeDrugName));
+
+  [...expandedNormalizedNames].forEach(name => {
+    const linkedNames = referenceAliasLookup.get(name);
+    if (!linkedNames) {
+      return;
+    }
+
+    linkedNames.forEach(linkedName => {
+      expandedNormalizedNames.add(linkedName);
+    });
+  });
+
+  return [...new Set([...directNames, ...expandedNormalizedNames])];
+}
+
+function getCatalogDrugNormalizedNames(drug) {
+  return [...new Set(getCatalogDrugSearchNames(drug).map(normalizeDrugName))];
 }
 
 function generateRandomMedGrafProfile() {

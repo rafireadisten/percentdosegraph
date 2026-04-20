@@ -1,39 +1,61 @@
 [
   {
     "drug": "Morphine",
-    "aliases": ["morphine sulfate"],
+    "aliases": [
+      "morphine sulfate"
+    ],
     "route": "PO",
     "maxDose": 120,
     "unit": "mg/day",
     "source": "Starter library reference",
-    "note": "Illustrative oral daily ceiling for percent-of-max trending."
+    "note": "Illustrative oral daily ceiling for percent-of-max trending.",
+    "roAliases": [
+      "morfina",
+      "mst continus"
+    ]
   },
   {
     "drug": "Morphine",
-    "aliases": ["morphine sulfate"],
+    "aliases": [
+      "morphine sulfate"
+    ],
     "route": "IV",
     "maxDose": 40,
     "unit": "mg/day",
     "source": "Starter library reference",
-    "note": "Illustrative IV daily ceiling kept separate from PO dosing."
+    "note": "Illustrative IV daily ceiling kept separate from PO dosing.",
+    "roAliases": [
+      "morfina",
+      "mst continus"
+    ]
   },
   {
     "drug": "Hydromorphone",
-    "aliases": ["dilaudid"],
+    "aliases": [
+      "dilaudid"
+    ],
     "route": "PO",
     "maxDose": 32,
     "unit": "mg/day",
     "source": "Starter library reference",
-    "note": "Illustrative oral reference entry."
+    "note": "Illustrative oral reference entry.",
+    "roAliases": [
+      "dilaudid"
+    ]
   },
   {
     "drug": "Hydromorphone",
-    "aliases": ["dilaudid"],
+    "aliases": [
+      "dilaudid"
+    ],
     "route": "IV",
     "maxDose": 12,
     "unit": "mg/day",
     "source": "Starter library reference",
-    "note": "Illustrative IV reference entry."
+    "note": "Illustrative IV reference entry.",
+    "roAliases": [
+      "dilaudid"
+    ]
   },
   {
     "drug": "Oxycodone",
@@ -42,43 +64,70 @@
     "maxDose": 80,
     "unit": "mg/day",
     "source": "Starter library reference",
-    "note": "Illustrative oral reference entry."
+    "note": "Illustrative oral reference entry.",
+    "roAliases": [
+      "oxycontin"
+    ]
   },
   {
     "drug": "Acetaminophen",
-    "aliases": ["paracetamol", "tylenol"],
+    "aliases": [
+      "paracetamol",
+      "tylenol"
+    ],
     "route": "PO",
     "maxDose": 4000,
     "unit": "mg/day",
     "source": "Starter library reference",
-    "note": "Common daily cap used as a starting reference only."
+    "note": "Common daily cap used as a starting reference only.",
+    "roAliases": [
+      "paracetamol",
+      "panadol"
+    ]
   },
   {
     "drug": "Acetaminophen",
-    "aliases": ["paracetamol", "tylenol"],
+    "aliases": [
+      "paracetamol",
+      "tylenol"
+    ],
     "route": "IV",
     "maxDose": 4000,
     "unit": "mg/day",
     "source": "Starter library reference",
-    "note": "IV tracked separately even when the numeric cap matches PO."
+    "note": "IV tracked separately even when the numeric cap matches PO.",
+    "roAliases": [
+      "paracetamol",
+      "panadol"
+    ]
   },
   {
     "drug": "Lorazepam",
-    "aliases": ["ativan"],
+    "aliases": [
+      "ativan"
+    ],
     "route": "PO",
     "maxDose": 10,
     "unit": "mg/day",
     "source": "Starter library reference",
-    "note": "Illustrative oral reference entry."
+    "note": "Illustrative oral reference entry.",
+    "roAliases": [
+      "ativan"
+    ]
   },
   {
     "drug": "Lorazepam",
-    "aliases": ["ativan"],
+    "aliases": [
+      "ativan"
+    ],
     "route": "IV",
     "maxDose": 8,
     "unit": "mg/day",
     "source": "Starter library reference",
-    "note": "Illustrative IV reference entry."
+    "note": "Illustrative IV reference entry.",
+    "roAliases": [
+      "ativan"
+    ]
   },
   {
     "drug": "Fentanyl",
@@ -87,7 +136,10 @@
     "maxDose": 600,
     "unit": "mcg/day",
     "source": "Starter library reference",
-    "note": "Illustrative IV reference entry using mcg/day."
+    "note": "Illustrative IV reference entry using mcg/day.",
+    "roAliases": [
+      "durogesic"
+    ]
   },
   {
     "drug": "Fentanyl",
@@ -96,38 +148,62 @@
     "maxDose": 100,
     "unit": "mcg/hr",
     "source": "Starter library reference",
-    "note": "Illustrative transdermal reference entry."
+    "note": "Illustrative transdermal reference entry.",
+    "roAliases": [
+      "durogesic"
+    ]
   },
   {
     "drug": "Allopurinol",
-    "aliases": ["allopurinol"],
+    "aliases": [
+      "allopurinol"
+    ],
     "route": "PO",
     "maxDose": 800,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Gout treatment; titrate from 100mg/day. Xanthine Oxidase Inhibitor."
+    "note": "Gout treatment; titrate from 100mg/day. Xanthine Oxidase Inhibitor.",
+    "roAliases": [
+      "milurit",
+      "zyloric"
+    ]
   },
   {
     "drug": "Tamsulosin",
-    "aliases": ["flomax"],
+    "aliases": [
+      "flomax"
+    ],
     "route": "PO",
     "maxDose": 0.8,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "BPH treatment; 0.4mg once daily. Alpha-1 Blocker (Uroselective)."
+    "note": "BPH treatment; 0.4mg once daily. Alpha-1 Blocker (Uroselective).",
+    "roAliases": [
+      "omnic",
+      "flomax"
+    ]
   },
   {
     "drug": "Levothyroxine",
-    "aliases": ["synthroid", "levoxyl"],
+    "aliases": [
+      "synthroid",
+      "levoxyl"
+    ],
     "route": "PO",
     "maxDose": 0.3,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Thyroid hormone replacement; typical 75–200mcg/day."
+    "note": "Thyroid hormone replacement; typical 75–200mcg/day.",
+    "roAliases": [
+      "euthyrox",
+      "synthroid"
+    ]
   },
   {
     "drug": "Vascepa",
-    "aliases": ["icosapent ethyl"],
+    "aliases": [
+      "icosapent ethyl"
+    ],
     "route": "PO",
     "maxDose": 4000,
     "unit": "mg/day",
@@ -136,7 +212,9 @@
   },
   {
     "drug": "Aspirin",
-    "aliases": ["acetylsalicylic acid"],
+    "aliases": [
+      "acetylsalicylic acid"
+    ],
     "route": "PO",
     "maxDose": 4000,
     "unit": "mg/day",
@@ -144,11 +222,17 @@
     "note": "Legacy general-use ceiling retained for compatibility. Antiplatelet-specific FDA normalization is still pending.",
     "maxDoseType": "legacy_reference_not_fda_normalized",
     "verificationStatus": "pending_fda_antiplatelet_normalization",
-    "fdaLabelNote": "Common cardioprotective dosing is reflected in other antiplatelet labels, but this aspirin entry has not yet been normalized to a dedicated FDA aspirin labeling source."
+    "fdaLabelNote": "Common cardioprotective dosing is reflected in other antiplatelet labels, but this aspirin entry has not yet been normalized to a dedicated FDA aspirin labeling source.",
+    "roAliases": [
+      "aspenter",
+      "acid acetilsalicilic"
+    ]
   },
   {
     "drug": "Atorvastatin",
-    "aliases": ["lipitor"],
+    "aliases": [
+      "lipitor"
+    ],
     "route": "PO",
     "maxDose": 80,
     "unit": "mg/day",
@@ -157,29 +241,51 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Dosage range is 10 mg to 80 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=b687ba81-cb24-bbdf-5dd9-ab0e53dd480b&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=b687ba81-cb24-bbdf-5dd9-ab0e53dd480b&type=pdf",
+    "roAliases": [
+      "sortis",
+      "atoris",
+      "lipitor"
+    ]
   },
   {
     "drug": "Amlodipine",
-    "aliases": ["norvasc"],
+    "aliases": [
+      "norvasc"
+    ],
     "route": "PO",
     "maxDose": 10,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "5–10mg/day. Calcium Channel Blocker."
+    "note": "5–10mg/day. Calcium Channel Blocker.",
+    "roAliases": [
+      "norvasc",
+      "amlodac"
+    ]
   },
   {
     "drug": "Metoprolol Tartrate",
-    "aliases": ["lopressor", "metoprolol"],
+    "aliases": [
+      "lopressor",
+      "metoprolol"
+    ],
     "route": "PO",
     "maxDose": 450,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "100mg BID typical; max 450mg/day. Beta Blocker (Beta-1 Selective)."
+    "note": "100mg BID typical; max 450mg/day. Beta Blocker (Beta-1 Selective).",
+    "roAliases": [
+      "betaloc",
+      "egiloc",
+      "lopressor",
+      "toprol xl"
+    ]
   },
   {
     "drug": "Losartan",
-    "aliases": ["cozaar"],
+    "aliases": [
+      "cozaar"
+    ],
     "route": "PO",
     "maxDose": 100,
     "unit": "mg/day",
@@ -188,47 +294,78 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_label_range_without_single_explicit_max",
     "fdaLabelSummary": "Losartan can be administered once or twice daily with total daily doses ranging from 25 mg to 100 mg; 150 mg did not give greater effect than 50 to 100 mg.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=372ba4ad-26ca-4675-8475-4b664fbecba9"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=372ba4ad-26ca-4675-8475-4b664fbecba9",
+    "roAliases": [
+      "lorista",
+      "cozaar"
+    ]
   },
   {
     "drug": "Dapagliflozin",
-    "aliases": ["farxiga"],
+    "aliases": [
+      "farxiga"
+    ],
     "route": "PO",
     "maxDose": 10,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "10mg/day; heart failure/T2DM. SGLT-2 Inhibitor."
+    "note": "10mg/day; heart failure/T2DM. SGLT-2 Inhibitor.",
+    "roAliases": [
+      "forxiga",
+      "farxiga"
+    ]
   },
   {
     "drug": "Omeprazole",
-    "aliases": ["prilosec"],
+    "aliases": [
+      "prilosec"
+    ],
     "route": "PO",
     "maxDose": 120,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "20–40mg/day; hypersecretory up to 120mg. Proton Pump Inhibitor."
+    "note": "20–40mg/day; hypersecretory up to 120mg. Proton Pump Inhibitor.",
+    "roAliases": [
+      "losec",
+      "prilosec"
+    ]
   },
   {
     "drug": "Pantoprazole",
-    "aliases": ["protonix"],
+    "aliases": [
+      "protonix"
+    ],
     "route": "PO",
     "maxDose": 240,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "40mg/day; up to 240mg hypersecretory. Proton Pump Inhibitor."
+    "note": "40mg/day; up to 240mg hypersecretory. Proton Pump Inhibitor.",
+    "roAliases": [
+      "controloc",
+      "protonix"
+    ]
   },
   {
     "drug": "Vitamin D3",
-    "aliases": ["cholecalciferol"],
+    "aliases": [
+      "cholecalciferol"
+    ],
     "route": "PO",
     "maxDose": 4000,
     "unit": "IU/day",
     "source": "Expanded library from Replit",
-    "note": "OTC safe upper limit 4000 IU/day. Fat-Soluble Vitamin."
+    "note": "OTC safe upper limit 4000 IU/day. Fat-Soluble Vitamin.",
+    "roAliases": [
+      "vigantol",
+      "cholecalciferol"
+    ]
   },
   {
     "drug": "Lisinopril",
-    "aliases": ["prinivil", "zestril"],
+    "aliases": [
+      "prinivil",
+      "zestril"
+    ],
     "route": "PO",
     "maxDose": 80,
     "unit": "mg/day",
@@ -237,56 +374,92 @@
     "maxDoseType": "fda_labeled_upper_studied_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The usual dosage range is 20 mg to 40 mg per day; doses up to 80 mg have been used but do not appear to give greater effect.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=b17cd16b-8d0a-4cfa-bd48-2529983fcd12&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=b17cd16b-8d0a-4cfa-bd48-2529983fcd12&type=pdf",
+    "roAliases": [
+      "diroton",
+      "zestril",
+      "prinivil"
+    ]
   },
   {
     "drug": "Metformin",
-    "aliases": ["glucophage"],
+    "aliases": [
+      "glucophage"
+    ],
     "route": "PO",
     "maxDose": 2550,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "500–2550mg/day in divided doses. Biguanide."
+    "note": "500–2550mg/day in divided doses. Biguanide.",
+    "roAliases": [
+      "siofor",
+      "glucophage"
+    ]
   },
   {
     "drug": "Linagliptin",
-    "aliases": ["tradjenta"],
+    "aliases": [
+      "tradjenta"
+    ],
     "route": "PO",
     "maxDose": 5,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "5mg once daily; renal-dose not required. DPP-4 Inhibitor."
+    "note": "5mg once daily; renal-dose not required. DPP-4 Inhibitor.",
+    "roAliases": [
+      "tradjenta"
+    ]
   },
   {
     "drug": "Empagliflozin",
-    "aliases": ["jardiance"],
+    "aliases": [
+      "jardiance"
+    ],
     "route": "PO",
     "maxDose": 25,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "10–25mg/day. SGLT-2 Inhibitor."
+    "note": "10–25mg/day. SGLT-2 Inhibitor.",
+    "roAliases": [
+      "jardiance"
+    ]
   },
   {
     "drug": "Semaglutide",
-    "aliases": ["ozempic", "wegovy"],
+    "aliases": [
+      "ozempic",
+      "wegovy"
+    ],
     "route": "SC",
     "maxDose": 2,
     "unit": "mg/week",
     "source": "Expanded library from Replit",
-    "note": "Weekly injection; max 2mg/week. GLP-1 Receptor Agonist."
+    "note": "Weekly injection; max 2mg/week. GLP-1 Receptor Agonist.",
+    "roAliases": [
+      "ozempic",
+      "wegovy",
+      "rybelsus"
+    ]
   },
   {
     "drug": "Gabapentin",
-    "aliases": ["neurontin"],
+    "aliases": [
+      "neurontin"
+    ],
     "route": "PO",
     "maxDose": 3600,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "300–3600mg/day in divided doses. Anticonvulsant / Neuropathic."
+    "note": "300–3600mg/day in divided doses. Anticonvulsant / Neuropathic.",
+    "roAliases": [
+      "neurontin"
+    ]
   },
   {
     "drug": "Rosuvastatin",
-    "aliases": ["crestor"],
+    "aliases": [
+      "crestor"
+    ],
     "route": "PO",
     "maxDose": 40,
     "unit": "mg/day",
@@ -295,11 +468,17 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The dosage range is 5 to 40 mg orally once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=a1021325-c108-41b9-91dc-f1202730bfd1"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=a1021325-c108-41b9-91dc-f1202730bfd1",
+    "roAliases": [
+      "crestor",
+      "rosucard"
+    ]
   },
   {
     "drug": "Carvedilol",
-    "aliases": ["coreg"],
+    "aliases": [
+      "coreg"
+    ],
     "route": "PO",
     "maxDose": 100,
     "unit": "mg/day",
@@ -308,115 +487,196 @@
   },
   {
     "drug": "Furosemide",
-    "aliases": ["lasix"],
+    "aliases": [
+      "lasix"
+    ],
     "route": "PO",
     "maxDose": 600,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "20–600mg/day oral. Loop Diuretic."
+    "note": "20–600mg/day oral. Loop Diuretic.",
+    "roAliases": [
+      "lasix"
+    ]
   },
   {
     "drug": "Spironolactone",
-    "aliases": ["aldactone"],
+    "aliases": [
+      "aldactone"
+    ],
     "route": "PO",
     "maxDose": 400,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "25–400mg/day. Potassium-Sparing Diuretic."
+    "note": "25–400mg/day. Potassium-Sparing Diuretic.",
+    "roAliases": [
+      "verospiron",
+      "aldactone"
+    ]
   },
   {
     "drug": "Hydrochlorothiazide",
-    "aliases": ["hctz"],
+    "aliases": [
+      "hctz"
+    ],
     "route": "PO",
     "maxDose": 50,
     "unit": "mg/day",
     "source": "Expanded static starter library",
-    "note": "12.5–50mg/day. Thiazide diuretic."
+    "note": "12.5–50mg/day. Thiazide diuretic.",
+    "roAliases": [
+      "esidrex",
+      "hctz"
+    ]
   },
   {
     "drug": "Chlorthalidone",
-    "aliases": ["thalitone"],
+    "aliases": [
+      "thalitone"
+    ],
     "route": "PO",
     "maxDose": 100,
     "unit": "mg/day",
     "source": "Expanded static starter library",
-    "note": "12.5–100mg/day. Thiazide-like diuretic."
+    "note": "12.5–100mg/day. Thiazide-like diuretic.",
+    "roAliases": [
+      "hygroton",
+      "thalitone"
+    ]
   },
   {
     "drug": "Valsartan",
-    "aliases": ["diovan"],
+    "aliases": [
+      "diovan"
+    ],
     "route": "PO",
     "maxDose": 320,
     "unit": "mg/day",
     "source": "Expanded static starter library",
-    "note": "80–320mg/day. Angiotensin receptor blocker."
+    "note": "80–320mg/day. Angiotensin receptor blocker.",
+    "roAliases": [
+      "diovan",
+      "valsacor"
+    ]
   },
   {
     "drug": "Metoprolol Succinate",
-    "aliases": ["toprol xl", "metoprolol xl"],
+    "aliases": [
+      "toprol xl",
+      "metoprolol xl"
+    ],
     "route": "PO",
     "maxDose": 400,
     "unit": "mg/day",
     "source": "Expanded static starter library",
-    "note": "25–400mg/day extended release. Beta-1 selective blocker."
+    "note": "25–400mg/day extended release. Beta-1 selective blocker.",
+    "roAliases": [
+      "betaloc",
+      "egiloc",
+      "lopressor",
+      "toprol xl"
+    ]
   },
   {
     "drug": "Pantoprazole",
-    "aliases": ["protonix"],
+    "aliases": [
+      "protonix"
+    ],
     "route": "IV",
     "maxDose": 240,
     "unit": "mg/day",
     "source": "Expanded static starter library",
-    "note": "IV PPI reference entry for severe acid suppression workflows."
+    "note": "IV PPI reference entry for severe acid suppression workflows.",
+    "roAliases": [
+      "controloc",
+      "protonix"
+    ]
   },
   {
     "drug": "Albuterol",
-    "aliases": ["salbutamol", "proair", "ventolin"],
+    "aliases": [
+      "salbutamol",
+      "proair",
+      "ventolin"
+    ],
     "route": "INH",
     "maxDose": 12,
     "unit": "puffs/day",
     "source": "Expanded static starter library",
-    "note": "Illustrative rescue inhaler cap for comparison trending."
+    "note": "Illustrative rescue inhaler cap for comparison trending.",
+    "roAliases": [
+      "salbutamol",
+      "ventolin"
+    ]
   },
   {
     "drug": "Prednisone",
-    "aliases": ["deltasone"],
+    "aliases": [
+      "deltasone"
+    ],
     "route": "PO",
     "maxDose": 80,
     "unit": "mg/day",
     "source": "Expanded static starter library",
-    "note": "Common short-course steroid ceiling for demo use."
+    "note": "Common short-course steroid ceiling for demo use.",
+    "roAliases": [
+      "deltasone"
+    ]
   },
   {
     "drug": "Insulin Glargine",
-    "aliases": ["lantus", "basaglar", "toujeo"],
+    "aliases": [
+      "lantus",
+      "basaglar",
+      "toujeo"
+    ],
     "route": "SC",
     "maxDose": 120,
     "unit": "units/day",
     "source": "Expanded static starter library",
-    "note": "Illustrative basal insulin reference for percent-of-max trending."
+    "note": "Illustrative basal insulin reference for percent-of-max trending.",
+    "roAliases": [
+      "lantus",
+      "toujeo",
+      "basaglar"
+    ]
   },
   {
     "drug": "Insulin Lispro",
-    "aliases": ["humalog", "admelog"],
+    "aliases": [
+      "humalog",
+      "admelog"
+    ],
     "route": "SC",
     "maxDose": 80,
     "unit": "units/day",
     "source": "Expanded static starter library",
-    "note": "Illustrative rapid-acting insulin daily cap for comparison."
+    "note": "Illustrative rapid-acting insulin daily cap for comparison.",
+    "roAliases": [
+      "humalog",
+      "admelog"
+    ]
   },
   {
     "drug": "Amoxicillin",
-    "aliases": ["amoxil"],
+    "aliases": [
+      "amoxil"
+    ],
     "route": "PO",
     "maxDose": 1750,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Adult tablet regimens: 875 mg every 12 hours or 500 mg every 8 hours."
+    "note": "Adult tablet regimens: 875 mg every 12 hours or 500 mg every 8 hours.",
+    "roAliases": [
+      "amoxil",
+      "ospamox"
+    ]
   },
   {
     "drug": "Simvastatin",
-    "aliases": ["zocor"],
+    "aliases": [
+      "zocor"
+    ],
     "route": "PO",
     "maxDose": 40,
     "unit": "mg/day",
@@ -425,11 +685,17 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The maximum recommended dosage is 40 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=462cc021-2c48-4665-b9a9-f293d153fb03"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=462cc021-2c48-4665-b9a9-f293d153fb03",
+    "roAliases": [
+      "zocor",
+      "vazilip"
+    ]
   },
   {
     "drug": "Pravastatin",
-    "aliases": ["pravachol"],
+    "aliases": [
+      "pravachol"
+    ],
     "route": "PO",
     "maxDose": 80,
     "unit": "mg/day",
@@ -438,11 +704,17 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Adults: recommended starting dosage is 40 mg to 80 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=4b01fa4d-65e6-4ece-a96b-8eeb561061c0"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=4b01fa4d-65e6-4ece-a96b-8eeb561061c0",
+    "roAliases": [
+      "pravachol"
+    ]
   },
   {
     "drug": "Lovastatin",
-    "aliases": ["mevacor", "altoprev"],
+    "aliases": [
+      "mevacor",
+      "altoprev"
+    ],
     "route": "PO",
     "maxDose": 80,
     "unit": "mg/day",
@@ -451,11 +723,17 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Lovastatin tablets are dosed up to 80 mg/day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b2f17323-2e08-462a-9a91-42f22bcaf53c"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b2f17323-2e08-462a-9a91-42f22bcaf53c",
+    "roAliases": [
+      "mevacor"
+    ]
   },
   {
     "drug": "Pitavastatin",
-    "aliases": ["livalo", "zypitamag"],
+    "aliases": [
+      "livalo",
+      "zypitamag"
+    ],
     "route": "PO",
     "maxDose": 4,
     "unit": "mg/day",
@@ -464,11 +742,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The maximum recommended dosage is 4 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9ad1ecb9-822d-47c1-9f6f-6f771fa0f924"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9ad1ecb9-822d-47c1-9f6f-6f771fa0f924",
+    "roAliases": [
+      "livalo"
+    ]
   },
   {
     "drug": "Fluvastatin",
-    "aliases": ["lescol"],
+    "aliases": [
+      "lescol"
+    ],
     "route": "PO",
     "maxDose": 80,
     "unit": "mg/day",
@@ -477,11 +760,17 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Adults: recommended starting dose is 40 mg to 80 mg daily; extended-release tablets are dosed at 80 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ccd6bbe1-e293-4e1c-9ec4-e6c217612e77"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ccd6bbe1-e293-4e1c-9ec4-e6c217612e77",
+    "roAliases": [
+      "lescol"
+    ]
   },
   {
     "drug": "Enalapril",
-    "aliases": ["vasotec", "epaned"],
+    "aliases": [
+      "vasotec",
+      "epaned"
+    ],
     "route": "PO",
     "maxDose": 40,
     "unit": "mg/day",
@@ -490,11 +779,17 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The dosage may be titrated upward until blood pressure is controlled or to a maximum of 40 mg daily.",
-    "fdaSourceUrl": "https://www.dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=a5c6e64c-a3ed-44f2-83e7-f4b62b6cd622&type=pdf"
+    "fdaSourceUrl": "https://www.dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=a5c6e64c-a3ed-44f2-83e7-f4b62b6cd622&type=pdf",
+    "roAliases": [
+      "renitec",
+      "vasotec"
+    ]
   },
   {
     "drug": "Ramipril",
-    "aliases": ["altace"],
+    "aliases": [
+      "altace"
+    ],
     "route": "PO",
     "maxDose": 20,
     "unit": "mg/day",
@@ -503,11 +798,17 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The usual maintenance dose following titration is 2.5 mg to 20 mg daily as a single dose or equally divided doses.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=a8cdec12-81d1-4ef4-82c0-d05d93c37a07"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=a8cdec12-81d1-4ef4-82c0-d05d93c37a07",
+    "roAliases": [
+      "tritace",
+      "altace"
+    ]
   },
   {
     "drug": "Benazepril",
-    "aliases": ["lotensin"],
+    "aliases": [
+      "lotensin"
+    ],
     "route": "PO",
     "maxDose": 80,
     "unit": "mg/day",
@@ -516,11 +817,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The studied dosing range is 10 to 80 mg; total daily doses above 80 mg have not been evaluated.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=decda177-7c1a-4d28-84fc-c6d7aa251561"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=decda177-7c1a-4d28-84fc-c6d7aa251561",
+    "roAliases": [
+      "lotensin"
+    ]
   },
   {
     "drug": "Captopril",
-    "aliases": ["capoten"],
+    "aliases": [
+      "capoten"
+    ],
     "route": "PO",
     "maxDose": 450,
     "unit": "mg/day",
@@ -529,11 +835,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "A maximum daily dose of 450 mg captopril tablets should not be exceeded.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=00871911-8c79-433c-87d5-181f4c973d5b&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=00871911-8c79-433c-87d5-181f4c973d5b&type=pdf",
+    "roAliases": [
+      "capoten"
+    ]
   },
   {
     "drug": "Fosinopril",
-    "aliases": ["monopril"],
+    "aliases": [
+      "monopril"
+    ],
     "route": "PO",
     "maxDose": 80,
     "unit": "mg/day",
@@ -542,11 +853,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Once-daily doses of 20 mg to 80 mg were used in trials; some patients are unlikely to have a further response to 80 mg.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=e8c794ba-8a15-4e3e-ba3b-1704887628cd"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=e8c794ba-8a15-4e3e-ba3b-1704887628cd",
+    "roAliases": [
+      "monopril"
+    ]
   },
   {
     "drug": "Moexipril",
-    "aliases": ["univasc"],
+    "aliases": [
+      "univasc"
+    ],
     "route": "PO",
     "maxDose": 30,
     "unit": "mg/day",
@@ -555,11 +871,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "In multiple dose studies, moexipril hydrochloride was studied in the dose range of 7.5 to 30 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=5c24072c-9769-4cb5-b8da-bf814d21391d&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=5c24072c-9769-4cb5-b8da-bf814d21391d&type=pdf",
+    "roAliases": [
+      "univasc"
+    ]
   },
   {
     "drug": "Perindopril",
-    "aliases": ["aceon"],
+    "aliases": [
+      "aceon"
+    ],
     "route": "PO",
     "maxDose": 16,
     "unit": "mg/day",
@@ -568,11 +889,17 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The dosage may be titrated upward until blood pressure is controlled or to a maximum of 16 mg per day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fcaefca9-e6ca-4c97-9eb8-7f1c619ce4d0"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fcaefca9-e6ca-4c97-9eb8-7f1c619ce4d0",
+    "roAliases": [
+      "prestarium",
+      "aceon"
+    ]
   },
   {
     "drug": "Quinapril",
-    "aliases": ["accupril"],
+    "aliases": [
+      "accupril"
+    ],
     "route": "PO",
     "maxDose": 80,
     "unit": "mg/day",
@@ -581,11 +908,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Most patients have required dosages of 20, 40, or 80 mg/day, given as a single dose or in two equally divided doses.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a62d0ed3-8fcc-45fb-9246-b57b08a11f60"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a62d0ed3-8fcc-45fb-9246-b57b08a11f60",
+    "roAliases": [
+      "accupril"
+    ]
   },
   {
     "drug": "Trandolapril",
-    "aliases": ["mavik"],
+    "aliases": [
+      "mavik"
+    ],
     "route": "PO",
     "maxDose": 4,
     "unit": "mg/day",
@@ -594,11 +926,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Trandolapril tablets are labeled in strengths up to 4 mg for oral once-daily administration.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=6f25ed16-e5e9-4170-b4b4-3b460887779e&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=6f25ed16-e5e9-4170-b4b4-3b460887779e&type=pdf",
+    "roAliases": [
+      "mavik"
+    ]
   },
   {
     "drug": "Irbesartan",
-    "aliases": ["avapro"],
+    "aliases": [
+      "avapro"
+    ],
     "route": "PO",
     "maxDose": 300,
     "unit": "mg/day",
@@ -607,11 +944,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The recommended initial dose is 150 mg once daily; 300 mg once daily is the upper labeled daily dose.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=5c125c2a-a709-4cf1-b2d5-6e1d24a77377"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=5c125c2a-a709-4cf1-b2d5-6e1d24a77377",
+    "roAliases": [
+      "avapro"
+    ]
   },
   {
     "drug": "Candesartan",
-    "aliases": ["atacand"],
+    "aliases": [
+      "atacand"
+    ],
     "route": "PO",
     "maxDose": 32,
     "unit": "mg/day",
@@ -620,11 +962,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Adult hypertension dosing ranges from 8 mg to 32 mg total daily dose.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=0f2b2fa3-249b-4756-a3f1-3223a004d9cb&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=0f2b2fa3-249b-4756-a3f1-3223a004d9cb&type=pdf",
+    "roAliases": [
+      "atacand"
+    ]
   },
   {
     "drug": "Olmesartan",
-    "aliases": ["benicar"],
+    "aliases": [
+      "benicar"
+    ],
     "route": "PO",
     "maxDose": 40,
     "unit": "mg/day",
@@ -633,11 +980,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The dose may be increased to a maximum of 40 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=a4ceea38-8fff-4317-be04-8dc22222ec70&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=a4ceea38-8fff-4317-be04-8dc22222ec70&type=pdf",
+    "roAliases": [
+      "benicar"
+    ]
   },
   {
     "drug": "Telmisartan",
-    "aliases": ["micardis"],
+    "aliases": [
+      "micardis"
+    ],
     "route": "PO",
     "maxDose": 80,
     "unit": "mg/day",
@@ -646,11 +998,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Hypertension dosing is 40 mg once daily, with a range of 40 to 80 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=56a72ddf-c2a2-45ce-91b1-1fcfbff52c10&type=display"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=56a72ddf-c2a2-45ce-91b1-1fcfbff52c10&type=display",
+    "roAliases": [
+      "micardis"
+    ]
   },
   {
     "drug": "Eprosartan",
-    "aliases": ["teveten"],
+    "aliases": [
+      "teveten"
+    ],
     "route": "PO",
     "maxDose": 800,
     "unit": "mg/day",
@@ -659,11 +1016,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_source_confirmation_needed",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder until the single-agent FDA label reference is normalized.",
-    "fdaSourceUrl": ""
+    "fdaSourceUrl": "",
+    "roAliases": [
+      "teveten"
+    ]
   },
   {
     "drug": "Azilsartan",
-    "aliases": ["edarbi"],
+    "aliases": [
+      "edarbi"
+    ],
     "route": "PO",
     "maxDose": 80,
     "unit": "mg/day",
@@ -672,11 +1034,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The recommended dose in adults is 80 mg taken orally once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=52b27c75-9f5a-4816-bafd-dace9d7d2063"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=52b27c75-9f5a-4816-bafd-dace9d7d2063",
+    "roAliases": [
+      "edarbi"
+    ]
   },
   {
     "drug": "Atenolol",
-    "aliases": ["tenormin"],
+    "aliases": [
+      "tenormin"
+    ],
     "route": "PO",
     "maxDose": 100,
     "unit": "mg/day",
@@ -685,11 +1052,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Atenolol is typically given as 50 mg once daily and may be increased to 100 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=59f296ff-48d4-4f26-b2a1-98cc82fc3c0c"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=59f296ff-48d4-4f26-b2a1-98cc82fc3c0c",
+    "roAliases": [
+      "tenormin"
+    ]
   },
   {
     "drug": "Bisoprolol",
-    "aliases": ["zebeta"],
+    "aliases": [
+      "zebeta"
+    ],
     "route": "PO",
     "maxDose": 20,
     "unit": "mg/day",
@@ -698,11 +1070,18 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Bisoprolol fumarate is studied and labeled in doses up to 20 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=b9bbf9ed-4781-42a9-bc3e-deda9f05e810&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=b9bbf9ed-4781-42a9-bc3e-deda9f05e810&type=pdf",
+    "roAliases": [
+      "concor",
+      "zebeta"
+    ]
   },
   {
     "drug": "Propranolol",
-    "aliases": ["inderal", "innopran xl"],
+    "aliases": [
+      "inderal",
+      "innopran xl"
+    ],
     "route": "PO",
     "maxDose": 320,
     "unit": "mg/day",
@@ -711,11 +1090,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_indication_and_formulation_specific_max",
     "fdaLabelSummary": "Propranolol oral dosing is highly indication-specific, with different labeled maxima across products and uses.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=1b11bc5a-006f-4950-baab-9af72d39f68e"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=1b11bc5a-006f-4950-baab-9af72d39f68e",
+    "roAliases": [
+      "inderal"
+    ]
   },
   {
     "drug": "Nadolol",
-    "aliases": ["corgard"],
+    "aliases": [
+      "corgard"
+    ],
     "route": "PO",
     "maxDose": 320,
     "unit": "mg/day",
@@ -724,11 +1108,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Doses up to 240 mg or 320 mg once daily may be needed.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=f11553f1-18ec-41b0-a7ad-1c9f21ef2c9f&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=f11553f1-18ec-41b0-a7ad-1c9f21ef2c9f&type=pdf",
+    "roAliases": [
+      "corgard"
+    ]
   },
   {
     "drug": "Nebivolol",
-    "aliases": ["bystolic"],
+    "aliases": [
+      "bystolic"
+    ],
     "route": "PO",
     "maxDose": 40,
     "unit": "mg/day",
@@ -737,11 +1126,17 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Nebivolol has been studied in dose ranges up to 40 mg once daily.",
-    "fdaSourceUrl": "https://www.dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=9a5e1bd8-f2b6-42e6-972d-09418528cd63&type=pdf"
+    "fdaSourceUrl": "https://www.dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=9a5e1bd8-f2b6-42e6-972d-09418528cd63&type=pdf",
+    "roAliases": [
+      "nebilet",
+      "bystolic"
+    ]
   },
   {
     "drug": "Labetalol",
-    "aliases": ["trandate"],
+    "aliases": [
+      "trandate"
+    ],
     "route": "PO",
     "maxDose": 2400,
     "unit": "mg/day",
@@ -750,11 +1145,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Patients with severe hypertension may require from 1200 mg to 2400 mg per day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=28c91727-e5a8-48b3-a4df-d7bec8feda40"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=28c91727-e5a8-48b3-a4df-d7bec8feda40",
+    "roAliases": [
+      "trandate"
+    ]
   },
   {
     "drug": "Acebutolol",
-    "aliases": ["sectral"],
+    "aliases": [
+      "sectral"
+    ],
     "route": "PO",
     "maxDose": 1200,
     "unit": "mg/day",
@@ -763,11 +1163,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Acebutolol dosing is generally 600 to 1200 mg per day after titration.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?audience=consumer&setid=fe2cd5c0-ee16-4bcb-ad92-3755881dbe79"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?audience=consumer&setid=fe2cd5c0-ee16-4bcb-ad92-3755881dbe79",
+    "roAliases": [
+      "sectral"
+    ]
   },
   {
     "drug": "Betaxolol",
-    "aliases": ["kerlone"],
+    "aliases": [
+      "kerlone"
+    ],
     "route": "PO",
     "maxDose": 40,
     "unit": "mg/day",
@@ -776,11 +1181,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Betaxolol doses of 20 mg and 40 mg once daily were studied.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=e198244d-fda3-4015-8c01-390f3f88e238"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=e198244d-fda3-4015-8c01-390f3f88e238",
+    "roAliases": [
+      "kerlone"
+    ]
   },
   {
     "drug": "Pindolol",
-    "aliases": ["visken"],
+    "aliases": [
+      "visken"
+    ],
     "route": "PO",
     "maxDose": 60,
     "unit": "mg/day",
@@ -789,11 +1199,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Divided dosages in the range of 10 mg to 60 mg daily have been shown to be effective.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a369da5a-ee4a-487f-9891-47955e565fb2"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a369da5a-ee4a-487f-9891-47955e565fb2",
+    "roAliases": [
+      "visken"
+    ]
   },
   {
     "drug": "Timolol",
-    "aliases": ["blocadren"],
+    "aliases": [
+      "blocadren"
+    ],
     "route": "PO",
     "maxDose": 60,
     "unit": "mg/day",
@@ -802,11 +1217,17 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_source_confirmation_needed",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder until a current oral timolol label reference is normalized.",
-    "fdaSourceUrl": ""
+    "fdaSourceUrl": "",
+    "roAliases": [
+      "blocadren"
+    ]
   },
   {
     "drug": "Sotalol",
-    "aliases": ["betapace", "sorine"],
+    "aliases": [
+      "betapace",
+      "sorine"
+    ],
     "route": "PO",
     "maxDose": 320,
     "unit": "mg/day",
@@ -815,11 +1236,18 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_indication_specific_max",
     "fdaLabelSummary": "Sotalol dosing differs materially by arrhythmia indication and renal function.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6f3145d7-f3c9-4456-a77d-d04c54f24668"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6f3145d7-f3c9-4456-a77d-d04c54f24668",
+    "roAliases": [
+      "betapace"
+    ]
   },
   {
     "drug": "Diltiazem",
-    "aliases": ["cardizem", "tiazac", "dilacor xr"],
+    "aliases": [
+      "cardizem",
+      "tiazac",
+      "dilacor xr"
+    ],
     "route": "PO",
     "maxDose": 540,
     "unit": "mg/day",
@@ -828,11 +1256,17 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Diltiazem extended-release capsules are studied in doses ranging from 120 mg to 540 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=66d650f4-93dc-4aa2-8908-f87d6691a875&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=66d650f4-93dc-4aa2-8908-f87d6691a875&type=pdf",
+    "roAliases": [
+      "cardizem"
+    ]
   },
   {
     "drug": "Verapamil",
-    "aliases": ["calan", "verelan"],
+    "aliases": [
+      "calan",
+      "verelan"
+    ],
     "route": "PO",
     "maxDose": 480,
     "unit": "mg/day",
@@ -841,11 +1275,17 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Extended-release verapamil labeling includes doses up to 480 mg/day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=4eb349bb-c46b-4809-81af-6f924a5e34ef"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=4eb349bb-c46b-4809-81af-6f924a5e34ef",
+    "roAliases": [
+      "calan"
+    ]
   },
   {
     "drug": "Nifedipine",
-    "aliases": ["procardia", "adalat cc"],
+    "aliases": [
+      "procardia",
+      "adalat cc"
+    ],
     "route": "PO",
     "maxDose": 120,
     "unit": "mg/day",
@@ -854,11 +1294,17 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Nifedipine extended-release products are labeled up to 120 mg/day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1f27bd46-5dde-4b2e-88c0-b450f4b94b84"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1f27bd46-5dde-4b2e-88c0-b450f4b94b84",
+    "roAliases": [
+      "adalat cc",
+      "procardia"
+    ]
   },
   {
     "drug": "Nicardipine",
-    "aliases": ["cardene"],
+    "aliases": [
+      "cardene"
+    ],
     "route": "PO",
     "maxDose": 120,
     "unit": "mg/day",
@@ -867,11 +1313,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Nicardipine capsules are labeled in oral dosing up to 120 mg/day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=3955d43d-a87f-4d2c-b90e-3ecf0d6aa148&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=3955d43d-a87f-4d2c-b90e-3ecf0d6aa148&type=pdf",
+    "roAliases": [
+      "cardene"
+    ]
   },
   {
     "drug": "Nisoldipine",
-    "aliases": ["sular"],
+    "aliases": [
+      "sular"
+    ],
     "route": "PO",
     "maxDose": 40,
     "unit": "mg/day",
@@ -880,11 +1331,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Nisoldipine extended-release tablets are available up to 40 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=bab6e4c1-6ebd-4dbd-af90-12486f4f4ea6&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=bab6e4c1-6ebd-4dbd-af90-12486f4f4ea6&type=pdf",
+    "roAliases": [
+      "sular"
+    ]
   },
   {
     "drug": "Felodipine",
-    "aliases": ["plendil"],
+    "aliases": [
+      "plendil"
+    ],
     "route": "PO",
     "maxDose": 20,
     "unit": "mg/day",
@@ -893,11 +1349,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Felodipine extended-release tablets are labeled up to 20 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=fddebfce-70ed-4ee1-8598-bbb8f1ca9263&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=fddebfce-70ed-4ee1-8598-bbb8f1ca9263&type=pdf",
+    "roAliases": [
+      "plendil"
+    ]
   },
   {
     "drug": "Isradipine",
-    "aliases": ["dynacirc"],
+    "aliases": [
+      "dynacirc"
+    ],
     "route": "PO",
     "maxDose": 20,
     "unit": "mg/day",
@@ -906,11 +1367,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_source_confirmation_needed",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder until the current oral isradipine label is normalized.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?audience=consumer&setid=e2f2b9a9-169f-4ccf-8974-58f21592c5bc"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?audience=consumer&setid=e2f2b9a9-169f-4ccf-8974-58f21592c5bc",
+    "roAliases": [
+      "dynacirc"
+    ]
   },
   {
     "drug": "Clevidipine",
-    "aliases": ["cleviprex"],
+    "aliases": [
+      "cleviprex"
+    ],
     "route": "IV",
     "maxDose": 32,
     "unit": "mg/hour",
@@ -919,11 +1385,16 @@
     "maxDoseType": "fda_weight_or_infusion_limited_reference",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Cleviprex infusion is titrated up to a maximum dose of 32 mg/hour, with limited short-term experience at that level.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f9290625-b723-4eda-bab8-a97bef6041f6"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f9290625-b723-4eda-bab8-a97bef6041f6",
+    "roAliases": [
+      "cleviprex"
+    ]
   },
   {
     "drug": "Sertraline",
-    "aliases": ["zoloft"],
+    "aliases": [
+      "zoloft"
+    ],
     "route": "PO",
     "maxDose": 200,
     "unit": "mg/day",
@@ -932,11 +1403,18 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "MDD, OCD, PD, PTSD, and SAD tablet dosing is titrated up to 200 mg per day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=7f62789b-61df-4b7b-9e01-c7a4dfb7e73c&version=3"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=7f62789b-61df-4b7b-9e01-c7a4dfb7e73c&version=3",
+    "roAliases": [
+      "zoloft",
+      "asentra"
+    ]
   },
   {
     "drug": "Fluoxetine",
-    "aliases": ["prozac", "sarafem"],
+    "aliases": [
+      "prozac",
+      "sarafem"
+    ],
     "route": "PO",
     "maxDose": 80,
     "unit": "mg/day",
@@ -945,11 +1423,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The maximum fluoxetine dose should not exceed 80 mg/day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=70c1c88a-672e-4865-a556-69b1d30752f0"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=70c1c88a-672e-4865-a556-69b1d30752f0",
+    "roAliases": [
+      "prozac"
+    ]
   },
   {
     "drug": "Escitalopram",
-    "aliases": ["lexapro"],
+    "aliases": [
+      "lexapro"
+    ],
     "route": "PO",
     "maxDose": 20,
     "unit": "mg/day",
@@ -958,11 +1441,17 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Maximum: 20 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=32780ff1-0f59-467f-b27f-e541e4c0c7d3"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=32780ff1-0f59-467f-b27f-e541e4c0c7d3",
+    "roAliases": [
+      "cipralex",
+      "lexapro"
+    ]
   },
   {
     "drug": "Citalopram",
-    "aliases": ["celexa"],
+    "aliases": [
+      "celexa"
+    ],
     "route": "PO",
     "maxDose": 40,
     "unit": "mg/day",
@@ -971,11 +1460,18 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Dosages above 40 mg once daily are not recommended due to the risk of QT prolongation.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=94bb1159-f716-4479-83df-5728c6806c6e"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=94bb1159-f716-4479-83df-5728c6806c6e",
+    "roAliases": [
+      "cipramil",
+      "celexa"
+    ]
   },
   {
     "drug": "Paroxetine",
-    "aliases": ["paxil", "pexeva"],
+    "aliases": [
+      "paxil",
+      "pexeva"
+    ],
     "route": "PO",
     "maxDose": 60,
     "unit": "mg/day",
@@ -984,11 +1480,17 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_ambiguous_formulation_specific_max",
     "fdaLabelSummary": "Paroxetine maxima vary by product and indication, including lower caps for some formulations and up to 60 mg/day for some indications.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=134e76f0-45cf-47eb-b6e1-cdb3bb522a0a&type=display"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=134e76f0-45cf-47eb-b6e1-cdb3bb522a0a&type=display",
+    "roAliases": [
+      "seroxat",
+      "paxil"
+    ]
   },
   {
     "drug": "Fluvoxamine",
-    "aliases": ["luvox"],
+    "aliases": [
+      "luvox"
+    ],
     "route": "PO",
     "maxDose": 300,
     "unit": "mg/day",
@@ -997,11 +1499,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Adult maximum dose is 300 mg/day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e1ba0041-783e-4e6b-a807-8b4e6c11158c"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e1ba0041-783e-4e6b-a807-8b4e6c11158c",
+    "roAliases": [
+      "luvox"
+    ]
   },
   {
     "drug": "Quetiapine",
-    "aliases": ["seroquel"],
+    "aliases": [
+      "seroquel"
+    ],
     "route": "PO",
     "maxDose": 800,
     "unit": "mg/day",
@@ -1010,11 +1517,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_indication_specific_max",
     "fdaLabelSummary": "Quetiapine adult labeling uses different target and maximum doses depending on schizophrenia, bipolar, and adjunctive depression indications.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=5db83ae8-3ce7-40c6-a72f-2ae7cfea61cf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=5db83ae8-3ce7-40c6-a72f-2ae7cfea61cf",
+    "roAliases": [
+      "seroquel"
+    ]
   },
   {
     "drug": "Aripiprazole",
-    "aliases": ["abilify"],
+    "aliases": [
+      "abilify"
+    ],
     "route": "PO",
     "maxDose": 30,
     "unit": "mg/day",
@@ -1023,11 +1535,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Adult aripiprazole tablet labeling lists a maximum dose of 30 mg/day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=df703fad-84f9-4ceb-bbd5-4e4bb8ae180d"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=df703fad-84f9-4ceb-bbd5-4e4bb8ae180d",
+    "roAliases": [
+      "abilify"
+    ]
   },
   {
     "drug": "Olanzapine",
-    "aliases": ["zyprexa"],
+    "aliases": [
+      "zyprexa"
+    ],
     "route": "PO",
     "maxDose": 20,
     "unit": "mg/day",
@@ -1036,11 +1553,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_source_confirmation_needed",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder until a current oral olanzapine label source is normalized.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=olanzapine"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=olanzapine",
+    "roAliases": [
+      "zyprexa"
+    ]
   },
   {
     "drug": "Risperidone",
-    "aliases": ["risperdal"],
+    "aliases": [
+      "risperdal"
+    ],
     "route": "PO",
     "maxDose": 16,
     "unit": "mg/day",
@@ -1049,11 +1571,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Adult risperidone dosing is titrated within a range up to 16 mg/day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=ad35cff1-7f93-4c07-a5be-9f87aa17431e&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=ad35cff1-7f93-4c07-a5be-9f87aa17431e&type=pdf",
+    "roAliases": [
+      "risperdal"
+    ]
   },
   {
     "drug": "Ziprasidone",
-    "aliases": ["geodon"],
+    "aliases": [
+      "geodon"
+    ],
     "route": "PO",
     "maxDose": 160,
     "unit": "mg/day",
@@ -1062,11 +1589,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_source_confirmation_needed",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder until a current oral ziprasidone label source is normalized.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=ziprasidone"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=ziprasidone",
+    "roAliases": [
+      "geodon"
+    ]
   },
   {
     "drug": "Lurasidone",
-    "aliases": ["latuda"],
+    "aliases": [
+      "latuda"
+    ],
     "route": "PO",
     "maxDose": 160,
     "unit": "mg/day",
@@ -1075,11 +1607,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Lurasidone tablet labeling includes adult doses up to 160 mg/day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=lurasidone"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=lurasidone",
+    "roAliases": [
+      "latuda"
+    ]
   },
   {
     "drug": "Paliperidone",
-    "aliases": ["invega"],
+    "aliases": [
+      "invega"
+    ],
     "route": "PO",
     "maxDose": 12,
     "unit": "mg/day",
@@ -1088,11 +1625,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Paliperidone extended-release tablet labeling includes doses up to 12 mg/day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=paliperidone%20extended-release"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=paliperidone%20extended-release",
+    "roAliases": [
+      "invega"
+    ]
   },
   {
     "drug": "Asenapine",
-    "aliases": ["saphris"],
+    "aliases": [
+      "saphris"
+    ],
     "route": "SL",
     "maxDose": 20,
     "unit": "mg/day",
@@ -1101,11 +1643,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Asenapine sublingual tablet labeling includes 5 mg to 10 mg twice daily dosing.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=asenapine"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=asenapine",
+    "roAliases": [
+      "saphris"
+    ]
   },
   {
     "drug": "Iloperidone",
-    "aliases": ["fanapt"],
+    "aliases": [
+      "fanapt"
+    ],
     "route": "PO",
     "maxDose": 24,
     "unit": "mg/day",
@@ -1114,11 +1661,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Iloperidone tablet labeling includes doses up to 24 mg/day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=iloperidone"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=iloperidone",
+    "roAliases": [
+      "fanapt"
+    ]
   },
   {
     "drug": "Brexpiprazole",
-    "aliases": ["rexulti"],
+    "aliases": [
+      "rexulti"
+    ],
     "route": "PO",
     "maxDose": 4,
     "unit": "mg/day",
@@ -1127,11 +1679,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_indication_specific_max",
     "fdaLabelSummary": "Brexpiprazole labeling uses indication-specific adult maxima rather than one universal scalar.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=brexpiprazole"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=brexpiprazole",
+    "roAliases": [
+      "rexulti"
+    ]
   },
   {
     "drug": "Cariprazine",
-    "aliases": ["vraylar"],
+    "aliases": [
+      "vraylar"
+    ],
     "route": "PO",
     "maxDose": 6,
     "unit": "mg/day",
@@ -1140,11 +1697,18 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Cariprazine capsule labeling includes doses up to 6 mg/day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=cariprazine"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=cariprazine",
+    "roAliases": [
+      "vraylar"
+    ]
   },
   {
     "drug": "Clozapine",
-    "aliases": ["clozaril", "fazaclo", "versacloz"],
+    "aliases": [
+      "clozaril",
+      "fazaclo",
+      "versacloz"
+    ],
     "route": "PO",
     "maxDose": 900,
     "unit": "mg/day",
@@ -1153,11 +1717,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Clozapine labeling includes titration up to a maximum of 900 mg/day.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=clozapine"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=clozapine",
+    "roAliases": [
+      "clozaril"
+    ]
   },
   {
     "drug": "Amitriptyline",
-    "aliases": ["elavil"],
+    "aliases": [
+      "elavil"
+    ],
     "route": "PO",
     "maxDose": 300,
     "unit": "mg/day",
@@ -1166,11 +1735,17 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_old_label_indication_specific_max",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder pending a dedicated TCA normalization pass.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=amitriptyline"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=amitriptyline",
+    "roAliases": [
+      "elavil"
+    ]
   },
   {
     "drug": "Nortriptyline",
-    "aliases": ["pamelor", "aventyl"],
+    "aliases": [
+      "pamelor",
+      "aventyl"
+    ],
     "route": "PO",
     "maxDose": 150,
     "unit": "mg/day",
@@ -1179,11 +1754,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_old_label_indication_specific_max",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder pending dedicated TCA normalization.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=nortriptyline"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=nortriptyline",
+    "roAliases": [
+      "pamelor"
+    ]
   },
   {
     "drug": "Imipramine",
-    "aliases": ["tofranil"],
+    "aliases": [
+      "tofranil"
+    ],
     "route": "PO",
     "maxDose": 300,
     "unit": "mg/day",
@@ -1192,11 +1772,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_old_label_indication_specific_max",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder pending dedicated TCA normalization.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=imipramine"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=imipramine",
+    "roAliases": [
+      "tofranil"
+    ]
   },
   {
     "drug": "Desipramine",
-    "aliases": ["norpramin"],
+    "aliases": [
+      "norpramin"
+    ],
     "route": "PO",
     "maxDose": 300,
     "unit": "mg/day",
@@ -1205,11 +1790,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_old_label_indication_specific_max",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder pending dedicated TCA normalization.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=desipramine"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=desipramine",
+    "roAliases": [
+      "norpramin"
+    ]
   },
   {
     "drug": "Clomipramine",
-    "aliases": ["anafranil"],
+    "aliases": [
+      "anafranil"
+    ],
     "route": "PO",
     "maxDose": 250,
     "unit": "mg/day",
@@ -1218,11 +1808,17 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_old_label_indication_specific_max",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder pending dedicated TCA normalization.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=clomipramine"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=clomipramine",
+    "roAliases": [
+      "anafranil"
+    ]
   },
   {
     "drug": "Doxepin",
-    "aliases": ["silenor", "sinequan"],
+    "aliases": [
+      "silenor",
+      "sinequan"
+    ],
     "route": "PO",
     "maxDose": 300,
     "unit": "mg/day",
@@ -1231,11 +1827,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_old_label_indication_specific_max",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder pending dedicated TCA normalization.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=doxepin"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=doxepin",
+    "roAliases": [
+      "sinequan"
+    ]
   },
   {
     "drug": "Trimipramine",
-    "aliases": ["surmontil"],
+    "aliases": [
+      "surmontil"
+    ],
     "route": "PO",
     "maxDose": 250,
     "unit": "mg/day",
@@ -1244,11 +1845,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_old_label_indication_specific_max",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder pending dedicated TCA normalization.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=trimipramine"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=trimipramine",
+    "roAliases": [
+      "surmontil"
+    ]
   },
   {
     "drug": "Protriptyline",
-    "aliases": ["vivactil"],
+    "aliases": [
+      "vivactil"
+    ],
     "route": "PO",
     "maxDose": 60,
     "unit": "mg/day",
@@ -1257,11 +1863,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_old_label_indication_specific_max",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder pending dedicated TCA normalization.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=protriptyline"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=protriptyline",
+    "roAliases": [
+      "vivactil"
+    ]
   },
   {
     "drug": "Amoxapine",
-    "aliases": ["asendin"],
+    "aliases": [
+      "asendin"
+    ],
     "route": "PO",
     "maxDose": 300,
     "unit": "mg/day",
@@ -1270,11 +1881,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_old_label_indication_specific_max",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder pending dedicated TCA normalization.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=amoxapine"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=amoxapine",
+    "roAliases": [
+      "asendin"
+    ]
   },
   {
     "drug": "Maprotiline",
-    "aliases": ["ludiomil"],
+    "aliases": [
+      "ludiomil"
+    ],
     "route": "PO",
     "maxDose": 225,
     "unit": "mg/day",
@@ -1283,11 +1899,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_old_label_indication_specific_max",
     "fdaLabelSummary": "Current scalar is retained as a comparison placeholder pending dedicated TCA normalization.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=maprotiline"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=maprotiline",
+    "roAliases": [
+      "ludiomil"
+    ]
   },
   {
     "drug": "Clonazepam",
-    "aliases": ["klonopin"],
+    "aliases": [
+      "klonopin"
+    ],
     "route": "PO",
     "maxDose": 4,
     "unit": "mg/day",
@@ -1296,11 +1917,18 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_indication_specific_max",
     "fdaLabelSummary": "Clonazepam labeling is indication-specific and this entry needs a targeted normalization pass.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=401cb3c0-4a5b-4ff9-baea-53095e60263d&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=401cb3c0-4a5b-4ff9-baea-53095e60263d&type=pdf",
+    "roAliases": [
+      "rivotril",
+      "klonopin"
+    ]
   },
   {
     "drug": "Alprazolam",
-    "aliases": ["xanax", "xanax xr"],
+    "aliases": [
+      "xanax",
+      "xanax xr"
+    ],
     "route": "PO",
     "maxDose": 10,
     "unit": "mg/day",
@@ -1309,11 +1937,17 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_indication_specific_max",
     "fdaLabelSummary": "The maximum recommended dosage is 4 mg daily for anxiety indications, while panic-disorder trials included doses in the range of 1 mg to 10 mg daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=25781f50-d309-4c4f-9e21-c019e068d101&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=25781f50-d309-4c4f-9e21-c019e068d101&type=pdf",
+    "roAliases": [
+      "xanax",
+      "frontin"
+    ]
   },
   {
     "drug": "Diazepam",
-    "aliases": ["valium"],
+    "aliases": [
+      "valium"
+    ],
     "route": "PO",
     "maxDose": 40,
     "unit": "mg/day",
@@ -1322,11 +1956,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_indication_specific_max",
     "fdaLabelSummary": "Adult daily dosing varies from 2 mg to 10 mg given 2 to 4 times daily depending on indication.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=09f4f9d9-0418-4688-bd49-2507bc12b234&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=09f4f9d9-0418-4688-bd49-2507bc12b234&type=pdf",
+    "roAliases": [
+      "valium"
+    ]
   },
   {
     "drug": "Temazepam",
-    "aliases": ["restoril"],
+    "aliases": [
+      "restoril"
+    ],
     "route": "PO",
     "maxDose": 30,
     "unit": "mg/day",
@@ -1335,11 +1974,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The recommended usual adult dose is 15 mg before retiring; some patients may need 30 mg.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=97afda58-4daf-4192-bd87-3ccbb000ee52"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=97afda58-4daf-4192-bd87-3ccbb000ee52",
+    "roAliases": [
+      "restoril"
+    ]
   },
   {
     "drug": "Oxazepam",
-    "aliases": ["serax"],
+    "aliases": [
+      "serax"
+    ],
     "route": "PO",
     "maxDose": 120,
     "unit": "mg/day",
@@ -1348,11 +1992,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_indication_specific_max",
     "fdaLabelSummary": "Usual doses range from 10 to 15 mg three or four times daily for milder anxiety and 15 to 30 mg three or four times daily for more severe syndromes.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=a0d5a4c1-ec79-42e6-8e8f-ae4d144edb43&type=display"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=a0d5a4c1-ec79-42e6-8e8f-ae4d144edb43&type=display",
+    "roAliases": [
+      "serax"
+    ]
   },
   {
     "drug": "Chlordiazepoxide",
-    "aliases": ["librium"],
+    "aliases": [
+      "librium"
+    ],
     "route": "PO",
     "maxDose": 100,
     "unit": "mg/day",
@@ -1361,11 +2010,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_indication_specific_max",
     "fdaLabelSummary": "Adult dosing includes up to 300 mg per day for alcohol-withdrawal management in the oral label.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=9e64d2d8-b12c-5639-e053-2a95a90aab80"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=9e64d2d8-b12c-5639-e053-2a95a90aab80",
+    "roAliases": [
+      "librium"
+    ]
   },
   {
     "drug": "Clorazepate",
-    "aliases": ["tranxene"],
+    "aliases": [
+      "tranxene"
+    ],
     "route": "PO",
     "maxDose": 60,
     "unit": "mg/day",
@@ -1374,11 +2028,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_indication_specific_max",
     "fdaLabelSummary": "For alcohol-withdrawal management, labeled oral dosing starts at 30 mg and may continue at 30 to 60 mg in divided doses.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a6cc08b8-146e-430f-af39-8b866698b997"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a6cc08b8-146e-430f-af39-8b866698b997",
+    "roAliases": [
+      "tranxene"
+    ]
   },
   {
     "drug": "Midazolam",
-    "aliases": ["versed"],
+    "aliases": [
+      "versed"
+    ],
     "route": "PO",
     "maxDose": 20,
     "unit": "mg/day",
@@ -1387,11 +2046,16 @@
     "maxDoseType": "deferred_fda_normalization",
     "verificationStatus": "deferred_weight_based_or_noncomparable_formulation",
     "fdaLabelSummary": "Oral midazolam syrup labeling uses mg/kg dosing up to a maximum dose of 40 mg in pediatric use.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=fc93242b-0abf-466a-8413-8a365620ee75"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=fc93242b-0abf-466a-8413-8a365620ee75",
+    "roAliases": [
+      "versed"
+    ]
   },
   {
     "drug": "Triazolam",
-    "aliases": ["halcion"],
+    "aliases": [
+      "halcion"
+    ],
     "route": "PO",
     "maxDose": 0.5,
     "unit": "mg/day",
@@ -1400,11 +2064,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "The maximum recommended dosage is 0.5 mg once daily.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=8828406e-89f0-458f-841f-4c041df4acda"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=8828406e-89f0-458f-841f-4c041df4acda",
+    "roAliases": [
+      "halcion"
+    ]
   },
   {
     "drug": "Estazolam",
-    "aliases": ["prosom"],
+    "aliases": [
+      "prosom"
+    ],
     "route": "PO",
     "maxDose": 2,
     "unit": "mg/day",
@@ -1413,11 +2082,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Most adults use 1 mg before bedtime; a 2 mg dose may be used when clinically necessary.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?name=a1e3b4bf-22e9-430a-a768-4d86ae886c9e&setid=a1e3b4bf-22e9-430a-a768-4d86ae886c9e"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?name=a1e3b4bf-22e9-430a-a768-4d86ae886c9e&setid=a1e3b4bf-22e9-430a-a768-4d86ae886c9e",
+    "roAliases": [
+      "prosom"
+    ]
   },
   {
     "drug": "Flurazepam",
-    "aliases": ["dalmane"],
+    "aliases": [
+      "dalmane"
+    ],
     "route": "PO",
     "maxDose": 30,
     "unit": "mg/day",
@@ -1426,11 +2100,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Flurazepam hydrochloride capsules are labeled in 15 mg and 30 mg strengths for bedtime use.",
-    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=16a5de2d-2f89-4fc2-a1cf-2d6fd11f2748&type=pdf"
+    "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=16a5de2d-2f89-4fc2-a1cf-2d6fd11f2748&type=pdf",
+    "roAliases": [
+      "dalmane"
+    ]
   },
   {
     "drug": "Clopidogrel",
-    "aliases": ["plavix"],
+    "aliases": [
+      "plavix"
+    ],
     "route": "PO",
     "maxDose": 75,
     "unit": "mg/day",
@@ -1439,11 +2118,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "75 mg once daily orally.",
-    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/020839s074lbl.pdf"
+    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/020839s074lbl.pdf",
+    "roAliases": [
+      "plavix"
+    ]
   },
   {
     "drug": "Prasugrel",
-    "aliases": ["effient"],
+    "aliases": [
+      "effient"
+    ],
     "route": "PO",
     "maxDose": 10,
     "unit": "mg/day",
@@ -1452,11 +2136,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "Continue at 10 mg once daily.",
-    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2019/022307s016lbl.pdf"
+    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2019/022307s016lbl.pdf",
+    "roAliases": [
+      "effient"
+    ]
   },
   {
     "drug": "Ticagrelor",
-    "aliases": ["brilinta"],
+    "aliases": [
+      "brilinta"
+    ],
     "route": "PO",
     "maxDose": 180,
     "unit": "mg/day",
@@ -1465,11 +2154,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "90 mg twice daily during the first year after ACS.",
-    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2016/022433s020lbl.pdf"
+    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2016/022433s020lbl.pdf",
+    "roAliases": [
+      "brilinta"
+    ]
   },
   {
     "drug": "Dipyridamole",
-    "aliases": ["persantine"],
+    "aliases": [
+      "persantine"
+    ],
     "route": "PO",
     "maxDose": 400,
     "unit": "mg/day",
@@ -1478,11 +2172,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "75-100 mg four times daily.",
-    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2019/012836s061lbl.pdf"
+    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2019/012836s061lbl.pdf",
+    "roAliases": [
+      "persantine"
+    ]
   },
   {
     "drug": "Cilostazol",
-    "aliases": ["pletal"],
+    "aliases": [
+      "pletal"
+    ],
     "route": "PO",
     "maxDose": 200,
     "unit": "mg/day",
@@ -1491,11 +2190,16 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "100 mg twice daily.",
-    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2017/020863s024lbl.pdf"
+    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2017/020863s024lbl.pdf",
+    "roAliases": [
+      "pletal"
+    ]
   },
   {
     "drug": "Abciximab",
-    "aliases": ["reopro"],
+    "aliases": [
+      "reopro"
+    ],
     "route": "IV",
     "maxDose": 10,
     "unit": "mcg/min",
@@ -1504,11 +2208,16 @@
     "maxDoseType": "fda_weight_based_with_infusion_cap",
     "verificationStatus": "fda_weight_based_not_universal_daily_max",
     "fdaLabelSummary": "0.25 mg/kg IV bolus, then 0.125 mcg/kg/min infusion to a maximum of 10 mcg/min for 12 hours.",
-    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2019/103575s5138lbl.pdf"
+    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2019/103575s5138lbl.pdf",
+    "roAliases": [
+      "reopro"
+    ]
   },
   {
     "drug": "Eptifibatide",
-    "aliases": ["integrilin"],
+    "aliases": [
+      "integrilin"
+    ],
     "route": "IV",
     "maxDose": 15,
     "unit": "mg/hour",
@@ -1517,11 +2226,16 @@
     "maxDoseType": "fda_weight_based_not_scalar_normalized",
     "verificationStatus": "fda_weight_based_not_universal_daily_max",
     "fdaLabelSummary": "180 mcg/kg IV bolus, second 180 mcg/kg bolus after 10 minutes, then 2 mcg/kg/min infusion; 1 mcg/kg/min if CrCl less than 50 mL/min.",
-    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/020718s039lbl.pdf"
+    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/020718s039lbl.pdf",
+    "roAliases": [
+      "integrilin"
+    ]
   },
   {
     "drug": "Tirofiban",
-    "aliases": ["aggrastat"],
+    "aliases": [
+      "aggrastat"
+    ],
     "route": "IV",
     "maxDose": 1,
     "unit": "mg/hour",
@@ -1530,11 +2244,16 @@
     "maxDoseType": "fda_weight_based_not_scalar_normalized",
     "verificationStatus": "fda_weight_based_not_universal_daily_max",
     "fdaLabelSummary": "25 mcg/kg IV over 3 minutes, then 0.15 mcg/kg/min infusion; 0.075 mcg/kg/min if renal impairment applies.",
-    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2013/020912s019s020lbl.pdf"
+    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2013/020912s019s020lbl.pdf",
+    "roAliases": [
+      "aggrastat"
+    ]
   },
   {
     "drug": "Vorapaxar",
-    "aliases": ["zontivity"],
+    "aliases": [
+      "zontivity"
+    ],
     "route": "PO",
     "maxDose": 2.08,
     "unit": "mg/day",
@@ -1543,137 +2262,215 @@
     "maxDoseType": "fda_labeled_max_daily_dose",
     "verificationStatus": "fda_labeled_max_normalized",
     "fdaLabelSummary": "2.08 mg orally once daily.",
-    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2015/204886s002lbl.pdf"
+    "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2015/204886s002lbl.pdf",
+    "roAliases": [
+      "zontivity"
+    ]
   },
   {
     "drug": "Celecoxib",
-    "aliases": ["celebrex"],
+    "aliases": [
+      "celebrex"
+    ],
     "route": "PO",
     "maxDose": 400,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Common oral NSAID reference ceiling for static comparison."
+    "note": "Common oral NSAID reference ceiling for static comparison.",
+    "roAliases": [
+      "celebrex"
+    ]
   },
   {
     "drug": "Diclofenac",
-    "aliases": ["voltaren", "cataflam"],
+    "aliases": [
+      "voltaren",
+      "cataflam"
+    ],
     "route": "PO",
     "maxDose": 150,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Common oral NSAID reference ceiling for static comparison."
+    "note": "Common oral NSAID reference ceiling for static comparison.",
+    "roAliases": [
+      "voltaren",
+      "cataflam"
+    ]
   },
   {
     "drug": "Meloxicam",
-    "aliases": ["mobic"],
+    "aliases": [
+      "mobic"
+    ],
     "route": "PO",
     "maxDose": 15,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Common oral NSAID reference ceiling for static comparison."
+    "note": "Common oral NSAID reference ceiling for static comparison.",
+    "roAliases": [
+      "mobic"
+    ]
   },
   {
     "drug": "Indomethacin",
-    "aliases": ["indocin"],
+    "aliases": [
+      "indocin"
+    ],
     "route": "PO",
     "maxDose": 200,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Common oral NSAID reference ceiling for static comparison."
+    "note": "Common oral NSAID reference ceiling for static comparison.",
+    "roAliases": [
+      "indocin"
+    ]
   },
   {
     "drug": "Ketorolac",
-    "aliases": ["toradol"],
+    "aliases": [
+      "toradol"
+    ],
     "route": "PO",
     "maxDose": 40,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Short-course oral NSAID reference ceiling for static comparison."
+    "note": "Short-course oral NSAID reference ceiling for static comparison.",
+    "roAliases": [
+      "toradol"
+    ]
   },
   {
     "drug": "Etodolac",
-    "aliases": ["lodine"],
+    "aliases": [
+      "lodine"
+    ],
     "route": "PO",
     "maxDose": 1200,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Common oral NSAID reference ceiling for static comparison."
+    "note": "Common oral NSAID reference ceiling for static comparison.",
+    "roAliases": [
+      "lodine"
+    ]
   },
   {
     "drug": "Nabumetone",
-    "aliases": ["relafen"],
+    "aliases": [
+      "relafen"
+    ],
     "route": "PO",
     "maxDose": 2000,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Common oral NSAID reference ceiling for static comparison."
+    "note": "Common oral NSAID reference ceiling for static comparison.",
+    "roAliases": [
+      "relafen"
+    ]
   },
   {
     "drug": "Sulindac",
-    "aliases": ["clinoril"],
+    "aliases": [
+      "clinoril"
+    ],
     "route": "PO",
     "maxDose": 400,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Common oral NSAID reference ceiling for static comparison."
+    "note": "Common oral NSAID reference ceiling for static comparison.",
+    "roAliases": [
+      "clinoril"
+    ]
   },
   {
     "drug": "Piroxicam",
-    "aliases": ["feldene"],
+    "aliases": [
+      "feldene"
+    ],
     "route": "PO",
     "maxDose": 20,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Common oral NSAID reference ceiling for static comparison."
+    "note": "Common oral NSAID reference ceiling for static comparison.",
+    "roAliases": [
+      "feldene"
+    ]
   },
   {
     "drug": "Oxaprozin",
-    "aliases": ["daypro"],
+    "aliases": [
+      "daypro"
+    ],
     "route": "PO",
     "maxDose": 1800,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Common oral NSAID reference ceiling for static comparison."
+    "note": "Common oral NSAID reference ceiling for static comparison.",
+    "roAliases": [
+      "daypro"
+    ]
   },
   {
     "drug": "Pregabalin",
-    "aliases": ["lyrica"],
+    "aliases": [
+      "lyrica"
+    ],
     "route": "PO",
     "maxDose": 600,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Common oral antineuropathic reference ceiling for static comparison."
+    "note": "Common oral antineuropathic reference ceiling for static comparison.",
+    "roAliases": [
+      "lyrica"
+    ]
   },
   {
     "drug": "Carbamazepine",
-    "aliases": ["tegretol"],
+    "aliases": [
+      "tegretol"
+    ],
     "route": "PO",
     "maxDose": 1200,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Common oral antineuropathic reference ceiling for static comparison."
+    "note": "Common oral antineuropathic reference ceiling for static comparison.",
+    "roAliases": [
+      "tegretol"
+    ]
   },
   {
     "drug": "Oxcarbazepine",
-    "aliases": ["trileptal"],
+    "aliases": [
+      "trileptal"
+    ],
     "route": "PO",
     "maxDose": 2400,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "Common oral antineuropathic reference ceiling for static comparison."
+    "note": "Common oral antineuropathic reference ceiling for static comparison.",
+    "roAliases": [
+      "trileptal"
+    ]
   },
   {
     "drug": "Amoxicillin/Clavulanate",
-    "aliases": ["augmentin"],
+    "aliases": [
+      "augmentin"
+    ],
     "route": "PO",
     "maxDose": 1750,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Standard adult tablet regimens use 875 mg every 12 hours or 500 mg every 8 hours based on the amoxicillin component."
+    "note": "Standard adult tablet regimens use 875 mg every 12 hours or 500 mg every 8 hours based on the amoxicillin component.",
+    "roAliases": [
+      "augmentin"
+    ]
   },
   {
     "drug": "Penicillin V Potassium",
-    "aliases": ["pen vk", "veetids"],
+    "aliases": [
+      "pen vk",
+      "veetids"
+    ],
     "route": "PO",
     "maxDose": 2000,
     "unit": "mg/day",
@@ -1682,34 +2479,51 @@
   },
   {
     "drug": "Dicloxacillin",
-    "aliases": ["dynapen"],
+    "aliases": [
+      "dynapen"
+    ],
     "route": "PO",
     "maxDose": 1000,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Adult oral dosage table includes 250 mg every 6 hours on an empty stomach."
+    "note": "Adult oral dosage table includes 250 mg every 6 hours on an empty stomach.",
+    "roAliases": [
+      "dynapen"
+    ]
   },
   {
     "drug": "Cephalexin",
-    "aliases": ["keflex"],
+    "aliases": [
+      "keflex"
+    ],
     "route": "PO",
     "maxDose": 4000,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Adults: dosage ranges from 1 g to 4 g daily in divided doses."
+    "note": "Adults: dosage ranges from 1 g to 4 g daily in divided doses.",
+    "roAliases": [
+      "keflex"
+    ]
   },
   {
     "drug": "Cefadroxil",
-    "aliases": ["duricef"],
+    "aliases": [
+      "duricef"
+    ],
     "route": "PO",
     "maxDose": 2000,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Adult oral regimens use 1 g to 2 g per day in a single dose or divided twice daily."
+    "note": "Adult oral regimens use 1 g to 2 g per day in a single dose or divided twice daily.",
+    "roAliases": [
+      "duricef"
+    ]
   },
   {
     "drug": "Cefuroxime Axetil",
-    "aliases": ["ceftin"],
+    "aliases": [
+      "ceftin"
+    ],
     "route": "PO",
     "maxDose": 1000,
     "unit": "mg/day",
@@ -1718,119 +2532,192 @@
   },
   {
     "drug": "Cefdinir",
-    "aliases": ["omnicef"],
+    "aliases": [
+      "omnicef"
+    ],
     "route": "PO",
     "maxDose": 600,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Adults and adolescents: 300 mg every 12 hours or 600 mg once daily."
+    "note": "Adults and adolescents: 300 mg every 12 hours or 600 mg once daily.",
+    "roAliases": [
+      "omnicef"
+    ]
   },
   {
     "drug": "Cefpodoxime",
-    "aliases": ["vantin"],
+    "aliases": [
+      "vantin"
+    ],
     "route": "PO",
     "maxDose": 800,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Adult oral regimens commonly use 100 mg to 400 mg every 12 hours depending on infection type."
+    "note": "Adult oral regimens commonly use 100 mg to 400 mg every 12 hours depending on infection type.",
+    "roAliases": [
+      "vantin"
+    ]
   },
   {
     "drug": "Cefixime",
-    "aliases": ["suprax"],
+    "aliases": [
+      "suprax"
+    ],
     "route": "PO",
     "maxDose": 400,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "The recommended adult dose is 400 mg daily, given once daily or divided every 12 hours."
+    "note": "The recommended adult dose is 400 mg daily, given once daily or divided every 12 hours.",
+    "roAliases": [
+      "suprax"
+    ]
   },
   {
     "drug": "Azithromycin",
-    "aliases": ["zithromax", "z-pak", "zpak"],
+    "aliases": [
+      "zithromax",
+      "z-pak",
+      "zpak"
+    ],
     "route": "PO",
     "maxDose": 500,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Common adult tablet regimens use 500 mg once daily for 3 days or 500 mg on day 1 followed by 250 mg daily."
+    "note": "Common adult tablet regimens use 500 mg once daily for 3 days or 500 mg on day 1 followed by 250 mg daily.",
+    "roAliases": [
+      "zithromax",
+      "z pak",
+      "zpak"
+    ]
   },
   {
     "drug": "Clarithromycin",
-    "aliases": ["biaxin"],
+    "aliases": [
+      "biaxin"
+    ],
     "route": "PO",
     "maxDose": 1000,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Adults: clarithromycin tablets 250 mg or 500 mg every 12 hours."
+    "note": "Adults: clarithromycin tablets 250 mg or 500 mg every 12 hours.",
+    "roAliases": [
+      "biaxin"
+    ]
   },
   {
     "drug": "Erythromycin",
-    "aliases": ["ery-tab", "erythrocin"],
+    "aliases": [
+      "ery-tab",
+      "erythrocin"
+    ],
     "route": "PO",
     "maxDose": 1000,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Usual adult oral dosing uses one 250 mg tablet four times daily or one 500 mg tablet every 12 hours."
+    "note": "Usual adult oral dosing uses one 250 mg tablet four times daily or one 500 mg tablet every 12 hours.",
+    "roAliases": [
+      "ery tab",
+      "erythrocin"
+    ]
   },
   {
     "drug": "Doxycycline",
-    "aliases": ["vibramycin", "doryx"],
+    "aliases": [
+      "vibramycin",
+      "doryx"
+    ],
     "route": "PO",
     "maxDose": 200,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "The usual adult dosage is 200 mg on day 1, administered 100 mg every 12 hours, followed by 100 mg daily."
+    "note": "The usual adult dosage is 200 mg on day 1, administered 100 mg every 12 hours, followed by 100 mg daily.",
+    "roAliases": [
+      "vibramycin",
+      "doryx"
+    ]
   },
   {
     "drug": "Minocycline",
-    "aliases": ["minocin"],
+    "aliases": [
+      "minocin"
+    ],
     "route": "PO",
     "maxDose": 200,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "The usual adult dosage is 200 mg initially followed by 100 mg every 12 hours."
+    "note": "The usual adult dosage is 200 mg initially followed by 100 mg every 12 hours.",
+    "roAliases": [
+      "minocin"
+    ]
   },
   {
     "drug": "Clindamycin",
-    "aliases": ["cleocin"],
+    "aliases": [
+      "cleocin"
+    ],
     "route": "PO",
     "maxDose": 1800,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Adults: serious infections 150 mg to 300 mg every 6 hours; more severe infections 300 mg to 450 mg every 6 hours."
+    "note": "Adults: serious infections 150 mg to 300 mg every 6 hours; more severe infections 300 mg to 450 mg every 6 hours.",
+    "roAliases": [
+      "cleocin"
+    ]
   },
   {
     "drug": "Nitrofurantoin",
-    "aliases": ["macrobid"],
+    "aliases": [
+      "macrobid"
+    ],
     "route": "PO",
     "maxDose": 200,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Adults and pediatric patients over 12 years: one 100 mg capsule every 12 hours for seven days."
+    "note": "Adults and pediatric patients over 12 years: one 100 mg capsule every 12 hours for seven days.",
+    "roAliases": [
+      "macrobid"
+    ]
   },
   {
     "drug": "Ciprofloxacin",
-    "aliases": ["cipro"],
+    "aliases": [
+      "cipro"
+    ],
     "route": "PO",
     "maxDose": 1500,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Adult dosage guidelines include 500 mg to 750 mg every 12 hours for multiple infections."
+    "note": "Adult dosage guidelines include 500 mg to 750 mg every 12 hours for multiple infections.",
+    "roAliases": [
+      "cipro"
+    ]
   },
   {
     "drug": "Levofloxacin",
-    "aliases": ["levaquin"],
+    "aliases": [
+      "levaquin"
+    ],
     "route": "PO",
     "maxDose": 750,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "The usual adult dose is 250 mg, 500 mg, or 750 mg orally every 24 hours depending on infection type."
+    "note": "The usual adult dose is 250 mg, 500 mg, or 750 mg orally every 24 hours depending on infection type.",
+    "roAliases": [
+      "levaquin"
+    ]
   },
   {
     "drug": "Fosfomycin",
-    "aliases": ["monurol"],
+    "aliases": [
+      "monurol"
+    ],
     "route": "PO",
     "maxDose": 3000,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Adult oral dosing uses a single 3 g sachet dose for uncomplicated urinary tract infection."
+    "note": "Adult oral dosing uses a single 3 g sachet dose for uncomplicated urinary tract infection.",
+    "roAliases": [
+      "monurol"
+    ]
   }
 ]
