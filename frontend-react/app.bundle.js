@@ -49434,6 +49434,11 @@ function App() {
       return rangesOverlap(event.date, eventEndDate, bucketStart, bucketEnd);
     });
   }, [filteredEvents, selectedChartBucket]);
+  const timeframeLabel = TIMEFRAME_OPTIONS.find((option) => option.value === timeframe)?.label ?? timeframe;
+  const selectedDrugSummary = selectedDrugs.length ? selectedDrugs.slice(0, 3).map((drug) => drug.name).join(", ") : medicationEntries.length ? `${medicationEntries.length} medication entr${medicationEntries.length === 1 ? "y" : "ies"}` : "No medications selected";
+  const workspaceMaxDose = selectedDrugs[0]?.maxDailyDose ?? null;
+  const workspaceMaxDoseLabel = workspaceMaxDose ? `${workspaceMaxDose} ${selectedDrugs[0]?.unit ?? "mg"}/day` : "Not set yet";
+  const workspaceMaxDoseDetail = selectedDrugs.length > 1 ? "Per-drug ceilings are tracked independently in the dynamic workspace" : selectedDrugs[0] ? `Reference ceiling for ${selectedDrugs[0].name}` : "Manual or inferred max dose";
   function handleAddDrug(drug) {
     setDrugs((current3) => mergeDrugCatalog(current3, [drug]));
     setSelectedDrugIds((current3) => {
@@ -50093,55 +50098,83 @@ function App() {
         h("p", { className: "menu-label" }, "DoseGraph"),
         h("a", { href: "../index.html" }, "Landing page"),
         h("a", { href: "../about.html" }, "About"),
+        h("a", { href: "../updates.html" }, "Updates"),
         h("a", { href: "../frontend-static/" }, "Static version"),
         h("a", { href: "./" }, "Dynamic version"),
-        h("span", { className: "menu-note" }, "Mobile app beta: unreleased"),
         h("a", { href: "mailto:rafi@readisten.com" }, "Contact developers / engineers"),
         h("a", { href: "../accounts.html" }, "Accounts & profiles management")
       )
-    ),
-    h(
-      "div",
-      { className: "topbar" },
-      h(
-        "span",
-        { className: "user-info" },
-        isAuthenticated ? `Signed in as ${user?.name || user?.email}` : "Guest mode available"
-      ),
-      isAuthenticated ? h(
-        "button",
-        { type: "button", className: "pill-button secondary-button", onClick: handleLogout },
-        "Logout"
-      ) : null
     ),
     h(
       "section",
       { className: "hero" },
       h(
         "article",
-        { className: "hero-panel" },
-        h("p", { className: "badge" }, "DoseGraph Dynamic"),
-        h(
-          "h1",
-          null,
-          workspaceLabel || "Use the dynamic DoseGraph workspace for core medication dose graphing."
-        ),
+        { className: "hero-copy" },
+        h("p", { className: "eyebrow" }, "DoseGraph Dynamic"),
+        h("h1", null, "Use the dynamic DoseGraph workspace with the same core flow as static mode."),
         h(
           "p",
-          null,
-          `${patientName} \xB7 Enter medication context, routes, reference max doses, and dose dates in one place. This dynamic page keeps the same core graphing flow as static mode while adding account sync and profile management. ${isAuthenticated ? "Account sync is active for saved profiles." : "You can still graph in guest mode, then register when you want synced profiles."}`
+          { className: "hero-text" },
+          "Enter the medication context, patient label, route, reference max dose, and dose dates in one place. This dynamic page follows the static workspace as the primary mold, while adding saved profiles and optional account sync."
         )
       ),
       h(
         "article",
-        { className: "hero-panel" },
-        h("p", { className: "metric-label" }, "Workspace snapshot"),
-        patientNotes ? h("p", { className: "helper" }, patientNotes) : null,
-        h("p", { className: "big-number" }, `${selectedDrugs.length}/${MAX_VISIBLE_DRUGS}`),
+        { className: "hero-card" },
+        h("p", { className: "card-label" }, "Dynamic workspace"),
+        h("p", { className: "card-value" }, `${selectedDrugs.length}`),
         h(
           "p",
-          null,
-          `${summary.activeDrugCount} selected drug(s) have data in the current ${route} view. Peak exposure across the chart is ${summary.peakPercent.toFixed(1)}%.`
+          { className: "card-caption" },
+          `${summary.activeDrugCount} selected drug(s) with data in the current ${route} view${isAuthenticated ? " and account sync available." : " in guest or signed-in mode."}`
+        ),
+        patientNotes ? h("p", { className: "workspace-detail hero-card-note" }, patientNotes) : null
+      )
+    ),
+    h(
+      "div",
+      { className: "workspace-heading" },
+      h("p", { className: "eyebrow" }, "Workspace snapshot"),
+      h(
+        "p",
+        { className: "workspace-heading-copy" },
+        isAuthenticated ? `Signed in as ${user?.name || user?.email}. The dynamic workspace keeps the static graphing flow while adding synced profiles.` : "Guest mode stays available here too. You can graph first and sign in later if you want synced profiles."
+      )
+    ),
+    h(
+      "section",
+      { className: "workspace-strip", "aria-label": "Current workspace overview" },
+      h(
+        "article",
+        { className: "workspace-card" },
+        h("p", { className: "card-label" }, "Patient + Drugs"),
+        h("strong", null, patientName || "Example Patient"),
+        h("p", { className: "workspace-detail" }, selectedDrugSummary)
+      ),
+      h(
+        "article",
+        { className: "workspace-card" },
+        h("p", { className: "card-label" }, "Route + Window"),
+        h("strong", null, route),
+        h("p", { className: "workspace-detail" }, timeframeLabel)
+      ),
+      h(
+        "article",
+        { className: "workspace-card" },
+        h("p", { className: "card-label" }, "Reference Ceiling"),
+        h("strong", null, workspaceMaxDoseLabel),
+        h("p", { className: "workspace-detail" }, workspaceMaxDoseDetail)
+      ),
+      h(
+        "article",
+        { className: "workspace-card" },
+        h("p", { className: "card-label" }, "Dose Segments"),
+        h("strong", null, `${summary.eventCount} in view`),
+        h(
+          "p",
+          { className: "workspace-detail" },
+          filteredEvents[0] ? `Most recent event ${filteredEvents[0].date}` : "No dose segments yet"
         )
       )
     ),
@@ -50150,7 +50183,7 @@ function App() {
       { className: "layout" },
       h(
         "aside",
-        { className: "panel controls selector-panel" },
+        { className: "panel controls-panel selector-panel" },
         h(
           "div",
           null,
