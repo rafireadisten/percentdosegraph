@@ -4,6 +4,16 @@ All notable project changes should be recorded in this file.
 
 ## 2026-04-20
 
+### `fix: sync hosted dynamic app updates`
+- Updated the hosted React dynamic app so current UI and interaction changes are reflected in deployed output.
+- Rebuilt frontend bundle assets after UI, workflow, and menu-alignment changes.
+
+### `feat: align dynamic UI with static workspace mold`
+- Made the static workspace layout and control language the baseline convention for the dynamic React page.
+- Updated chart controls to follow the static "Add Drug To Graph" pattern and static-style legend behavior.
+- Aligned dynamic navigation menu behavior and styling to the static menu convention.
+- Added static-style dose entry workflow support for "Save & Add Another" in the dynamic form.
+
 <!-- MARKER: PDG-80PCT-DISABLED-2026-04-20 -->
 ### `chore: disable 80% max dose visualizers (code retained, not active)`
 - Commented out all 80% reference line and metric display code across `script.js`, `frontend-react/app.js`, and `frontend-static/index.html`. No code deleted — each block is marked `MARKER: PDG-80PCT-DISABLED-2026-04-20` for easy search and re-activation.

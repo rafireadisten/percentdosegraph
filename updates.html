@@ -224,6 +224,12 @@
         if (title.includes('persist') || title.includes('restore')) {
           return 'Your last workspace now comes back automatically after reload.';
         }
+        if (title.includes('sync hosted') || title.includes('hosted dynamic')) {
+          return 'The hosted dynamic app now reflects the latest UI and workflow updates.';
+        }
+        if (title.includes('align dynamic ui') || title.includes('static workspace mold')) {
+          return 'The dynamic page now follows the static workspace layout, controls, and menu behavior more closely.';
+        }
 
         const firstBullet = entry.bullets[0] || '';
         if (!firstBullet) {
