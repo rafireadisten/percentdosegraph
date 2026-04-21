@@ -706,6 +706,65 @@ textarea {
   box-shadow: inset 0 0 0 1px rgba(33, 49, 58, 0.12);
 }
 
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.graph-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.add-drug-panel {
+  margin-top: 14px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.74);
+  padding: 16px;
+}
+
+.add-drug-panel-results {
+  margin-top: 10px;
+}
+
+.table-action {
+  border: 1px solid rgba(191, 79, 41, 0.11);
+  background: rgba(191, 79, 41, 0.08);
+  color: var(--danger);
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.table-action.secondary {
+  border-color: rgba(15, 90, 45, 0.16);
+  background: rgba(15, 90, 45, 0.08);
+  color: var(--accent);
+}
+
 .table-swatch {
   vertical-align: middle;
 }

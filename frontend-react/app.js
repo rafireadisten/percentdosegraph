@@ -37,26 +37,27 @@ const AUTH_TOKEN_STORAGE_KEY = 'percentdosegraph:auth-token';
 const AUTH_ACCOUNT_STORAGE_KEY = 'percentdosegraph:auth-account';
 const LEGAL_ACK_STORAGE_KEY = 'percentdosegraph:legal-acknowledgements';
 const CHART_COLORS = [
-  '#0d8f78',
-  '#bf4f29',
+  '#0f5a2d',
   '#2956bf',
+  '#6b7a12',
+  '#6ea8ff',
   '#7e5bef',
-  '#986f0b',
-  '#c93d71',
-  '#2c7a7b',
-  '#805ad5',
-  '#c05621',
-  '#276749',
-  '#2b6cb0',
-  '#97266d',
-  '#4a5568',
-  '#d69e2e',
-  '#2f855a',
-  '#dd6b20',
-  '#3182ce',
-  '#b83280',
-  '#22543d',
-  '#744210',
+  '#c43d3d',
+  '#b794f4',
+  '#f28b82',
+  '#bf5a17',
+  '#c58b00',
+  '#f6ad55',
+  '#0d8f78',
+  '#1f6feb',
+  '#8f9f2b',
+  '#8ecdfc',
+  '#9f7aea',
+  '#d93025',
+  '#d6bcfa',
+  '#f4a7a1',
+  '#d97706',
+  '#b99600',
 ];
 
 function shuffleArray(array) {
@@ -1455,11 +1456,11 @@ function App() {
         'article',
         { className: 'hero-copy' },
         h('p', { className: 'eyebrow' }, 'DoseGraph Dynamic'),
-        h('h1', null, 'Use the dynamic DoseGraph workspace with the same core flow as static mode.'),
+        h('h1', null, 'Use the dynamic DoseGraph workspace with the static workspace as the core mold.'),
         h(
           'p',
           { className: 'hero-text' },
-          'Enter the medication context, patient label, route, reference max dose, and dose dates in one place. This dynamic page follows the static workspace as the primary mold, while adding saved profiles and optional account sync.'
+          'Enter the medication, patient label, route, reference max dose, and dose dates in one place. This dynamic page follows the static workspace layout first, then layers in saved profiles, account sync, and import/export tools.'
         )
       ),
       h(
@@ -1533,12 +1534,13 @@ function App() {
         { className: 'panel controls-panel selector-panel' },
         h(
           'div',
-          null,
+          { className: 'panel-header' },
+          h('p', { className: 'section-kicker' }, 'Step 1'),
           h('h2', null, 'Step 1 · Configure the regimen'),
           h(
             'p',
             null,
-            'Search the bundled sample library instantly and, when available, expand into the official FDA NDC directory for broader U.S. coverage.'
+            'Set the patient context and the ceiling used to normalize every dose to % max, while keeping the search flow available for the bundled sample library and FDA-backed catalog.'
           )
         ),
         h(
@@ -1623,7 +1625,8 @@ function App() {
           { className: 'workspace-panel' },
           h(
             'div',
-            null,
+            { className: 'panel-header compact' },
+            h('p', { className: 'section-kicker' }, 'Workspace'),
             h('h2', null, 'Patient workspace'),
             h(
               'p',
@@ -1685,8 +1688,9 @@ function App() {
           { className: 'dose-entry-form', onSubmit: handleMedicationEntrySubmit },
           h(
             'div',
-            null,
-            h('h2', null, 'Step 2 · Medication list entry'),
+            { className: 'panel-header compact' },
+            h('p', { className: 'section-kicker' }, 'Step 2'),
+            h('h2', null, 'Medication list entry'),
             h(
               'p',
               null,
@@ -1780,7 +1784,7 @@ function App() {
               })
             )
           ),
-          h('button', { type: 'submit', className: 'primary-button' }, 'Add Medication To List'),
+          h('button', { type: 'submit', className: 'primary-button' }, 'Save Medication List Entry'),
           listStatus ? h('p', { className: 'helper success-text' }, listStatus) : null,
           listError ? h('p', { className: 'helper error-text' }, listError) : null
         ),
@@ -1789,12 +1793,13 @@ function App() {
           { className: 'dose-entry-form', onSubmit: handleDoseEntrySubmit },
           h(
             'div',
-            null,
-            h('h2', null, 'Step 3 · Add and edit doses'),
+            { className: 'panel-header compact' },
+            h('p', { className: 'section-kicker' }, 'Step 3'),
+            h('h2', null, 'Add and edit doses'),
             h(
               'p',
               null,
-              'Add a drug-specific dose event with its own date, route, and amount so the chart updates immediately.'
+              'Add dose segments with a date, optional end date, route, and amount so the graph updates immediately and stays closer to the static dose-entry workflow.'
             )
           ),
           h(
@@ -1885,7 +1890,7 @@ function App() {
           h(
             'button',
             { type: 'submit', className: 'primary-button' },
-            editingDoseId ? 'Update Dose Entry' : 'Add Dose Entry'
+            editingDoseId ? 'Update Dose Segment' : 'Save Dose Segment'
           ),
           editingDoseId
             ? h(
@@ -1920,7 +1925,7 @@ function App() {
         h(
           'div',
           { className: 'field profile-actions' },
-          h('p', { className: 'metric-label' }, 'Step 4 · Timeframe and profile save'),
+          h('p', { className: 'metric-label' }, 'Profile save'),
           h(
             'button',
             {
@@ -1948,7 +1953,12 @@ function App() {
         h(
           'section',
           { className: 'workspace-panel' },
-          h('h2', null, 'Step 4 · Data tools'),
+          h(
+            'div',
+            { className: 'panel-header compact' },
+            h('p', { className: 'section-kicker' }, 'Step 5'),
+            h('h2', null, 'Data tools')
+          ),
           h(
             'div',
             { className: 'profile-card-actions' },
@@ -2010,7 +2020,12 @@ function App() {
         h(
           'section',
           { className: 'profile-panel' },
-          h('h2', null, 'Step 5 · Saved graph profiles'),
+          h(
+            'div',
+            { className: 'panel-header compact' },
+            h('p', { className: 'section-kicker' }, 'Step 6'),
+            h('h2', null, 'Saved graph profiles')
+          ),
           profiles.length
             ? h(
                 'div',
@@ -2176,7 +2191,18 @@ function App() {
           h(
             'section',
             { className: 'workspace-panel auth-panel-shell' },
-            h('h2', null, isAuthenticated ? 'Step 6 · Account sync and legal checklist' : 'Step 6 · Account registration and sign-in'),
+            h(
+              'div',
+              { className: 'panel-header compact' },
+              h('p', { className: 'section-kicker' }, 'Step 7'),
+              h(
+                'h2',
+                null,
+                isAuthenticated
+                  ? 'Account sync and legal checklist'
+                  : 'Account registration and sign-in'
+              )
+            ),
             h(
               'p',
               null,
@@ -2398,7 +2424,8 @@ function App() {
           h(
             'div',
             { className: 'panel-copy' },
-            h('h2', null, 'Comparison chart'),
+            h('p', { className: 'section-kicker' }, 'Step 4'),
+            h('h2', null, 'Review the trend'),
             h(
               'p',
               null,
@@ -2432,91 +2459,6 @@ function App() {
               h('span', { className: 'metric-label' }, 'Dose events'),
               h('strong', null, summary.eventCount)
             )
-          ),
-          h(
-            'div',
-            { className: 'compare-bar' },
-            selectedDrugs.map((drug, index) =>
-              h(
-                'span',
-                {
-                  key: drug.id,
-                  className: 'compare-chip',
-                  style: { '--chip-color': CHART_COLORS[index % CHART_COLORS.length] },
-                },
-                h('span', { className: 'compare-chip-dot' }),
-                h('span', { className: 'compare-chip-name' }, drug.name),
-                h(
-                  'button',
-                  {
-                    type: 'button',
-                    className: 'compare-chip-remove',
-                    'aria-label': `Remove ${drug.name}`,
-                    onClick: () => handleToggleDrugSelection(drug.id),
-                  },
-                  '×'
-                )
-              )
-            ),
-            canAddMore
-              ? compareBarOpen
-                ? h(
-                    'span',
-                    { className: 'compare-input-wrap' },
-                    h('input', {
-                      autoFocus: true,
-                      className: 'compare-input',
-                      type: 'search',
-                      placeholder: 'Search drug to add…',
-                      value: compareBarTerm,
-                      onChange: event => setCompareBarTerm(event.target.value),
-                      onBlur: () => {
-                        setTimeout(() => {
-                          setCompareBarOpen(false);
-                          setCompareBarTerm('');
-                        }, 200);
-                      },
-                    }),
-                    compareBarTerm.length >= 2
-                      ? h(
-                          'ul',
-                          { className: 'compare-dropdown' },
-                          drugs
-                            .filter(
-                              d =>
-                                d.name.toLowerCase().includes(compareBarTerm.toLowerCase()) &&
-                                !selectedDrugIds.includes(d.id)
-                            )
-                            .slice(0, 8)
-                            .map(d =>
-                              h(
-                                'li',
-                                {
-                                  key: d.id,
-                                  className: 'compare-dropdown-item',
-                                  onMouseDown: () => {
-                                    handleAddDrug(d);
-                                    setCompareBarOpen(false);
-                                    setCompareBarTerm('');
-                                  },
-                                },
-                                d.name
-                              )
-                            )
-                        )
-                      : null
-                  )
-                : h(
-                    'button',
-                    {
-                      type: 'button',
-                      className: 'compare-add-btn',
-                      onClick: () => setCompareBarOpen(true),
-                    },
-                    h('span', { className: 'compare-add-icon' }, '+'),
-                    ' Compare'
-                  )
-              : null
           ),
           h(
             'div',
@@ -2628,6 +2570,134 @@ function App() {
                       )
                     )
           ),
+          h(
+            'div',
+            { className: 'chart-legend', 'aria-label': 'Active comparison legend' },
+            selectedDrugs.map((drug, index) =>
+              h(
+                'span',
+                { className: 'legend-chip', key: `legend-${drug.id}` },
+                h('span', {
+                  className: 'legend-swatch',
+                  style: { backgroundColor: CHART_COLORS[index % CHART_COLORS.length] },
+                }),
+                h('span', null, drug.name),
+                h(
+                  'button',
+                  {
+                    type: 'button',
+                    className: 'table-action secondary compact-button',
+                    onClick: () => handleToggleDrugSelection(drug.id),
+                  },
+                  'Remove'
+                )
+              )
+            )
+          ),
+          h(
+            'div',
+            { className: 'graph-toolbar' },
+            h(
+              'button',
+              {
+                type: 'button',
+                className: 'secondary-button',
+                disabled: !canAddMore && !compareBarOpen,
+                onClick: () => {
+                  setCompareBarOpen(current => !current);
+                  if (compareBarOpen) {
+                    setCompareBarTerm('');
+                  }
+                },
+              },
+              compareBarOpen ? 'Hide Add Drug Panel' : 'Add Drug To Graph'
+            )
+          ),
+          compareBarOpen
+            ? h(
+                'section',
+                { className: 'add-drug-panel', 'aria-label': 'Add drug to graph' },
+                h(
+                  'div',
+                  { className: 'panel-header compact' },
+                  h('p', { className: 'section-kicker' }, 'Graph Add'),
+                  h('h3', null, 'Add another drug series'),
+                  h(
+                    'p',
+                    null,
+                    'Add a new medication line to the current graph with the same static Add Drug To Graph flow, using the existing dynamic medication library.'
+                  )
+                ),
+                h(
+                  'div',
+                  { className: 'field' },
+                  h('label', { htmlFor: 'compareBarSearch' }, 'Medication'),
+                  h('input', {
+                    id: 'compareBarSearch',
+                    autoFocus: true,
+                    className: 'search-input',
+                    type: 'search',
+                    placeholder: 'Search medication to add to graph',
+                    value: compareBarTerm,
+                    onChange: event => setCompareBarTerm(event.target.value),
+                  })
+                ),
+                compareBarTerm.length >= 2
+                  ? h(
+                      'div',
+                      { className: 'search-results add-drug-panel-results' },
+                      drugs
+                        .filter(
+                          d =>
+                            d.name.toLowerCase().includes(compareBarTerm.toLowerCase()) &&
+                            !selectedDrugIds.includes(d.id)
+                        )
+                        .slice(0, 8)
+                        .map(d =>
+                          h(
+                            'div',
+                            { className: 'result-row', key: `compare-${d.id}` },
+                            h(
+                              'div',
+                              { className: 'result-copy' },
+                              h('strong', null, d.name),
+                              h('p', null, buildDrugResultCaption(d))
+                            ),
+                            h(
+                              'button',
+                              {
+                                type: 'button',
+                                className: 'pill-button',
+                                onClick: () => {
+                                  handleAddDrug(d);
+                                  setCompareBarOpen(false);
+                                  setCompareBarTerm('');
+                                },
+                              },
+                              'Add To Graph'
+                            )
+                          )
+                        )
+                    )
+                  : h(
+                      'p',
+                      { className: 'helper' },
+                      'Type at least two letters to search the existing medication library and add another plotted drug.'
+                    ),
+                compareBarTerm.length >= 2 &&
+                !drugs.some(
+                  d =>
+                    d.name.toLowerCase().includes(compareBarTerm.toLowerCase()) &&
+                    !selectedDrugIds.includes(d.id)
+                )
+                  ? h(
+                      'div',
+                      { className: 'empty small-empty' },
+                      'No additional medication matches were found for this graph search.'
+                    )
+                  : null
+              )
+            : null,
           h(
             'div',
             { className: 'insights' },
