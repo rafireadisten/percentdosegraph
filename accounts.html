@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DoseGraph Accounts & Profiles</title>
+    <style>
+      :root {
+        --bg: #f6f1e8;
+        --panel: rgba(255, 252, 246, 0.92);
+        --ink: #1f2a2e;
+        --muted: #66757a;
+        --accent: #0e7a6d;
+        --border: rgba(31, 42, 46, 0.12);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Avenir Next', 'Segoe UI', sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(14, 122, 109, 0.18), transparent 28%),
+          linear-gradient(135deg, #f8f5ef 0%, #efe5d5 100%);
+      }
+      main {
+        width: min(920px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 3rem 0 4rem;
+      }
+      .panel {
+        padding: 1.6rem;
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: var(--panel);
+        box-shadow: 0 18px 50px rgba(70, 56, 27, 0.08);
+      }
+      .stack {
+        display: grid;
+        gap: 1rem;
+      }
+      .eyebrow {
+        margin: 0 0 0.75rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: var(--accent);
+      }
+      h1, h2, h3, p { margin-top: 0; }
+      p { color: var(--muted); line-height: 1.7; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin: 1.25rem 0;
+      }
+      .card {
+        padding: 1rem;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.6);
+      }
+      .card h3,
+      .card p {
+        margin-bottom: 0.5rem;
+      }
+      .limit {
+        display: inline-flex;
+        padding: 0.35rem 0.65rem;
+        border-radius: 999px;
+        background: rgba(14, 122, 109, 0.1);
+        color: var(--accent);
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+      ul {
+        margin: 0.5rem 0 0;
+        padding-left: 1.15rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .link {
+        display: inline-flex;
+        margin-top: 1rem;
+        padding: 0.8rem 1rem;
+        border-radius: 14px;
+        text-decoration: none;
+        color: white;
+        background: var(--accent);
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="panel">
+        <p class="eyebrow">Accounts & Profiles</p>
+        <h1>Accounts and profile options</h1>
+        <p>
+          This page describes the current DoseGraph account types and the profile-generation limits
+          attached to each one. Full account management tools are still in construction, but the
+          account model is already defined.
+        </p>
+        <div class="grid">
+          <article class="card">
+            <h3>Patient account</h3>
+            <p class="limit">Up to 5 profiles</p>
+            <p>
+              Intended for personal or single-user tracking. This keeps the free core experience
+              accessible while limiting profile volume.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Clinician account</h3>
+            <p class="limit">Up to 20 profiles</p>
+            <p>
+              Intended for professional review workflows and multiple active patient cases while
+              still remaining part of the free-access model.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Developer account</h3>
+            <p class="limit">Unlimited profiles</p>
+            <p>
+              Intended for engineering, testing, prototyping, and product-development workflows
+              where profile limits would create friction.
+            </p>
+          </article>
+        </div>
+        <div class="stack">
+          <div>
+            <h2>Account generation options</h2>
+            <ul>
+              <li>Guest/local use currently behaves like the patient tier.</li>
+              <li>Signed-in standard accounts currently behave like the clinician tier.</li>
+              <li>Developer and admin accounts have unlimited profile generation.</li>
+            </ul>
+          </div>
+          <div>
+            <h2>Current behavior</h2>
+            <ul>
+              <li>Users can continue to graph and edit data even after reaching a profile limit.</li>
+              <li>Profile limits only block creation of new profiles.</li>
+              <li>Existing profiles can still be loaded, updated, or deleted.</li>
+            </ul>
+          </div>
+          <div>
+            <h2>Status</h2>
+            <p>
+              Full accounts and profiles management controls are still under construction. For now,
+              sign-in, profile saving, loading, and graph persistence continue to live in the main
+              DoseGraph workspaces.
+            </p>
+          </div>
+        </div>
+        <a class="link" href="./index.html">Back to DoseGraph</a>
+      </section>
+    </main>
+  </body>
+</html>

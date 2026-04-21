@@ -3,16 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple MedGraphF</title>
+    <title>DoseGraph</title>
     <style>
       :root {
-        --bg: #f6f1e8;
-        --panel: rgba(255, 252, 246, 0.92);
-        --ink: #1f2a2e;
-        --muted: #66757a;
-        --accent: #0e7a6d;
-        --accent-strong: #0a5e54;
-        --border: rgba(31, 42, 46, 0.12);
+        --bg: #ffffff;
+        --panel: rgba(255, 255, 255, 0.94);
+        --ink: #202124;
+        --muted: #5f6368;
+        --accent: #0f5a2d;
+        --accent-strong: #0a4723;
+        --border: #e0e3e7;
       }
 
       * {
@@ -22,17 +22,27 @@
       body {
         margin: 0;
         min-height: 100vh;
-        font-family: 'Avenir Next', 'Segoe UI', sans-serif;
+        font-family: 'Google Sans', 'Roboto', 'Segoe UI', sans-serif;
         color: var(--ink);
-        background:
-          radial-gradient(circle at top left, rgba(14, 122, 109, 0.18), transparent 28%),
-          linear-gradient(135deg, #f8f5ef 0%, #efe5d5 100%);
+        position: relative;
+        background: var(--bg);
+      }
+
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background: transparent;
       }
 
       main {
         width: min(1080px, calc(100% - 2rem));
         margin: 0 auto;
         padding: 4rem 0;
+        position: relative;
+        z-index: 1;
       }
 
       .hero {
@@ -67,15 +77,22 @@
         gap: 1.5rem;
       }
 
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.9rem;
+        margin-top: 1.5rem;
+      }
+
       .card {
         display: flex;
         flex-direction: column;
         gap: 1rem;
         padding: 1.5rem;
         border: 1px solid var(--border);
-        border-radius: 24px;
+        border-radius: 18px;
         background: var(--panel);
-        box-shadow: 0 18px 50px rgba(70, 56, 27, 0.08);
+        box-shadow: 0 1px 2px rgba(60, 64, 67, 0.18), 0 1px 3px rgba(60, 64, 67, 0.12);
       }
 
       .card h2,
@@ -88,7 +105,7 @@
         width: fit-content;
         padding: 0.35rem 0.7rem;
         border-radius: 999px;
-        background: rgba(14, 122, 109, 0.12);
+        background: rgba(30, 142, 62, 0.1);
         color: var(--accent-strong);
         font-size: 0.8rem;
         letter-spacing: 0.08em;
@@ -114,18 +131,122 @@
       .link:hover {
         background: var(--accent-strong);
       }
+
+      .link.secondary {
+        color: white;
+        background: var(--accent);
+      }
+
+      .link.secondary:hover {
+        background: var(--accent-strong);
+      }
+
+      .about {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: var(--panel);
+        box-shadow: 0 1px 2px rgba(60, 64, 67, 0.18), 0 1px 3px rgba(60, 64, 67, 0.12);
+      }
+
+      .about h2,
+      .about p {
+        margin: 0;
+      }
+
+      .about-copy {
+        display: grid;
+        gap: 1rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .menu-shell {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        z-index: 30;
+      }
+
+      .menu-button {
+        border: 1px solid var(--accent-strong);
+        border-radius: 999px;
+        padding: 9px 12px;
+        font-weight: 600;
+        color: white;
+        background: var(--accent);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 1px 2px rgba(60, 64, 67, 0.18), 0 2px 6px rgba(60, 64, 67, 0.14);
+        cursor: pointer;
+      }
+
+      .menu-drawer {
+        position: absolute;
+        top: 48px;
+        right: 0;
+        width: min(280px, calc(100vw - 32px));
+        padding: 12px;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 2px 8px rgba(60, 64, 67, 0.2);
+      }
+
+      .menu-drawer.hidden {
+        display: none;
+      }
+
+      .menu-label {
+        margin: 0 0 8px;
+        padding: 0 4px;
+        color: var(--muted);
+        font-size: 0.74rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .menu-drawer a {
+        display: block;
+        padding: 11px 12px;
+        border-radius: 14px;
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .menu-drawer a:hover {
+        background: rgba(30, 142, 62, 0.08);
+      }
     </style>
   </head>
   <body>
+    <div class="menu-shell">
+      <button id="globalMenuButton" type="button" class="menu-button">Menu</button>
+      <nav id="globalMenuDrawer" class="menu-drawer hidden" aria-label="Universal navigation">
+        <p class="menu-label">DoseGraph</p>
+        <a href="./index.html">Landing page</a>
+        <a href="./about.html">About</a>
+        <a href="./updates.html">Updates</a>
+        <a href="./frontend-static/">Static version</a>
+        <a href="./frontend-react/">Dynamic version</a>
+        <a href="mailto:rafi@readisten.com">Contact developers / engineers</a>
+        <a href="./accounts.html">Accounts &amp; profiles management</a>
+      </nav>
+    </div>
     <main>
       <section class="hero">
-        <p class="eyebrow">Simple MedGraphF</p>
-        <h1>Choose the easiest MedGraph front page for quick charting or account-based workflow.</h1>
+        <p class="eyebrow">DoseGraph</p>
+        <!-- MARKER: PDG-COPYLOCK-CORE-LINE-2026-04-20 — DO NOT EDIT without 2-3 explicit review passes -->
+        <h1 id="core-slogan" data-copy-lock="triple-review">Compare and see medication doses over time.</h1>
         <p>
-          Simple MedGraphF gives you two clear starting points. Use the static page for basic
-          medication graphing with the core fields only, or open the React page when you want
-          account registration, saved profiles, imports, exports, and backend sync.
+          DoseGraph shows each dose as a percent of that drug's maximum dose at each time point.
+          This makes it easy to compare one drug to another, or compare the same drug across time.
         </p>
+        <!-- END MARKER: PDG-COPYLOCK-CORE-LINE-2026-04-20 -->
+        <div class="hero-actions">
+           <!-- MARKER: PDG-ABOUT-DISABLED-2026-04-20 — restore line below to re-enable About link -->
+           <!-- <a class="link secondary" href="#about">About This Project</a> -->
+        </div>
       </section>
 
       <section class="chooser" aria-label="Frontend type chooser">
@@ -151,6 +272,14 @@
           <a class="link" href="./frontend-react/">Open React Account Page</a>
         </article>
       </section>
+
     </main>
+    <script>
+      const globalMenuButton = document.getElementById('globalMenuButton');
+      const globalMenuDrawer = document.getElementById('globalMenuDrawer');
+      globalMenuButton?.addEventListener('click', () => {
+        globalMenuDrawer?.classList.toggle('hidden');
+      });
+    </script>
   </body>
 </html>

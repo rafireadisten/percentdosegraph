@@ -4,6 +4,11 @@ All notable project changes should be recorded in this file.
 
 ## 2026-04-20
 
+<!-- MARKER: PDG-80PCT-DISABLED-2026-04-20 -->
+### `chore: disable 80% max dose visualizers (code retained, not active)`
+- Commented out all 80% reference line and metric display code across `script.js`, `frontend-react/app.js`, and `frontend-static/index.html`. No code deleted — each block is marked `MARKER: PDG-80PCT-DISABLED-2026-04-20` for easy search and re-activation.
+- To re-enable: search `PDG-80PCT-DISABLED-2026-04-20` across all files and uncomment the annotated blocks.
+
 <!-- MARKER: PDG-RHEUM-ORAL-2026-04-20 -->
 ### `feat: add top oral rheumatology drugs with multilingual alias coverage`
 - <!-- MARKER: PDG-RHEUM-DB-DATA-2026-04-20 --> Added five oral rheumatology medications to `data/drugs.json`: Methotrexate, Hydroxychloroquine, Leflunomide, Sulfasalazine, and Tofacitinib.

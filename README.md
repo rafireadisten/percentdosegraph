@@ -1,57 +1,60 @@
-# PercentDoseGraph
+# DoseGraph
 
-PercentDoseGraph is a lightweight browser app for clinicians and pharmacists who want to review medication dosing as a percentage of a patient-specific maximum dose over different time windows.
+Compare and see medication doses over time.
 
-## GitHub Repository Assets
+## Why DoseGraph Exists
 
-This repository includes several files configured for GitHub hosting:
-- **`.github/`** - GitHub-specific configuration (workflows, issue templates, PR templates)
-- **`LICENSE`** - MIT open source license
-- **`CONTRIBUTING.md`** - Developer contribution guidelines
-- **`SECURITY.md`** - Security policy and vulnerability reporting
-- **`deploy/`** - Deployment-ready folder for web hosting services
-- **`.gitignore`, `.gitattributes`, `.npmrc`** - Git and npm configuration
+Imagine being tasked with reviewing 20 years of a patient's medication dosing history spread across roughly 100 pages of printed records, with only 72 hours to produce a usable result. Under those constraints, the task quickly proves impractical and goes unfinished.
 
-These are only relevant if pushing to GitHub. For local development of the application itself, focus on the core files listed below.
+This isn't just a hypothetical example of system inefficiency. It's something I have personally experienced.
 
-## What this first version does
+In 2026, I was finally able to revisit the problem with a new advantage: AI tools that made it possible to begin building a viable computerized graphing solution.
+
+DoseGraph's main job is simple: show each drug dose as a percent of that drug's maximum dose over time. This lets you clearly compare different drugs, or compare the same drug at different times.
+
+## What DoseGraph Does
 
 - captures the core clinical context: patient, medication, dose unit, and max dose
-- lets you add dated dose events
-- summarizes exposure across 1 day, 1 week, 1 year, 2 years, 3 years, 5 years, or 10 years
-- visualizes average dose as `% of max`
-- highlights higher-risk periods with an 80% reference line
+- lets you add dated dose events and defined dose segments
+- shows each drug as `% of max dose` over time
+- supports multiple timeframe views from `1d` through `10y` plus custom ranges
+- lets you save and load medication profiles
+- supports local and backend-backed account/profile workflows
 
 ## Features
 
-- **Expanded Drug Library**: 35+ medications with clinical dosing guidelines
-- **Data Management**: Import/export JSON, export CSV, clear all data
-- **Medication Profiles**: Save and load named medication snapshots
-- **Responsive Design**: Works on desktop and mobile devices
-- **Real-time Inference**: Auto-suggests max doses from built-in library
+- **Dose Graphing**: Compare medications or compare one medication across time
+- **Profile Limits By Account Type**: `5` patient, `20` clinician, unlimited developer
+- **Drug Library**: Built-in medication list including inhaled drugs and combination inhalers
+- **Editing Workflow**: Update doses from the form workflow and from graph-linked detail panels
+- **Data Tools**: Import/export options moved behind advanced actions for a cleaner UI
 
-## File Structure
+## Core Files
 
 ```
 percentdosegraph/
-├── index.html          # Main application interface
-├── script.js           # Application logic and chart rendering
-├── styles.css          # Styling and responsive design
-├── drug-library.json   # Expanded medication reference library
-├── profiles.json       # Saved medication profiles
-└── data/               # Sample data files
-    ├── doses.json      # Sample dose events
-    └── drugs.json      # Alternative drug format
+├── index.html                 # Landing page
+├── about.html                 # Origin story and product context
+├── accounts.html              # Account tiers and profile-management overview
+├── frontend-static/           # Static DoseGraph experience
+├── frontend-react/            # Dynamic React web app
+├── script.js                  # Main static-app logic
+├── styles.css                 # Shared styling
+├── drug-library.json          # Local medication reference library
+└── data/                      # Local sample/reference data
 ```
 
 ## Quick Start
 
-1. Open `index.html` in a modern web browser
-2. The app loads with sample data for demonstration
-3. Configure patient and medication settings
-4. Add dose events using the form
-5. View trends in the chart panel
-6. Save profiles for different patients/medications
+```bash
+npm install
+npm run dev:web
+npm run dev:api
+```
+
+Then open the local app in your browser.
+
+For a simple static-only check, you can also open `index.html` directly in a modern browser.
 
 ## Backend Persistence
 
@@ -102,34 +105,9 @@ For backward compatibility, `POST /api/profiles` still works and will attach the
 - **Import JSON**: Restore from exported backup files
 - **Profiles**: Save/load named medication configurations
 
-## Replit Integration
-
-This app incorporates resources and features from an advanced Replit-generated version, including:
-
-- Expanded drug library with 25+ additional medications
-- Profile management system
-- Enhanced data persistence concepts
-- Improved UI patterns and responsive design
-
 ## Important note
 
 The bundled `drug-library.json` is a starter reference library for inference and display. It is not a validated clinical formulary and should remain clinician-adjustable.
-
-## Good next steps
-
-- add CSV upload for MAR or dispensing history
-- support multiple medications and route conversions
-- store data locally with IndexedDB or in a backend service
-- add patient-level guardrails such as renal adjustment, weight-based caps, or cumulative exposure alerts
-- export charts and summary reports for documentation
-
-## Recent enhancements
-
-- Added data export functionality (JSON and CSV formats)
-- Added data import from JSON files
-- Added clear all data button for resetting the application
-- Integrated expanded drug library from Replit resources
-- Added medication profiles for saving/loading configurations
 
 ## Mobile App Development
 

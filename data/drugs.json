@@ -2960,5 +2960,331 @@
     "maxSingleDose": 11,
     "unit": "mg",
     "notes": "Oral rheumatology starter reference for JAK inhibitor regimen comparison."
+  },
+  {
+    "id": 189,
+    "name": "Albuterol",
+    "genericName": "Albuterol",
+    "drugClass": "Short-acting beta agonist",
+    "maxDailyDose": 12,
+    "routeMaxDoses": {
+      "INH": 12
+    },
+    "maxSingleDose": 2,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "salbutamol",
+      "ventolin",
+      "proair"
+    ]
+  },
+  {
+    "id": 190,
+    "name": "Levalbuterol",
+    "genericName": "Levalbuterol",
+    "drugClass": "Short-acting beta agonist",
+    "maxDailyDose": 12,
+    "routeMaxDoses": {
+      "INH": 12
+    },
+    "maxSingleDose": 2,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "xopenex"
+    ]
+  },
+  {
+    "id": 191,
+    "name": "Ipratropium",
+    "genericName": "Ipratropium",
+    "drugClass": "Short-acting muscarinic antagonist",
+    "maxDailyDose": 12,
+    "routeMaxDoses": {
+      "INH": 12
+    },
+    "maxSingleDose": 2,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "atrovent"
+    ]
+  },
+  {
+    "id": 192,
+    "name": "Tiotropium",
+    "genericName": "Tiotropium",
+    "drugClass": "Long-acting muscarinic antagonist",
+    "maxDailyDose": 2,
+    "routeMaxDoses": {
+      "INH": 2
+    },
+    "maxSingleDose": 2,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "spiriva"
+    ]
+  },
+  {
+    "id": 193,
+    "name": "Umeclidinium",
+    "genericName": "Umeclidinium",
+    "drugClass": "Long-acting muscarinic antagonist",
+    "maxDailyDose": 1,
+    "routeMaxDoses": {
+      "INH": 1
+    },
+    "maxSingleDose": 1,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "incruse ellipta"
+    ]
+  },
+  {
+    "id": 195,
+    "name": "Budesonide",
+    "genericName": "Budesonide",
+    "drugClass": "Inhaled corticosteroid",
+    "maxDailyDose": 4,
+    "routeMaxDoses": {
+      "INH": 4
+    },
+    "maxSingleDose": 2,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "pulmicort"
+    ]
+  },
+  {
+    "id": 196,
+    "name": "Fluticasone Propionate",
+    "genericName": "Fluticasone Propionate",
+    "drugClass": "Inhaled corticosteroid",
+    "maxDailyDose": 4,
+    "routeMaxDoses": {
+      "INH": 4
+    },
+    "maxSingleDose": 2,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "flovent"
+    ]
+  },
+  {
+    "id": 197,
+    "name": "Fluticasone Furoate",
+    "genericName": "Fluticasone Furoate",
+    "drugClass": "Inhaled corticosteroid",
+    "maxDailyDose": 1,
+    "routeMaxDoses": {
+      "INH": 1
+    },
+    "maxSingleDose": 1,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "arnuity ellipta"
+    ]
+  },
+  {
+    "id": 198,
+    "name": "Beclomethasone",
+    "genericName": "Beclomethasone",
+    "drugClass": "Inhaled corticosteroid",
+    "maxDailyDose": 4,
+    "routeMaxDoses": {
+      "INH": 4
+    },
+    "maxSingleDose": 2,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "qvar"
+    ]
+  },
+  {
+    "id": 199,
+    "name": "Mometasone",
+    "genericName": "Mometasone",
+    "drugClass": "Inhaled corticosteroid",
+    "maxDailyDose": 2,
+    "routeMaxDoses": {
+      "INH": 2
+    },
+    "maxSingleDose": 2,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "asmanex"
+    ]
+  },
+  {
+    "id": 200,
+    "name": "Ciclesonide",
+    "genericName": "Ciclesonide",
+    "drugClass": "Inhaled corticosteroid",
+    "maxDailyDose": 2,
+    "routeMaxDoses": {
+      "INH": 2
+    },
+    "maxSingleDose": 2,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "alvesco"
+    ]
+  },
+  {
+    "id": 201,
+    "name": "Salmeterol",
+    "genericName": "Salmeterol",
+    "drugClass": "Long-acting beta agonist",
+    "maxDailyDose": 2,
+    "routeMaxDoses": {
+      "INH": 2
+    },
+    "maxSingleDose": 1,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "serevent"
+    ]
+  },
+  {
+    "id": 202,
+    "name": "Formoterol",
+    "genericName": "Formoterol",
+    "drugClass": "Long-acting beta agonist",
+    "maxDailyDose": 2,
+    "routeMaxDoses": {
+      "INH": 2
+    },
+    "maxSingleDose": 1,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "foradil",
+      "perforomist"
+    ]
+  },
+  {
+    "id": 204,
+    "name": "Budesonide/Formoterol",
+    "genericName": "Budesonide/Formoterol",
+    "drugClass": "ICS/LABA combination inhaler",
+    "maxDailyDose": 12,
+    "routeMaxDoses": {
+      "INH": 12
+    },
+    "maxSingleDose": 2,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "symbicort",
+      "breyna"
+    ]
+  },
+  {
+    "id": 205,
+    "name": "Fluticasone/Salmeterol",
+    "genericName": "Fluticasone/Salmeterol",
+    "drugClass": "ICS/LABA combination inhaler",
+    "maxDailyDose": 4,
+    "routeMaxDoses": {
+      "INH": 4
+    },
+    "maxSingleDose": 1,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "advair",
+      "airduo",
+      "wixela"
+    ]
+  },
+  {
+    "id": 206,
+    "name": "Fluticasone Furoate/Vilanterol",
+    "genericName": "Fluticasone Furoate/Vilanterol",
+    "drugClass": "ICS/LABA combination inhaler",
+    "maxDailyDose": 1,
+    "routeMaxDoses": {
+      "INH": 1
+    },
+    "maxSingleDose": 1,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "breo ellipta"
+    ]
+  },
+  {
+    "id": 207,
+    "name": "Mometasone/Formoterol",
+    "genericName": "Mometasone/Formoterol",
+    "drugClass": "ICS/LABA combination inhaler",
+    "maxDailyDose": 4,
+    "routeMaxDoses": {
+      "INH": 4
+    },
+    "maxSingleDose": 2,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "dulera"
+    ]
+  },
+  {
+    "id": 208,
+    "name": "Tiotropium/Olodaterol",
+    "genericName": "Tiotropium/Olodaterol",
+    "drugClass": "LAMA/LABA combination inhaler",
+    "maxDailyDose": 2,
+    "routeMaxDoses": {
+      "INH": 2
+    },
+    "maxSingleDose": 2,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "stiolto"
+    ]
+  },
+  {
+    "id": 209,
+    "name": "Umeclidinium/Vilanterol",
+    "genericName": "Umeclidinium/Vilanterol",
+    "drugClass": "LAMA/LABA combination inhaler",
+    "maxDailyDose": 1,
+    "routeMaxDoses": {
+      "INH": 1
+    },
+    "maxSingleDose": 1,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "anoro ellipta"
+    ]
+  },
+  {
+    "id": 210,
+    "name": "Fluticasone/Umeclidinium/Vilanterol",
+    "genericName": "Fluticasone/Umeclidinium/Vilanterol",
+    "drugClass": "Triple-therapy combination inhaler",
+    "maxDailyDose": 1,
+    "routeMaxDoses": {
+      "INH": 1
+    },
+    "maxSingleDose": 1,
+    "unit": "puffs",
+    "notes": "Expanded inhaled starter drug library.",
+    "roAliases": [
+      "trelegy ellipta"
+    ]
   }
 ]

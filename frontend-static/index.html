@@ -3,26 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple MedGraphF Basic</title>
+    <title>DoseGraph Basic</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body>
+    <div class="menu-shell">
+      <button id="globalMenuButton" type="button" class="menu-button">Menu</button>
+      <nav id="globalMenuDrawer" class="menu-drawer hidden" aria-label="Universal navigation">
+        <p class="menu-label">DoseGraph</p>
+        <a href="../index.html">Landing page</a>
+        <a href="../about.html">About</a>
+        <a href="../updates.html">Updates</a>
+        <a href="./">Static version</a>
+        <a href="../frontend-react/">Dynamic version</a>
+        <a href="mailto:rafi@readisten.com">Contact developers / engineers</a>
+        <a href="../accounts.html">Accounts &amp; profiles management</a>
+      </nav>
+    </div>
     <div class="app-shell">
       <header class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">Simple MedGraphF Basic</p>
-          <h1>Use the simple front page for core medication dose graphing.</h1>
+          <p class="eyebrow">DoseGraph Basic</p>
+          <h1>Use the basic DoseGraph workspace for core medication dose graphing.</h1>
           <p class="hero-text">
             Enter the medication, patient label, route, reference max dose, and dose dates in one
             place. This basic page focuses on the core graph functions without requiring account
             registration.
           </p>
         </div>
-        <div class="hero-card">
-          <p class="card-label">Basic functions</p>
-          <p class="card-value" id="headlinePercent">0</p>
-          <p class="card-caption">Days above 80% of max in the selected window</p>
-        </div>
+
+      <!-- MARKER: PDG-80PCT-DISABLED-2026-04-20 — restore block below to re-enable 80% hero card
+      <div class="hero-card">
+        <p class="card-label">Basic functions</p>
+        <p class="card-value" id="headlinePercent">0</p>
+        <p class="card-caption">Days above 80% of max in the selected window</p>
+      </div>
+      -->
       </header>
 
       <div class="workspace-heading">
@@ -95,6 +111,7 @@
                 <option value="SC">SC</option>
                 <option value="SL">SL</option>
                 <option value="PR">PR</option>
+                <option value="INH">Inhaled</option>
                 <option value="TD">Transdermal</option>
                 <option value="Other">Other</option>
               </select>
@@ -111,11 +128,19 @@
               Assessment window
               <select id="timeframe" name="timeframe">
                 <option value="1d">1 day</option>
-                <option value="7d">1 week</option>
-                <option value="30d">30 days</option>
-                <option value="90d">90 days</option>
-                <option value="1y" selected>1 year</option>
-                <option value="2y">2 years</option>
+                <option value="1w">1 week</option>
+                <option value="2w">2 weeks</option>
+                <option value="4w">4 weeks</option>
+                <option value="3m">3 months</option>
+                <option value="4m">4 months</option>
+                <option value="6m">6 months</option>
+                <option value="12m" selected>12 months</option>
+                <option value="18m">18 months</option>
+                <option value="24m">24 months</option>
+                <option value="3y">3 years</option>
+                <option value="5y">5 years</option>
+                <option value="10y">10 years</option>
+                <option value="custom">Custom</option>
               </select>
             </label>
           </form>
@@ -150,15 +175,12 @@
               a new dose level for the same drug and route.
             </p>
             <div class="workflow-actions">
-              <button id="setTodayButton" type="button" class="secondary-button">Use Today</button>
-              <button id="setTwoYearButton" type="button" class="secondary-button">
-                Switch to 2 Years
+              <button id="openTimeframeButton" type="button" class="secondary-button">Timeframe</button>
+              <button id="openAdvancedOptionsButton" type="button" class="secondary-button">
+                Advanced Options
               </button>
             </div>
             <div class="export-controls">
-              <button id="importJsonButton" class="secondary-button">Import JSON</button>
-              <button id="exportJsonButton" class="secondary-button">Export JSON</button>
-              <button id="exportCsvButton" class="secondary-button">Export CSV</button>
               <button
                 id="clearDataButton"
                 class="secondary-button"
@@ -205,6 +227,7 @@
                 <option value="SC">SC</option>
                 <option value="SL">SL</option>
                 <option value="PR">PR</option>
+                <option value="INH">Inhaled</option>
                 <option value="TD">Transdermal</option>
                 <option value="Other">Other</option>
               </select>
@@ -271,22 +294,151 @@
             </p>
           </div>
 
+
+
+          <!-- MARKER: PDG-80PCT-DISABLED-2026-04-20 — restore block below to re-enable days-above-80% metric row
           <div class="metrics-grid">
             <article class="metric">
               <span>Days above 80%</span>
               <strong id="highDays">0</strong>
             </article>
           </div>
-
+          -->
           <div class="chart-card">
-            <aside id="chartHoverCard" class="chart-hover-card hidden" aria-live="polite"></aside>
             <canvas
               id="doseChart"
               width="900"
               height="380"
               aria-label="Dose percentage chart"
             ></canvas>
+            <aside id="chartHoverCard" class="chart-hover-card hidden" aria-live="polite"></aside>
             <div id="chartLegend" class="chart-legend" aria-label="Active comparison legend"></div>
+            <div class="graph-toolbar">
+              <button id="toggleAddDrugPanelButton" type="button" class="secondary-button">
+                Add Drug To Graph
+              </button>
+            </div>
+            <div id="seriesDetails" class="series-details" aria-label="Drug series details"></div>
+            <section id="addDrugPanel" class="add-drug-panel hidden" aria-label="Add drug to graph">
+              <div class="panel-header compact">
+                <p class="section-kicker">Graph Add</p>
+                <h3>Add another drug series</h3>
+                <p>
+                  Add a new medication line to the current graph with its own route, reference max
+                  dose, time window, and dose amount. If a profile is currently loaded, these
+                  changes remain part of that graphed profile.
+                </p>
+              </div>
+              <form id="addDrugForm" class="stack">
+                <label>
+                  Medication
+                  <input id="addDrugMedicationName" name="addDrugMedicationName" type="text" />
+                </label>
+                <label>
+                  Route of administration
+                  <select id="addDrugRoute" name="addDrugRoute">
+                    <option value="PO" selected>PO</option>
+                    <option value="IV">IV</option>
+                    <option value="IM">IM</option>
+                    <option value="SC">SC</option>
+                    <option value="SL">SL</option>
+                    <option value="PR">PR</option>
+                    <option value="INH">Inhaled</option>
+                    <option value="TD">Transdermal</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </label>
+                <label>
+                  Dose unit
+                  <input id="addDrugDoseUnit" name="addDrugDoseUnit" type="text" />
+                </label>
+                <label>
+                  Reference maximum dose
+                  <input id="addDrugMaxDose" name="addDrugMaxDose" type="text" inputmode="decimal" />
+                </label>
+                <label>
+                  Assessment window
+                  <select id="addDrugTimeframe" name="addDrugTimeframe">
+                    <option value="1d">1 day</option>
+                    <option value="1w">1 week</option>
+                    <option value="2w">2 weeks</option>
+                    <option value="4w">4 weeks</option>
+                    <option value="3m">3 months</option>
+                    <option value="4m">4 months</option>
+                    <option value="6m">6 months</option>
+                    <option value="12m" selected>12 months</option>
+                    <option value="18m">18 months</option>
+                    <option value="24m">24 months</option>
+                    <option value="3y">3 years</option>
+                    <option value="5y">5 years</option>
+                    <option value="10y">10 years</option>
+                    <option value="custom">Custom</option>
+                  </select>
+                </label>
+                <div class="status-field">
+                  <span class="status-label">Save target</span>
+                  <div class="save-target-group" role="group" aria-label="Additional drug save target">
+                    <label class="save-target-option">
+                      <input
+                        id="addDrugSaveTargetWorkspace"
+                        name="addDrugSaveTarget"
+                        type="radio"
+                        value="workspace"
+                        checked
+                      />
+                      <span>Current graph only</span>
+                    </label>
+                    <label class="save-target-option">
+                      <input
+                        id="addDrugSaveTargetProfile"
+                        name="addDrugSaveTarget"
+                        type="radio"
+                        value="profile"
+                      />
+                      <span>Current profile + graph</span>
+                    </label>
+                  </div>
+                  <p id="addDrugSaveTargetHelp" class="workspace-detail">
+                    Save this added drug only into the current graph workspace unless you choose the
+                    loaded profile option.
+                  </p>
+                </div>
+                <div class="entry-grid">
+                  <label>
+                    Start date
+                    <input id="addDrugStartDate" name="addDrugStartDate" type="date" required />
+                  </label>
+                  <label>
+                    End date
+                    <input id="addDrugEndDate" name="addDrugEndDate" type="date" />
+                  </label>
+                </div>
+                <label>
+                  Dose amount
+                  <input id="addDrugAmount" name="addDrugAmount" type="number" min="0" step="0.1" required />
+                </label>
+                <div class="status-field">
+                  <span class="status-label">Dose Status</span>
+                  <input id="addDrugStatus" name="addDrugStatus" type="hidden" value="current" />
+                  <div class="status-toggle-group" role="group" aria-label="Additional drug status selector">
+                    <button id="addDrugStatusCurrentButton" type="button" class="status-toggle active">
+                      Still on this dose
+                    </button>
+                    <button id="addDrugStatusEndedButton" type="button" class="status-toggle">
+                      Dose ended or changed
+                    </button>
+                  </div>
+                </div>
+                <div class="dose-form-actions">
+                  <button id="addDrugSubmitButton" type="submit" class="primary-button">
+                    Add Drug Series
+                  </button>
+                  <button id="closeAddDrugPanelButton" type="button" class="secondary-button">
+                    Close
+                  </button>
+                </div>
+              </form>
+            </section>
           </div>
 
           <div class="summary-grid">
@@ -361,6 +513,46 @@
               </div>
               <p id="authMessage" class="auth-message"></p>
             </form>
+
+            <div class="compliance-panel static-auth-legal">
+              <p class="metric-label">Legal checklist</p>
+              <p class="workspace-detail">
+                Review and accept these notices before creating or using a browser-local account for
+                saved profiles.
+              </p>
+              <label class="checkbox-row">
+                <input id="staticAcceptedEula" type="checkbox" />
+                <span>
+                  I accept the EULA and understand commercial deployment requires an appropriate
+                  commercial license or internal approval.
+                </span>
+              </label>
+              <label class="checkbox-row">
+                <input id="staticAcceptedHipaaNotice" type="checkbox" />
+                <span>
+                  I acknowledge the HIPAA notice: directly identifying patient data should be
+                  anonymized, and exact first and last names should not be used in this workspace.
+                </span>
+              </label>
+              <label class="checkbox-row">
+                <input id="staticAcceptedBaaRepresentation" type="checkbox" />
+                <span>
+                  I represent that any required BAA or equivalent authorization for identifiable
+                  health data has been reviewed and approved before account sync or sharing.
+                </span>
+              </label>
+              <div class="notice-card legal-copy">
+                <strong>HIPAA notice</strong>
+                <p>
+                  Browser-local profiles can still contain sensitive clinical context. Keep the data
+                  de-identified unless your organization has approved identifiable use.
+                </p>
+              </div>
+              <div id="staticLegalStatus" class="notice-card notice-warning">
+                <strong>Legal checklist still requires acknowledgement</strong>
+                <p>Account creation and sign-in stay blocked until all three notices are accepted.</p>
+              </div>
+            </div>
           </div>
 
           <div class="profile-controls">

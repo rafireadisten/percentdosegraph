@@ -51,5 +51,21 @@
     "route": "PO",
     "amount": 12.5,
     "notes": ""
+  },
+  {
+    "id": 14,
+    "drugId": 133,
+    "date": "2026-04-21",
+    "route": "PO",
+    "amount": 875,
+    "notes": ""
+  },
+  {
+    "id": 15,
+    "drugId": 133,
+    "date": "2025-04-21",
+    "route": "PO",
+    "amount": 875,
+    "notes": ""
   }
 ]

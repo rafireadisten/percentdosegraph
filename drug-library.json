@@ -610,6 +610,295 @@
     ]
   },
   {
+    "drug": "Levalbuterol",
+    "aliases": [
+      "xopenex"
+    ],
+    "route": "INH",
+    "maxDose": 12,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative rescue inhaler cap for comparison trending.",
+    "roAliases": [
+      "levalbuterol",
+      "xopenex"
+    ]
+  },
+  {
+    "drug": "Ipratropium",
+    "aliases": [
+      "atrovent"
+    ],
+    "route": "INH",
+    "maxDose": 12,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative inhaled anticholinergic cap for comparison trending.",
+    "roAliases": [
+      "ipratropium",
+      "atrovent"
+    ]
+  },
+  {
+    "drug": "Tiotropium",
+    "aliases": [
+      "spiriva"
+    ],
+    "route": "INH",
+    "maxDose": 2,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative once-daily LAMA cap for maintenance trending.",
+    "roAliases": [
+      "tiotropium",
+      "spiriva"
+    ]
+  },
+  {
+    "drug": "Umeclidinium",
+    "aliases": [
+      "incruse ellipta"
+    ],
+    "route": "INH",
+    "maxDose": 1,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative once-daily LAMA cap for maintenance trending.",
+    "roAliases": [
+      "umeclidinium",
+      "incruse"
+    ]
+  },
+  {
+    "drug": "Budesonide",
+    "aliases": [
+      "pulmicort"
+    ],
+    "route": "INH",
+    "maxDose": 4,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative inhaled corticosteroid cap for maintenance trending.",
+    "roAliases": [
+      "budesonide",
+      "pulmicort"
+    ]
+  },
+  {
+    "drug": "Fluticasone Propionate",
+    "aliases": [
+      "flovent"
+    ],
+    "route": "INH",
+    "maxDose": 4,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative inhaled corticosteroid cap for maintenance trending.",
+    "roAliases": [
+      "fluticasone",
+      "flovent"
+    ]
+  },
+  {
+    "drug": "Fluticasone Furoate",
+    "aliases": [
+      "arnuity ellipta"
+    ],
+    "route": "INH",
+    "maxDose": 1,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative once-daily inhaled corticosteroid cap for maintenance trending.",
+    "roAliases": [
+      "fluticasone furoate",
+      "arnuity"
+    ]
+  },
+  {
+    "drug": "Beclomethasone",
+    "aliases": [
+      "qvar"
+    ],
+    "route": "INH",
+    "maxDose": 4,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative inhaled corticosteroid cap for maintenance trending.",
+    "roAliases": [
+      "beclomethasone",
+      "qvar"
+    ]
+  },
+  {
+    "drug": "Mometasone",
+    "aliases": [
+      "asmanex"
+    ],
+    "route": "INH",
+    "maxDose": 2,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative inhaled corticosteroid cap for maintenance trending.",
+    "roAliases": [
+      "mometasone",
+      "asmanex"
+    ]
+  },
+  {
+    "drug": "Ciclesonide",
+    "aliases": [
+      "alvesco"
+    ],
+    "route": "INH",
+    "maxDose": 2,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative inhaled corticosteroid cap for maintenance trending.",
+    "roAliases": [
+      "ciclesonide",
+      "alvesco"
+    ]
+  },
+  {
+    "drug": "Salmeterol",
+    "aliases": [
+      "serevent"
+    ],
+    "route": "INH",
+    "maxDose": 2,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative LABA cap for maintenance trending.",
+    "roAliases": [
+      "salmeterol",
+      "serevent"
+    ]
+  },
+  {
+    "drug": "Formoterol",
+    "aliases": [
+      "foradil",
+      "perforomist"
+    ],
+    "route": "INH",
+    "maxDose": 2,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative LABA cap for maintenance trending.",
+    "roAliases": [
+      "formoterol",
+      "foradil"
+    ]
+  },
+  {
+    "drug": "Budesonide/Formoterol",
+    "aliases": [
+      "symbicort",
+      "breyna"
+    ],
+    "route": "INH",
+    "maxDose": 12,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative ICS/LABA combination inhaler cap for maintenance trending.",
+    "roAliases": [
+      "symbicort",
+      "breyna"
+    ]
+  },
+  {
+    "drug": "Fluticasone/Salmeterol",
+    "aliases": [
+      "advair",
+      "airduo",
+      "wixela"
+    ],
+    "route": "INH",
+    "maxDose": 4,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative ICS/LABA combination inhaler cap for maintenance trending.",
+    "roAliases": [
+      "advair",
+      "wixela"
+    ]
+  },
+  {
+    "drug": "Fluticasone Furoate/Vilanterol",
+    "aliases": [
+      "breo ellipta"
+    ],
+    "route": "INH",
+    "maxDose": 1,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative once-daily ICS/LABA combination inhaler cap for maintenance trending.",
+    "roAliases": [
+      "breo",
+      "vilanterol"
+    ]
+  },
+  {
+    "drug": "Mometasone/Formoterol",
+    "aliases": [
+      "dulera"
+    ],
+    "route": "INH",
+    "maxDose": 4,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative ICS/LABA combination inhaler cap for maintenance trending.",
+    "roAliases": [
+      "dulera",
+      "mometasone formoterol"
+    ]
+  },
+  {
+    "drug": "Tiotropium/Olodaterol",
+    "aliases": [
+      "stiolto"
+    ],
+    "route": "INH",
+    "maxDose": 2,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative LAMA/LABA combination inhaler cap for maintenance trending.",
+    "roAliases": [
+      "stiolto",
+      "olodaterol"
+    ]
+  },
+  {
+    "drug": "Umeclidinium/Vilanterol",
+    "aliases": [
+      "anoro ellipta"
+    ],
+    "route": "INH",
+    "maxDose": 1,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative once-daily LAMA/LABA combination inhaler cap for maintenance trending.",
+    "roAliases": [
+      "anoro",
+      "umeclidinium vilanterol"
+    ]
+  },
+  {
+    "drug": "Fluticasone/Umeclidinium/Vilanterol",
+    "aliases": [
+      "trelegy ellipta"
+    ],
+    "route": "INH",
+    "maxDose": 1,
+    "unit": "puffs/day",
+    "source": "Expanded inhaled starter library",
+    "note": "Illustrative triple-therapy inhaler cap for maintenance trending.",
+    "roAliases": [
+      "trelegy",
+      "umeclidinium"
+    ]
+  },
+  {
     "drug": "Prednisone",
     "aliases": [
       "deltasone"

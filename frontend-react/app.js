@@ -16,7 +16,7 @@ import {
 const h = React.createElement;
 const MAX_VISIBLE_DRUGS = 20;
 const API_BASE_PATH = resolveApiBasePath();
-const ROUTE_OPTIONS = ['PO', 'IV', 'IM', 'SC', 'SL', 'PR', 'TD', 'Other'];
+const ROUTE_OPTIONS = ['PO', 'IV', 'IM', 'SC', 'SL', 'PR', 'INH', 'TD', 'Other'];
 const TIMELINE_STATUS_OPTIONS = [
   { value: 'current', label: 'Current' },
   { value: 'historic', label: 'Historic' },
@@ -264,6 +264,8 @@ function App() {
   const [profileStatus, setProfileStatus] = useState('');
   const [profileName, setProfileName] = useState('');
   const [hoveredLineDrugId, setHoveredLineDrugId] = useState(null);
+  const [compareBarOpen, setCompareBarOpen] = useState(false);
+  const [compareBarTerm, setCompareBarTerm] = useState('');
   // MARKER: PDG-GRAPH-INTERACTION-2026-04-20
   const [selectedChartBucket, setSelectedChartBucket] = useState(null);
   const [maxDoseDrafts, setMaxDoseDrafts] = useState({});
@@ -288,6 +290,7 @@ function App() {
   // Random profile generator state
   const [randomProfile, setRandomProfile] = useState(null);
   const [generatingRandom, setGeneratingRandom] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     saveProfilesToStorage(profiles);
@@ -783,6 +786,16 @@ function App() {
     const existingProfile = activeProfileId
       ? profiles.find(profile => profile.id === activeProfileId)
       : null;
+    const profileCreation = canCreateAnotherProfileForUser(user, profiles, existingProfile);
+    if (!profileCreation.allowed) {
+      setProfileStatus(
+        `${profileCreation.tier} users can save up to ${
+          Number.isFinite(profileCreation.limit) ? profileCreation.limit : 'unlimited'
+        } profiles. Delete an old profile before creating a new one.`
+      );
+      return;
+    }
+
     const existingLabel = existingProfile?.label ?? existingProfile?.name;
     const id = existingProfile?.id ?? generateProfileId(
       {
@@ -1389,28 +1402,44 @@ function App() {
 
   return h(
     'div',
-    { className: 'shell' },
+    { className: 'app-shell' },
+    h(
+      'div',
+      { className: 'menu-shell' },
+      h(
+        'button',
+        {
+          type: 'button',
+          className: 'menu-button',
+          onClick: () => setMenuOpen(current => !current),
+        },
+        'Menu'
+      ),
+      h(
+        'nav',
+        {
+          className: `menu-drawer${menuOpen ? '' : ' hidden'}`,
+          'aria-label': 'Universal navigation',
+        },
+        h('p', { className: 'menu-label' }, 'DoseGraph'),
+        h('a', { href: '../index.html' }, 'Landing page'),
+        h('a', { href: '../about.html' }, 'About'),
+        h('a', { href: '../frontend-static/' }, 'Static version'),
+        h('a', { href: './' }, 'Dynamic version'),
+        h('span', { className: 'menu-note' }, 'Mobile app beta: unreleased'),
+        h('a', { href: 'mailto:rafi@readisten.com' }, 'Contact developers / engineers'),
+        h('a', { href: '../accounts.html' }, 'Accounts & profiles management')
+      )
+    ),
     h(
       'div',
       { className: 'topbar' },
-      h('a', { className: 'home-link', href: '../index.html' }, 'Back to Simple MedGraphF'),
-      h('span', { className: 'badge' }, 'React Account'),
       h(
         'span',
         { className: 'user-info' },
         isAuthenticated
           ? `Signed in as ${user?.name || user?.email}`
           : 'Guest mode available'
-      ),
-      h(
-        'a',
-        {
-          className: 'topbar-link',
-          href: 'https://github.com/rafireadisten/percentdosegraph/blob/main/MOBILE_DEPLOYMENT.md',
-          target: '_blank',
-          rel: 'noopener noreferrer',
-        },
-        'Mobile App'
       ),
       isAuthenticated
         ? h(
@@ -1426,22 +1455,22 @@ function App() {
         h(
           'article',
           { className: 'hero-panel' },
-          h('p', { className: 'badge' }, 'Simple MedGraphF'),
+          h('p', { className: 'badge' }, 'DoseGraph Dynamic'),
           h(
             'h1',
             null,
-            workspaceLabel || 'Simple MedGraphF account workspace for charting, saved profiles, and sign-in.'
+            workspaceLabel || 'Use the dynamic DoseGraph workspace for core medication dose graphing.'
           ),
           h(
             'p',
             null,
-            `${patientName} · Use this React page when you want the richer MedGraph workflow: multi-drug charting, saved profiles, account registration, sign-in, import and export, and backend sync. ${isAuthenticated ? 'Account sync is active for saved profiles.' : 'You can still graph in guest mode, then register when you want synced profiles.'}`
+            `${patientName} · Enter medication context, routes, reference max doses, and dose dates in one place. This dynamic page keeps the same core graphing flow as static mode while adding account sync and profile management. ${isAuthenticated ? 'Account sync is active for saved profiles.' : 'You can still graph in guest mode, then register when you want synced profiles.'}`
           )
         ),
       h(
         'article',
         { className: 'hero-panel' },
-        h('p', { className: 'metric-label' }, patientNotes ? 'Clinical note' : 'Plotted drugs'),
+        h('p', { className: 'metric-label' }, 'Workspace snapshot'),
         patientNotes ? h('p', { className: 'helper' }, patientNotes) : null,
         h('p', { className: 'big-number' }, `${selectedDrugs.length}/${MAX_VISIBLE_DRUGS}`),
         h(
@@ -1460,7 +1489,7 @@ function App() {
         h(
           'div',
           null,
-          h('h2', null, 'Drug selector'),
+          h('h2', null, 'Step 1 · Configure the regimen'),
           h(
             'p',
             null,
@@ -1612,7 +1641,7 @@ function App() {
           h(
             'div',
             null,
-            h('h2', null, 'Medication list entry'),
+            h('h2', null, 'Step 2 · Medication list entry'),
             h(
               'p',
               null,
@@ -1716,7 +1745,7 @@ function App() {
           h(
             'div',
             null,
-            h('h2', null, 'Log dose'),
+            h('h2', null, 'Step 3 · Add and edit doses'),
             h(
               'p',
               null,
@@ -1846,6 +1875,7 @@ function App() {
         h(
           'div',
           { className: 'field profile-actions' },
+          h('p', { className: 'metric-label' }, 'Step 4 · Timeframe and profile save'),
           h(
             'button',
             {
@@ -1873,7 +1903,7 @@ function App() {
         h(
           'section',
           { className: 'workspace-panel' },
-          h('h2', null, 'Data tools'),
+          h('h2', null, 'Step 4 · Data tools'),
           h(
             'div',
             { className: 'profile-card-actions' },
@@ -1935,7 +1965,7 @@ function App() {
         h(
           'section',
           { className: 'profile-panel' },
-          h('h2', null, 'Saved graph profiles'),
+          h('h2', null, 'Step 5 · Saved graph profiles'),
           profiles.length
             ? h(
                 'div',
@@ -2101,7 +2131,7 @@ function App() {
           h(
             'section',
             { className: 'workspace-panel auth-panel-shell' },
-            h('h2', null, isAuthenticated ? 'Account sync' : 'Account registration and sign-in'),
+            h('h2', null, isAuthenticated ? 'Step 6 · Account sync and legal checklist' : 'Step 6 · Account registration and sign-in'),
             h(
               'p',
               null,
@@ -2109,10 +2139,100 @@ function App() {
                 ? 'Your saved medication-list profiles can sync with the backend while local browser storage remains available as a fallback.'
                 : 'Register or sign in here when you want saved profiles and backend sync. Guest mode still lets you use the graph and basic medication entry tools.'
             ),
+            isAuthenticated
+              ? [
+                  h(
+                    'div',
+                    { className: 'auth-inline-status', key: 'auth-status' },
+                    h(
+                      'p',
+                      { className: 'helper' },
+                      `Currently signed in as ${user?.name || user?.email}.`
+                    ),
+                    h(
+                      'button',
+                      {
+                        type: 'button',
+                        className: 'pill-button secondary-button',
+                        onClick: handleLogout,
+                      },
+                      'Logout'
+                    )
+                  ),
+                  h(
+                    'div',
+                    { className: 'account-data-grid', key: 'account-data' },
+                    buildAccountDataRows(user).map(row =>
+                      h(
+                        'div',
+                        { className: 'account-data-row', key: row.label },
+                        h('span', { className: 'metric-label' }, row.label),
+                        h('strong', null, row.value)
+                      )
+                    )
+                  ),
+                ]
+              : h(
+                  'div',
+                  { className: 'auth-form auth-inline-form' },
+                  authError ? h('div', { className: 'error' }, authError) : null,
+                  h(
+                    'div',
+                    { className: 'notice-card legal-copy auth-legal-reminder' },
+                    h('strong', null, 'Before creating or using a synced account'),
+                    h(
+                      'p',
+                      null,
+                      'Review the legal checklist below. Do not use direct patient names, and only use identifiable health data when your organization has approved that use.'
+                    )
+                  ),
+                  authMode === 'register'
+                    ? h('input', {
+                        type: 'text',
+                        placeholder: 'Name',
+                        value: authName,
+                        onChange: e => setAuthName(e.target.value),
+                      })
+                    : null,
+                  h('input', {
+                    type: 'email',
+                    placeholder: 'Email',
+                    value: authEmail,
+                    onChange: e => setAuthEmail(e.target.value),
+                  }),
+                  h('input', {
+                    type: 'password',
+                    placeholder: 'Password',
+                    value: authPassword,
+                    onChange: e => setAuthPassword(e.target.value),
+                  }),
+                  h(
+                    'div',
+                    { className: 'auth-inline-actions' },
+                    h(
+                      'button',
+                      {
+                        type: 'button',
+                        onClick: handleAuth,
+                        disabled: authLoading,
+                      },
+                      authLoading ? 'Loading...' : authMode === 'login' ? 'Login' : 'Register'
+                    ),
+                    h(
+                      'button',
+                      {
+                        type: 'button',
+                        className: 'secondary-button',
+                        onClick: () => setAuthMode(authMode === 'login' ? 'register' : 'login'),
+                      },
+                      authMode === 'login' ? 'Need an account?' : 'Have an account?'
+                    )
+                  )
+                ),
             h(
               'div',
               { className: 'compliance-panel' },
-              h('p', { className: 'metric-label' }, 'Compliance and licensing notices'),
+              h('p', { className: 'metric-label' }, 'Legal checklist'),
               h(
                 'p',
                 { className: 'helper' },
@@ -2192,87 +2312,7 @@ function App() {
                     : 'Until all three notices are accepted, account sync, imports, exports, and profile saves stay blocked.'
                 )
               )
-            ),
-            isAuthenticated
-              ? [
-                  h(
-                    'div',
-                    { className: 'auth-inline-status', key: 'auth-status' },
-                    h(
-                      'p',
-                      { className: 'helper' },
-                      `Currently signed in as ${user?.name || user?.email}.`
-                    ),
-                    h(
-                      'button',
-                      {
-                        type: 'button',
-                        className: 'pill-button secondary-button',
-                        onClick: handleLogout,
-                      },
-                      'Logout'
-                    )
-                  ),
-                  h(
-                    'div',
-                    { className: 'account-data-grid', key: 'account-data' },
-                    buildAccountDataRows(user).map(row =>
-                      h(
-                        'div',
-                        { className: 'account-data-row', key: row.label },
-                        h('span', { className: 'metric-label' }, row.label),
-                        h('strong', null, row.value)
-                      )
-                    )
-                  ),
-                ]
-              : h(
-                  'div',
-                  { className: 'auth-form auth-inline-form' },
-                  authError ? h('div', { className: 'error' }, authError) : null,
-                  authMode === 'register'
-                    ? h('input', {
-                        type: 'text',
-                        placeholder: 'Name',
-                        value: authName,
-                        onChange: e => setAuthName(e.target.value),
-                      })
-                    : null,
-                  h('input', {
-                    type: 'email',
-                    placeholder: 'Email',
-                    value: authEmail,
-                    onChange: e => setAuthEmail(e.target.value),
-                  }),
-                  h('input', {
-                    type: 'password',
-                    placeholder: 'Password',
-                    value: authPassword,
-                    onChange: e => setAuthPassword(e.target.value),
-                  }),
-                  h(
-                    'div',
-                    { className: 'auth-inline-actions' },
-                    h(
-                      'button',
-                      {
-                        type: 'button',
-                        onClick: handleAuth,
-                        disabled: authLoading,
-                      },
-                      authLoading ? 'Loading...' : authMode === 'login' ? 'Login' : 'Register'
-                    ),
-                    h(
-                      'button',
-                      {
-                        type: 'button',
-                        className: 'secondary-button',
-                        onClick: () => setAuthMode(authMode === 'login' ? 'register' : 'login'),
-                      },
-                      authMode === 'login' ? 'Need an account?' : 'Have an account?'
-                    )
-                  )
-                )
+            )
           ),
           h(
             'section',
@@ -2350,6 +2390,91 @@ function App() {
           ),
           h(
             'div',
+            { className: 'compare-bar' },
+            selectedDrugs.map((drug, index) =>
+              h(
+                'span',
+                {
+                  key: drug.id,
+                  className: 'compare-chip',
+                  style: { '--chip-color': CHART_COLORS[index % CHART_COLORS.length] },
+                },
+                h('span', { className: 'compare-chip-dot' }),
+                h('span', { className: 'compare-chip-name' }, drug.name),
+                h(
+                  'button',
+                  {
+                    type: 'button',
+                    className: 'compare-chip-remove',
+                    'aria-label': `Remove ${drug.name}`,
+                    onClick: () => handleToggleDrugSelection(drug.id),
+                  },
+                  '×'
+                )
+              )
+            ),
+            canAddMore
+              ? compareBarOpen
+                ? h(
+                    'span',
+                    { className: 'compare-input-wrap' },
+                    h('input', {
+                      autoFocus: true,
+                      className: 'compare-input',
+                      type: 'search',
+                      placeholder: 'Search drug to add…',
+                      value: compareBarTerm,
+                      onChange: event => setCompareBarTerm(event.target.value),
+                      onBlur: () => {
+                        setTimeout(() => {
+                          setCompareBarOpen(false);
+                          setCompareBarTerm('');
+                        }, 200);
+                      },
+                    }),
+                    compareBarTerm.length >= 2
+                      ? h(
+                          'ul',
+                          { className: 'compare-dropdown' },
+                          drugs
+                            .filter(
+                              d =>
+                                d.name.toLowerCase().includes(compareBarTerm.toLowerCase()) &&
+                                !selectedDrugIds.includes(d.id)
+                            )
+                            .slice(0, 8)
+                            .map(d =>
+                              h(
+                                'li',
+                                {
+                                  key: d.id,
+                                  className: 'compare-dropdown-item',
+                                  onMouseDown: () => {
+                                    handleAddDrug(d);
+                                    setCompareBarOpen(false);
+                                    setCompareBarTerm('');
+                                  },
+                                },
+                                d.name
+                              )
+                            )
+                        )
+                      : null
+                  )
+                : h(
+                    'button',
+                    {
+                      type: 'button',
+                      className: 'compare-add-btn',
+                      onClick: () => setCompareBarOpen(true),
+                    },
+                    h('span', { className: 'compare-add-icon' }, '+'),
+                    ' Compare'
+                  )
+              : null
+          ),
+          h(
+            'div',
             { className: 'chart-panel tall-chart line-hover-chart-panel' },
             hoveredLineDefinition
               ? h(
@@ -2420,11 +2545,12 @@ function App() {
                           stroke: 'rgba(33, 49, 58, 0.18)',
                           strokeDasharray: '4 4',
                         }),
-                        h(ReferenceLine, {
-                          y: 80,
-                          stroke: 'var(--danger)',
-                          strokeDasharray: '5 5',
-                        }),
+                        // MARKER: PDG-80PCT-DISABLED-2026-04-20 — re-enable block below to restore 80% max dose reference line
+                        // h(ReferenceLine, {
+                        //   y: 80,
+                        //   stroke: 'var(--danger)',
+                        //   strokeDasharray: '5 5',
+                        // }),
                         h(ReferenceLine, {
                           y: 100,
                           stroke: 'rgba(191, 79, 41, 0.45)',
@@ -2745,11 +2871,11 @@ function App() {
       h(
         'section',
         { className: 'panel' },
-        h('h2', null, '3-Drug Hypothetical Profile Generator'),
+        h('h2', null, 'Demo tools · Random MedGraf Generator'),
         h(
           'p',
           null,
-          'Generate a synthetic 3-year cardiovascular medication timeline with realistic dose changes to demonstrate charting capabilities.'
+          'Generate a three-drug cardiovascular profile with stepwise dose changes over three years. The chart plots % max daily dose against calendar dates.'
         ),
         h(
           'div',
@@ -2837,11 +2963,12 @@ function App() {
                       stroke: 'rgba(33, 49, 58, 0.18)',
                       strokeDasharray: '4 4',
                     }),
-                    h(ReferenceLine, {
-                      y: 80,
-                      stroke: 'var(--danger)',
-                      strokeDasharray: '5 5',
-                    }),
+                    // MARKER: PDG-80PCT-DISABLED-2026-04-20 — re-enable block below to restore 80% max dose reference line (preview chart)
+                    // h(ReferenceLine, {
+                    //   y: 80,
+                    //   stroke: 'var(--danger)',
+                    //   strokeDasharray: '5 5',
+                    // }),
                     h(ReferenceLine, {
                       y: 100,
                       stroke: 'rgba(191, 79, 41, 0.45)',
@@ -4145,6 +4272,47 @@ function formatDateKey(date) {
 function coerceDrugId(drugId) {
   const numeric = Number(drugId);
   return Number.isInteger(numeric) && `${numeric}` === `${drugId}` ? numeric : drugId;
+}
+
+function getProfileLimitForUser(user) {
+  if (user?.role === 'admin' || user?.role === 'developer' || user?.role === 'system') {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  if (user?.id) {
+    return 20;
+  }
+
+  return 5;
+}
+
+function getProfileTierLabelForUser(user) {
+  if (user?.role === 'admin' || user?.role === 'developer' || user?.role === 'system') {
+    return 'Developer';
+  }
+
+  if (user?.id) {
+    return 'Clinician';
+  }
+
+  return 'Patient';
+}
+
+function canCreateAnotherProfileForUser(user, profiles, existingProfile) {
+  if (existingProfile) {
+    return {
+      allowed: true,
+      limit: getProfileLimitForUser(user),
+      tier: getProfileTierLabelForUser(user),
+    };
+  }
+
+  const limit = getProfileLimitForUser(user);
+  return {
+    allowed: profiles.length < limit,
+    limit,
+    tier: getProfileTierLabelForUser(user),
+  };
 }
 
 createRoot(document.getElementById('root')).render(h(App));

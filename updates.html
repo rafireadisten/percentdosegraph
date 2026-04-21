@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DoseGraph Updates</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --panel: rgba(255, 255, 255, 0.96);
+        --ink: #202124;
+        --muted: #5f6368;
+        --accent: #0f5a2d;
+        --accent-strong: #0a4723;
+        --border: #e0e3e7;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Google Sans', 'Roboto', 'Segoe UI', sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+      }
+
+      .menu-shell {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        z-index: 30;
+      }
+
+      .menu-button {
+        border: 1px solid var(--accent-strong);
+        border-radius: 999px;
+        padding: 9px 12px;
+        font-weight: 600;
+        color: white;
+        background: var(--accent);
+        box-shadow: 0 1px 2px rgba(60, 64, 67, 0.18), 0 2px 6px rgba(60, 64, 67, 0.14);
+        cursor: pointer;
+      }
+
+      .menu-drawer {
+        position: absolute;
+        top: 48px;
+        right: 0;
+        width: min(280px, calc(100vw - 32px));
+        padding: 12px;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 2px 8px rgba(60, 64, 67, 0.2);
+      }
+
+      .menu-drawer.hidden {
+        display: none;
+      }
+
+      .menu-label {
+        margin: 0 0 8px;
+        padding: 0 4px;
+        color: var(--muted);
+        font-size: 0.74rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .menu-drawer a {
+        display: block;
+        padding: 11px 12px;
+        border-radius: 14px;
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .menu-drawer a:hover {
+        background: rgba(30, 142, 62, 0.08);
+      }
+
+      main {
+        width: min(980px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 4rem 0 3rem;
+      }
+
+      .hero {
+        margin-bottom: 1.25rem;
+      }
+
+      .eyebrow {
+        margin: 0 0 0.6rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 0.78rem;
+        color: var(--accent-strong);
+      }
+
+      h1 {
+        margin: 0 0 0.65rem;
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 1;
+      }
+
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .feed {
+        display: grid;
+        gap: 0.9rem;
+        margin-top: 1.5rem;
+      }
+
+      .update-card {
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: var(--panel);
+        padding: 1rem 1.1rem;
+        box-shadow: 0 1px 2px rgba(60, 64, 67, 0.12);
+      }
+
+      .update-date {
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent-strong);
+        margin-bottom: 0.3rem;
+      }
+
+      .update-title {
+        margin: 0 0 0.35rem;
+        font-size: 1.05rem;
+      }
+
+      .update-summary {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .small-note {
+        margin-top: 1rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="menu-shell">
+      <button id="globalMenuButton" type="button" class="menu-button">Menu</button>
+      <nav id="globalMenuDrawer" class="menu-drawer hidden" aria-label="Universal navigation">
+        <p class="menu-label">DoseGraph</p>
+        <a href="./index.html">Landing page</a>
+        <a href="./about.html">About</a>
+        <a href="./updates.html">Updates</a>
+        <a href="./frontend-static/">Static version</a>
+        <a href="./frontend-react/">Dynamic version</a>
+        <a href="mailto:rafi@readisten.com">Contact developers / engineers</a>
+        <a href="./accounts.html">Accounts &amp; profiles management</a>
+      </nav>
+    </div>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">DoseGraph updates</p>
+        <h1>What changed recently</h1>
+        <p>Plain-language highlights pulled automatically from the changelog.</p>
+      </section>
+
+      <section id="updatesFeed" class="feed" aria-live="polite"></section>
+      <p class="small-note">This page updates automatically whenever <strong>CHANGELOG.md</strong> changes.</p>
+    </main>
+
+    <script>
+      const globalMenuButton = document.getElementById('globalMenuButton');
+      const globalMenuDrawer = document.getElementById('globalMenuDrawer');
+      const updatesFeed = document.getElementById('updatesFeed');
+
+      globalMenuButton?.addEventListener('click', () => {
+        globalMenuDrawer?.classList.toggle('hidden');
+      });
+
+      function cleanMarkdownText(value) {
+        return String(value)
+          .replace(/<!--.*?-->/g, '')
+          .replace(/`([^`]+)`/g, '$1')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      function simplifyTitle(title) {
+        const cleaned = cleanMarkdownText(title)
+          .replace(/^(feat|fix|chore|docs|test|data):\s*/i, '')
+          .replace(/\(.*?\)/g, '')
+          .trim();
+
+        return cleaned ? cleaned[0].toUpperCase() + cleaned.slice(1) : 'Update';
+      }
+
+      function summarizeEntry(entry) {
+        const title = entry.title.toLowerCase();
+
+        if (title.includes('disable 80%')) {
+          return 'The 80% warning visuals are temporarily hidden, but can be turned back on later.';
+        }
+        if (title.includes('rheumatology')) {
+          return 'More rheumatology medications were added so comparisons cover a wider set of drugs.';
+        }
+        if (title.includes('multilingual')) {
+          return 'Drug name matching now works better across multiple languages.';
+        }
+        if (title.includes('deployment') || title.includes('workflow')) {
+          return 'Release and deployment flow was improved to make updates more reliable.';
+        }
+        if (title.includes('hover')) {
+          return 'Chart hover details were improved so it is easier to understand each plotted line.';
+        }
+        if (title.includes('persist') || title.includes('restore')) {
+          return 'Your last workspace now comes back automatically after reload.';
+        }
+
+        const firstBullet = entry.bullets[0] || '';
+        if (!firstBullet) {
+          return 'General improvements and maintenance updates were applied.';
+        }
+
+        const simplified = cleanMarkdownText(firstBullet)
+          .replace(/(^added\s+)/i, 'Added ')
+          .replace(/(^updated\s+)/i, 'Updated ')
+          .replace(/(^changed\s+)/i, 'Changed ')
+          .replace(/\b(api|route|bundle|schema|orm|workflow|artifact)\b/gi, '')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        return simplified.length > 170 ? `${simplified.slice(0, 167)}...` : simplified;
+      }
+
+      function parseChangelog(markdown) {
+        const lines = markdown.split('\n');
+        const entries = [];
+        let currentDate = null;
+        let currentEntry = null;
+
+        for (const rawLine of lines) {
+          const line = rawLine.trim();
+          if (!line || line.startsWith('<!--')) {
+            continue;
+          }
+
+          const dateMatch = line.match(/^##\s+(.+)$/);
+          if (dateMatch) {
+            currentDate = cleanMarkdownText(dateMatch[1]);
+            continue;
+          }
+
+          const entryMatch = line.match(/^###\s+(.+)$/);
+          if (entryMatch) {
+            if (currentEntry) {
+              entries.push(currentEntry);
+            }
+            currentEntry = {
+              date: currentDate || 'Recent',
+              title: cleanMarkdownText(entryMatch[1]),
+              bullets: [],
+            };
+            continue;
+          }
+
+          const bulletMatch = line.match(/^-\s+(.+)$/);
+          if (bulletMatch && currentEntry) {
+            const cleaned = cleanMarkdownText(bulletMatch[1]);
+            if (cleaned) {
+              currentEntry.bullets.push(cleaned);
+            }
+          }
+        }
+
+        if (currentEntry) {
+          entries.push(currentEntry);
+        }
+
+        return entries;
+      }
+
+      function renderUpdates(entries) {
+        if (!entries.length) {
+          updatesFeed.innerHTML = '<article class="update-card"><p class="update-summary">No updates found yet.</p></article>';
+          return;
+        }
+
+        updatesFeed.innerHTML = entries
+          .slice(0, 24)
+          .map(entry => {
+            const title = simplifyTitle(entry.title);
+            const summary = summarizeEntry(entry);
+            return `
+              <article class="update-card">
+                <div class="update-date">${entry.date}</div>
+                <h2 class="update-title">${title}</h2>
+                <p class="update-summary">${summary}</p>
+              </article>
+            `;
+          })
+          .join('');
+      }
+
+      async function loadUpdates() {
+        try {
+          const response = await fetch('./CHANGELOG.md', { cache: 'no-store' });
+          if (!response.ok) {
+            throw new Error(`Failed to load changelog (${response.status})`);
+          }
+
+          const markdown = await response.text();
+          renderUpdates(parseChangelog(markdown));
+        } catch (error) {
+          updatesFeed.innerHTML = `<article class="update-card"><p class="update-summary">Unable to load updates right now. (${error.message})</p></article>`;
+        }
+      }
+
+      loadUpdates();
+    </script>
+  </body>
+</html>

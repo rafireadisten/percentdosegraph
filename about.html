@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DoseGraph About</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --panel: rgba(255, 255, 255, 0.96);
+        --ink: #202124;
+        --muted: #5f6368;
+        --accent: #0f5a2d;
+        --accent-strong: #0a4723;
+        --border: #e0e3e7;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Google Sans', 'Roboto', 'Segoe UI', sans-serif;
+        color: var(--ink);
+        background: #ffffff;
+      }
+      main {
+        width: min(920px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 3rem 0 4rem;
+      }
+      .panel {
+        padding: 1.6rem;
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background:
+          linear-gradient(180deg, rgba(15, 90, 45, 0.04), rgba(255, 255, 255, 0.98) 34%),
+          var(--panel);
+        box-shadow: 0 1px 2px rgba(60, 64, 67, 0.18), 0 2px 8px rgba(60, 64, 67, 0.12);
+      }
+      .eyebrow {
+        margin: 0 0 0.75rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: var(--accent);
+      }
+      h1, h2, p { margin-top: 0; }
+      p { color: var(--muted); line-height: 1.7; }
+      .link {
+        display: inline-flex;
+        margin-top: 1rem;
+        padding: 0.8rem 1rem;
+        border-radius: 14px;
+        text-decoration: none;
+        color: white;
+        background: var(--accent);
+        font-weight: 600;
+      }
+      .link:hover {
+        background: var(--accent-strong);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="panel">
+        <p class="eyebrow">About DoseGraph</p>
+        <!-- MARKER: PDG-COPYLOCK-CORE-LINE-2026-04-20 — DO NOT EDIT without 2-3 explicit review passes -->
+        <h1 id="core-slogan" data-copy-lock="triple-review">Compare and see medication doses over time.</h1>
+        <!-- END MARKER: PDG-COPYLOCK-CORE-LINE-2026-04-20 -->
+        <h2>The origin of DoseGraph</h2>
+        <p>
+          Imagine being tasked with reviewing 20 years of a patient's medication dosing history
+          spread across roughly 100 pages of printed records, with only 72 hours to produce a
+          usable result. Under those constraints, the task quickly proves impractical and goes
+          unfinished.
+        </p>
+        <p>
+          This isn't just a hypothetical example of system inefficiency. It's something I have
+          personally experienced.
+        </p>
+        <p>
+          The plan was to return the following year and finish the work, but that opportunity
+          never happened. In 2026, I was finally able to revisit the problem with a new
+          advantage: AI tools that made it possible to begin building a viable computerized
+          graphing solution.
+        </p>
+        <p>
+          DoseGraph's main job is simple: show each drug dose as a percent of that drug's maximum
+          dose over time. This lets you clearly compare different drugs, or compare the same drug
+          at different times.
+        </p>
+        <a class="link" href="./index.html">Back to DoseGraph</a>
+      </section>
+    </main>
+  </body>
+</html>
