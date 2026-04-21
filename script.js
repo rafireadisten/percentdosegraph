@@ -10,14 +10,27 @@ const STATIC_WORKSPACE_STORAGE_KEY = 'percentdosegraph:static-workspace';
 const STATIC_ACCOUNT_WORKSPACES_STORAGE_KEY = 'percentdosegraph:static-account-workspaces';
 const CURRENT_DOSE_NOTE = 'Current dose segment';
 const STATIC_CHART_COLORS = [
-  '#1e8e3e',
+  '#0f5a2d',
   '#2956bf',
-  '#137333',
-  '#fbbc04',
-  '#ea4335',
-  '#34a853',
-  '#669df6',
-  '#2f855a',
+  '#6b7a12',
+  '#6ea8ff',
+  '#7e5bef',
+  '#c43d3d',
+  '#b794f4',
+  '#f28b82',
+  '#bf5a17',
+  '#c58b00',
+  '#f6ad55',
+  '#0d8f78',
+  '#1f6feb',
+  '#8f9f2b',
+  '#8ecdfc',
+  '#9f7aea',
+  '#d93025',
+  '#d6bcfa',
+  '#f4a7a1',
+  '#d97706',
+  '#b99600',
 ];
 
 let drugReferenceLibrary = [];
@@ -2063,7 +2076,7 @@ function renderRandomProfileChart() {
   const padding = { top: 26, right: 30, bottom: 56, left: 64 };
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
-  const colors = ['#1e8e3e', '#2956bf', '#137333'];
+  const colors = STATIC_CHART_COLORS;
   const points = state.randomProfile.points;
   const pointIndexByDate = new Map(points.map((point, index) => [point.date, index]));
 

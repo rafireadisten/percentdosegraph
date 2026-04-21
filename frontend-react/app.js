@@ -1032,6 +1032,8 @@ function App() {
 
   async function handleDoseEntrySubmit(event) {
     event.preventDefault();
+    const submitter = event.nativeEvent?.submitter;
+    const saveAndAddAnother = submitter?.dataset?.submitMode === 'save-add-another';
 
     const amount = Number(entryAmount);
     if (!entryDrugId) {
@@ -1124,8 +1126,18 @@ function App() {
     setRoute(entryRoute);
     setEditingDoseId(null);
     setEntryAmount('');
-    setEntryEndDate('');
     setEntryNotes('');
+
+    if (!saveAndAddAnother) {
+      setEntryEndDate('');
+    }
+
+    if (saveAndAddAnother) {
+      setEntryDate(formatDateKey(new Date()));
+      setEntryEndDate('');
+      setEntryStatus('Dose segment saved. Continue adding another segment.');
+    }
+
     setEntryError('');
     setWorkspaceStatus('');
   }
@@ -1427,8 +1439,11 @@ function App() {
       h(
         'button',
         {
+          id: 'globalMenuButton',
           type: 'button',
           className: 'menu-button',
+          'aria-expanded': menuOpen,
+          'aria-controls': 'globalMenuDrawer',
           onClick: () => setMenuOpen(current => !current),
         },
         'Menu'
@@ -1436,6 +1451,7 @@ function App() {
       h(
         'nav',
         {
+          id: 'globalMenuDrawer',
           className: `menu-drawer${menuOpen ? '' : ' hidden'}`,
           'aria-label': 'Universal navigation',
         },
@@ -1888,9 +1904,24 @@ function App() {
             )
           ),
           h(
-            'button',
-            { type: 'submit', className: 'primary-button' },
-            editingDoseId ? 'Update Dose Segment' : 'Save Dose Segment'
+            'div',
+            { className: 'dose-form-actions' },
+            h(
+              'button',
+              { type: 'submit', className: 'primary-button' },
+              editingDoseId ? 'Update Dose Segment' : 'Save Dose Segment'
+            ),
+            !editingDoseId
+              ? h(
+                  'button',
+                  {
+                    type: 'submit',
+                    className: 'secondary-button',
+                    'data-submit-mode': 'save-add-another',
+                  },
+                  'Save & Add Another'
+                )
+              : null
           ),
           editingDoseId
             ? h(
