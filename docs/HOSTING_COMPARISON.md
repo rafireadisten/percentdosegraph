@@ -52,7 +52,7 @@
 | **Bandwidth** | Unlimited |
 | **Size limit** | 1GB site |
 | **Build time** | ~3 minutes |
-| **Custom domain** | Yes (via CNAME) |
+| **Custom domain** | Yes (free via CNAME) |
 | **Auto-deploy** | Yes |
 | **Uptime** | 99.9% |
 
@@ -60,14 +60,25 @@
 - Already configured in your repo
 - No additional signup needed
 - Works perfectly with your project
+- **Can upgrade to custom domain (dosegraph.io) for free**
 
 **Cons:**
-- Slower builds than Cloudflare
-- URL is longer: `rafireadisten.github.io/percentdosegraph`
+- Slower builds than Cloudflare (~3min vs ~1min)
+- Default URL longer: `rafireadisten.github.io/percentdosegraph`
 
-**Setup Time:** Already done!
+**Upgrade to Custom Domain:**
+```
+1. Register dosegraph.io on Namecheap
+2. In GitHub → Settings → Pages
+3. Enter custom domain: dosegraph.io
+4. Create CNAME record in DNS pointing to: rafireadisten.github.io
+5. Verify DNS propagation
+Result: https://dosegraph.io (FREE!)
+```
 
-**Use Case:** Backup or if no Cloudflare account
+**Setup Time:** Already done! (Upgrade takes 15 min)
+
+**Use Case:** Primary option if no Cloudflare account; can upgrade to dosegraph.io free
 
 ---
 
@@ -460,7 +471,8 @@ TOTAL: $100-250/month
 | Provider | Frontend | Backend | Database | Overall | Recommendation |
 |----------|----------|---------|----------|---------|-----------------|
 | Cloudflare + Cloud Run + JSON | 10/10 | 10/10 | 10/10 | **10/10** | ⭐⭐⭐⭐⭐ |
-| GitHub Pages + Fly.io + JSON | 8/10 | 8/10 | 10/10 | 8.7/10 | ⭐⭐⭐⭐ |
+| GitHub Pages (dosegraph.io) + Cloud Run + JSON | 9/10 | 10/10 | 10/10 | **9.7/10** | ⭐⭐⭐⭐⭐ |
+| GitHub Pages + Fly.io + JSON | 9/10 | 8/10 | 10/10 | **9.0/10** | ⭐⭐⭐⭐ |
 | Netlify + Railway + Neon | 7/10 | 8/10 | 8/10 | 7.7/10 | ⭐⭐⭐ |
 | Vercel + Lambda + RDS | 8/10 | 7/10 | 8/10 | 7.7/10 | ⭐⭐⭐ |
 | Traditional VPS (full stack) | 6/10 | 9/10 | 10/10 | 8.3/10 | ⭐⭐⭐⭐ |
@@ -497,18 +509,27 @@ Supports: Millions of patients
 ## Decision Tree
 
 ```
-Starting out?
-├─ Yes → Use Cloudflare Pages + Cloud Run + JSON ($0/mo)
-└─ No → Are you comfortable with CLI tools?
-   ├─ Yes → Try Fly.io instead of Cloud Run
-   └─ No → Use Vercel/Netlify (easier UI)
+Choose Frontend:
+├─ Want fastest deployments + global CDN → Cloudflare Pages
+├─ Already have GitHub → GitHub Pages (+ dosegraph.io domain)
+└─ Neither → Netlify/Vercel (simpler UI)
+
+Choose Backend:
+├─ Want simplest deployment → Google Cloud Run
+├─ Want always-on + Generous free tier → Fly.io
+└─ Want AWS ecosystem → Lambda
+
+Database:
+├─ <1000 patients → Use JSON (free forever)
+├─ 1000-100k patients → Add Neon PostgreSQL
+└─ >100k patients → Managed PostgreSQL service
 
 Data > 1MB?
 ├─ Yes → Stick with JSON
 └─ No → Consider PostgreSQL
 
 Traffic > 1000 req/day?
-├─ Yes → Cloud Run auto-scales (still free!)
+├─ Yes → Cloud Run/Fly.io auto-scales (still free!)
 └─ No → Any option works
 
 Security critical (healthcare)?
