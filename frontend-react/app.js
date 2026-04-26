@@ -293,6 +293,7 @@ function App() {
   const [authName, setAuthName] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState('');
+  const [authNotice, setAuthNotice] = useState('');
   const [legalAcknowledgements, setLegalAcknowledgements] = useState({
     acceptedEula: Boolean(legalDefaults.acceptedEula),
     acceptedHipaaNotice: Boolean(legalDefaults.acceptedHipaaNotice),
@@ -1363,6 +1364,7 @@ function App() {
 
     setAuthLoading(true);
     setAuthError('');
+    setAuthNotice('');
 
     try {
       const endpoint = authMode === 'login' ? '/auth/login' : '/auth/register';
@@ -1383,10 +1385,24 @@ function App() {
         throw new Error(data.error || 'Authentication failed');
       }
 
-      persistAuthSession(data.token, data.account);
-      setAuthToken(data.token);
-      setUser(data.account);
-      setIsAuthenticated(true);
+      if (data.token) {
+        persistAuthSession(data.token, data.account);
+        setAuthToken(data.token);
+        setUser(data.account);
+        setIsAuthenticated(true);
+      } else {
+        clearAuthSession();
+        setAuthToken('');
+        setUser(null);
+        setIsAuthenticated(false);
+      }
+
+      if (data.requiresEmailConfirmation) {
+        setAuthNotice(data.message || 'Check your email to confirm the account, then sign in.');
+      } else {
+        setAuthNotice('');
+      }
+
       setAuthEmail('');
       setAuthPassword('');
       setAuthName('');
@@ -1402,6 +1418,7 @@ function App() {
     setAuthToken('');
     setUser(null);
     setIsAuthenticated(false);
+    setAuthNotice('');
     setProfiles(normalizeStoredProfiles(loadProfilesFromStorage()));
     setActiveProfileId(null);
     setProfileStatus('Signed out. Local browser profiles are still available.');
@@ -1434,7 +1451,7 @@ function App() {
     }
 
     const message =
-      `Accept the EULA, commercial licensing, HIPAA notice, and BAA acknowledgement before ${actionLabel}.`;
+      `Account sync is blocked until you check all three legal boxes below: EULA, HIPAA notice, and BAA acknowledgement.`;
     setFailure?.(message);
     setStatus?.('');
     return false;
@@ -1445,7 +1462,8 @@ function App() {
       return true;
     }
 
-    const message = `${patientIdentifierWarning} Update the patient label before ${actionLabel}.`;
+    const message =
+      `${patientIdentifierWarning} Replace the patient label with something de-identified like "RD-001" or "Example Patient" before ${actionLabel}.`;
     setFailure?.(message);
     setStatus?.('');
     return false;
@@ -2320,6 +2338,7 @@ function App() {
                   'div',
                   { className: 'auth-form auth-inline-form' },
                   authError ? h('div', { className: 'error' }, authError) : null,
+                  authNotice ? h('p', { className: 'helper success-text' }, authNotice) : null,
                   h(
                     'div',
                     { className: 'notice-card legal-copy auth-legal-reminder' },
@@ -2329,6 +2348,11 @@ function App() {
                       null,
                       'Review the legal checklist below. Do not use direct patient names, and only use identifiable health data when your organization has approved that use.'
                     )
+                  ),
+                  h(
+                    'p',
+                    { className: 'helper auth-preflight-hint' },
+                    'Login only works after two things are true: the patient label is de-identified, and all three legal checkboxes below are accepted.'
                   ),
                   authMode === 'register'
                     ? h('input', {

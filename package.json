@@ -7,7 +7,7 @@
   "author": "Rafi",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/percentdosegraph.git"
+    "url": "https://github.com/rafireadisten/percentdosegraph.git"
   },
   "keywords": [
     "clinical",
@@ -62,6 +62,7 @@
     "build:mobile:production": "npm --workspace percentdosegraph-mobile run build:ios && npm --workspace percentdosegraph-mobile run build:android"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.104.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-is": "^19.2.4",

@@ -1080,6 +1080,10 @@ textarea {
   flex-wrap: wrap;
 }
 
+.auth-preflight-hint {
+  margin: 0;
+}
+
 .auth-form input {
   padding: 0.75rem;
   border: 1px solid var(--border);

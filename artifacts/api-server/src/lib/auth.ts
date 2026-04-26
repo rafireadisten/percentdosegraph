@@ -3,9 +3,32 @@ import bcrypt from 'bcryptjs';
 import passport from 'passport';
 import { Strategy as BearerStrategy } from 'passport-http-bearer';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { getAccountByEmail, getAccountById, sanitizeAccount, type PublicAccount } from './store.js';
+import { createClient } from '@supabase/supabase-js';
+import {
+  createAccount,
+  getAccountByEmail,
+  getAccountById,
+  sanitizeAccount,
+  updateAccountById,
+  type PublicAccount,
+} from './store.js';
 
 const AUTH_SECRET = process.env.AUTH_SECRET ?? 'percentdosegraph-dev-secret';
+const SUPABASE_URL = process.env.SUPABASE_URL ?? '';
+const SUPABASE_PUBLISHABLE_KEY =
+  process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY ?? '';
+const SUPABASE_AUTH_EMAIL_REDIRECT_TO = process.env.SUPABASE_AUTH_EMAIL_REDIRECT_TO ?? '';
+
+const supabaseAuthClient =
+  SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY
+    ? createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+          detectSessionInUrl: false,
+        },
+      })
+    : null;
 
 type AuthTokenPayload = {
   sub: number;
@@ -16,6 +39,19 @@ type AuthTokenPayload = {
 
 export type AuthenticatedAccount = PublicAccount & {
   role?: string;
+};
+
+type SupabaseAuthPayload = {
+  session: {
+    access_token: string;
+    refresh_token?: string;
+    expires_at?: number;
+  } | null;
+  user: {
+    id: string;
+    email?: string | null;
+    user_metadata?: Record<string, unknown>;
+  } | null;
 };
 
 export function configurePassport() {
@@ -50,6 +86,11 @@ export function configurePassport() {
   passport.use(
     new BearerStrategy(async (token, done) => {
       try {
+        if (isSupabaseAuthEnabled()) {
+          const account = await resolveSupabaseAccountForToken(token);
+          return done(null, account ?? false);
+        }
+
         const payload = verifyAuthToken(token);
         if (!payload) {
           return done(null, false);
@@ -70,6 +111,109 @@ export function configurePassport() {
 
 export async function hashPassword(password: string) {
   return bcrypt.hash(password, 12);
+}
+
+export function isSupabaseAuthEnabled() {
+  return Boolean(supabaseAuthClient);
+}
+
+export async function registerWithSupabase(input: {
+  email: string;
+  password: string;
+  name?: string;
+}) {
+  if (!supabaseAuthClient) {
+    throw new Error('Supabase auth is not configured');
+  }
+
+  const { data, error } = await supabaseAuthClient.auth.signUp({
+    email: input.email,
+    password: input.password,
+    options: {
+      ...(input.name ? { data: { name: input.name } } : {}),
+      ...(SUPABASE_AUTH_EMAIL_REDIRECT_TO
+        ? { emailRedirectTo: SUPABASE_AUTH_EMAIL_REDIRECT_TO }
+        : {}),
+    },
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data as SupabaseAuthPayload;
+}
+
+export async function loginWithSupabase(input: { email: string; password: string }) {
+  if (!supabaseAuthClient) {
+    throw new Error('Supabase auth is not configured');
+  }
+
+  const { data, error } = await supabaseAuthClient.auth.signInWithPassword({
+    email: input.email,
+    password: input.password,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data as SupabaseAuthPayload;
+}
+
+export async function resolveSupabaseAccountForToken(token: string) {
+  if (!supabaseAuthClient) {
+    return null;
+  }
+
+  const { data, error } = await supabaseAuthClient.auth.getUser(token);
+  if (error || !data.user) {
+    return null;
+  }
+
+  return syncSupabaseUserAccount({
+    id: data.user.id,
+    email: data.user.email,
+    user_metadata: data.user.user_metadata ?? {},
+  });
+}
+
+export async function syncSupabaseUserAccount(user: {
+  id: string;
+  email?: string | null;
+  user_metadata?: Record<string, unknown>;
+}) {
+  const email = user.email?.toLowerCase().trim();
+  if (!email) {
+    return null;
+  }
+
+  const preferredName =
+    getSupabaseDisplayName(user.user_metadata) ?? email.split('@')[0] ?? 'Supabase User';
+  const existing = await getAccountByEmail(email);
+
+  if (!existing) {
+    const created = await createAccount({
+      name: preferredName,
+      email,
+      passwordHash: '',
+      role: 'user',
+      isActive: true,
+    });
+    return sanitizeAccount(created);
+  }
+
+  const nextName = existing.name?.trim() || preferredName;
+  const nextIsActive = existing.isActive !== false;
+  if (existing.name !== nextName || existing.isActive !== nextIsActive) {
+    const updated = await updateAccountById(existing.id, {
+      name: nextName,
+      isActive: nextIsActive,
+    });
+    return sanitizeAccount(updated ?? existing);
+  }
+
+  return sanitizeAccount(existing);
 }
 
 export function issueAuthToken(account: { id: number; email: string; role?: string }) {
@@ -114,4 +258,14 @@ function base64UrlEncode(value: string) {
 
 function base64UrlDecode(value: string) {
   return Buffer.from(value, 'base64url').toString('utf8');
+}
+
+function getSupabaseDisplayName(metadata?: Record<string, unknown>) {
+  if (!metadata) {
+    return null;
+  }
+
+  const candidates = [metadata.name, metadata.full_name, metadata.display_name];
+  const value = candidates.find(candidate => typeof candidate === 'string' && candidate.trim());
+  return typeof value === 'string' ? value.trim() : null;
 }
