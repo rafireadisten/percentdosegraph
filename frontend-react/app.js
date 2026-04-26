@@ -36,6 +36,7 @@ const LAST_WORKSPACE_STORAGE_KEY = 'percentdosegraph:react-last-workspace';
 const AUTH_TOKEN_STORAGE_KEY = 'percentdosegraph:auth-token';
 const AUTH_ACCOUNT_STORAGE_KEY = 'percentdosegraph:auth-account';
 const LEGAL_ACK_STORAGE_KEY = 'percentdosegraph:legal-acknowledgements';
+const COMMON_DOSE_UNITS = ['mg', 'mcg', 'g', 'mEq', 'mL', 'units', 'IU', 'drops'];
 const CHART_COLORS = [
   '#0f5a2d',
   '#2956bf',
@@ -59,6 +60,15 @@ const CHART_COLORS = [
   '#d97706',
   '#b99600',
 ];
+
+function normalizeDoseUnit(unit) {
+  const normalized = String(unit ?? '').trim();
+  return normalized || 'mg';
+}
+
+function getPreferredDoseUnit(drug) {
+  return normalizeDoseUnit(drug?.unit);
+}
 
 function shuffleArray(array) {
   const shuffled = [...array];
@@ -251,6 +261,7 @@ function App() {
   const [entryEndDate, setEntryEndDate] = useState('');
   const [entryRoute, setEntryRoute] = useState('PO');
   const [entryAmount, setEntryAmount] = useState('');
+  const [entryDoseUnit, setEntryDoseUnit] = useState('mg');
   const [entryNotes, setEntryNotes] = useState('');
   const [entryStatus, setEntryStatus] = useState('');
   const [entryError, setEntryError] = useState('');
@@ -551,6 +562,15 @@ function App() {
       setListDrugId(String(candidateDrugId));
     }
   }, [drugs, entryDrugId, listDrugId, selectedDrugIds]);
+
+  useEffect(() => {
+    if (editingDoseId) {
+      return;
+    }
+
+    const selectedDrug = drugs.find(drug => String(drug.id) === String(entryDrugId));
+    setEntryDoseUnit(getPreferredDoseUnit(selectedDrug));
+  }, [drugs, editingDoseId, entryDrugId]);
 
   const drugLookup = useMemo(() => {
     return new Map(drugs.map(drug => [drug.id, drug]));
@@ -950,22 +970,26 @@ function App() {
   }
 
   function handleStartDoseEdit(dose) {
+    const selectedDrug = drugLookup.get(String(dose.drugId));
     setEditingDoseId(dose.id);
     setEntryDrugId(String(dose.drugId));
     setEntryDate(dose.date);
     setEntryEndDate(dose.endDate ?? '');
     setEntryRoute(dose.route);
     setEntryAmount(String(dose.amount));
+    setEntryDoseUnit(normalizeDoseUnit(dose.doseUnit ?? selectedDrug?.unit));
     setEntryNotes(dose.notes ?? '');
     setEntryStatus('Editing an existing dose event.');
     setEntryError('');
   }
 
   function handleCancelDoseEdit() {
+    const selectedDrug = drugLookup.get(String(entryDrugId));
     setEditingDoseId(null);
     setEntryDate(formatDateKey(new Date()));
     setEntryEndDate('');
     setEntryAmount('');
+    setEntryDoseUnit(getPreferredDoseUnit(selectedDrug));
     setEntryNotes('');
     setEntryStatus('');
     setEntryError('');
@@ -1066,6 +1090,7 @@ function App() {
       endDate: entryEndDate || undefined,
       route: entryRoute,
       amount,
+      doseUnit: normalizeDoseUnit(entryDoseUnit),
       notes: entryNotes.trim(),
     };
 
@@ -1889,6 +1914,23 @@ function App() {
                 value: entryAmount,
                 onChange: event => setEntryAmount(event.target.value),
               })
+            ),
+            h(
+              'div',
+              { className: 'field' },
+              h('label', { htmlFor: 'entryDoseUnit' }, 'Dose unit'),
+              h('input', {
+                id: 'entryDoseUnit',
+                type: 'text',
+                list: 'entryDoseUnitOptions',
+                value: entryDoseUnit,
+                onChange: event => setEntryDoseUnit(event.target.value),
+              }),
+              h(
+                'datalist',
+                { id: 'entryDoseUnitOptions' },
+                COMMON_DOSE_UNITS.map(unit => h('option', { key: unit, value: unit }))
+              )
             ),
             h(
               'div',
@@ -2821,7 +2863,11 @@ function App() {
                                 { key: `chart-selection-${event.id}` },
                                 h('td', null, event.date),
                                 h('td', null, event.endDate ?? event.resolvedEndDate ?? '—'),
-                                h('td', null, `${event.amount.toFixed(1)} ${drug?.unit ?? 'mg'}`),
+                                h(
+                                  'td',
+                                  null,
+                                  `${event.amount.toFixed(1)} ${event.doseUnit ?? drug?.unit ?? 'mg'}`
+                                ),
                                 h('td', null, `${percent.toFixed(1)}%`),
                                 h('td', null, event.notes || '—'),
                                 h(
@@ -2964,7 +3010,7 @@ function App() {
                   ? filteredEvents.slice(0, 20).map(event => {
                       const drug = drugLookup.get(event.drugId);
                       const maxDose = drug?.maxDailyDose ?? 100;
-                      const unit = drug?.unit ?? 'mg';
+                      const unit = event.doseUnit ?? drug?.unit ?? 'mg';
                       const percent = maxDose > 0 ? (event.amount / maxDose) * 100 : 0;
 
                       return h(
@@ -3250,6 +3296,7 @@ function normalizeDoseRecord(dose, index, defaultDrugId) {
     endDate: dose.endDate ?? '',
     route: dose.route ?? 'PO',
     amount: Number(dose.amount ?? 0),
+    doseUnit: normalizeDoseUnit(dose.doseUnit ?? dose.unit),
     notes: dose.notes ?? '',
   };
 }
@@ -4253,6 +4300,7 @@ function buildDoseEventsCsv(filteredEvents, drugLookup) {
     const drug = drugLookup.get(String(event.drugId));
     const maxDose = drug?.maxDailyDose ?? 100;
     const percent = maxDose > 0 ? ((event.amount / maxDose) * 100).toFixed(1) : '0.0';
+    const unit = normalizeDoseUnit(event.doseUnit ?? drug?.unit);
 
     rows.push([
       event.date,
@@ -4260,7 +4308,7 @@ function buildDoseEventsCsv(filteredEvents, drugLookup) {
       drug?.name ?? 'Unknown drug',
       event.route,
       String(event.amount),
-      drug?.unit ?? 'mg',
+      unit,
       percent,
       event.notes ?? '',
     ]);

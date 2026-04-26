@@ -95,6 +95,16 @@
               Type or choose a medication to link it to the local library.
             </p>
             <datalist id="medicationSuggestions"></datalist>
+            <datalist id="doseUnitSuggestions">
+              <option value="mg"></option>
+              <option value="mcg"></option>
+              <option value="g"></option>
+              <option value="mEq"></option>
+              <option value="mL"></option>
+              <option value="units"></option>
+              <option value="IU"></option>
+              <option value="drops"></option>
+            </datalist>
             <label>
               Patient
               <input id="patientName" name="patientName" type="text" />
@@ -118,7 +128,7 @@
             </label>
             <label>
               Dose unit
-              <input id="doseUnit" name="doseUnit" type="text" />
+              <input id="doseUnit" name="doseUnit" type="text" list="doseUnitSuggestions" value="mg" />
             </label>
             <label>
               Reference maximum dose for this patient and route
@@ -350,7 +360,7 @@
                 </label>
                 <label>
                   Dose unit
-                  <input id="addDrugDoseUnit" name="addDrugDoseUnit" type="text" />
+                  <input id="addDrugDoseUnit" name="addDrugDoseUnit" type="text" list="doseUnitSuggestions" value="mg" />
                 </label>
                 <label>
                   Reference maximum dose

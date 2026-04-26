@@ -43,7 +43,7 @@ const state = {
     medicationId: '',
     patientName: '',
     medicationRoute: 'PO',
-    doseUnit: '',
+    doseUnit: 'mg',
     maxDose: '',
     timeframe: '1y',
     customStartDate: '',
@@ -316,7 +316,7 @@ function handleSettingsFormUpdate(event) {
   state.settings.medicationName = elements.medicationName.value.trim();
   state.settings.patientName = elements.patientName.value.trim();
   state.settings.medicationRoute = elements.medicationRoute.value;
-  state.settings.doseUnit = elements.doseUnit.value.trim();
+  state.settings.doseUnit = normalizeDoseUnit(elements.doseUnit.value);
   state.settings.timeframe = normalizeTimeframe(elements.timeframe.value);
 
   if (event.target === elements.maxDose) {
@@ -332,7 +332,7 @@ function handleSettingsFormUpdate(event) {
 
     if (state.inference.match && !state.inference.isOverridden) {
       elements.maxDose.value = state.settings.maxDose;
-      elements.doseUnit.value = state.settings.doseUnit;
+      elements.doseUnit.value = normalizeDoseUnit(state.settings.doseUnit);
     }
 
     if (
@@ -751,7 +751,7 @@ elements.seriesDetails?.addEventListener('click', event => {
     state.settings.medicationName = getDoseEventDrugName(referenceEvent);
     state.settings.medicationRoute = referenceEvent.route;
     state.settings.maxDose = getDoseEventMaxDose(referenceEvent);
-    state.settings.doseUnit = getDoseEventUnit(referenceEvent);
+    state.settings.doseUnit = normalizeDoseUnit(getDoseEventUnit(referenceEvent));
     syncFormFromState();
     elements.settingsForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
@@ -768,7 +768,7 @@ elements.seriesDetails?.addEventListener('click', event => {
     resetAddDrugForm();
     elements.addDrugMedicationName.value = getDoseEventDrugName(referenceEvent);
     elements.addDrugRoute.value = referenceEvent.route;
-    elements.addDrugDoseUnit.value = getDoseEventUnit(referenceEvent);
+    elements.addDrugDoseUnit.value = normalizeDoseUnit(getDoseEventUnit(referenceEvent));
     elements.addDrugMaxDose.value = String(getDoseEventMaxDose(referenceEvent));
     setAddDrugStatus('current');
     syncAddDrugPanelFromState();
@@ -794,7 +794,7 @@ elements.addDrugForm?.addEventListener('submit', async event => {
 
   const medicationName = elements.addDrugMedicationName.value.trim();
   const route = elements.addDrugRoute.value;
-  const doseUnit = elements.addDrugDoseUnit.value.trim();
+  const doseUnit = normalizeDoseUnit(elements.addDrugDoseUnit.value);
   const maxDose = parsePositiveNumber(elements.addDrugMaxDose.value);
   const timeframe = normalizeTimeframe(elements.addDrugTimeframe.value);
   const startDate = elements.addDrugStartDate.value;
@@ -832,7 +832,7 @@ elements.addDrugForm?.addEventListener('submit', async event => {
   state.doseEvents.sort((a, b) => a.date.localeCompare(b.date));
   state.settings.medicationName = medicationName;
   state.settings.medicationRoute = route;
-  state.settings.doseUnit = doseUnit;
+  state.settings.doseUnit = normalizeDoseUnit(doseUnit);
   state.settings.maxDose = maxDose;
   state.settings.timeframe = timeframe;
   state.inference.isOverridden = true;
@@ -996,7 +996,7 @@ function syncFormFromState() {
   elements.medicationName.value = state.settings.medicationName;
   elements.patientName.value = state.settings.patientName;
   elements.medicationRoute.value = state.settings.medicationRoute;
-  elements.doseUnit.value = state.settings.doseUnit;
+  elements.doseUnit.value = normalizeDoseUnit(state.settings.doseUnit);
   elements.maxDose.value = state.settings.maxDose === '' ? '' : String(state.settings.maxDose);
   state.settings.timeframe = normalizeTimeframe(state.settings.timeframe);
   elements.timeframe.value = state.settings.timeframe;
@@ -1098,7 +1098,7 @@ function getDoseEventMaxDose(event) {
 }
 
 function getDoseEventUnit(event) {
-  return event.doseUnit || state.settings.doseUnit;
+  return normalizeDoseUnit(event.doseUnit ?? state.settings.doseUnit);
 }
 
 function getDoseEventDrugKey(event) {
@@ -1176,7 +1176,7 @@ function prepareNextDoseForm(referenceEvent) {
   state.settings.medicationId = referenceEvent.medicationId ?? '';
   state.settings.medicationName = getDoseEventDrugName(referenceEvent);
   state.settings.maxDose = getDoseEventMaxDose(referenceEvent);
-  state.settings.doseUnit = getDoseEventUnit(referenceEvent);
+  state.settings.doseUnit = normalizeDoseUnit(getDoseEventUnit(referenceEvent));
   syncFormFromState();
   setDoseStatus('current');
 }
@@ -1255,7 +1255,7 @@ function refreshInference({ preserveManual }) {
 
   if (state.inference.match && !state.inference.isOverridden) {
     state.settings.maxDose = state.inference.match.maxDose;
-    state.settings.doseUnit = state.inference.match.unit;
+    state.settings.doseUnit = normalizeDoseUnit(state.inference.match.unit);
   }
 }
 
@@ -1265,7 +1265,7 @@ function applyInferredMaxDose() {
   }
 
   state.settings.maxDose = state.inference.match.maxDose;
-  state.settings.doseUnit = state.inference.match.unit;
+  state.settings.doseUnit = normalizeDoseUnit(state.inference.match.unit);
   state.inference.isOverridden = false;
 }
 
@@ -1384,7 +1384,7 @@ function startEditingDoseEvent(doseEvent) {
   state.settings.medicationId = doseEvent.medicationId ?? '';
   state.settings.medicationName = getDoseEventDrugName(doseEvent);
   state.settings.maxDose = getDoseEventMaxDose(doseEvent);
-  state.settings.doseUnit = getDoseEventUnit(doseEvent);
+  state.settings.doseUnit = normalizeDoseUnit(getDoseEventUnit(doseEvent));
   syncFormFromState();
   elements.doseStartDate.value = doseEvent.date;
   elements.doseEndDate.value = doseEvent.endDate || '';
@@ -1995,7 +1995,7 @@ function resetAddDrugForm() {
   elements.addDrugForm?.reset();
   elements.addDrugMedicationName.value = state.settings.medicationName || '';
   elements.addDrugRoute.value = state.settings.medicationRoute || 'PO';
-  elements.addDrugDoseUnit.value = state.settings.doseUnit || '';
+  elements.addDrugDoseUnit.value = normalizeDoseUnit(state.settings.doseUnit);
   elements.addDrugMaxDose.value = state.settings.maxDose === '' ? '' : String(state.settings.maxDose ?? '');
   elements.addDrugTimeframe.value = normalizeTimeframe(state.settings.timeframe);
   elements.addDrugStartDate.value = formatDateInput(new Date());
@@ -3077,7 +3077,7 @@ function monthsBetween(startDate, endDate) {
 }
 
 function displayEventUnit() {
-  return (state.settings.doseUnit || 'units').replace('/day', '');
+  return normalizeDoseUnit(state.settings.doseUnit);
 }
 
 function formatDateInput(date) {
@@ -3128,13 +3128,21 @@ function parsePositiveNumber(value) {
 
 function formatWorkspaceMaxDose() {
   const hasMaxDose = Number.isFinite(Number(state.settings.maxDose)) && Number(state.settings.maxDose) > 0;
-  const unitLabel = state.settings.doseUnit || 'units/day';
+  const unitLabel = normalizeDoseUnit(state.settings.doseUnit);
 
   if (!hasMaxDose) {
     return `Not set ${unitLabel}`;
   }
 
   return `${formatNumber(state.settings.maxDose)} ${unitLabel}`;
+}
+
+function normalizeDoseUnit(value) {
+  const normalized = String(value ?? '')
+    .trim()
+    .replace(/\s*\/\s*day$/i, '');
+
+  return normalized || 'mg';
 }
 
 function normalizeTimeframe(timeframe) {

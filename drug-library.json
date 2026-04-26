@@ -12,6 +12,10 @@
     "roAliases": [
       "morfina",
       "mst continus"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -27,6 +31,10 @@
     "roAliases": [
       "morfina",
       "mst continus"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -41,6 +49,10 @@
     "note": "Illustrative oral reference entry.",
     "roAliases": [
       "dilaudid"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -55,6 +67,10 @@
     "note": "Illustrative IV reference entry.",
     "roAliases": [
       "dilaudid"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -67,6 +83,10 @@
     "note": "Illustrative oral reference entry.",
     "roAliases": [
       "oxycontin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -83,6 +103,10 @@
     "roAliases": [
       "paracetamol",
       "panadol"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -99,6 +123,10 @@
     "roAliases": [
       "paracetamol",
       "panadol"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -113,6 +141,10 @@
     "note": "Illustrative oral reference entry.",
     "roAliases": [
       "ativan"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -127,6 +159,10 @@
     "note": "Illustrative IV reference entry.",
     "roAliases": [
       "ativan"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -139,6 +175,10 @@
     "note": "Illustrative IV reference entry using mcg/day.",
     "roAliases": [
       "durogesic"
+    ],
+    "commonDoseUnits": [
+      "mcg",
+      "mg"
     ]
   },
   {
@@ -151,6 +191,10 @@
     "note": "Illustrative transdermal reference entry.",
     "roAliases": [
       "durogesic"
+    ],
+    "commonDoseUnits": [
+      "mcg",
+      "mg"
     ]
   },
   {
@@ -166,6 +210,10 @@
     "roAliases": [
       "milurit",
       "zyloric"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -181,6 +229,10 @@
     "roAliases": [
       "omnic",
       "flomax"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -190,13 +242,17 @@
       "levoxyl"
     ],
     "route": "PO",
-    "maxDose": 0.3,
-    "unit": "mg/day",
+    "maxDose": 300,
+    "unit": "mcg/day",
     "source": "Expanded library from Replit",
-    "note": "Thyroid hormone replacement; typical 75–200mcg/day.",
+    "note": "Thyroid hormone replacement; typical dosing is in mcg/day (often 25 to 200 mcg/day).",
     "roAliases": [
       "euthyrox",
       "synthroid"
+    ],
+    "commonDoseUnits": [
+      "mcg",
+      "mg"
     ]
   },
   {
@@ -208,7 +264,11 @@
     "maxDose": 4000,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "2g BID (4g/day); CV risk reduction. Omega-3 Fatty Acid (EPA)."
+    "note": "2g BID (4g/day); CV risk reduction. Omega-3 Fatty Acid (EPA).",
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
+    ]
   },
   {
     "drug": "Aspirin",
@@ -226,6 +286,10 @@
     "roAliases": [
       "aspenter",
       "acid acetilsalicilic"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -246,6 +310,10 @@
       "sortis",
       "atoris",
       "lipitor"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -261,6 +329,10 @@
     "roAliases": [
       "norvasc",
       "amlodac"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -279,6 +351,10 @@
       "egiloc",
       "lopressor",
       "toprol xl"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -298,6 +374,10 @@
     "roAliases": [
       "lorista",
       "cozaar"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -313,6 +393,10 @@
     "roAliases": [
       "forxiga",
       "farxiga"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -328,6 +412,10 @@
     "roAliases": [
       "losec",
       "prilosec"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -343,6 +431,10 @@
     "roAliases": [
       "controloc",
       "protonix"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -358,6 +450,10 @@
     "roAliases": [
       "vigantol",
       "cholecalciferol"
+    ],
+    "commonDoseUnits": [
+      "units",
+      "IU"
     ]
   },
   {
@@ -379,6 +475,10 @@
       "diroton",
       "zestril",
       "prinivil"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -394,6 +494,10 @@
     "roAliases": [
       "siofor",
       "glucophage"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -408,6 +512,10 @@
     "note": "5mg once daily; renal-dose not required. DPP-4 Inhibitor.",
     "roAliases": [
       "tradjenta"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -422,6 +530,10 @@
     "note": "10–25mg/day. SGLT-2 Inhibitor.",
     "roAliases": [
       "jardiance"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -439,6 +551,10 @@
       "ozempic",
       "wegovy",
       "rybelsus"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -453,6 +569,10 @@
     "note": "300–3600mg/day in divided doses. Anticonvulsant / Neuropathic.",
     "roAliases": [
       "neurontin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -472,6 +592,10 @@
     "roAliases": [
       "crestor",
       "rosucard"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -483,7 +607,11 @@
     "maxDose": 100,
     "unit": "mg/day",
     "source": "Expanded library from Replit",
-    "note": "HF: 25mg BID max; HTN: 50mg BID. Beta Blocker (Alpha + Beta)."
+    "note": "HF: 25mg BID max; HTN: 50mg BID. Beta Blocker (Alpha + Beta).",
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
+    ]
   },
   {
     "drug": "Furosemide",
@@ -497,6 +625,10 @@
     "note": "20–600mg/day oral. Loop Diuretic.",
     "roAliases": [
       "lasix"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -512,6 +644,10 @@
     "roAliases": [
       "verospiron",
       "aldactone"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -527,6 +663,10 @@
     "roAliases": [
       "esidrex",
       "hctz"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -542,6 +682,10 @@
     "roAliases": [
       "hygroton",
       "thalitone"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -557,6 +701,10 @@
     "roAliases": [
       "diovan",
       "valsacor"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -575,6 +723,10 @@
       "egiloc",
       "lopressor",
       "toprol xl"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -590,6 +742,10 @@
     "roAliases": [
       "controloc",
       "protonix"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -607,6 +763,9 @@
     "roAliases": [
       "salbutamol",
       "ventolin"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -622,6 +781,9 @@
     "roAliases": [
       "levalbuterol",
       "xopenex"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -637,6 +799,9 @@
     "roAliases": [
       "ipratropium",
       "atrovent"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -652,6 +817,9 @@
     "roAliases": [
       "tiotropium",
       "spiriva"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -667,6 +835,9 @@
     "roAliases": [
       "umeclidinium",
       "incruse"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -682,6 +853,9 @@
     "roAliases": [
       "budesonide",
       "pulmicort"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -697,6 +871,9 @@
     "roAliases": [
       "fluticasone",
       "flovent"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -712,6 +889,9 @@
     "roAliases": [
       "fluticasone furoate",
       "arnuity"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -727,6 +907,9 @@
     "roAliases": [
       "beclomethasone",
       "qvar"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -742,6 +925,9 @@
     "roAliases": [
       "mometasone",
       "asmanex"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -757,6 +943,9 @@
     "roAliases": [
       "ciclesonide",
       "alvesco"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -772,6 +961,9 @@
     "roAliases": [
       "salmeterol",
       "serevent"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -788,6 +980,9 @@
     "roAliases": [
       "formoterol",
       "foradil"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -804,6 +999,9 @@
     "roAliases": [
       "symbicort",
       "breyna"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -821,6 +1019,9 @@
     "roAliases": [
       "advair",
       "wixela"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -836,6 +1037,9 @@
     "roAliases": [
       "breo",
       "vilanterol"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -851,6 +1055,9 @@
     "roAliases": [
       "dulera",
       "mometasone formoterol"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -866,6 +1073,9 @@
     "roAliases": [
       "stiolto",
       "olodaterol"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -881,6 +1091,9 @@
     "roAliases": [
       "anoro",
       "umeclidinium vilanterol"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -896,6 +1109,9 @@
     "roAliases": [
       "trelegy",
       "umeclidinium"
+    ],
+    "commonDoseUnits": [
+      "puffs"
     ]
   },
   {
@@ -910,6 +1126,10 @@
     "note": "Common short-course steroid ceiling for demo use.",
     "roAliases": [
       "deltasone"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -928,6 +1148,10 @@
       "lantus",
       "toujeo",
       "basaglar"
+    ],
+    "commonDoseUnits": [
+      "units",
+      "IU"
     ]
   },
   {
@@ -944,6 +1168,10 @@
     "roAliases": [
       "humalog",
       "admelog"
+    ],
+    "commonDoseUnits": [
+      "units",
+      "IU"
     ]
   },
   {
@@ -959,6 +1187,10 @@
     "roAliases": [
       "amoxil",
       "ospamox"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -978,6 +1210,10 @@
     "roAliases": [
       "zocor",
       "vazilip"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -996,6 +1232,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=4b01fa4d-65e6-4ece-a96b-8eeb561061c0",
     "roAliases": [
       "pravachol"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1015,6 +1255,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b2f17323-2e08-462a-9a91-42f22bcaf53c",
     "roAliases": [
       "mevacor"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1034,6 +1278,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9ad1ecb9-822d-47c1-9f6f-6f771fa0f924",
     "roAliases": [
       "livalo"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1052,6 +1300,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ccd6bbe1-e293-4e1c-9ec4-e6c217612e77",
     "roAliases": [
       "lescol"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1072,6 +1324,10 @@
     "roAliases": [
       "renitec",
       "vasotec"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1091,6 +1347,10 @@
     "roAliases": [
       "tritace",
       "altace"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1109,6 +1369,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=decda177-7c1a-4d28-84fc-c6d7aa251561",
     "roAliases": [
       "lotensin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1127,6 +1391,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=00871911-8c79-433c-87d5-181f4c973d5b&type=pdf",
     "roAliases": [
       "capoten"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1145,6 +1413,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=e8c794ba-8a15-4e3e-ba3b-1704887628cd",
     "roAliases": [
       "monopril"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1163,6 +1435,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=5c24072c-9769-4cb5-b8da-bf814d21391d&type=pdf",
     "roAliases": [
       "univasc"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1182,6 +1458,10 @@
     "roAliases": [
       "prestarium",
       "aceon"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1200,6 +1480,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a62d0ed3-8fcc-45fb-9246-b57b08a11f60",
     "roAliases": [
       "accupril"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1218,6 +1502,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=6f25ed16-e5e9-4170-b4b4-3b460887779e&type=pdf",
     "roAliases": [
       "mavik"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1236,6 +1524,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=5c125c2a-a709-4cf1-b2d5-6e1d24a77377",
     "roAliases": [
       "avapro"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1254,6 +1546,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=0f2b2fa3-249b-4756-a3f1-3223a004d9cb&type=pdf",
     "roAliases": [
       "atacand"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1272,6 +1568,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=a4ceea38-8fff-4317-be04-8dc22222ec70&type=pdf",
     "roAliases": [
       "benicar"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1290,6 +1590,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=56a72ddf-c2a2-45ce-91b1-1fcfbff52c10&type=display",
     "roAliases": [
       "micardis"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1308,6 +1612,10 @@
     "fdaSourceUrl": "",
     "roAliases": [
       "teveten"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1326,6 +1634,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=52b27c75-9f5a-4816-bafd-dace9d7d2063",
     "roAliases": [
       "edarbi"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1344,6 +1656,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=59f296ff-48d4-4f26-b2a1-98cc82fc3c0c",
     "roAliases": [
       "tenormin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1363,6 +1679,10 @@
     "roAliases": [
       "concor",
       "zebeta"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1382,6 +1702,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=1b11bc5a-006f-4950-baab-9af72d39f68e",
     "roAliases": [
       "inderal"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1400,6 +1724,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=f11553f1-18ec-41b0-a7ad-1c9f21ef2c9f&type=pdf",
     "roAliases": [
       "corgard"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1419,6 +1747,10 @@
     "roAliases": [
       "nebilet",
       "bystolic"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1437,6 +1769,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=28c91727-e5a8-48b3-a4df-d7bec8feda40",
     "roAliases": [
       "trandate"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1455,6 +1791,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?audience=consumer&setid=fe2cd5c0-ee16-4bcb-ad92-3755881dbe79",
     "roAliases": [
       "sectral"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1473,6 +1813,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=e198244d-fda3-4015-8c01-390f3f88e238",
     "roAliases": [
       "kerlone"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1491,6 +1835,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a369da5a-ee4a-487f-9891-47955e565fb2",
     "roAliases": [
       "visken"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1509,6 +1857,10 @@
     "fdaSourceUrl": "",
     "roAliases": [
       "blocadren"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1528,6 +1880,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6f3145d7-f3c9-4456-a77d-d04c54f24668",
     "roAliases": [
       "betapace"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1548,6 +1904,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=66d650f4-93dc-4aa2-8908-f87d6691a875&type=pdf",
     "roAliases": [
       "cardizem"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1567,6 +1927,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=4eb349bb-c46b-4809-81af-6f924a5e34ef",
     "roAliases": [
       "calan"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1587,6 +1951,10 @@
     "roAliases": [
       "adalat cc",
       "procardia"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1605,6 +1973,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=3955d43d-a87f-4d2c-b90e-3ecf0d6aa148&type=pdf",
     "roAliases": [
       "cardene"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1623,6 +1995,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=bab6e4c1-6ebd-4dbd-af90-12486f4f4ea6&type=pdf",
     "roAliases": [
       "sular"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1641,6 +2017,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=fddebfce-70ed-4ee1-8598-bbb8f1ca9263&type=pdf",
     "roAliases": [
       "plendil"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1659,6 +2039,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?audience=consumer&setid=e2f2b9a9-169f-4ccf-8974-58f21592c5bc",
     "roAliases": [
       "dynacirc"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1677,6 +2061,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f9290625-b723-4eda-bab8-a97bef6041f6",
     "roAliases": [
       "cleviprex"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1696,6 +2084,10 @@
     "roAliases": [
       "zoloft",
       "asentra"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1715,6 +2107,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=70c1c88a-672e-4865-a556-69b1d30752f0",
     "roAliases": [
       "prozac"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1734,6 +2130,10 @@
     "roAliases": [
       "cipralex",
       "lexapro"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1753,6 +2153,10 @@
     "roAliases": [
       "cipramil",
       "celexa"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1773,6 +2177,10 @@
     "roAliases": [
       "seroxat",
       "paxil"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1791,6 +2199,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e1ba0041-783e-4e6b-a807-8b4e6c11158c",
     "roAliases": [
       "luvox"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1809,6 +2221,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=5db83ae8-3ce7-40c6-a72f-2ae7cfea61cf",
     "roAliases": [
       "seroquel"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1827,6 +2243,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=df703fad-84f9-4ceb-bbd5-4e4bb8ae180d",
     "roAliases": [
       "abilify"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1845,6 +2265,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=olanzapine",
     "roAliases": [
       "zyprexa"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1863,6 +2287,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=ad35cff1-7f93-4c07-a5be-9f87aa17431e&type=pdf",
     "roAliases": [
       "risperdal"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1881,6 +2309,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=ziprasidone",
     "roAliases": [
       "geodon"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1899,6 +2331,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=lurasidone",
     "roAliases": [
       "latuda"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1917,6 +2353,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=paliperidone%20extended-release",
     "roAliases": [
       "invega"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1935,6 +2375,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=asenapine",
     "roAliases": [
       "saphris"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1953,6 +2397,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=iloperidone",
     "roAliases": [
       "fanapt"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1971,6 +2419,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=brexpiprazole",
     "roAliases": [
       "rexulti"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -1989,6 +2441,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=cariprazine",
     "roAliases": [
       "vraylar"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2009,6 +2465,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=clozapine",
     "roAliases": [
       "clozaril"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2027,6 +2487,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=amitriptyline",
     "roAliases": [
       "elavil"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2046,6 +2510,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=nortriptyline",
     "roAliases": [
       "pamelor"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2064,6 +2532,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=imipramine",
     "roAliases": [
       "tofranil"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2082,6 +2554,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=desipramine",
     "roAliases": [
       "norpramin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2100,6 +2576,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=clomipramine",
     "roAliases": [
       "anafranil"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2119,6 +2599,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=doxepin",
     "roAliases": [
       "sinequan"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2137,6 +2621,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=trimipramine",
     "roAliases": [
       "surmontil"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2155,6 +2643,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=protriptyline",
     "roAliases": [
       "vivactil"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2173,6 +2665,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=amoxapine",
     "roAliases": [
       "asendin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2191,6 +2687,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?labeltype=all&query=maprotiline",
     "roAliases": [
       "ludiomil"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2210,6 +2710,10 @@
     "roAliases": [
       "rivotril",
       "klonopin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2230,6 +2734,10 @@
     "roAliases": [
       "xanax",
       "frontin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2248,6 +2756,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=09f4f9d9-0418-4688-bd49-2507bc12b234&type=pdf",
     "roAliases": [
       "valium"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2266,6 +2778,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=97afda58-4daf-4192-bd87-3ccbb000ee52",
     "roAliases": [
       "restoril"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2284,6 +2800,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=a0d5a4c1-ec79-42e6-8e8f-ae4d144edb43&type=display",
     "roAliases": [
       "serax"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2302,6 +2822,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=9e64d2d8-b12c-5639-e053-2a95a90aab80",
     "roAliases": [
       "librium"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2320,6 +2844,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a6cc08b8-146e-430f-af39-8b866698b997",
     "roAliases": [
       "tranxene"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2338,6 +2866,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=fc93242b-0abf-466a-8413-8a365620ee75",
     "roAliases": [
       "versed"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2356,6 +2888,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=8828406e-89f0-458f-841f-4c041df4acda",
     "roAliases": [
       "halcion"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2374,6 +2910,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?name=a1e3b4bf-22e9-430a-a768-4d86ae886c9e&setid=a1e3b4bf-22e9-430a-a768-4d86ae886c9e",
     "roAliases": [
       "prosom"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2392,6 +2932,10 @@
     "fdaSourceUrl": "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=16a5de2d-2f89-4fc2-a1cf-2d6fd11f2748&type=pdf",
     "roAliases": [
       "dalmane"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2410,6 +2954,10 @@
     "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/020839s074lbl.pdf",
     "roAliases": [
       "plavix"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2428,6 +2976,10 @@
     "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2019/022307s016lbl.pdf",
     "roAliases": [
       "effient"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2446,6 +2998,10 @@
     "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2016/022433s020lbl.pdf",
     "roAliases": [
       "brilinta"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2464,6 +3020,10 @@
     "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2019/012836s061lbl.pdf",
     "roAliases": [
       "persantine"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2482,6 +3042,10 @@
     "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2017/020863s024lbl.pdf",
     "roAliases": [
       "pletal"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2500,6 +3064,10 @@
     "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2019/103575s5138lbl.pdf",
     "roAliases": [
       "reopro"
+    ],
+    "commonDoseUnits": [
+      "mcg",
+      "mg"
     ]
   },
   {
@@ -2518,6 +3086,10 @@
     "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/020718s039lbl.pdf",
     "roAliases": [
       "integrilin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2536,6 +3108,10 @@
     "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2013/020912s019s020lbl.pdf",
     "roAliases": [
       "aggrastat"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2554,6 +3130,10 @@
     "fdaSourceUrl": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2015/204886s002lbl.pdf",
     "roAliases": [
       "zontivity"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2568,6 +3148,10 @@
     "note": "Common oral NSAID reference ceiling for static comparison.",
     "roAliases": [
       "celebrex"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2584,6 +3168,10 @@
     "roAliases": [
       "voltaren",
       "cataflam"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2598,6 +3186,10 @@
     "note": "Common oral NSAID reference ceiling for static comparison.",
     "roAliases": [
       "mobic"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2612,6 +3204,10 @@
     "note": "Common oral NSAID reference ceiling for static comparison.",
     "roAliases": [
       "indocin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2626,6 +3222,10 @@
     "note": "Short-course oral NSAID reference ceiling for static comparison.",
     "roAliases": [
       "toradol"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2640,6 +3240,10 @@
     "note": "Common oral NSAID reference ceiling for static comparison.",
     "roAliases": [
       "lodine"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2654,6 +3258,10 @@
     "note": "Common oral NSAID reference ceiling for static comparison.",
     "roAliases": [
       "relafen"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2668,6 +3276,10 @@
     "note": "Common oral NSAID reference ceiling for static comparison.",
     "roAliases": [
       "clinoril"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2682,6 +3294,10 @@
     "note": "Common oral NSAID reference ceiling for static comparison.",
     "roAliases": [
       "feldene"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2696,6 +3312,10 @@
     "note": "Common oral NSAID reference ceiling for static comparison.",
     "roAliases": [
       "daypro"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2710,6 +3330,10 @@
     "note": "Common oral antineuropathic reference ceiling for static comparison.",
     "roAliases": [
       "lyrica"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2724,6 +3348,10 @@
     "note": "Common oral antineuropathic reference ceiling for static comparison.",
     "roAliases": [
       "tegretol"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2738,6 +3366,10 @@
     "note": "Common oral antineuropathic reference ceiling for static comparison.",
     "roAliases": [
       "trileptal"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2752,6 +3384,10 @@
     "note": "Standard adult tablet regimens use 875 mg every 12 hours or 500 mg every 8 hours based on the amoxicillin component.",
     "roAliases": [
       "augmentin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2764,7 +3400,11 @@
     "maxDose": 2000,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Usual adult oral regimens use 250 mg to 500 mg every 6 to 8 hours."
+    "note": "Usual adult oral regimens use 250 mg to 500 mg every 6 to 8 hours.",
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
+    ]
   },
   {
     "drug": "Dicloxacillin",
@@ -2778,6 +3418,10 @@
     "note": "Adult oral dosage table includes 250 mg every 6 hours on an empty stomach.",
     "roAliases": [
       "dynapen"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2792,6 +3436,10 @@
     "note": "Adults: dosage ranges from 1 g to 4 g daily in divided doses.",
     "roAliases": [
       "keflex"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2806,6 +3454,10 @@
     "note": "Adult oral regimens use 1 g to 2 g per day in a single dose or divided twice daily.",
     "roAliases": [
       "duricef"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2817,7 +3469,11 @@
     "maxDose": 1000,
     "unit": "mg/day",
     "source": "DailyMed adult oral dosage reference",
-    "note": "Adult dosage guidelines include 250 mg or 500 mg every 12 hours."
+    "note": "Adult dosage guidelines include 250 mg or 500 mg every 12 hours.",
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
+    ]
   },
   {
     "drug": "Cefdinir",
@@ -2831,6 +3487,10 @@
     "note": "Adults and adolescents: 300 mg every 12 hours or 600 mg once daily.",
     "roAliases": [
       "omnicef"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2845,6 +3505,10 @@
     "note": "Adult oral regimens commonly use 100 mg to 400 mg every 12 hours depending on infection type.",
     "roAliases": [
       "vantin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2859,6 +3523,10 @@
     "note": "The recommended adult dose is 400 mg daily, given once daily or divided every 12 hours.",
     "roAliases": [
       "suprax"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2877,6 +3545,10 @@
       "zithromax",
       "z pak",
       "zpak"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2891,6 +3563,10 @@
     "note": "Adults: clarithromycin tablets 250 mg or 500 mg every 12 hours.",
     "roAliases": [
       "biaxin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2907,6 +3583,10 @@
     "roAliases": [
       "ery tab",
       "erythrocin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2923,6 +3603,10 @@
     "roAliases": [
       "vibramycin",
       "doryx"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2937,6 +3621,10 @@
     "note": "The usual adult dosage is 200 mg initially followed by 100 mg every 12 hours.",
     "roAliases": [
       "minocin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2951,6 +3639,10 @@
     "note": "Adults: serious infections 150 mg to 300 mg every 6 hours; more severe infections 300 mg to 450 mg every 6 hours.",
     "roAliases": [
       "cleocin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2965,6 +3657,10 @@
     "note": "Adults and pediatric patients over 12 years: one 100 mg capsule every 12 hours for seven days.",
     "roAliases": [
       "macrobid"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2979,6 +3675,10 @@
     "note": "Adult dosage guidelines include 500 mg to 750 mg every 12 hours for multiple infections.",
     "roAliases": [
       "cipro"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -2993,6 +3693,10 @@
     "note": "The usual adult dose is 250 mg, 500 mg, or 750 mg orally every 24 hours depending on infection type.",
     "roAliases": [
       "levaquin"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -3007,6 +3711,10 @@
     "note": "Adult oral dosing uses a single 3 g sachet dose for uncomplicated urinary tract infection.",
     "roAliases": [
       "monurol"
+    ],
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
     ]
   },
   {
@@ -3023,7 +3731,11 @@
     "maxDose": 25,
     "unit": "mg/week",
     "source": "Expanded oral rheumatology starter library",
-    "note": "Weekly oral DMARD reference retained for trend comparison workflows."
+    "note": "Weekly oral DMARD reference retained for trend comparison workflows.",
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
+    ]
   },
   {
     "drug": "Hydroxychloroquine",
@@ -3038,7 +3750,11 @@
     "maxDose": 400,
     "unit": "mg/day",
     "source": "Expanded oral rheumatology starter library",
-    "note": "Oral rheumatology starter reference for autoimmune maintenance comparisons."
+    "note": "Oral rheumatology starter reference for autoimmune maintenance comparisons.",
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
+    ]
   },
   {
     "drug": "Leflunomide",
@@ -3053,7 +3769,11 @@
     "maxDose": 20,
     "unit": "mg/day",
     "source": "Expanded oral rheumatology starter library",
-    "note": "Oral DMARD reference retained for trend comparison workflows."
+    "note": "Oral DMARD reference retained for trend comparison workflows.",
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
+    ]
   },
   {
     "drug": "Sulfasalazine",
@@ -3069,7 +3789,11 @@
     "maxDose": 3000,
     "unit": "mg/day",
     "source": "Expanded oral rheumatology starter library",
-    "note": "Oral anti-inflammatory DMARD reference for comparison trending."
+    "note": "Oral anti-inflammatory DMARD reference for comparison trending.",
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
+    ]
   },
   {
     "drug": "Tofacitinib",
@@ -3084,6 +3808,10 @@
     "maxDose": 11,
     "unit": "mg/day",
     "source": "Expanded oral rheumatology starter library",
-    "note": "Oral targeted synthetic DMARD (JAK inhibitor) reference for trend comparisons."
+    "note": "Oral targeted synthetic DMARD (JAK inhibitor) reference for trend comparisons.",
+    "commonDoseUnits": [
+      "mg",
+      "mcg"
+    ]
   }
 ]
