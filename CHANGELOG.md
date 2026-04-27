@@ -9,6 +9,11 @@ All notable project changes should be recorded in this file.
 - Recorded migration updates from Replit to Cloudflare as part of the current hosting transition.
 - Recorded Cloudflare-focused company migration tracking for deployment and infrastructure continuity.
 
+### `chore: publish supabase initialization dates`
+- Supabase client dependency (`@supabase/supabase-js`) first introduced: **2026-04-03** (initial commit).
+- Supabase auth library (`artifacts/api-server/src/lib/auth.ts`) and routes (`src/routes/auth.ts`) first created: **2026-04-04** (`feat: implement complete authentication and profile management system`).
+- Supabase auth account sync integration completed: **2026-04-26** (`feat: integrate supabase auth for account sync`).
+
 ## 2026-04-20
 
 ### `fix: sync hosted dynamic app updates`
