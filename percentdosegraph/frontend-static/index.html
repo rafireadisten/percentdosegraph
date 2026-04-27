@@ -191,6 +191,9 @@
               </button>
             </div>
             <div class="export-controls">
+              <button id="openFhirImportButton" type="button" class="secondary-button">
+                Import FHIR
+              </button>
               <button
                 id="clearDataButton"
                 class="secondary-button"
@@ -565,6 +568,64 @@
             </div>
           </div>
 
+          <div class="ehr-connect-panel">
+            <div class="panel-header compact">
+              <p class="section-kicker">EHR Connection</p>
+              <h3>Connect to EHR</h3>
+              <p>
+                Sign in to your patient portal through SMART on FHIR to automatically load your
+                medication list into the graph.
+              </p>
+            </div>
+
+            <div class="ehr-status">
+              <span id="ehrStatusDot" class="ehr-status-dot"></span>
+              <span id="ehrStatusText">Not connected</span>
+            </div>
+
+            <div id="ehrConnectControls">
+              <label>
+                Select EHR System
+                <select id="ehrSystemSelect">
+                  <option value="">Loading…</option>
+                </select>
+              </label>
+              <div class="dose-form-actions" style="margin-top: 0.75rem">
+                <button id="ehrConnectButton" type="button" class="secondary-button">
+                  Connect to EHR
+                </button>
+              </div>
+            </div>
+
+            <div id="ehrConnectedControls" class="hidden">
+              <p id="ehrPatientInfo" class="workspace-detail"></p>
+              <div class="dose-form-actions">
+                <button id="ehrLoadMedsButton" type="button" class="secondary-button">
+                  Load Medications
+                </button>
+                <button
+                  id="ehrDisconnectButton"
+                  type="button"
+                  class="secondary-button"
+                  style="color: var(--danger); border-color: rgba(180, 35, 24, 0.3)"
+                >
+                  Disconnect
+                </button>
+              </div>
+            </div>
+
+            <div id="ehrExpiredControls" class="hidden">
+              <p class="workspace-detail">
+                Your EHR session has expired. Reconnect to reload medications.
+              </p>
+              <button id="ehrReconnectButton" type="button" class="secondary-button">
+                Reconnect
+              </button>
+            </div>
+
+            <p id="ehrConnectError" class="workspace-detail ehr-error-text hidden"></p>
+          </div>
+
           <div class="profile-controls">
             <label>
               Profile name
@@ -626,6 +687,74 @@
           </div>
         </section>
       </main>
+    </div>
+
+    <div
+      id="fhirImportModal"
+      class="fhir-modal-overlay hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="fhirImportModalTitle"
+    >
+      <div class="fhir-modal-card">
+        <div class="fhir-modal-header">
+          <h2 id="fhirImportModalTitle">Import FHIR Medications</h2>
+          <button id="closeFhirImportModal" type="button" class="secondary-button">Close</button>
+        </div>
+        <p class="workspace-detail">
+          Paste a FHIR JSON Bundle or upload a <code>.json</code> file. Matched medications are
+          added to the dose graph automatically. Unrecognized medications can be mapped to an
+          existing drug name or skipped.
+        </p>
+
+        <div class="fhir-import-actions">
+          <label class="secondary-button" style="cursor: pointer; display: inline-flex; align-items: center">
+            Upload File
+            <input id="fhirFileInput" type="file" accept=".json" style="display: none" />
+          </label>
+        </div>
+
+        <label>
+          Paste FHIR Bundle JSON
+          <textarea
+            id="fhirJsonInput"
+            rows="8"
+            placeholder='{"resourceType":"Bundle","entry":[{"resource":{"resourceType":"MedicationRequest",...}}]}'
+            style="font-family: monospace; font-size: 0.82rem"
+          ></textarea>
+        </label>
+
+        <button id="fhirImportSubmitButton" type="button" class="primary-button">
+          Import Medications
+        </button>
+
+        <p id="fhirImportStatus" class="workspace-detail"></p>
+
+        <div id="fhirImportResults" class="hidden">
+          <div id="fhirMatchedSection" class="fhir-results-section hidden">
+            <h3>Matched medications</h3>
+            <p class="workspace-detail" style="margin: 0 0 0.5rem">
+              Check the medications you want to add to the graph.
+            </p>
+            <div id="fhirMatchedList"></div>
+          </div>
+
+          <div id="fhirUnmatchedSection" class="fhir-results-section hidden" style="margin-top: 1rem">
+            <h3>Unrecognized medications</h3>
+            <p class="workspace-detail" style="margin: 0 0 0.5rem">
+              These were not found in the drug library. Type a drug name to map them, or leave
+              blank to skip.
+            </p>
+            <div id="fhirUnmatchedList"></div>
+          </div>
+
+          <div style="margin-top: 1rem">
+            <button id="fhirImportApplyButton" type="button" class="primary-button hidden">
+              Add to Graph
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="../script.js"></script>

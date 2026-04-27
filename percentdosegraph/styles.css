@@ -1074,3 +1074,157 @@ canvas {
     max-width: none;
   }
 }
+
+/* ---- FHIR Import Modal ---- */
+
+.fhir-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.48);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  overflow-y: auto;
+}
+
+.fhir-modal-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 2rem;
+  width: min(700px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 8px 32px rgba(60, 64, 67, 0.22);
+}
+
+.fhir-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.fhir-modal-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.fhir-import-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.fhir-import-actions .secondary-button {
+  cursor: pointer;
+}
+
+.fhir-med-row,
+.fhir-unmatched-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.fhir-med-row:last-child,
+.fhir-unmatched-row:last-child {
+  border-bottom: none;
+}
+
+.fhir-med-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.fhir-include-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.fhir-include-label input[type='checkbox'] {
+  width: auto;
+  margin: 0;
+}
+
+.fhir-unmatched-actions {
+  min-width: 180px;
+  max-width: 220px;
+}
+
+.fhir-unmatched-actions label {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.fhir-results-section {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.fhir-results-section h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+/* ---- EHR Connect Panel ---- */
+
+.ehr-connect-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+  margin-top: 1.25rem;
+}
+
+.ehr-connect-panel .panel-header.compact {
+  gap: 0.3rem;
+}
+
+.ehr-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.ehr-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.ehr-status-dot.connected {
+  background: #1e8e3e;
+}
+
+.ehr-status-dot.expired {
+  background: #b42318;
+}
+
+.ehr-error-text {
+  color: var(--danger);
+  font-size: 0.875rem;
+}

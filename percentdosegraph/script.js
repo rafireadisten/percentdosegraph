@@ -4593,3 +4593,786 @@ function getTimelineAnchorDate() {
 
   return new Date(`${latestDate}T00:00:00`);
 }
+
+// ---- FHIR Support ----
+
+const FHIR_SESSION_STORAGE_KEY = 'percentdosegraph:fhir-session-id';
+
+const fhirState = {
+  sessionId: '',
+  connected: false,
+  patientName: null,
+  patientId: null,
+  ehrId: null,
+  expiresAt: null,
+  expired: false,
+  ehrSystems: [],
+  pendingImport: null,
+};
+
+function getFhirElements() {
+  return {
+    importModal: document.getElementById('fhirImportModal'),
+    openImportButton: document.getElementById('openFhirImportButton'),
+    closeImportButton: document.getElementById('closeFhirImportModal'),
+    fileInput: document.getElementById('fhirFileInput'),
+    jsonInput: document.getElementById('fhirJsonInput'),
+    submitButton: document.getElementById('fhirImportSubmitButton'),
+    importStatus: document.getElementById('fhirImportStatus'),
+    importResults: document.getElementById('fhirImportResults'),
+    matchedSection: document.getElementById('fhirMatchedSection'),
+    matchedList: document.getElementById('fhirMatchedList'),
+    unmatchedSection: document.getElementById('fhirUnmatchedSection'),
+    unmatchedList: document.getElementById('fhirUnmatchedList'),
+    applyButton: document.getElementById('fhirImportApplyButton'),
+    ehrSystemSelect: document.getElementById('ehrSystemSelect'),
+    ehrConnectButton: document.getElementById('ehrConnectButton'),
+    ehrConnectControls: document.getElementById('ehrConnectControls'),
+    ehrConnectedControls: document.getElementById('ehrConnectedControls'),
+    ehrExpiredControls: document.getElementById('ehrExpiredControls'),
+    ehrStatusText: document.getElementById('ehrStatusText'),
+    ehrStatusDot: document.getElementById('ehrStatusDot'),
+    ehrPatientInfo: document.getElementById('ehrPatientInfo'),
+    ehrLoadMedsButton: document.getElementById('ehrLoadMedsButton'),
+    ehrDisconnectButton: document.getElementById('ehrDisconnectButton'),
+    ehrReconnectButton: document.getElementById('ehrReconnectButton'),
+    ehrConnectError: document.getElementById('ehrConnectError'),
+  };
+}
+
+(function restoreStoredFhirSession() {
+  try {
+    const stored = window.localStorage.getItem(FHIR_SESSION_STORAGE_KEY);
+    if (stored) {
+      fhirState.sessionId = stored;
+    }
+  } catch {
+    // ignore
+  }
+})();
+
+(async function handleSmartCallback() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  const oauthState = params.get('state');
+
+  if (!code || !oauthState) {
+    if (fhirState.sessionId) {
+      setTimeout(() => refreshFhirSession().then(() => syncFhirConnectUI()), 600);
+    } else {
+      setTimeout(() => syncFhirConnectUI(), 100);
+    }
+    return;
+  }
+
+  window.history.replaceState({}, '', window.location.pathname);
+
+  try {
+    const response = await fetch(`${API_BASE_PATH}/fhir/smart/auth/callback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code, state: oauthState }),
+    });
+    const result = await response.json();
+
+    if (result.sessionId) {
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage(
+          { type: 'fhir-auth-success', sessionId: result.sessionId, patientName: result.patientName ?? null },
+          window.location.origin
+        );
+        window.close();
+        return;
+      }
+      await storeFhirSession(result.sessionId, result.patientName ?? null);
+      syncFhirConnectUI();
+      autoLoadFhirMedications();
+    } else {
+      const errMsg = result.error ?? 'Authorization failed.';
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage({ type: 'fhir-auth-error', error: errMsg }, window.location.origin);
+        window.close();
+        return;
+      }
+      showFhirConnectError(errMsg);
+      syncFhirConnectUI();
+    }
+  } catch {
+    const errMsg = 'Failed to complete EHR authorization.';
+    if (window.opener && !window.opener.closed) {
+      window.opener.postMessage({ type: 'fhir-auth-error', error: errMsg }, window.location.origin);
+      window.close();
+      return;
+    }
+    showFhirConnectError(errMsg);
+    syncFhirConnectUI();
+  }
+})();
+
+window.addEventListener('message', function (event) {
+  if (event.origin !== window.location.origin) return;
+  const msg = event.data;
+  if (!msg || typeof msg !== 'object') return;
+
+  if (msg.type === 'fhir-auth-success') {
+    storeFhirSession(msg.sessionId, msg.patientName ?? null).then(() => {
+      syncFhirConnectUI();
+      autoLoadFhirMedications();
+    });
+  } else if (msg.type === 'fhir-auth-error') {
+    showFhirConnectError(msg.error ?? 'Authorization failed.');
+    syncFhirConnectUI();
+  }
+});
+
+async function storeFhirSession(sessionId, patientName) {
+  fhirState.sessionId = sessionId;
+  try {
+    window.localStorage.setItem(FHIR_SESSION_STORAGE_KEY, sessionId);
+  } catch {
+    // ignore
+  }
+  if (patientName) {
+    fhirState.patientName = patientName;
+    fhirState.connected = true;
+    fhirState.expired = false;
+  } else {
+    await refreshFhirSession();
+  }
+}
+
+async function refreshFhirSession() {
+  if (!fhirState.sessionId) return;
+  try {
+    const response = await fetch(`${API_BASE_PATH}/fhir/smart/session`, {
+      headers: { 'X-FHIR-Session': fhirState.sessionId },
+    });
+    if (response.status === 404 || response.status === 400) {
+      fhirState.connected = false;
+      fhirState.sessionId = '';
+      try { window.localStorage.removeItem(FHIR_SESSION_STORAGE_KEY); } catch {}
+      return;
+    }
+    const data = await response.json();
+    fhirState.connected = data.connected === true;
+    fhirState.patientName = data.patientName ?? null;
+    fhirState.patientId = data.patientId ?? null;
+    fhirState.ehrId = data.ehrId ?? null;
+    fhirState.expiresAt = data.expiresAt ?? null;
+    fhirState.expired = data.expired === true;
+  } catch {
+    fhirState.connected = false;
+  }
+}
+
+function syncFhirConnectUI() {
+  const el = getFhirElements();
+  if (!el.ehrConnectControls) return;
+
+  const { connected, expired, patientName, patientId, sessionId } = fhirState;
+
+  if (connected && !expired) {
+    el.ehrConnectControls.classList.add('hidden');
+    el.ehrConnectedControls.classList.remove('hidden');
+    el.ehrExpiredControls.classList.add('hidden');
+    if (el.ehrStatusDot) el.ehrStatusDot.className = 'ehr-status-dot connected';
+    if (el.ehrStatusText) el.ehrStatusText.textContent = 'Connected';
+    if (el.ehrPatientInfo) {
+      el.ehrPatientInfo.textContent = patientName
+        ? `Patient: ${patientName}`
+        : patientId
+        ? `Patient ID: ${patientId}`
+        : 'Connected to EHR';
+    }
+  } else if (sessionId && (expired || !connected)) {
+    el.ehrConnectControls.classList.add('hidden');
+    el.ehrConnectedControls.classList.add('hidden');
+    el.ehrExpiredControls.classList.remove('hidden');
+    if (el.ehrStatusDot) el.ehrStatusDot.className = 'ehr-status-dot expired';
+    if (el.ehrStatusText) el.ehrStatusText.textContent = expired ? 'Session expired' : 'Disconnected';
+  } else {
+    el.ehrConnectControls.classList.remove('hidden');
+    el.ehrConnectedControls.classList.add('hidden');
+    el.ehrExpiredControls.classList.add('hidden');
+    if (el.ehrStatusDot) el.ehrStatusDot.className = 'ehr-status-dot';
+    if (el.ehrStatusText) el.ehrStatusText.textContent = 'Not connected';
+  }
+}
+
+function showFhirConnectError(message) {
+  const el = getFhirElements();
+  if (!el.ehrConnectError) return;
+  el.ehrConnectError.textContent = message;
+  el.ehrConnectError.classList.remove('hidden');
+  setTimeout(() => {
+    if (el.ehrConnectError) el.ehrConnectError.classList.add('hidden');
+  }, 9000);
+}
+
+async function loadFhirEhrSystems() {
+  const el = getFhirElements();
+  if (!el.ehrSystemSelect) return;
+
+  try {
+    const response = await fetch(`${API_BASE_PATH}/fhir/smart/config`);
+    if (!response.ok) throw new Error('Failed to fetch');
+    const data = await response.json();
+    fhirState.ehrSystems = data.systems ?? [];
+
+    if (fhirState.ehrSystems.length) {
+      el.ehrSystemSelect.innerHTML = fhirState.ehrSystems
+        .map(s => `<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)}</option>`)
+        .join('');
+    } else {
+      el.ehrSystemSelect.innerHTML = '<option value="">No EHR systems configured</option>';
+    }
+  } catch {
+    el.ehrSystemSelect.innerHTML = '<option value="">Could not load EHR systems</option>';
+  }
+}
+
+async function startEhrConnect() {
+  const el = getFhirElements();
+  if (!el.ehrSystemSelect) return;
+
+  const ehrId = el.ehrSystemSelect.value;
+  if (!ehrId) {
+    showFhirConnectError('Please select an EHR system.');
+    return;
+  }
+
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+
+  try {
+    const url = `${API_BASE_PATH}/fhir/smart/auth/start?${new URLSearchParams({ ehrId, redirectUri }).toString()}`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.error) {
+      showFhirConnectError(data.error);
+      return;
+    }
+
+    const popup = window.open(
+      data.authUrl,
+      'fhir-auth-popup',
+      'width=620,height=720,scrollbars=yes,resizable=yes'
+    );
+
+    if (!popup || popup.closed) {
+      window.location.href = data.authUrl;
+    }
+  } catch {
+    showFhirConnectError('Failed to start EHR authorization. Please try again.');
+  }
+}
+
+async function disconnectEhr() {
+  if (fhirState.sessionId) {
+    try {
+      await fetch(`${API_BASE_PATH}/fhir/smart/session`, {
+        method: 'DELETE',
+        headers: { 'X-FHIR-Session': fhirState.sessionId },
+      });
+    } catch {
+      // ignore
+    }
+  }
+  fhirState.sessionId = '';
+  fhirState.connected = false;
+  fhirState.patientName = null;
+  fhirState.patientId = null;
+  fhirState.expired = false;
+  try { window.localStorage.removeItem(FHIR_SESSION_STORAGE_KEY); } catch {}
+  syncFhirConnectUI();
+}
+
+async function autoLoadFhirMedications() {
+  if (!fhirState.sessionId) return;
+
+  const el = getFhirElements();
+  if (el.ehrStatusText) el.ehrStatusText.textContent = 'Loading medications…';
+
+  try {
+    const patientParam = fhirState.patientId
+      ? `&patient=${encodeURIComponent(fhirState.patientId)}`
+      : '';
+    const response = await fetch(
+      `${API_BASE_PATH}/fhir/proxy?path=${encodeURIComponent('/MedicationRequest')}${patientParam}`,
+      { headers: { 'X-FHIR-Session': fhirState.sessionId } }
+    );
+
+    if (response.status === 401) {
+      const data = await response.json();
+      if (data.expired) {
+        fhirState.expired = true;
+        fhirState.connected = false;
+      } else {
+        fhirState.connected = false;
+      }
+      syncFhirConnectUI();
+      return;
+    }
+
+    if (!response.ok) {
+      syncFhirConnectUI();
+      return;
+    }
+
+    const bundle = await response.json();
+    syncFhirConnectUI();
+    await autoApplyFhirBundle(bundle);
+  } catch {
+    syncFhirConnectUI();
+  }
+}
+
+async function autoApplyFhirBundle(bundle) {
+  if (!bundle || bundle.resourceType !== 'Bundle') return;
+
+  let importData;
+  try {
+    const response = await fetch(`${API_BASE_PATH}/fhir/import`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bundle),
+    });
+    importData = await response.json();
+  } catch {
+    return;
+  }
+
+  if (!importData || importData.error) return;
+
+  const { matched, unmatched } = importData;
+  const today = formatDateInput(new Date());
+  let addedCount = 0;
+
+  for (const m of matched) {
+    const med = m.parsedMedication;
+    const drug = m.drug;
+    const startDate = med.startDate ?? today;
+    const isEnded = Boolean(med.endDate) || (med.status && med.status !== 'active' && med.status !== 'unknown');
+    const route = med.route ?? state.settings.medicationRoute ?? 'PO';
+    const maxDose = (drug.routeMaxDoses && drug.routeMaxDoses[route]) ?? drug.maxDailyDose ?? 100;
+
+    const newEvent = normalizeDoseEvent({
+      date: startDate,
+      endDate: isEnded ? (med.endDate ?? startDate) : '',
+      route,
+      amount: med.dose ?? 0,
+      medicationName: drug.name,
+      medicationId: String(drug.id),
+      maxDose,
+      doseUnit: med.unit ?? drug.unit ?? 'mg',
+      status: isEnded ? 'ended' : 'current',
+      notes: isEnded ? '' : CURRENT_DOSE_NOTE,
+    });
+    state.doseEvents.push(newEvent);
+    addedCount++;
+  }
+
+  state.doseEvents.sort((a, b) => a.date.localeCompare(b.date));
+  if (addedCount > 0) render();
+
+  if (unmatched.length > 0) {
+    openFhirImportModal();
+    fhirState.pendingImport = { matched: [], unmatched, totalParsed: importData.totalParsed, totalMatched: importData.totalMatched, totalUnmatched: importData.totalUnmatched };
+    const el = getFhirElements();
+    if (el.importStatus) {
+      el.importStatus.textContent = `Auto-loaded ${addedCount} matched medication(s). ${unmatched.length} unrecognized medication(s) need review.`;
+    }
+    if (el.importResults) el.importResults.classList.remove('hidden');
+    if (el.matchedSection) el.matchedSection.classList.add('hidden');
+    if (el.unmatchedSection) {
+      const datalistId = buildFhirDrugSuggestionsDatalist();
+      el.unmatchedSection.classList.remove('hidden');
+      el.unmatchedList.innerHTML = unmatched
+        .map(
+          (med, i) => `
+        <div class="fhir-unmatched-row" data-index="${i}">
+          <div class="fhir-med-info">
+            <strong>${escapeHtml(med.name)}</strong>
+            <span class="workspace-detail">${
+              med.dose != null
+                ? `${med.dose} ${escapeHtml(med.unit ?? '')}`
+                : 'Dose not specified'
+            } &mdash; ${escapeHtml(med.route ?? 'Route unknown')}</span>
+          </div>
+          <div class="fhir-unmatched-actions">
+            <label>
+              Map to drug in library (optional)
+              <input
+                type="text"
+                class="fhir-map-input"
+                list="${datalistId}"
+                data-unmatched-index="${i}"
+                placeholder="Start typing a drug name…"
+                autocomplete="off"
+              />
+            </label>
+            <p style="font-size:0.78rem;color:var(--muted);margin:0.2rem 0 0">
+              Leave blank to skip
+            </p>
+          </div>
+        </div>`
+        )
+        .join('');
+    }
+    if (el.applyButton) el.applyButton.classList.remove('hidden');
+  }
+}
+
+async function processFhirBundle(bundle) {
+  const el = getFhirElements();
+
+  if (!bundle || bundle.resourceType !== 'Bundle') {
+    if (el.importStatus) el.importStatus.textContent = 'The response was not a valid FHIR Bundle.';
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_PATH}/fhir/import`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bundle),
+    });
+    const data = await response.json();
+
+    if (data.error) {
+      if (el.importStatus) el.importStatus.textContent = data.error;
+      return;
+    }
+
+    if (el.importModal && el.importModal.classList.contains('hidden')) {
+      openFhirImportModal();
+    }
+
+    renderFhirImportResults(data);
+  } catch {
+    if (el.importStatus) el.importStatus.textContent = 'Import failed. Please try again.';
+  }
+}
+
+function buildFhirDrugSuggestionsDatalist() {
+  const datalistId = 'fhirDrugLibrarySuggestions';
+  let datalist = document.getElementById(datalistId);
+  if (!datalist) {
+    datalist = document.createElement('datalist');
+    datalist.id = datalistId;
+    document.body.appendChild(datalist);
+  }
+  datalist.innerHTML = state.catalogDrugs
+    .map(drug => `<option value="${escapeHtml(drug.name)}">`)
+    .join('');
+  return datalistId;
+}
+
+function lookupCatalogDrugByName(name) {
+  if (!name || !state.catalogDrugs.length) return null;
+  const normalized = normalizeDrugName(name);
+  return (
+    state.catalogDrugs.find(drug => {
+      if (normalizeDrugName(drug.name) === normalized) return true;
+      if (drug.genericName && normalizeDrugName(drug.genericName) === normalized) return true;
+      if (drug.roAliases && drug.roAliases.some(alias => normalizeDrugName(alias) === normalized)) return true;
+      return false;
+    }) ?? null
+  );
+}
+
+function renderFhirImportResults(data) {
+  const el = getFhirElements();
+  if (!el.importResults) return;
+
+  fhirState.pendingImport = data;
+  const { matched, unmatched, totalParsed, totalMatched, totalUnmatched } = data;
+
+  if (el.importStatus) {
+    el.importStatus.textContent = `Found ${totalParsed} medication(s): ${totalMatched} matched, ${totalUnmatched} unrecognized.`;
+  }
+
+  el.importResults.classList.remove('hidden');
+
+  if (matched.length > 0) {
+    el.matchedSection.classList.remove('hidden');
+    el.matchedList.innerHTML = matched
+      .map(
+        (m, i) => `
+      <div class="fhir-med-row" data-index="${i}">
+        <div class="fhir-med-info">
+          <strong>${escapeHtml(m.drug.name)}</strong>
+          <span class="workspace-detail">${
+            m.parsedMedication.dose != null
+              ? `${m.parsedMedication.dose} ${escapeHtml(m.parsedMedication.unit ?? '')}`
+              : 'Dose not specified'
+          } &mdash; ${escapeHtml(m.parsedMedication.route ?? 'Route unknown')} &mdash; ${escapeHtml(
+          m.parsedMedication.startDate ?? 'Date unknown'
+        )}</span>
+        </div>
+        <label class="fhir-include-label">
+          <input type="checkbox" class="fhir-include-checkbox" data-index="${i}" checked />
+          Include
+        </label>
+      </div>`
+      )
+      .join('');
+  } else {
+    el.matchedSection.classList.add('hidden');
+  }
+
+  if (unmatched.length > 0) {
+    const datalistId = buildFhirDrugSuggestionsDatalist();
+    el.unmatchedSection.classList.remove('hidden');
+    el.unmatchedList.innerHTML = unmatched
+      .map(
+        (med, i) => `
+      <div class="fhir-unmatched-row" data-index="${i}">
+        <div class="fhir-med-info">
+          <strong>${escapeHtml(med.name)}</strong>
+          <span class="workspace-detail">${
+            med.dose != null
+              ? `${med.dose} ${escapeHtml(med.unit ?? '')}`
+              : 'Dose not specified'
+          } &mdash; ${escapeHtml(med.route ?? 'Route unknown')}</span>
+        </div>
+        <div class="fhir-unmatched-actions">
+          <label>
+            Map to drug in library (optional)
+            <input
+              type="text"
+              class="fhir-map-input"
+              list="${datalistId}"
+              data-unmatched-index="${i}"
+              placeholder="Start typing a drug name…"
+              autocomplete="off"
+            />
+          </label>
+          <p style="font-size:0.78rem;color:var(--muted);margin:0.2rem 0 0">
+            Leave blank to skip
+          </p>
+        </div>
+      </div>`
+      )
+      .join('');
+  } else {
+    el.unmatchedSection.classList.add('hidden');
+  }
+
+  if (matched.length > 0 || unmatched.length > 0) {
+    if (el.applyButton) el.applyButton.classList.remove('hidden');
+  }
+}
+
+function applyFhirImport() {
+  const el = getFhirElements();
+  if (!fhirState.pendingImport) return;
+
+  const { matched, unmatched } = fhirState.pendingImport;
+  const today = formatDateInput(new Date());
+  let addedCount = 0;
+
+  const checkboxes = el.matchedList ? el.matchedList.querySelectorAll('.fhir-include-checkbox') : [];
+  matched.forEach((m, i) => {
+    const checkbox = checkboxes[i];
+    if (checkbox && !checkbox.checked) return;
+
+    const med = m.parsedMedication;
+    const drug = m.drug;
+    const startDate = med.startDate ?? today;
+    const isEnded = Boolean(med.endDate) || (med.status && med.status !== 'active' && med.status !== 'unknown');
+    const route = med.route ?? state.settings.medicationRoute ?? 'PO';
+    const maxDose = (drug.routeMaxDoses && drug.routeMaxDoses[route]) ?? drug.maxDailyDose ?? 100;
+
+    const newEvent = normalizeDoseEvent({
+      date: startDate,
+      endDate: isEnded ? (med.endDate ?? startDate) : '',
+      route,
+      amount: med.dose ?? 0,
+      medicationName: drug.name,
+      medicationId: String(drug.id),
+      maxDose,
+      doseUnit: med.unit ?? drug.unit ?? 'mg',
+      status: isEnded ? 'ended' : 'current',
+      notes: isEnded ? '' : CURRENT_DOSE_NOTE,
+    });
+    state.doseEvents.push(newEvent);
+    addedCount++;
+  });
+
+  fhirState.pendingImport.matched = [];
+  if (el.matchedSection) el.matchedSection.classList.add('hidden');
+
+  const mapInputs = el.unmatchedList ? el.unmatchedList.querySelectorAll('.fhir-map-input') : [];
+  const skippedUnmatched = [];
+  const resolvedUnmatchedIndices = new Set();
+
+  unmatched.forEach((med, i) => {
+    const input = mapInputs[i];
+    const mappedName = input ? input.value.trim() : '';
+    if (!mappedName) return;
+
+    const catalogDrug = lookupCatalogDrugByName(mappedName);
+    if (!catalogDrug) {
+      skippedUnmatched.push(med.name);
+      return;
+    }
+
+    const startDate = med.startDate ?? today;
+    const isEnded = Boolean(med.endDate) || (med.status && med.status !== 'active' && med.status !== 'unknown');
+    const route = med.route ?? state.settings.medicationRoute ?? 'PO';
+    const maxDose = (catalogDrug.routeMaxDoses && catalogDrug.routeMaxDoses[route]) ?? catalogDrug.maxDailyDose ?? 100;
+
+    const newEvent = normalizeDoseEvent({
+      date: startDate,
+      endDate: isEnded ? (med.endDate ?? startDate) : '',
+      route,
+      amount: med.dose ?? 0,
+      medicationName: catalogDrug.name,
+      medicationId: String(catalogDrug.id),
+      maxDose,
+      doseUnit: med.unit ?? catalogDrug.unit ?? 'mg',
+      status: isEnded ? 'ended' : 'current',
+      notes: isEnded ? '' : CURRENT_DOSE_NOTE,
+    });
+    state.doseEvents.push(newEvent);
+    addedCount++;
+    resolvedUnmatchedIndices.add(i);
+  });
+
+  if (resolvedUnmatchedIndices.size > 0) {
+    fhirState.pendingImport.unmatched = unmatched.filter((_, i) => !resolvedUnmatchedIndices.has(i));
+    if (el.unmatchedList) {
+      el.unmatchedList.querySelectorAll('.fhir-unmatched-row').forEach(row => {
+        const idx = Number(row.dataset.index);
+        if (resolvedUnmatchedIndices.has(idx)) {
+          row.remove();
+        }
+      });
+    }
+    if (fhirState.pendingImport.unmatched.length === 0) {
+      if (el.unmatchedSection) el.unmatchedSection.classList.add('hidden');
+    }
+  }
+
+  state.doseEvents.sort((a, b) => a.date.localeCompare(b.date));
+  render();
+
+  if (el.importStatus) {
+    let msg = `Added ${addedCount} dose segment(s) to the graph.`;
+    if (skippedUnmatched.length > 0) {
+      msg += ` ${skippedUnmatched.length} medication(s) skipped — name not found in drug library: ${skippedUnmatched.map(escapeHtml).join(', ')}.`;
+    }
+    el.importStatus.textContent = msg;
+  }
+
+  if (skippedUnmatched.length === 0) {
+    setTimeout(() => closeFhirImportModal(), 1600);
+  }
+}
+
+function openFhirImportModal() {
+  const el = getFhirElements();
+  if (!el.importModal) return;
+
+  if (el.jsonInput) el.jsonInput.value = '';
+  if (el.importStatus) el.importStatus.textContent = '';
+  if (el.importResults) el.importResults.classList.add('hidden');
+  if (el.matchedSection) el.matchedSection.classList.add('hidden');
+  if (el.unmatchedSection) el.unmatchedSection.classList.add('hidden');
+  if (el.applyButton) el.applyButton.classList.add('hidden');
+  fhirState.pendingImport = null;
+
+  el.importModal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFhirImportModal() {
+  const el = getFhirElements();
+  if (!el.importModal) return;
+  el.importModal.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+async function submitFhirImport() {
+  const el = getFhirElements();
+  if (!el.jsonInput) return;
+
+  const rawJson = el.jsonInput.value.trim();
+  if (!rawJson) {
+    if (el.importStatus) el.importStatus.textContent = 'Please paste a FHIR Bundle JSON or upload a file.';
+    return;
+  }
+
+  if (el.submitButton) {
+    el.submitButton.disabled = true;
+    el.submitButton.textContent = 'Importing…';
+  }
+  if (el.importStatus) el.importStatus.textContent = 'Processing…';
+
+  let bundle;
+  try {
+    bundle = JSON.parse(rawJson);
+  } catch {
+    if (el.importStatus) el.importStatus.textContent = 'Invalid JSON. Please check the pasted content.';
+    if (el.submitButton) {
+      el.submitButton.disabled = false;
+      el.submitButton.textContent = 'Import Medications';
+    }
+    return;
+  }
+
+  await processFhirBundle(bundle);
+
+  if (el.submitButton) {
+    el.submitButton.disabled = false;
+    el.submitButton.textContent = 'Import Medications';
+  }
+}
+
+(function initFhirUI() {
+  const el = getFhirElements();
+
+  el.openImportButton?.addEventListener('click', openFhirImportModal);
+  el.closeImportButton?.addEventListener('click', closeFhirImportModal);
+
+  el.importModal?.addEventListener('click', function (event) {
+    if (event.target === el.importModal) closeFhirImportModal();
+  });
+
+  el.fileInput?.addEventListener('change', function (event) {
+    const file = event.target.files ? event.target.files[0] : null;
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      if (el.jsonInput && e.target) el.jsonInput.value = String(e.target.result);
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+  });
+
+  el.submitButton?.addEventListener('click', submitFhirImport);
+  el.applyButton?.addEventListener('click', applyFhirImport);
+
+  el.ehrConnectButton?.addEventListener('click', startEhrConnect);
+
+  el.ehrDisconnectButton?.addEventListener('click', disconnectEhr);
+
+  el.ehrReconnectButton?.addEventListener('click', function () {
+    fhirState.sessionId = '';
+    fhirState.expired = false;
+    fhirState.connected = false;
+    try { window.localStorage.removeItem(FHIR_SESSION_STORAGE_KEY); } catch {}
+    syncFhirConnectUI();
+    startEhrConnect();
+  });
+
+  el.ehrLoadMedsButton?.addEventListener('click', function () {
+    autoLoadFhirMedications();
+  });
+
+  if (el.ehrSystemSelect) {
+    loadFhirEhrSystems();
+    syncFhirConnectUI();
+  }
+})();
