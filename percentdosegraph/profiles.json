@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "accountId": 2,
+    "name": "Auth Owned Profile",
+    "payload": {
+      "label": "Auth Owned Profile"
+    },
+    "createdAt": "2026-04-04T15:37:19.545Z",
+    "updatedAt": "2026-04-04T15:37:19.545Z"
+  }
+]

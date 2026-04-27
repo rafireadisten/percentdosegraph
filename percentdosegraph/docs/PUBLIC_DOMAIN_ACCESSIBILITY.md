@@ -1,0 +1,538 @@
+# Public Domain Accessibility Guide
+
+## Overview
+
+This guide covers deploying the Percent Dose Graph (PDG) application to a public domain using traditional VPS hosting (DigitalOcean, Linode, etc.) and connected to a custom domain.
+
+**Current Status:**
+- ✅ App is production-ready (React + Node.js API)
+- ✅ Docker containerization available
+- ✅ Database: JSON file-based or PostgreSQL
+- ✅ Authentication: JWT with Passport support
+- 🔄 Domain: Currently on GitHub Pages (`rafireadisten.github.io/percentdosegraph`)
+
+---
+
+## Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Public Domain                        │
+│          (e.g., dosegraph.com, pdg.clinic)             │
+└────────────────────────┬────────────────────────────────┘
+                         │
+                  ┌──────▼──────┐
+                  │   Reverse   │
+                  │  Proxy      │ (Nginx/Apache)
+                  │ (Port 80,   │
+                  │  443 HTTPS) │
+                  └──────┬──────┘
+                         │
+        ┌────────────────┼────────────────┐
+        │                │                │
+   ┌────▼─────┐    ┌────▼──────┐   ┌────▼────┐
+   │  React   │    │ Node.js    │   │Database │
+   │Frontend  │    │  API       │   │(Postgres│
+   │(3000)    │    │ (3001)     │   │or JSON) │
+   └──────────┘    └────────────┘   └─────────┘
+
+  (Docker Container on VPS)
+```
+
+---
+
+## Step 1: Domain Registration & DNS Setup
+
+### 1.1 Register a Domain
+**Options:**
+- Namecheap
+- GoDaddy
+- Route 53 (AWS)
+- Google Domains
+- Cloudflare (also provides free DNS)
+
+**Recommended:** Namecheap or Cloudflare (for cost + features)
+
+### 1.2 Point DNS to Your VPS
+
+For a VPS at IP `123.45.67.89`, create these DNS records:
+
+| Type | Name | Value | TTL |
+|------|------|-------|-----|
+| A | @ | 123.45.67.89 | 3600 |
+| A | www | 123.45.67.89 | 3600 |
+| CNAME | api | @ | 3600 |
+
+**Example for `dosegraph.com`:**
+- `dosegraph.com` → 123.45.67.89
+- `www.dosegraph.com` → 123.45.67.89
+- `api.dosegraph.com` → dosegraph.com
+
+DNS typically takes 24-48 hours to propagate. Check status:
+```bash
+nslookup dosegraph.com
+dig dosegraph.com
+```
+
+---
+
+## Step 2: VPS Setup (DigitalOcean/Linode Example)
+
+### 2.1 Initial VPS Configuration
+
+**Create a new Droplet/Linode:**
+- **OS:** Ubuntu 22.04 LTS
+- **Size:** 2GB RAM / 1 vCPU (minimum for dev), 4GB+ recommended
+- **Region:** Choose closest to target users
+
+### 2.2 Connect via SSH
+
+```bash
+ssh root@123.45.67.89
+
+# Update system
+apt update && apt upgrade -y
+
+# Create a non-root user (security best practice)
+adduser appuser
+usermod -aG sudo appuser
+su - appuser
+```
+
+### 2.3 Install Docker & Docker Compose
+
+```bash
+# Install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# Add user to docker group
+sudo usermod -aG docker $USER
+
+# Install Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Verify
+docker --version
+docker-compose --version
+```
+
+### 2.4 Install Nginx (Reverse Proxy & SSL)
+
+```bash
+sudo apt install -y nginx certbot python3-certbot-nginx
+
+# Start Nginx
+sudo systemctl start nginx
+sudo systemctl enable nginx
+```
+
+---
+
+## Step 3: Deploy Application to VPS
+
+### 3.1 Clone Repository
+
+```bash
+cd /home/appuser
+git clone https://github.com/rafireadisten/percentdosegraph.git
+cd percentdosegraph
+```
+
+### 3.2 Create Environment File
+
+Create `.env.production`:
+```bash
+NODE_ENV=production
+JWT_SECRET=your-secure-random-32-char-key-here      # Use: openssl rand -base64 32
+PORT=3001
+AUTH_SECRET=your-secure-auth-secret-here
+GOOGLE_CLIENT_ID=your-google-oauth-id-optional
+GOOGLE_CLIENT_SECRET=your-google-oauth-secret-optional
+DATABASE_URL=                                         # Leave empty for JSON persistence
+LOG_LEVEL=info
+```
+
+**Generate a secure JWT_SECRET:**
+```bash
+openssl rand -base64 32
+```
+
+### 3.3 Build and Start Docker Container
+
+```bash
+# Build the API image
+npm run build:api
+
+# Or use Docker
+docker build -t pdg-api:latest .
+
+# Run with docker-compose (recommended for production)
+docker-compose up -d
+
+# Verify services running
+docker ps
+```
+
+### 3.4 Build React Frontend for Production
+
+```bash
+npm run build:deploy
+
+# Files ready in ./deploy directory:
+# - app.bundle.js
+# - index.html
+# - styles.css
+# - 404.html (for SPA routing)
+```
+
+---
+
+## Step 4: Configure Nginx as Reverse Proxy
+
+### 4.1 Create Nginx Config
+
+Create `/etc/nginx/sites-available/dosegraph`:
+
+```nginx
+# Redirect HTTP to HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name dosegraph.com www.dosegraph.com api.dosegraph.com;
+    return 301 https://$server_name$request_uri;
+}
+
+# Main HTTPS server
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name dosegraph.com www.dosegraph.com;
+
+    # SSL certificates (will be generated by certbot)
+    ssl_certificate /etc/letsencrypt/live/dosegraph.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/dosegraph.com/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/dosegraph.com/chain.pem;
+
+    # Modern SSL config
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # Security headers
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+
+    # Root directory for React frontend
+    root /home/appuser/percentdosegraph/deploy;
+    index index.html;
+
+    # Static assets with long cache
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        expires 365d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # React SPA routing: fallback to index.html for client-side routes
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # API proxy to Node backend
+    location /api/ {
+        proxy_pass http://localhost:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Health check endpoint
+    location /health {
+        proxy_pass http://localhost:3001/api/health;
+        access_log off;
+    }
+}
+
+# API subdomain (optional separate endpoint)
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name api.dosegraph.com;
+
+    ssl_certificate /etc/letsencrypt/live/dosegraph.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/dosegraph.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    location / {
+        proxy_pass http://localhost:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+### 4.2 Enable Nginx Config
+
+```bash
+# Create symlink to enable site
+sudo ln -s /etc/nginx/sites-available/dosegraph /etc/nginx/sites-enabled/
+
+# Remove default config if needed
+sudo rm -f /etc/nginx/sites-enabled/default
+
+# Test Nginx config
+sudo nginx -t
+
+# Reload Nginx
+sudo systemctl reload nginx
+```
+
+---
+
+## Step 5: SSL/TLS Certificate with Let's Encrypt
+
+### 5.1 Generate Certificate
+
+```bash
+sudo certbot certonly --nginx -d dosegraph.com -d www.dosegraph.com -d api.dosegraph.com
+
+# Follow prompts:
+# - Enter email
+# - Accept terms
+# - Choose webroot or standalone
+```
+
+### 5.2 Auto-Renewal
+
+```bash
+# Enable auto-renewal timer
+sudo systemctl enable certbot.timer
+sudo systemctl start certbot.timer
+
+# Test renewal (dry run)
+sudo certbot renew --dry-run
+```
+
+---
+
+## Step 6: Monitoring & Maintenance
+
+### 6.1 Health Checks
+
+```bash
+# Check frontend
+curl https://dosegraph.com
+
+# Check API
+curl https://api.dosegraph.com/api/health
+
+# Check Docker containers
+docker ps
+docker logs -f pdg-api
+
+# Monitor disk/memory
+df -h
+free -h
+```
+
+### 6.2 Logs
+
+```bash
+# View application logs
+docker logs pdg-api
+
+# View Nginx access/error logs
+sudo tail -f /var/log/nginx/access.log
+sudo tail -f /var/log/nginx/error.log
+
+# View system journal
+journalctl -u nginx -f
+journalctl -u docker -f
+```
+
+### 6.3 Database Backup (JSON)
+
+```bash
+# Backup data files
+sudo tar -czf /backups/pdg-backup-$(date +%Y%m%d).tar.gz \
+  /home/appuser/percentdosegraph/accounts.json \
+  /home/appuser/percentdosegraph/profiles.json \
+  /home/appuser/percentdosegraph/data/
+
+# View backups
+ls -lh /backups/
+```
+
+---
+
+## Step 7: CI/CD Pipeline Update (GitHub Actions)
+
+Update `.github/workflows/deploy.yml` to deploy to your VPS:
+
+```yaml
+name: Deploy to Custom Domain
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Build
+        run: npm ci && npm run build:all
+      
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd ~/percentdosegraph
+            git pull origin main
+            docker-compose down
+            docker-compose pull
+            docker-compose up -d
+            npm run build:deploy
+            sudo systemctl reload nginx
+```
+
+**Add GitHub Secrets:**
+- `VPS_HOST`: 123.45.67.89
+- `VPS_USER`: appuser
+- `VPS_SSH_KEY`: (private key from `ssh-keygen`)
+
+---
+
+## Deployment Checklist
+
+- [ ] Domain registered and DNS configured
+- [ ] VPS created and SSH access tested
+- [ ] Docker & Docker Compose installed
+- [ ] Nginx installed and configured
+- [ ] Environment variables set (JWT_SECRET, etc.)
+- [ ] SSL certificate generated with Let's Encrypt
+- [ ] Application built and running in Docker
+- [ ] Frontend accessible at https://dosegraph.com
+- [ ] API accessible at https://api.dosegraph.com/api/health
+- [ ] HTTPS redirect working (http → https)
+- [ ] Health checks passing
+- [ ] Backups configured
+- [ ] Monitoring/logging verified
+- [ ] GitHub Actions CI/CD configured
+
+---
+
+## Production Security Checklist
+
+- [ ] Non-root user created for app
+- [ ] SSH key authentication enabled (disable password)
+- [ ] Firewall configured (only ports 22, 80, 443 open)
+- [ ] SSL/TLS enforced (A+ rating on SSL Labs)
+- [ ] Security headers configured in Nginx
+- [ ] Database backups automated
+- [ ] Rate limiting enabled on API
+- [ ] CORS configured appropriately
+- [ ] Secrets not in version control (.env.production)
+- [ ] Monitoring/alerts set up
+- [ ] Auto-renewal of SSL certificates verified
+
+---
+
+## Troubleshooting
+
+### DNS Not Resolving
+```bash
+# Check DNS propagation
+dig dosegraph.com +short
+nslookup dosegraph.com
+
+# Clear local DNS cache (macOS)
+dscacheutil -flushcache
+```
+
+### SSL Certificate Issues
+```bash
+# Check certificate validity
+certbot certificates
+
+# Manually renew
+sudo certbot renew --force-renewal
+
+# Check certificate dates
+echo | openssl s_client -servername dosegraph.com -connect dosegraph.com:443 2>/dev/null | openssl x509 -noout -dates
+```
+
+### Docker Container Won't Start
+```bash
+# Check logs
+docker logs pdg-api
+
+# Test build locally
+docker build -t test . 
+docker run -it test
+
+# Inspect image
+docker inspect pdg-api
+```
+
+### Nginx Not Finding React Routes
+```bash
+# Verify SPA config
+sudo -i
+grep -n "try_files" /etc/nginx/sites-enabled/dosegraph
+sudo terraform reload nginx
+```
+
+---
+
+## Next Steps
+
+1. **Register domain** via Namecheap or Cloudflare
+2. **Create VPS** on DigitalOcean or Linode
+3. **Configure DNS** to point at VPS IP
+4. **Run VPS setup script** from Step 2
+5. **Deploy application** using docker-compose
+6. **Generate SSL certificate** with Let's Encrypt
+7. **Test endpoints** from external IP
+8. **Configure monitoring** (UptimeRobot, Grafana)
+9. **Set up CI/CD** for auto-deployments
+
+---
+
+## Estimated Costs (Monthly)
+
+| Component | Provider | Estimate |
+|-----------|----------|----------|
+| Domain | Namecheap | $8-12 |
+| VPS (2GB RAM) | DigitalOcean | $12-15 |
+| SSL Certificate | Let's Encrypt | FREE |
+| Backup storage | Local or S3 | $0-5 |
+| **Total** | | **$20-32** |
+
+---
+
+## References
+
+- [Nginx Reverse Proxy Docs](https://docs.nginx.com/)
+- [Let's Encrypt Certbot](https://certbot.eff.org/)
+- [Docker Compose Docs](https://docs.docker.com/compose/)
+- [Node.js Production Best Practices](https://nodejs.org/en/docs/guides/nodejs-docker-webapp/)
+- [DigitalOcean App Platform](https://www.digitalocean.com/products/app-platform/)

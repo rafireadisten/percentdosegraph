@@ -1,0 +1,10 @@
+node_modules/
+dist/
+build/
+coverage/
+.storybook-out/
+*.min.js
+*.bundle.js
+mobile/app/src/app.tsx
+mobile/app/src/screens/DoseGraphScreen.tsx
+mobile/app/src/screens/ProfilesScreen.tsx
