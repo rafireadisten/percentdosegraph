@@ -1,5 +1,7 @@
 import crypto from "node:crypto";
 import { Router, type Request, type Response } from "express";
+import { eq, lt } from "drizzle-orm";
+import { db, fhirPendingStatesTable, fhirSessionsTable } from "@workspace/db";
 import { logger } from "../lib/logger.js";
 
 const router = Router();
@@ -84,46 +86,23 @@ const EHR_REGISTRY: EhrSystem[] = [
   },
 ];
 
-// ---- In-memory State Stores ----
-
-type PendingAuthState = {
-  ehrId: string;
-  fhirBaseUrl: string;
-  tokenUrl: string;
-  clientId: string;
-  scopes: string;
-  codeVerifier: string;
-  redirectUri: string;
-  createdAt: number;
-};
-
-type FhirSession = {
-  accessToken: string;
-  refreshToken: string | null;
-  patientId: string | null;
-  patientName: string | null;
-  ehrId: string;
-  fhirBaseUrl: string;
-  tokenUrl: string;
-  clientId: string;
-  expiresAt: number;
-  createdAt: number;
-};
+// ---- TTLs ----
 
 const PENDING_STATE_TTL_MS = 10 * 60 * 1000;
 const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
 
-const pendingAuthStates = new Map<string, PendingAuthState>();
-const fhirSessions = new Map<string, FhirSession>();
-
-setInterval(() => {
+// Periodic cleanup of expired DB rows (runs every minute)
+setInterval(async () => {
   const now = Date.now();
-  for (const [key, state] of pendingAuthStates) {
-    if (now - state.createdAt > PENDING_STATE_TTL_MS)
-      pendingAuthStates.delete(key);
-  }
-  for (const [key, session] of fhirSessions) {
-    if (now - session.createdAt > SESSION_TTL_MS) fhirSessions.delete(key);
+  try {
+    await db
+      .delete(fhirPendingStatesTable)
+      .where(lt(fhirPendingStatesTable.createdAt, now - PENDING_STATE_TTL_MS));
+    await db
+      .delete(fhirSessionsTable)
+      .where(lt(fhirSessionsTable.createdAt, now - SESSION_TTL_MS));
+  } catch (err) {
+    logger.warn({ err }, "Failed to clean up expired FHIR DB rows");
   }
 }, 60 * 1000);
 
@@ -160,7 +139,7 @@ router.get(["/fhir/smart/config", "/fhir/config"], (_req: Request, res: Response
   });
 });
 
-router.get(["/fhir/smart/auth/start", "/fhir/auth/start"], (req: Request, res: Response) => {
+router.get(["/fhir/smart/auth/start", "/fhir/auth/start"], async (req: Request, res: Response) => {
   try {
     const {
       ehrId,
@@ -223,7 +202,8 @@ router.get(["/fhir/smart/auth/start", "/fhir/auth/start"], (req: Request, res: R
     const codeChallenge = generateCodeChallenge(codeVerifier);
     const state = generateState();
 
-    pendingAuthStates.set(state, {
+    await db.insert(fhirPendingStatesTable).values({
+      state,
       ehrId: ehrId ?? "custom",
       fhirBaseUrl: resolvedFhirBaseUrl,
       tokenUrl: resolvedTokenUrl,
@@ -268,7 +248,12 @@ router.post(
         return;
       }
 
-      const pending = pendingAuthStates.get(state);
+      const [pending] = await db
+        .select()
+        .from(fhirPendingStatesTable)
+        .where(eq(fhirPendingStatesTable.state, state))
+        .limit(1);
+
       if (!pending) {
         res.status(400).json({
           error:
@@ -277,7 +262,10 @@ router.post(
         return;
       }
 
-      pendingAuthStates.delete(state);
+      // Delete the pending state (single-use)
+      await db
+        .delete(fhirPendingStatesTable)
+        .where(eq(fhirPendingStatesTable.state, state));
 
       const tokenRes = await fetch(pending.tokenUrl, {
         method: "POST",
@@ -351,7 +339,8 @@ router.post(
         }
       }
 
-      fhirSessions.set(sessionId, {
+      await db.insert(fhirSessionsTable).values({
+        sessionId,
         accessToken: tokenData.access_token,
         refreshToken: tokenData.refresh_token ?? null,
         patientId: tokenData.patient ?? null,
@@ -397,7 +386,12 @@ router.post(
         return;
       }
 
-      const session = fhirSessions.get(sessionId);
+      const [session] = await db
+        .select()
+        .from(fhirSessionsTable)
+        .where(eq(fhirSessionsTable.sessionId, sessionId))
+        .limit(1);
+
       if (!session) {
         res
           .status(401)
@@ -427,7 +421,9 @@ router.post(
 
       if (!tokenRes.ok) {
         const errText = await tokenRes.text().catch(() => "Unknown error");
-        fhirSessions.delete(sessionId);
+        await db
+          .delete(fhirSessionsTable)
+          .where(eq(fhirSessionsTable.sessionId, sessionId));
         res.status(502).json({
           error: `Token refresh failed: ${errText}. Please reconnect.`,
         });
@@ -442,10 +438,15 @@ router.post(
 
       const expiresAt =
         Date.now() + (tokenData.expires_in ?? 3600) * 1000;
-      session.accessToken = tokenData.access_token;
-      if (tokenData.refresh_token)
-        session.refreshToken = tokenData.refresh_token;
-      session.expiresAt = expiresAt;
+
+      await db
+        .update(fhirSessionsTable)
+        .set({
+          accessToken: tokenData.access_token,
+          ...(tokenData.refresh_token ? { refreshToken: tokenData.refresh_token } : {}),
+          expiresAt,
+        })
+        .where(eq(fhirSessionsTable.sessionId, sessionId));
 
       logger.info({ sessionId }, "SMART token refreshed");
       res.json({ sessionId, expiresAt });
@@ -456,14 +457,19 @@ router.post(
   }
 );
 
-router.get(["/fhir/smart/session", "/fhir/auth/session"], (req: Request, res: Response) => {
+router.get(["/fhir/smart/session", "/fhir/auth/session"], async (req: Request, res: Response) => {
   const sessionId = req.headers["x-fhir-session"] as string;
   if (!sessionId) {
     res.status(400).json({ error: "X-FHIR-Session header required" });
     return;
   }
 
-  const session = fhirSessions.get(sessionId);
+  const [session] = await db
+    .select()
+    .from(fhirSessionsTable)
+    .where(eq(fhirSessionsTable.sessionId, sessionId))
+    .limit(1);
+
   if (!session) {
     res.status(404).json({ connected: false, error: "Session not found" });
     return;
@@ -480,9 +486,13 @@ router.get(["/fhir/smart/session", "/fhir/auth/session"], (req: Request, res: Re
   });
 });
 
-router.delete(["/fhir/smart/session", "/fhir/auth/session"], (req: Request, res: Response) => {
+router.delete(["/fhir/smart/session", "/fhir/auth/session"], async (req: Request, res: Response) => {
   const sessionId = req.headers["x-fhir-session"] as string;
-  if (sessionId) fhirSessions.delete(sessionId);
+  if (sessionId) {
+    await db
+      .delete(fhirSessionsTable)
+      .where(eq(fhirSessionsTable.sessionId, sessionId));
+  }
   res.json({ disconnected: true });
 });
 
@@ -494,7 +504,12 @@ router.get("/fhir/proxy", async (req: Request, res: Response) => {
     return;
   }
 
-  const session = fhirSessions.get(sessionId);
+  const [session] = await db
+    .select()
+    .from(fhirSessionsTable)
+    .where(eq(fhirSessionsTable.sessionId, sessionId))
+    .limit(1);
+
   if (!session) {
     res
       .status(401)
@@ -524,10 +539,17 @@ router.get("/fhir/proxy", async (req: Request, res: Response) => {
           refresh_token?: string;
           expires_in?: number;
         };
+        const newExpiresAt = Date.now() + (td.expires_in ?? 3600) * 1000;
+        await db
+          .update(fhirSessionsTable)
+          .set({
+            accessToken: td.access_token,
+            ...(td.refresh_token ? { refreshToken: td.refresh_token } : {}),
+            expiresAt: newExpiresAt,
+          })
+          .where(eq(fhirSessionsTable.sessionId, sessionId));
         session.accessToken = td.access_token;
-        if (td.refresh_token) session.refreshToken = td.refresh_token;
-        session.expiresAt =
-          Date.now() + (td.expires_in ?? 3600) * 1000;
+        session.expiresAt = newExpiresAt;
         logger.info({ sessionId }, "Auto-refreshed FHIR token in proxy");
       }
     } catch (refreshErr) {

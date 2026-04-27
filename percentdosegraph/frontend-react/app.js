@@ -308,10 +308,11 @@ function App() {
   const [fhirImportStatus, setFhirImportStatus] = useState('');
 
   // EHR / SMART on FHIR connection state
-  const [ehrSessionId, setEhrSessionId] = useState(() => sessionStorage.getItem('ehrSessionId') ?? '');
-  const [ehrPatientName, setEhrPatientName] = useState(() => sessionStorage.getItem('ehrPatientName') ?? '');
-  const [ehrPatientId, setEhrPatientId] = useState(() => sessionStorage.getItem('ehrPatientId') ?? '');
-  const [ehrSystemName, setEhrSystemName] = useState(() => sessionStorage.getItem('ehrSystemName') ?? '');
+  // Restore from localStorage; server-side validation on mount keeps this in sync
+  const [ehrSessionId, setEhrSessionId] = useState(() => localStorage.getItem('ehrSessionId') ?? '');
+  const [ehrPatientName, setEhrPatientName] = useState(() => localStorage.getItem('ehrPatientName') ?? '');
+  const [ehrPatientId, setEhrPatientId] = useState(() => localStorage.getItem('ehrPatientId') ?? '');
+  const [ehrSystemName, setEhrSystemName] = useState(() => localStorage.getItem('ehrSystemName') ?? '');
   const [ehrConnecting, setEhrConnecting] = useState(false);
   const [ehrError, setEhrError] = useState('');
 
@@ -608,6 +609,58 @@ function App() {
     }
 
     return () => window.removeEventListener('message', handleSmartCallbackMessage);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // On mount, verify a stored EHR session is still valid on the server side.
+  // This is the authoritative expiry check — the server may have refreshed the
+  // token since the last visit, so we never evict based on the cached
+  // ehrExpiresAt alone. On a valid response we refresh the local expiry so the
+  // two stay in sync.
+  useEffect(() => {
+    const storedSessionId = localStorage.getItem('ehrSessionId');
+    if (!storedSessionId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE_PATH}/fhir/smart/session`, {
+          headers: { 'X-FHIR-Session': storedSessionId },
+        });
+        if (cancelled) return;
+        if (!res.ok) {
+          // Session is gone on the server — clear local state
+          setEhrSessionId('');
+          setEhrPatientName('');
+          setEhrPatientId('');
+          setEhrSystemName('');
+          localStorage.removeItem('ehrSessionId');
+          localStorage.removeItem('ehrPatientName');
+          localStorage.removeItem('ehrPatientId');
+          localStorage.removeItem('ehrSystemName');
+          localStorage.removeItem('ehrExpiresAt');
+        } else {
+          const data = await res.json();
+          if (!data.connected || data.expired) {
+            // Server says expired — clear
+            setEhrSessionId('');
+            setEhrPatientName('');
+            setEhrPatientId('');
+            setEhrSystemName('');
+            localStorage.removeItem('ehrSessionId');
+            localStorage.removeItem('ehrPatientName');
+            localStorage.removeItem('ehrPatientId');
+            localStorage.removeItem('ehrSystemName');
+            localStorage.removeItem('ehrExpiresAt');
+          } else if (data.expiresAt) {
+            // Session is still valid — refresh cached expiry to stay in sync
+            // with any server-side token refreshes that may have occurred
+            localStorage.setItem('ehrExpiresAt', String(data.expiresAt));
+          }
+        }
+      } catch {
+        // Network error — keep local state so the UI stays connected optimistically
+      }
+    })();
+    return () => { cancelled = true; };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const drugLookup = useMemo(() => {
@@ -1045,10 +1098,11 @@ function App() {
       setEhrPatientName(patientName);
       setEhrPatientId(patientId);
       setEhrSystemName(systemName);
-      sessionStorage.setItem('ehrSessionId', sessionId);
-      sessionStorage.setItem('ehrPatientName', patientName);
-      sessionStorage.setItem('ehrPatientId', patientId);
-      sessionStorage.setItem('ehrSystemName', systemName);
+      localStorage.setItem('ehrSessionId', sessionId);
+      localStorage.setItem('ehrPatientName', patientName);
+      localStorage.setItem('ehrPatientId', patientId);
+      localStorage.setItem('ehrSystemName', systemName);
+      localStorage.setItem('ehrExpiresAt', String(data.expiresAt ?? 0));
       // Auto-load medications immediately if patient context is available
       if (sessionId && patientId) {
         await autoLoadEhrMedications(sessionId, patientId);
@@ -1150,10 +1204,11 @@ function App() {
     setEhrPatientId('');
     setEhrSystemName('');
     setEhrError('');
-    sessionStorage.removeItem('ehrSessionId');
-    sessionStorage.removeItem('ehrPatientName');
-    sessionStorage.removeItem('ehrPatientId');
-    sessionStorage.removeItem('ehrSystemName');
+    localStorage.removeItem('ehrSessionId');
+    localStorage.removeItem('ehrPatientName');
+    localStorage.removeItem('ehrPatientId');
+    localStorage.removeItem('ehrSystemName');
+    localStorage.removeItem('ehrExpiresAt');
   }
 
   function handleStartDoseEdit(dose) {
