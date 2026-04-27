@@ -7,6 +7,7 @@ import dosesRouter from './doses.js';
 import profilesRouter from './profiles.js';
 import usDrugsRouter from './us-drugs.js';
 import fhirRouter from './fhir.js';
+import fhirSmartRouter from './fhir-smart.js';
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use(dosesRouter);
 router.use(profilesRouter);
 router.use(usDrugsRouter);
 router.use(fhirRouter);
+router.use(fhirSmartRouter);
 
 export default router;

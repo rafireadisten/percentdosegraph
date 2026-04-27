@@ -307,6 +307,14 @@ function App() {
   const [fhirModalOpen, setFhirModalOpen] = useState(false);
   const [fhirImportStatus, setFhirImportStatus] = useState('');
 
+  // EHR / SMART on FHIR connection state
+  const [ehrSessionId, setEhrSessionId] = useState(() => sessionStorage.getItem('ehrSessionId') ?? '');
+  const [ehrPatientName, setEhrPatientName] = useState(() => sessionStorage.getItem('ehrPatientName') ?? '');
+  const [ehrPatientId, setEhrPatientId] = useState(() => sessionStorage.getItem('ehrPatientId') ?? '');
+  const [ehrSystemName, setEhrSystemName] = useState(() => sessionStorage.getItem('ehrSystemName') ?? '');
+  const [ehrConnecting, setEhrConnecting] = useState(false);
+  const [ehrError, setEhrError] = useState('');
+
   useEffect(() => {
     saveProfilesToStorage(profiles);
   }, [profiles]);
@@ -574,6 +582,33 @@ function App() {
     const selectedDrug = drugs.find(drug => String(drug.id) === String(entryDrugId));
     setEntryDoseUnit(getPreferredDoseUnit(selectedDrug));
   }, [drugs, editingDoseId, entryDrugId]);
+
+  // Listen for SMART on FHIR popup callback messages and handle redirect fallback
+  useEffect(() => {
+    // Popup flow: listen for postMessage from the popup window
+    function handleSmartCallbackMessage(event) {
+      if (event.origin !== window.location.origin) return;
+      if (!event.data || event.data.type !== 'smart_auth_callback') return;
+      const { code, state } = event.data;
+      if (!code || !state) return;
+      processEhrCallback(code, state);
+    }
+    window.addEventListener('message', handleSmartCallbackMessage);
+
+    // Redirect flow: check sessionStorage for code+state stored by the IIFE on page load
+    const pending = sessionStorage.getItem('smart_auth_redirect_pending');
+    if (pending) {
+      sessionStorage.removeItem('smart_auth_redirect_pending');
+      try {
+        const { code, state } = JSON.parse(pending);
+        if (code && state) {
+          processEhrCallback(code, state);
+        }
+      } catch {}
+    }
+
+    return () => window.removeEventListener('message', handleSmartCallbackMessage);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const drugLookup = useMemo(() => {
     return new Map(drugs.map(drug => [drug.id, drug]));
@@ -989,6 +1024,136 @@ function App() {
     setFhirImportStatus(
       `Imported ${matchedMedicationEntries.length} medication entr${matchedMedicationEntries.length === 1 ? 'y' : 'ies'} from the FHIR bundle.`
     );
+  }
+
+  async function processEhrCallback(code, state) {
+    setEhrConnecting(true);
+    setEhrError('');
+    try {
+      const res = await fetch(`${API_BASE_PATH}/fhir/smart/auth/callback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, state }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Authorization callback failed');
+      const sessionId = data.sessionId ?? '';
+      const patientName = data.patientName ?? '';
+      const patientId = data.patientId ?? '';
+      const systemName = data.ehrId ?? 'EHR';
+      setEhrSessionId(sessionId);
+      setEhrPatientName(patientName);
+      setEhrPatientId(patientId);
+      setEhrSystemName(systemName);
+      sessionStorage.setItem('ehrSessionId', sessionId);
+      sessionStorage.setItem('ehrPatientName', patientName);
+      sessionStorage.setItem('ehrPatientId', patientId);
+      sessionStorage.setItem('ehrSystemName', systemName);
+      // Auto-load medications immediately if patient context is available
+      if (sessionId && patientId) {
+        await autoLoadEhrMedications(sessionId, patientId);
+      }
+    } catch (err) {
+      setEhrError(err instanceof Error ? err.message : 'EHR connection failed');
+    } finally {
+      setEhrConnecting(false);
+    }
+  }
+
+  async function autoLoadEhrMedications(sessionId, patientId) {
+    async function fetchFromProxy(path) {
+      const encodedPath = encodeURIComponent(path);
+      const res = await fetch(`${API_BASE_PATH}/fhir/proxy?path=${encodedPath}`, {
+        headers: { 'X-FHIR-Session': sessionId },
+      });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error ?? `FHIR server returned ${res.status}`);
+      }
+      return res.json();
+    }
+    const pid = encodeURIComponent(patientId);
+    const [medReqResult, medStmtResult] = await Promise.allSettled([
+      fetchFromProxy(`/MedicationRequest?patient=${pid}&_count=100`),
+      fetchFromProxy(`/MedicationStatement?patient=${pid}&_count=100`),
+    ]);
+    const allEntries = [];
+    if (medReqResult.status === 'fulfilled' && Array.isArray(medReqResult.value?.entry)) {
+      allEntries.push(...medReqResult.value.entry);
+    }
+    if (medStmtResult.status === 'fulfilled' && Array.isArray(medStmtResult.value?.entry)) {
+      allEntries.push(...medStmtResult.value.entry);
+    }
+    if (allEntries.length === 0 && medReqResult.status === 'rejected') {
+      throw medReqResult.reason;
+    }
+    const combinedBundle = {
+      resourceType: 'Bundle',
+      type: 'searchset',
+      total: allEntries.length,
+      entry: allEntries,
+    };
+    const importRes = await fetch(`${API_BASE_PATH}/fhir/import`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(combinedBundle),
+    });
+    if (!importRes.ok) {
+      const err = await importRes.json().catch(() => ({ error: 'Unknown error' }));
+      throw new Error(err.error ?? `Import server error ${importRes.status}`);
+    }
+    const result = await importRes.json();
+    const matchedDrugs = result.matched.map(m => m.drug);
+    const matchedMedicationEntries = result.matched;
+    handleFhirImportConfirm({ matchedDrugs, matchedMedicationEntries });
+  }
+
+  async function handleEhrConnect({ ehrId, fhirBaseUrl, authorizeUrl, tokenUrl, clientId, scopes }) {
+    setEhrConnecting(true);
+    setEhrError('');
+    try {
+      const redirectUri = window.location.origin + window.location.pathname;
+      const params = new URLSearchParams({ redirectUri });
+      if (ehrId && ehrId !== 'custom') {
+        params.set('ehrId', ehrId);
+      } else {
+        if (fhirBaseUrl) params.set('fhirBaseUrl', fhirBaseUrl);
+        if (authorizeUrl) params.set('authorizeUrl', authorizeUrl);
+        if (tokenUrl) params.set('tokenUrl', tokenUrl);
+        if (clientId) params.set('clientId', clientId);
+        if (scopes) params.set('scopes', scopes);
+      }
+      const res = await fetch(`${API_BASE_PATH}/fhir/smart/auth/start?${params.toString()}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Failed to initiate EHR authorization');
+      const popup = window.open(data.authUrl, 'fhir_auth', 'width=620,height=720');
+      if (!popup) {
+        window.location.href = data.authUrl;
+      }
+    } catch (err) {
+      setEhrConnecting(false);
+      setEhrError(err instanceof Error ? err.message : 'Failed to connect to EHR');
+    }
+  }
+
+  async function handleEhrDisconnect() {
+    if (ehrSessionId) {
+      try {
+        await fetch(`${API_BASE_PATH}/fhir/smart/session`, {
+          method: 'DELETE',
+          headers: { 'X-FHIR-Session': ehrSessionId },
+        });
+      } catch {}
+    }
+    setEhrSessionId('');
+    setEhrPatientName('');
+    setEhrPatientId('');
+    setEhrSystemName('');
+    setEhrError('');
+    sessionStorage.removeItem('ehrSessionId');
+    sessionStorage.removeItem('ehrPatientName');
+    sessionStorage.removeItem('ehrPatientId');
+    sessionStorage.removeItem('ehrSystemName');
   }
 
   function handleStartDoseEdit(dose) {
@@ -3310,6 +3475,14 @@ function App() {
             drugs,
             onClose: () => setFhirModalOpen(false),
             onConfirm: handleFhirImportConfirm,
+            ehrSessionId,
+            ehrPatientName,
+            ehrPatientId,
+            ehrSystemName,
+            ehrConnecting,
+            ehrError,
+            onEhrConnect: handleEhrConnect,
+            onEhrDisconnect: handleEhrDisconnect,
           })
         : null
     )
@@ -3329,7 +3502,19 @@ function resolveApiBasePath() {
 }
 
 
-function FhirImportModal({ drugs, onClose, onConfirm }) {
+function FhirImportModal({
+  drugs,
+  onClose,
+  onConfirm,
+  ehrSessionId,
+  ehrPatientName,
+  ehrPatientId,
+  ehrSystemName,
+  ehrConnecting,
+  ehrError,
+  onEhrConnect,
+  onEhrDisconnect,
+}) {
   const [activeTab, setActiveTab] = React.useState('paste');
   const [pasteText, setPasteText] = React.useState('');
   const [parseError, setParseError] = React.useState('');
@@ -3520,6 +3705,17 @@ function FhirImportModal({ drugs, onClose, onConfirm }) {
                   onClick: () => { setActiveTab('upload'); setParseError(''); },
                 },
                 'Upload File'
+              ),
+              h(
+                'button',
+                {
+                  type: 'button',
+                  className: `fhir-tab${activeTab === 'ehr' ? ' active' : ''}`,
+                  onClick: () => { setActiveTab('ehr'); setParseError(''); },
+                },
+                ehrSessionId
+                  ? '\u2022 Connected to EHR'
+                  : 'Connect to EHR'
               )
             ),
             activeTab === 'paste'
@@ -3552,6 +3748,19 @@ function FhirImportModal({ drugs, onClose, onConfirm }) {
                     h('button', { type: 'button', className: 'secondary-button', onClick: onClose }, 'Cancel')
                   )
                 )
+              : activeTab === 'ehr'
+              ? h(EhrConnectPanel, {
+                  ehrSessionId,
+                  ehrPatientName,
+                  ehrPatientId,
+                  ehrSystemName,
+                  ehrConnecting,
+                  ehrError,
+                  onEhrConnect,
+                  onEhrDisconnect,
+                  onLoadMedications: processBundle,
+                  onClose,
+                })
               : h(
                   'div',
                   { className: 'fhir-tab-panel' },
@@ -3698,6 +3907,272 @@ function FhirImportModal({ drugs, onClose, onConfirm }) {
             )
           )
     )
+  );
+}
+
+function EhrConnectPanel({
+  ehrSessionId,
+  ehrPatientName,
+  ehrPatientId,
+  ehrSystemName,
+  ehrConnecting,
+  ehrError,
+  onEhrConnect,
+  onEhrDisconnect,
+  onLoadMedications,
+  onClose,
+}) {
+  const DEFAULT_EHR_SYSTEMS = [
+    { id: 'epic-sandbox', name: 'Epic (Sandbox)' },
+    { id: 'cerner-sandbox', name: 'Cerner (Sandbox)' },
+  ];
+  const [selectedEhrId, setSelectedEhrId] = React.useState('epic-sandbox');
+  const [ehrSystems, setEhrSystems] = React.useState(DEFAULT_EHR_SYSTEMS);
+  const [customFhirBaseUrl, setCustomFhirBaseUrl] = React.useState('');
+  const [customAuthorizeUrl, setCustomAuthorizeUrl] = React.useState('');
+  const [customTokenUrl, setCustomTokenUrl] = React.useState('');
+  const [customClientId, setCustomClientId] = React.useState('');
+  const [loadingMeds, setLoadingMeds] = React.useState(false);
+  const [loadMedError, setLoadMedError] = React.useState('');
+
+  React.useEffect(() => {
+    fetch(`${API_BASE_PATH}/fhir/smart/config`)
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data.systems)) {
+          setEhrSystems(data.systems);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  async function handleLoadMedications() {
+    if (!ehrSessionId || !ehrPatientId) return;
+    setLoadingMeds(true);
+    setLoadMedError('');
+    try {
+      async function fetchFromProxy(path) {
+        const encodedPath = encodeURIComponent(path);
+        const res = await fetch(
+          `${API_BASE_PATH}/fhir/proxy?path=${encodedPath}`,
+          { headers: { 'X-FHIR-Session': ehrSessionId } }
+        );
+        if (res.status === 401) {
+          const err = await res.json().catch(() => ({}));
+          if (err.expired) throw new Error('Your EHR session has expired. Please reconnect.');
+          throw new Error(err.error ?? 'EHR session not found. Please reconnect.');
+        }
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error ?? `FHIR server returned ${res.status}`);
+        }
+        return res.json();
+      }
+
+      const pid = encodeURIComponent(ehrPatientId);
+      const [medReqBundle, medStmtBundle] = await Promise.allSettled([
+        fetchFromProxy(`/MedicationRequest?patient=${pid}&_count=100`),
+        fetchFromProxy(`/MedicationStatement?patient=${pid}&_count=100`),
+      ]);
+
+      const allEntries = [];
+      if (medReqBundle.status === 'fulfilled' && Array.isArray(medReqBundle.value?.entry)) {
+        allEntries.push(...medReqBundle.value.entry);
+      }
+      if (medStmtBundle.status === 'fulfilled' && Array.isArray(medStmtBundle.value?.entry)) {
+        allEntries.push(...medStmtBundle.value.entry);
+      }
+
+      if (allEntries.length === 0 && medReqBundle.status === 'rejected') {
+        throw medReqBundle.reason;
+      }
+
+      const combinedBundle = {
+        resourceType: 'Bundle',
+        type: 'searchset',
+        total: allEntries.length,
+        entry: allEntries,
+      };
+
+      await onLoadMedications(combinedBundle);
+    } catch (err) {
+      setLoadMedError(err instanceof Error ? err.message : 'Failed to load medications from EHR.');
+    } finally {
+      setLoadingMeds(false);
+    }
+  }
+
+  const isConnected = Boolean(ehrSessionId);
+  const isCustom = selectedEhrId === 'custom';
+
+  return h(
+    'div',
+    { className: 'fhir-tab-panel ehr-connect-panel' },
+    isConnected
+      ? h(
+          React.Fragment,
+          null,
+          h(
+            'div',
+            { className: 'ehr-status connected' },
+            h('span', { className: 'ehr-status-dot' }),
+            h(
+              'div',
+              { className: 'ehr-status-text' },
+              h('strong', null, 'Connected to EHR'),
+              h(
+                'span',
+                { className: 'ehr-status-detail' },
+                ehrPatientName
+                  ? `Patient: ${ehrPatientName}`
+                  : ehrPatientId
+                  ? `Patient ID: ${ehrPatientId}`
+                  : 'Patient context ready'
+              ),
+              ehrSystemName
+                ? h('span', { className: 'ehr-status-system' }, `System: ${ehrSystemName}`)
+                : null
+            )
+          ),
+          loadMedError
+            ? h('p', { className: 'helper error-text' }, loadMedError)
+            : null,
+          h(
+            'div',
+            { className: 'fhir-actions' },
+            ehrPatientId
+              ? h(
+                  'button',
+                  {
+                    type: 'button',
+                    className: 'primary-button',
+                    disabled: loadingMeds,
+                    onClick: handleLoadMedications,
+                  },
+                  loadingMeds ? 'Loading medications…' : 'Load patient medications'
+                )
+              : h(
+                  'p',
+                  { className: 'helper' },
+                  'No patient context returned by EHR. You can still use the Paste JSON or Upload File tabs to import a FHIR bundle manually.'
+                ),
+            h(
+              'button',
+              {
+                type: 'button',
+                className: 'secondary-button',
+                onClick: onEhrDisconnect,
+              },
+              'Disconnect'
+            ),
+            h('button', { type: 'button', className: 'secondary-button', onClick: onClose }, 'Cancel')
+          )
+        )
+      : h(
+          React.Fragment,
+          null,
+          h(
+            'p',
+            { className: 'helper' },
+            'Connect directly to an EHR using SMART on FHIR. Select your system and click Connect — a login window will open.'
+          ),
+          h(
+            'div',
+            { className: 'field' },
+            h('label', { className: 'field-label', htmlFor: 'ehrSystemPicker' }, 'EHR system'),
+            h(
+              'select',
+              {
+                id: 'ehrSystemPicker',
+                value: selectedEhrId,
+                onChange: e => setSelectedEhrId(e.target.value),
+              },
+              ehrSystems.map(s =>
+                h('option', { key: s.id, value: s.id }, s.name)
+              ),
+              h('option', { value: 'custom' }, 'Custom FHIR server')
+            )
+          ),
+          isCustom
+            ? h(
+                React.Fragment,
+                null,
+                h(
+                  'div',
+                  { className: 'field' },
+                  h('label', { className: 'field-label', htmlFor: 'customFhirBase' }, 'FHIR Base URL'),
+                  h('input', {
+                    id: 'customFhirBase',
+                    type: 'url',
+                    placeholder: 'https://example.com/fhir/R4',
+                    value: customFhirBaseUrl,
+                    onChange: e => setCustomFhirBaseUrl(e.target.value),
+                  })
+                ),
+                h(
+                  'div',
+                  { className: 'field' },
+                  h('label', { className: 'field-label', htmlFor: 'customAuthorize' }, 'Authorize URL'),
+                  h('input', {
+                    id: 'customAuthorize',
+                    type: 'url',
+                    placeholder: 'https://example.com/oauth2/authorize',
+                    value: customAuthorizeUrl,
+                    onChange: e => setCustomAuthorizeUrl(e.target.value),
+                  })
+                ),
+                h(
+                  'div',
+                  { className: 'field' },
+                  h('label', { className: 'field-label', htmlFor: 'customToken' }, 'Token URL'),
+                  h('input', {
+                    id: 'customToken',
+                    type: 'url',
+                    placeholder: 'https://example.com/oauth2/token',
+                    value: customTokenUrl,
+                    onChange: e => setCustomTokenUrl(e.target.value),
+                  })
+                ),
+                h(
+                  'div',
+                  { className: 'field' },
+                  h('label', { className: 'field-label', htmlFor: 'customClientId' }, 'Client ID'),
+                  h('input', {
+                    id: 'customClientId',
+                    type: 'text',
+                    placeholder: 'your-client-id',
+                    value: customClientId,
+                    onChange: e => setCustomClientId(e.target.value),
+                  })
+                )
+              )
+            : null,
+          ehrError
+            ? h('p', { className: 'helper error-text' }, ehrError)
+            : null,
+          h(
+            'div',
+            { className: 'fhir-actions' },
+            h(
+              'button',
+              {
+                type: 'button',
+                className: 'primary-button',
+                disabled: ehrConnecting || (isCustom && (!customFhirBaseUrl || !customAuthorizeUrl || !customTokenUrl || !customClientId)),
+                onClick: () =>
+                  onEhrConnect({
+                    ehrId: selectedEhrId,
+                    fhirBaseUrl: customFhirBaseUrl,
+                    authorizeUrl: customAuthorizeUrl,
+                    tokenUrl: customTokenUrl,
+                    clientId: customClientId,
+                  }),
+              },
+              ehrConnecting ? 'Connecting…' : 'Connect'
+            ),
+            h('button', { type: 'button', className: 'secondary-button', onClick: onClose }, 'Cancel')
+          )
+        )
   );
 }
 
@@ -4957,5 +5432,34 @@ function canCreateAnotherProfileForUser(user, profiles, existingProfile) {
     tier: getProfileTierLabelForUser(user),
   };
 }
+
+// SMART on FHIR callback detection
+// Popup mode: postMessage to opener and close the popup window.
+// Redirect mode (no opener): store code+state in sessionStorage for the App to process on mount.
+(function handleSmartCallback() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has('code') || !params.has('state')) return;
+    const code = params.get('code');
+    const state = params.get('state');
+    if (window.opener) {
+      // Popup flow — send to parent window and close
+      window.opener.postMessage(
+        { type: 'smart_auth_callback', code, state },
+        window.location.origin
+      );
+      window.close();
+    } else {
+      // Redirect flow — stash in sessionStorage; App will process on mount
+      sessionStorage.setItem(
+        'smart_auth_redirect_pending',
+        JSON.stringify({ code, state })
+      );
+      // Clean up the URL so users don't accidentally reload with stale params
+      const cleanUrl = window.location.pathname + window.location.hash;
+      window.history.replaceState({}, '', cleanUrl);
+    }
+  } catch {}
+})();
 
 createRoot(document.getElementById('root')).render(h(App));
