@@ -49171,6 +49171,8 @@ function App() {
   const [randomProfile, setRandomProfile] = (0, import_react56.useState)(null);
   const [generatingRandom, setGeneratingRandom] = (0, import_react56.useState)(false);
   const [menuOpen, setMenuOpen] = (0, import_react56.useState)(false);
+  const [fhirModalOpen, setFhirModalOpen] = (0, import_react56.useState)(false);
+  const [fhirImportStatus, setFhirImportStatus] = (0, import_react56.useState)("");
   (0, import_react56.useEffect)(() => {
     saveProfilesToStorage(profiles);
   }, [profiles]);
@@ -49713,6 +49715,24 @@ function App() {
       setActiveProfileId(null);
     }
     setProfileStatus("Profile deleted.");
+  }
+  function handleFhirImportConfirm({ matchedDrugs, matchedMedicationEntries }) {
+    setDrugs((current3) => mergeDrugCatalog(current3, matchedDrugs));
+    setMedicationEntries((current3) => mergeMedicationEntries(current3, matchedMedicationEntries));
+    setSelectedDrugIds((current3) => {
+      const merged = new Set(current3);
+      for (const drugId of matchedDrugs.map((d) => String(d.id))) {
+        if (merged.size >= MAX_VISIBLE_DRUGS && !merged.has(drugId)) {
+          continue;
+        }
+        merged.add(drugId);
+      }
+      return Array.from(merged);
+    });
+    setFhirModalOpen(false);
+    setFhirImportStatus(
+      `Imported ${matchedMedicationEntries.length} medication entr${matchedMedicationEntries.length === 1 ? "y" : "ies"} from the FHIR bundle.`
+    );
   }
   function handleStartDoseEdit(dose) {
     const selectedDrug = drugLookup.get(String(dose.drugId));
@@ -50378,12 +50398,33 @@ function App() {
           )
         ),
         h(
+          "div",
+          { className: "panel-header compact" },
+          h("p", { className: "section-kicker" }, "Step 2 \u2014 Optional shortcut"),
+          h("h2", null, "Import from FHIR"),
+          h(
+            "p",
+            null,
+            "Have a FHIR Bundle from an EHR or patient portal? Paste or upload the JSON to import the medication history automatically, then review and confirm which medications to add."
+          ),
+          h(
+            "button",
+            {
+              type: "button",
+              className: "primary-button",
+              onClick: () => setFhirModalOpen(true)
+            },
+            "Import from FHIR"
+          ),
+          fhirImportStatus ? h("p", { className: "helper success-text" }, fhirImportStatus) : null
+        ),
+        h(
           "form",
           { className: "dose-entry-form", onSubmit: handleMedicationEntrySubmit },
           h(
             "div",
             { className: "panel-header compact" },
-            h("p", { className: "section-kicker" }, "Step 2"),
+            h("p", { className: "section-kicker" }, "Step 2 \u2014 Manual entry"),
             h("h2", null, "Medication list entry"),
             h(
               "p",
@@ -51821,7 +51862,13 @@ function App() {
             )
           )
         ) : null
-      )
+      ),
+      fhirModalOpen ? h(FhirImportModal, {
+        key: "fhir-import-modal",
+        drugs,
+        onClose: () => setFhirModalOpen(false),
+        onConfirm: handleFhirImportConfirm
+      }) : null
     )
   );
 }
@@ -51833,6 +51880,356 @@ function resolveApiBasePath() {
     return "http://localhost:3001/api";
   }
   return `${window.location.origin}/api`;
+}
+function FhirImportModal({ drugs, onClose, onConfirm }) {
+  const [activeTab, setActiveTab] = import_react56.default.useState("paste");
+  const [pasteText, setPasteText] = import_react56.default.useState("");
+  const [parseError, setParseError] = import_react56.default.useState("");
+  const [importing, setImporting] = import_react56.default.useState(false);
+  const [importResult, setImportResult] = import_react56.default.useState(null);
+  const [checkedIds, setCheckedIds] = import_react56.default.useState(/* @__PURE__ */ new Set());
+  const [unmatchedOverrides, setUnmatchedOverrides] = import_react56.default.useState({});
+  const fileInputRef = import_react56.default.useRef(null);
+  function fhirStatusToTimeline(status) {
+    if (status === "completed" || status === "stopped") return "historic";
+    if (status === "intended" || status === "on-hold") return "planned";
+    return "current";
+  }
+  async function processBundle(bundle) {
+    setImporting(true);
+    setParseError("");
+    setImportResult(null);
+    try {
+      const response = await fetch(`${API_BASE_PATH}/fhir/import`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bundle)
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(err.error ?? `Server error ${response.status}`);
+      }
+      const result = await response.json();
+      const initialChecked = new Set(result.matched.map((_, i) => i));
+      setCheckedIds(initialChecked);
+      setImportResult(result);
+    } catch (err) {
+      setParseError(err instanceof Error ? err.message : "Import failed. Please check the bundle and try again.");
+    } finally {
+      setImporting(false);
+    }
+  }
+  function handlePasteSubmit() {
+    let bundle;
+    try {
+      bundle = JSON.parse(pasteText.trim());
+    } catch {
+      setParseError("Invalid JSON. Please paste a valid FHIR Bundle.");
+      return;
+    }
+    if (!bundle?.resourceType) {
+      setParseError('The pasted text does not look like a FHIR resource. Make sure it includes "resourceType": "Bundle".');
+      return;
+    }
+    processBundle(bundle);
+  }
+  function handleFileChange(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      let bundle;
+      try {
+        bundle = JSON.parse(e.target.result);
+      } catch {
+        setParseError("Could not parse the file as JSON. Make sure it is a valid FHIR Bundle JSON file.");
+        return;
+      }
+      if (!bundle?.resourceType) {
+        setParseError('The uploaded file does not look like a FHIR resource. Make sure it includes "resourceType": "Bundle".');
+        return;
+      }
+      processBundle(bundle);
+    };
+    reader.readAsText(file);
+    event.target.value = "";
+  }
+  function toggleChecked(index) {
+    setCheckedIds((current3) => {
+      const next = new Set(current3);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
+  }
+  function handleConfirm() {
+    if (!importResult) return;
+    const selectedMatches = importResult.matched.filter((_, i) => checkedIds.has(i));
+    const matchedDrugs = [];
+    const matchedMedicationEntries = [];
+    for (const match of selectedMatches) {
+      const drug = normalizeDrugRecord(match.drug);
+      matchedDrugs.push(drug);
+      const parsed = match.parsedMedication;
+      const route = parsed.route ?? "PO";
+      const today = formatDateKey(/* @__PURE__ */ new Date());
+      const entry = normalizeMedicationEntry({
+        id: `fhir-${drug.id}-${parsed.startDate ?? today}-${route}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        drugId: String(drug.id),
+        startDate: parsed.startDate ?? today,
+        endDate: parsed.endDate ?? "",
+        route,
+        timelineStatus: fhirStatusToTimeline(parsed.status),
+        notes: parsed.dose != null ? `Imported from FHIR (${parsed.sourceResourceType}). Dose: ${parsed.dose} ${parsed.unit ?? ""}.`.trim() : `Imported from FHIR (${parsed.sourceResourceType}).`,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString()
+      });
+      matchedMedicationEntries.push(entry);
+    }
+    for (const [indexStr, selectedDrugId] of Object.entries(unmatchedOverrides)) {
+      const index = Number(indexStr);
+      const parsed = importResult.unmatched[index];
+      const drug = drugs.find((d) => String(d.id) === String(selectedDrugId));
+      if (!drug || !parsed) continue;
+      const normalizedDrug = normalizeDrugRecord(drug);
+      matchedDrugs.push(normalizedDrug);
+      const route = parsed.route ?? "PO";
+      const today = formatDateKey(/* @__PURE__ */ new Date());
+      const entry = normalizeMedicationEntry({
+        id: `fhir-unmatched-${normalizedDrug.id}-${parsed.startDate ?? today}-${route}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        drugId: String(normalizedDrug.id),
+        startDate: parsed.startDate ?? today,
+        endDate: parsed.endDate ?? "",
+        route,
+        timelineStatus: fhirStatusToTimeline(parsed.status),
+        notes: `Manually matched from FHIR (${parsed.sourceResourceType}, original name: ${parsed.name}).`,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString()
+      });
+      matchedMedicationEntries.push(entry);
+    }
+    onConfirm({ matchedDrugs, matchedMedicationEntries });
+  }
+  const checkedCount = checkedIds.size + Object.keys(unmatchedOverrides).filter((k2) => unmatchedOverrides[k2]).length;
+  return h(
+    "div",
+    {
+      className: "modal-overlay",
+      role: "dialog",
+      "aria-modal": "true",
+      "aria-label": "Import from FHIR",
+      onClick: (e) => {
+        if (e.target === e.currentTarget) onClose();
+      }
+    },
+    h(
+      "div",
+      { className: "modal-box fhir-modal" },
+      h(
+        "div",
+        { className: "modal-header" },
+        h("h2", { className: "modal-title" }, "Import from FHIR"),
+        h(
+          "button",
+          { type: "button", className: "modal-close-button", onClick: onClose, "aria-label": "Close" },
+          "\xD7"
+        )
+      ),
+      !importResult ? h(
+        "div",
+        { className: "modal-body" },
+        h(
+          "div",
+          { className: "fhir-tabs" },
+          h(
+            "button",
+            {
+              type: "button",
+              className: `fhir-tab${activeTab === "paste" ? " active" : ""}`,
+              onClick: () => {
+                setActiveTab("paste");
+                setParseError("");
+              }
+            },
+            "Paste JSON"
+          ),
+          h(
+            "button",
+            {
+              type: "button",
+              className: `fhir-tab${activeTab === "upload" ? " active" : ""}`,
+              onClick: () => {
+                setActiveTab("upload");
+                setParseError("");
+              }
+            },
+            "Upload File"
+          )
+        ),
+        activeTab === "paste" ? h(
+          "div",
+          { className: "fhir-tab-panel" },
+          h("label", { className: "field-label", htmlFor: "fhirPasteArea" }, "Paste a FHIR Bundle JSON:"),
+          h("textarea", {
+            id: "fhirPasteArea",
+            className: "fhir-paste-area",
+            placeholder: '{\n  "resourceType": "Bundle",\n  "entry": [...]\n}',
+            value: pasteText,
+            onChange: (e) => setPasteText(e.target.value),
+            rows: 12
+          }),
+          parseError ? h("p", { className: "helper error-text" }, parseError) : null,
+          h(
+            "div",
+            { className: "fhir-actions" },
+            h(
+              "button",
+              {
+                type: "button",
+                className: "primary-button",
+                disabled: importing || !pasteText.trim(),
+                onClick: handlePasteSubmit
+              },
+              importing ? "Importing\u2026" : "Parse Bundle"
+            ),
+            h("button", { type: "button", className: "secondary-button", onClick: onClose }, "Cancel")
+          )
+        ) : h(
+          "div",
+          { className: "fhir-tab-panel" },
+          h("p", { className: "helper" }, "Upload a .json file containing a FHIR Bundle exported from your EHR or patient portal."),
+          h("input", {
+            ref: fileInputRef,
+            type: "file",
+            accept: ".json,application/json",
+            className: "fhir-file-input",
+            onChange: handleFileChange,
+            disabled: importing
+          }),
+          parseError ? h("p", { className: "helper error-text" }, parseError) : null,
+          importing ? h("p", { className: "helper" }, "Importing\u2026") : null,
+          h(
+            "div",
+            { className: "fhir-actions" },
+            h("button", { type: "button", className: "secondary-button", onClick: onClose }, "Cancel")
+          )
+        )
+      ) : h(
+        "div",
+        { className: "modal-body" },
+        h(
+          "p",
+          { className: "helper" },
+          `Parsed ${importResult.totalParsed} medication resource(s). ${importResult.totalMatched} matched, ${importResult.totalUnmatched} need review.`
+        ),
+        importResult.autoCreated?.length > 0 ? h(
+          "p",
+          { className: "helper success-text" },
+          `${importResult.autoCreated.length} new drug(s) auto-created from the RxNorm database.`
+        ) : null,
+        importResult.matched.length > 0 ? h(
+          import_react56.default.Fragment,
+          null,
+          h("h3", { className: "fhir-section-title" }, "Matched medications \u2014 select to add"),
+          h(
+            "div",
+            { className: "fhir-matched-list" },
+            importResult.matched.map(
+              (match, i) => h(
+                "label",
+                { key: `match-${i}`, className: "fhir-match-row" },
+                h("input", {
+                  type: "checkbox",
+                  checked: checkedIds.has(i),
+                  onChange: () => toggleChecked(i)
+                }),
+                h(
+                  "div",
+                  { className: "fhir-match-info" },
+                  h("span", { className: "fhir-match-name" }, match.drug.name),
+                  match.parsedMedication.name !== match.drug.name ? h("span", { className: "fhir-match-original" }, ` (from "${match.parsedMedication.name}")`) : null,
+                  match.isNewDrug ? h("span", { className: "fhir-badge new" }, "New") : null,
+                  h(
+                    "span",
+                    { className: "fhir-match-meta" },
+                    [
+                      match.parsedMedication.dose != null ? `${match.parsedMedication.dose} ${match.parsedMedication.unit ?? ""}`.trim() : null,
+                      match.parsedMedication.route,
+                      match.parsedMedication.startDate
+                    ].filter(Boolean).join(" \xB7 ")
+                  )
+                )
+              )
+            )
+          )
+        ) : null,
+        importResult.unmatched.length > 0 ? h(
+          import_react56.default.Fragment,
+          null,
+          h("h3", { className: "fhir-section-title review" }, "Review needed \u2014 unrecognized medications"),
+          h(
+            "div",
+            { className: "fhir-unmatched-list" },
+            importResult.unmatched.map(
+              (parsed, i) => h(
+                "div",
+                { key: `unmatched-${i}`, className: "fhir-unmatched-row" },
+                h(
+                  "div",
+                  { className: "fhir-match-info" },
+                  h("span", { className: "fhir-match-name" }, parsed.name),
+                  h(
+                    "span",
+                    { className: "fhir-match-meta" },
+                    [
+                      parsed.dose != null ? `${parsed.dose} ${parsed.unit ?? ""}`.trim() : null,
+                      parsed.route,
+                      parsed.startDate
+                    ].filter(Boolean).join(" \xB7 ")
+                  )
+                ),
+                h(
+                  "select",
+                  {
+                    className: "fhir-override-select",
+                    value: unmatchedOverrides[i] ?? "",
+                    onChange: (e) => {
+                      const val = e.target.value;
+                      setUnmatchedOverrides((cur) => ({ ...cur, [i]: val }));
+                    }
+                  },
+                  h("option", { value: "" }, "\u2014 Skip \u2014"),
+                  drugs.map((drug) => h("option", { key: drug.id, value: drug.id }, drug.name))
+                )
+              )
+            )
+          )
+        ) : null,
+        h(
+          "div",
+          { className: "fhir-actions" },
+          h(
+            "button",
+            {
+              type: "button",
+              className: "primary-button",
+              disabled: checkedCount === 0,
+              onClick: handleConfirm
+            },
+            `Add ${checkedCount} medication${checkedCount === 1 ? "" : "s"} to workspace`
+          ),
+          h(
+            "button",
+            {
+              type: "button",
+              className: "secondary-button",
+              onClick: () => setImportResult(null)
+            },
+            "Back"
+          ),
+          h("button", { type: "button", className: "secondary-button", onClick: onClose }, "Cancel")
+        )
+      )
+    )
+  );
 }
 function normalizeDrugRecord(drug, index) {
   const referenceMaxDailyDose = Number.isFinite(Number(drug.referenceMaxDailyDose)) && Number(drug.referenceMaxDailyDose) > 0 ? Number(drug.referenceMaxDailyDose) : Number.isFinite(Number(drug.maxDailyDose)) && Number(drug.maxDailyDose) > 0 ? Number(drug.maxDailyDose) : 100;
