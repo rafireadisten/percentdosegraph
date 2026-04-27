@@ -2,6 +2,13 @@
 
 All notable project changes should be recorded in this file.
 
+## 2026-04-27
+
+### `chore: document cloudflare and migration updates`
+- Recorded Cloudflare setup updates for `dosegraph.io`, including DNS configuration readiness for production routing.
+- Recorded migration updates from Replit to Cloudflare as part of the current hosting transition.
+- Recorded Cloudflare-focused company migration tracking for deployment and infrastructure continuity.
+
 ## 2026-04-20
 
 ### `fix: sync hosted dynamic app updates`
