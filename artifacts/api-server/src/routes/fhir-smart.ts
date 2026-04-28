@@ -55,7 +55,17 @@ type EhrSystem = {
   scopes: string;
 };
 
+// Sandbox client IDs are public placeholders used only for testing.
+const EPIC_SANDBOX_CLIENT_ID = "non_prod";
+const CERNER_SANDBOX_TENANT_ID = "ec2458f2-1e24-41c8-b71b-0e701af7583d";
+
+// Production client IDs are set via EPIC_CLIENT_ID / CERNER_CLIENT_ID secrets.
+// When absent or equal to the sandbox defaults the production entries are omitted.
+const epicProductionClientId = process.env["EPIC_CLIENT_ID"];
+const cernerProductionClientId = process.env["CERNER_CLIENT_ID"];
+
 const EHR_REGISTRY: EhrSystem[] = [
+  // ---- Sandbox entries (always present) ----
   {
     id: "epic-sandbox",
     name: "Epic (Sandbox)",
@@ -65,25 +75,63 @@ const EHR_REGISTRY: EhrSystem[] = [
       "https://fhir.epic.com/interconnect-fhir-oauth/oauth2/authorize",
     tokenUrl:
       "https://fhir.epic.com/interconnect-fhir-oauth/oauth2/token",
-    clientId: process.env["EPIC_CLIENT_ID"] ?? "non_prod",
+    clientId: EPIC_SANDBOX_CLIENT_ID,
     scopes:
       "launch/patient openid fhirUser patient/MedicationRequest.read patient/MedicationStatement.read patient/Patient.read",
   },
   {
     id: "cerner-sandbox",
     name: "Cerner (Sandbox)",
-    fhirBaseUrl:
-      "https://fhir-ehr-code.cerner.com/r4/ec2458f2-1e24-41c8-b71b-0e701af7583d",
-    authorizeUrl:
-      "https://authorization.cerner.com/tenants/ec2458f2-1e24-41c8-b71b-0e701af7583d/protocols/oauth2/profiles/smart-v1/personas/patient/authorize",
-    tokenUrl:
-      "https://authorization.cerner.com/tenants/ec2458f2-1e24-41c8-b71b-0e701af7583d/protocols/oauth2/profiles/smart-v1/token",
-    clientId:
-      process.env["CERNER_CLIENT_ID"] ??
-      "ec2458f2-1e24-41c8-b71b-0e701af7583d",
+    fhirBaseUrl: `https://fhir-ehr-code.cerner.com/r4/${CERNER_SANDBOX_TENANT_ID}`,
+    authorizeUrl: `https://authorization.cerner.com/tenants/${CERNER_SANDBOX_TENANT_ID}/protocols/oauth2/profiles/smart-v1/personas/patient/authorize`,
+    tokenUrl: `https://authorization.cerner.com/tenants/${CERNER_SANDBOX_TENANT_ID}/protocols/oauth2/profiles/smart-v1/token`,
+    clientId: CERNER_SANDBOX_TENANT_ID,
     scopes:
       "launch/patient openid fhirUser patient/MedicationRequest.read patient/MedicationStatement.read patient/Patient.read",
   },
+
+  // ---- Production entries (present only when real client IDs are configured) ----
+  // Epic production uses the same open.epic.com OAuth server as the sandbox;
+  // the registered client ID is what distinguishes a production app.
+  ...(epicProductionClientId && epicProductionClientId !== EPIC_SANDBOX_CLIENT_ID
+    ? [
+        {
+          id: "epic-production",
+          name: "Epic (Production)",
+          fhirBaseUrl:
+            "https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4",
+          authorizeUrl:
+            "https://fhir.epic.com/interconnect-fhir-oauth/oauth2/authorize",
+          tokenUrl:
+            "https://fhir.epic.com/interconnect-fhir-oauth/oauth2/token",
+          clientId: epicProductionClientId,
+          scopes:
+            "launch/patient openid fhirUser patient/MedicationRequest.read patient/MedicationStatement.read patient/Patient.read",
+        } satisfies EhrSystem,
+      ]
+    : []),
+
+  // Cerner production tenant IDs and endpoints are organization-specific.
+  // CERNER_CLIENT_ID should be set to the registered client ID for your tenant.
+  // The fhirBaseUrl below is the Millennium open-dev endpoint; replace with your
+  // organization's tenant URL once you have it from Cerner's code console.
+  ...(cernerProductionClientId && cernerProductionClientId !== CERNER_SANDBOX_TENANT_ID
+    ? [
+        {
+          id: "cerner-production",
+          name: "Cerner (Production)",
+          fhirBaseUrl:
+            "https://fhir-ehr.cerner.com/r4/YOUR_PRODUCTION_TENANT_ID",
+          authorizeUrl:
+            "https://authorization.cerner.com/tenants/YOUR_PRODUCTION_TENANT_ID/protocols/oauth2/profiles/smart-v1/personas/patient/authorize",
+          tokenUrl:
+            "https://authorization.cerner.com/tenants/YOUR_PRODUCTION_TENANT_ID/protocols/oauth2/profiles/smart-v1/token",
+          clientId: cernerProductionClientId,
+          scopes:
+            "launch/patient openid fhirUser patient/MedicationRequest.read patient/MedicationStatement.read patient/Patient.read",
+        } satisfies EhrSystem,
+      ]
+    : []),
 ];
 
 // ---- TTLs ----
