@@ -1211,6 +1211,13 @@ function App() {
     localStorage.removeItem('ehrExpiresAt');
   }
 
+  function handleEhrPatientSelected(patientId, patientName) {
+    setEhrPatientId(patientId);
+    setEhrPatientName(patientName);
+    localStorage.setItem('ehrPatientId', patientId);
+    localStorage.setItem('ehrPatientName', patientName);
+  }
+
   function handleStartDoseEdit(dose) {
     const selectedDrug = drugLookup.get(String(dose.drugId));
     setEditingDoseId(dose.id);
@@ -3538,6 +3545,7 @@ function App() {
             ehrError,
             onEhrConnect: handleEhrConnect,
             onEhrDisconnect: handleEhrDisconnect,
+            onPatientSelected: handleEhrPatientSelected,
           })
         : null
     )
@@ -3569,6 +3577,7 @@ function FhirImportModal({
   ehrError,
   onEhrConnect,
   onEhrDisconnect,
+  onPatientSelected,
 }) {
   const [activeTab, setActiveTab] = React.useState('paste');
   const [pasteText, setPasteText] = React.useState('');
@@ -3814,6 +3823,7 @@ function FhirImportModal({
                   onEhrConnect,
                   onEhrDisconnect,
                   onLoadMedications: processBundle,
+                  onPatientSelected,
                   onClose,
                 })
               : h(
@@ -3975,6 +3985,7 @@ function EhrConnectPanel({
   onEhrConnect,
   onEhrDisconnect,
   onLoadMedications,
+  onPatientSelected,
   onClose,
 }) {
   const DEFAULT_EHR_SYSTEMS = [
@@ -3989,6 +4000,61 @@ function EhrConnectPanel({
   const [customClientId, setCustomClientId] = React.useState('');
   const [loadingMeds, setLoadingMeds] = React.useState(false);
   const [loadMedError, setLoadMedError] = React.useState('');
+  const [patientSearchQuery, setPatientSearchQuery] = React.useState('');
+  const [patientSearchMode, setPatientSearchMode] = React.useState('name');
+  const [patientSearchResults, setPatientSearchResults] = React.useState(null);
+  const [patientSearchLoading, setPatientSearchLoading] = React.useState(false);
+  const [patientSearchError, setPatientSearchError] = React.useState('');
+
+  async function handlePatientSearch(e) {
+    if (e) e.preventDefault();
+    if (!patientSearchQuery.trim() || !ehrSessionId) return;
+    setPatientSearchLoading(true);
+    setPatientSearchError('');
+    setPatientSearchResults(null);
+    try {
+      const param = patientSearchMode === 'identifier'
+        ? `identifier=${encodeURIComponent(patientSearchQuery.trim())}`
+        : `name=${encodeURIComponent(patientSearchQuery.trim())}`;
+      const path = encodeURIComponent(`/Patient?${param}&_count=20`);
+      const res = await fetch(`${API_BASE_PATH}/fhir/proxy?path=${path}`, {
+        headers: { 'X-FHIR-Session': ehrSessionId },
+      });
+      if (res.status === 401) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error ?? 'EHR session not found. Please reconnect.');
+      }
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error ?? `FHIR server returned ${res.status}`);
+      }
+      const bundle = await res.json();
+      const entries = Array.isArray(bundle?.entry) ? bundle.entry : [];
+      setPatientSearchResults(entries.map(e => {
+        const r = e.resource ?? {};
+        const name = (r.name ?? []).find(n => n.use === 'official') ?? r.name?.[0] ?? {};
+        const given = Array.isArray(name.given) ? name.given.join(' ') : '';
+        const family = name.family ?? '';
+        const displayName = [given, family].filter(Boolean).join(' ') || r.id;
+        const dob = r.birthDate ?? '';
+        const id = r.id ?? '';
+        const mrn = (r.identifier ?? []).find(i => i.type?.coding?.some(c => c.code === 'MR'))?.value ?? '';
+        return { id, displayName, dob, mrn };
+      }));
+    } catch (err) {
+      setPatientSearchError(err instanceof Error ? err.message : 'Patient search failed.');
+    } finally {
+      setPatientSearchLoading(false);
+    }
+  }
+
+  function handleSelectPatient(patient) {
+    if (onPatientSelected) {
+      onPatientSelected(patient.id, patient.displayName);
+    }
+    setPatientSearchResults(null);
+    setPatientSearchQuery('');
+  }
 
   React.useEffect(() => {
     fetch(`${API_BASE_PATH}/fhir/smart/config`)
@@ -4107,9 +4173,94 @@ function EhrConnectPanel({
                   loadingMeds ? 'Loading medications…' : 'Load patient medications'
                 )
               : h(
-                  'p',
-                  { className: 'helper' },
-                  'No patient context returned by EHR. You can still use the Paste JSON or Upload File tabs to import a FHIR bundle manually.'
+                  React.Fragment,
+                  null,
+                  h('p', { className: 'helper' }, 'No patient was pre-selected by the EHR. Search for a patient by name or MRN to continue.'),
+                  h(
+                    'form',
+                    { className: 'patient-search-form', onSubmit: handlePatientSearch },
+                    h(
+                      'div',
+                      { className: 'patient-search-mode' },
+                      h(
+                        'label',
+                        { className: 'radio-label' },
+                        h('input', {
+                          type: 'radio',
+                          name: 'patientSearchMode',
+                          value: 'name',
+                          checked: patientSearchMode === 'name',
+                          onChange: () => setPatientSearchMode('name'),
+                        }),
+                        ' Name'
+                      ),
+                      h(
+                        'label',
+                        { className: 'radio-label' },
+                        h('input', {
+                          type: 'radio',
+                          name: 'patientSearchMode',
+                          value: 'identifier',
+                          checked: patientSearchMode === 'identifier',
+                          onChange: () => setPatientSearchMode('identifier'),
+                        }),
+                        ' MRN / Identifier'
+                      )
+                    ),
+                    h(
+                      'div',
+                      { className: 'patient-search-input-row' },
+                      h('input', {
+                        type: 'text',
+                        className: 'patient-search-input',
+                        placeholder: patientSearchMode === 'identifier' ? 'Enter MRN or identifier…' : 'Enter patient name…',
+                        value: patientSearchQuery,
+                        onChange: e => setPatientSearchQuery(e.target.value),
+                        disabled: patientSearchLoading,
+                      }),
+                      h(
+                        'button',
+                        {
+                          type: 'submit',
+                          className: 'primary-button',
+                          disabled: patientSearchLoading || !patientSearchQuery.trim(),
+                        },
+                        patientSearchLoading ? 'Searching…' : 'Search'
+                      )
+                    )
+                  ),
+                  patientSearchError
+                    ? h('p', { className: 'helper error-text' }, patientSearchError)
+                    : null,
+                  patientSearchResults !== null
+                    ? patientSearchResults.length === 0
+                      ? h('p', { className: 'helper' }, 'No patients found. Try a different search term.')
+                      : h(
+                          'ul',
+                          { className: 'patient-search-results' },
+                          patientSearchResults.map(patient =>
+                            h(
+                              'li',
+                              { key: patient.id, className: 'patient-search-result' },
+                              h(
+                                'button',
+                                {
+                                  type: 'button',
+                                  className: 'patient-result-btn',
+                                  onClick: () => handleSelectPatient(patient),
+                                },
+                                h('span', { className: 'patient-result-name' }, patient.displayName),
+                                patient.dob
+                                  ? h('span', { className: 'patient-result-detail' }, `DOB: ${patient.dob}`)
+                                  : null,
+                                patient.mrn
+                                  ? h('span', { className: 'patient-result-detail' }, `MRN: ${patient.mrn}`)
+                                  : null
+                              )
+                            )
+                          )
+                        )
+                    : null
                 ),
             h(
               'button',

@@ -1801,3 +1801,93 @@ h1 {
   font-size: 0.8rem;
   color: var(--muted);
 }
+
+.patient-search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.patient-search-mode {
+  display: flex;
+  gap: 18px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.patient-search-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.patient-search-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+}
+
+.patient-search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-subtle, rgba(16, 185, 129, 0.15));
+}
+
+.patient-search-results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.patient-search-result {
+  border-bottom: 1px solid var(--border);
+}
+
+.patient-search-result:last-child {
+  border-bottom: none;
+}
+
+.patient-result-btn {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.15s;
+}
+
+.patient-result-btn:hover {
+  background: var(--hover, #f3f4f6);
+}
+
+.patient-result-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.patient-result-detail {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
