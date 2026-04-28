@@ -2,6 +2,12 @@
 
 All notable project changes should be recorded in this file.
 
+## 2026-04-28
+
+### `fix: pin node version for cloudflare pages builds`
+- Added a repo-root `.node-version` file with `22.19.0` so Cloudflare Pages can install dependencies against a Node version compatible with `lighthouse@13.0.3`.
+- Added a matching `engines.node` requirement in `package.json` to document the minimum supported Node runtime for installs and CI builds.
+
 ## 2026-04-27
 
 ### `chore: document cloudflare and migration updates`

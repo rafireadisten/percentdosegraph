@@ -9,6 +9,9 @@
     "type": "git",
     "url": "https://github.com/rafireadisten/percentdosegraph.git"
   },
+  "engines": {
+    "node": ">=22.19.0"
+  },
   "keywords": [
     "clinical",
     "dosing",
