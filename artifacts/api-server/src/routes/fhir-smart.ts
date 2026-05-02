@@ -199,6 +199,24 @@ logger.info(
   "FHIR SMART registry initialised"
 );
 
+// Warn about incomplete production configurations so misconfigured deploys
+// are immediately visible in logs rather than silently falling back to sandbox.
+if (epicProdClientId && epicProdClientId === EPIC_SANDBOX_CLIENT_ID) {
+  logger.warn(
+    "EPIC_CLIENT_ID is set to the sandbox placeholder ('non_prod'); epic-production entry is disabled. Set a real App Orchard client ID to enable production Epic."
+  );
+}
+if (cernerProdClientId && cernerProdClientId !== CERNER_SANDBOX_TENANT_ID && !cernerProdTenantId) {
+  logger.warn(
+    "CERNER_CLIENT_ID is set but CERNER_PROD_TENANT_ID is missing; cerner-production entry is disabled. Set CERNER_PROD_TENANT_ID to your organization's Cerner tenant UUID to enable production Cerner."
+  );
+}
+if (cernerProdTenantId && !cernerProdClientId) {
+  logger.warn(
+    "CERNER_PROD_TENANT_ID is set but CERNER_CLIENT_ID is missing; cerner-production entry is disabled. Both secrets are required."
+  );
+}
+
 // ---- TTLs ----
 
 const PENDING_STATE_TTL_MS = 10 * 60 * 1000;
