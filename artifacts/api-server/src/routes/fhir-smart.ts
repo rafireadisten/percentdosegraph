@@ -59,10 +59,21 @@ type EhrSystem = {
 const EPIC_SANDBOX_CLIENT_ID = "non_prod";
 const CERNER_SANDBOX_TENANT_ID = "ec2458f2-1e24-41c8-b71b-0e701af7583d";
 
-// Production client IDs are set via EPIC_CLIENT_ID / CERNER_CLIENT_ID secrets.
-// When absent or equal to the sandbox defaults the production entries are omitted.
-const epicProductionClientId = process.env["EPIC_CLIENT_ID"];
-const cernerProductionClientId = process.env["CERNER_CLIENT_ID"];
+// Production credentials — set these as secrets in the Replit environment.
+//
+//   EPIC_CLIENT_ID           — client ID from Epic App Orchard registration
+//   CERNER_CLIENT_ID         — client ID from Cerner Code Console registration
+//   CERNER_PROD_TENANT_ID    — org-specific Cerner tenant UUID (found in Cerner
+//                              code console; determines all production URLs)
+//
+// Production registry entries are omitted unless ALL required values are present
+// and differ from the public sandbox defaults.
+const epicProdClientId = process.env["EPIC_CLIENT_ID"];
+const cernerProdClientId = process.env["CERNER_CLIENT_ID"];
+const cernerProdTenantId = process.env["CERNER_PROD_TENANT_ID"];
+
+const FHIR_SCOPES =
+  "launch/patient openid fhirUser patient/MedicationRequest.read patient/MedicationStatement.read patient/Patient.read";
 
 const EHR_REGISTRY: EhrSystem[] = [
   // ---- Sandbox entries (always present) ----
@@ -76,8 +87,7 @@ const EHR_REGISTRY: EhrSystem[] = [
     tokenUrl:
       "https://fhir.epic.com/interconnect-fhir-oauth/oauth2/token",
     clientId: EPIC_SANDBOX_CLIENT_ID,
-    scopes:
-      "launch/patient openid fhirUser patient/MedicationRequest.read patient/MedicationStatement.read patient/Patient.read",
+    scopes: FHIR_SCOPES,
   },
   {
     id: "cerner-sandbox",
@@ -86,14 +96,14 @@ const EHR_REGISTRY: EhrSystem[] = [
     authorizeUrl: `https://authorization.cerner.com/tenants/${CERNER_SANDBOX_TENANT_ID}/protocols/oauth2/profiles/smart-v1/personas/patient/authorize`,
     tokenUrl: `https://authorization.cerner.com/tenants/${CERNER_SANDBOX_TENANT_ID}/protocols/oauth2/profiles/smart-v1/token`,
     clientId: CERNER_SANDBOX_TENANT_ID,
-    scopes:
-      "launch/patient openid fhirUser patient/MedicationRequest.read patient/MedicationStatement.read patient/Patient.read",
+    scopes: FHIR_SCOPES,
   },
 
-  // ---- Production entries (present only when real client IDs are configured) ----
+  // ---- Production entries (present only when real credentials are configured) ----
+
   // Epic production uses the same open.epic.com OAuth server as the sandbox;
-  // the registered client ID is what distinguishes a production app.
-  ...(epicProductionClientId && epicProductionClientId !== EPIC_SANDBOX_CLIENT_ID
+  // a real registered client ID (EPIC_CLIENT_ID) is what distinguishes it.
+  ...(epicProdClientId && epicProdClientId !== EPIC_SANDBOX_CLIENT_ID
     ? [
         {
           id: "epic-production",
@@ -104,35 +114,90 @@ const EHR_REGISTRY: EhrSystem[] = [
             "https://fhir.epic.com/interconnect-fhir-oauth/oauth2/authorize",
           tokenUrl:
             "https://fhir.epic.com/interconnect-fhir-oauth/oauth2/token",
-          clientId: epicProductionClientId,
-          scopes:
-            "launch/patient openid fhirUser patient/MedicationRequest.read patient/MedicationStatement.read patient/Patient.read",
+          clientId: epicProdClientId,
+          scopes: FHIR_SCOPES,
         } satisfies EhrSystem,
       ]
     : []),
 
-  // Cerner production tenant IDs and endpoints are organization-specific.
-  // CERNER_CLIENT_ID should be set to the registered client ID for your tenant.
-  // The fhirBaseUrl below is the Millennium open-dev endpoint; replace with your
-  // organization's tenant URL once you have it from Cerner's code console.
-  ...(cernerProductionClientId && cernerProductionClientId !== CERNER_SANDBOX_TENANT_ID
+  // Cerner production requires BOTH a client ID AND an org-specific tenant ID.
+  // Endpoints are constructed from the tenant ID; no placeholder URLs are used.
+  // Set CERNER_CLIENT_ID and CERNER_PROD_TENANT_ID to enable this entry.
+  ...(cernerProdClientId &&
+  cernerProdClientId !== CERNER_SANDBOX_TENANT_ID &&
+  cernerProdTenantId &&
+  cernerProdTenantId !== CERNER_SANDBOX_TENANT_ID
     ? [
         {
           id: "cerner-production",
           name: "Cerner (Production)",
-          fhirBaseUrl:
-            "https://fhir-ehr.cerner.com/r4/YOUR_PRODUCTION_TENANT_ID",
-          authorizeUrl:
-            "https://authorization.cerner.com/tenants/YOUR_PRODUCTION_TENANT_ID/protocols/oauth2/profiles/smart-v1/personas/patient/authorize",
-          tokenUrl:
-            "https://authorization.cerner.com/tenants/YOUR_PRODUCTION_TENANT_ID/protocols/oauth2/profiles/smart-v1/token",
-          clientId: cernerProductionClientId,
-          scopes:
-            "launch/patient openid fhirUser patient/MedicationRequest.read patient/MedicationStatement.read patient/Patient.read",
+          fhirBaseUrl: `https://fhir-ehr.cerner.com/r4/${cernerProdTenantId}`,
+          authorizeUrl: `https://authorization.cerner.com/tenants/${cernerProdTenantId}/protocols/oauth2/profiles/smart-v1/personas/patient/authorize`,
+          tokenUrl: `https://authorization.cerner.com/tenants/${cernerProdTenantId}/protocols/oauth2/profiles/smart-v1/token`,
+          clientId: cernerProdClientId,
+          scopes: FHIR_SCOPES,
         } satisfies EhrSystem,
       ]
     : []),
 ];
+
+// ---- Redirect URI Allowlist ----
+//
+// Build an allowlist of trusted origins from the platform-provided domain list
+// (REPLIT_DOMAINS — comma-separated production domains) and the dev tunnel
+// (REPLIT_DEV_DOMAIN). Redirect URIs submitted to /fhir/auth/start must
+// originate from one of these origins so that authorization codes can only
+// land on our own pages.
+//
+// If neither env var is set (e.g. running fully offline) we fall back to
+// localhost, so local development still works.
+function buildAllowedOrigins(): Set<string> {
+  const origins = new Set<string>();
+  const replitDomains = process.env["REPLIT_DOMAINS"];
+  const devDomain = process.env["REPLIT_DEV_DOMAIN"];
+  if (replitDomains) {
+    for (const d of replitDomains.split(",")) {
+      const trimmed = d.trim();
+      if (trimmed) origins.add(`https://${trimmed}`);
+    }
+  }
+  if (devDomain) {
+    origins.add(`https://${devDomain}`);
+  }
+  if (origins.size === 0) {
+    origins.add("http://localhost");
+    origins.add("http://localhost:3000");
+    origins.add("http://localhost:5173");
+  }
+  return origins;
+}
+
+const ALLOWED_REDIRECT_ORIGINS = buildAllowedOrigins();
+
+function validateRedirectUri(redirectUri: string): void {
+  let parsed: URL;
+  try {
+    parsed = new URL(redirectUri);
+  } catch {
+    throw new Error("redirectUri is not a valid URL");
+  }
+  const origin = `${parsed.protocol}//${parsed.host}`;
+  if (!ALLOWED_REDIRECT_ORIGINS.has(origin)) {
+    throw new Error(
+      `redirectUri origin '${origin}' is not in the list of allowed origins`
+    );
+  }
+}
+
+// Log active registry and redirect allowlist at startup so the config is
+// visible in server logs without exposing secret values.
+logger.info(
+  {
+    registeredSystems: EHR_REGISTRY.map((s) => s.id),
+    allowedRedirectOrigins: [...ALLOWED_REDIRECT_ORIGINS],
+  },
+  "FHIR SMART registry initialised"
+);
 
 // ---- TTLs ----
 
@@ -201,6 +266,13 @@ router.get(["/fhir/smart/auth/start", "/fhir/auth/start"], async (req: Request, 
 
     if (!redirectUri) {
       res.status(400).json({ error: "redirectUri is required" });
+      return;
+    }
+
+    try {
+      validateRedirectUri(redirectUri);
+    } catch (uriErr) {
+      res.status(400).json({ error: (uriErr as Error).message });
       return;
     }
 
