@@ -1,4 +1,12 @@
-# Deploy Frontend to Cloudflare Pages (FREE)
+# Deploy Frontend to Cloudflare Pages (Canonical Production Path)
+
+## Canonical Hosting Model
+
+Use this production chain:
+
+`Local development -> GitHub main -> Cloudflare Pages -> dosegraph.io`
+
+GitHub remains the source-control system for code and file updates. Cloudflare Pages is the public web host. GitHub Pages should be treated only as an optional manual fallback, not the public-domain production path.
 
 ## Why Cloudflare Pages?
 
@@ -45,7 +53,16 @@
 
 ### 3. Configure Build Settings
 
+This repo is now a workspace shell with the actual deployable web app inside the `percentdosegraph/` subdirectory.
+
+Use these exact settings:
+
 **Framework preset:** None (or Node)
+
+**Root directory:**
+```text
+percentdosegraph
+```
 
 **Build command:**
 ```
@@ -57,7 +74,15 @@ npm run build:deploy
 deploy
 ```
 
-**Environment variables:** (Optional - leave blank for now)
+**Environment variables:**
+```text
+NODE_VERSION=22.19.0
+```
+
+If you enable the backend SMART-on-FHIR beta in production, also keep the API host environment aligned with:
+- `ENABLE_FHIR_SMART=true`
+- `ENABLE_CUSTOM_FHIR_EHR=false` unless you intentionally want custom EHR entry
+- `ALLOWED_APP_ORIGINS=https://dosegraph.io,https://www.dosegraph.io,https://percentdosegraph.pages.dev`
 
 Click **Save and Deploy**
 
@@ -123,7 +148,8 @@ If you use another DNS provider (Namecheap, Route 53, etc.):
 Cloudflare Pages automatically redeploys when you push to GitHub:
 
 ```bash
-# Make changes locally
+# Make changes locally in the app subtree
+cd percentdosegraph
 nano frontend-react/app.js
 
 # Commit and push
@@ -161,15 +187,19 @@ In Cloudflare Pages dashboard:
 
 **Common causes:**
 
-1. **Wrong build directory**
+1. **Wrong root directory**
+   - Should be: `percentdosegraph`
+   - The outer repository root is a workspace shell, not the Cloudflare build root
+
+2. **Wrong build directory**
    - Should be: `deploy`
    - Check in your [package.json](../package.json): `npm run build:deploy` creates this
 
-2. **Missing dependencies**
+3. **Missing dependencies**
    - Cloudflare runs `npm ci` automatically
    - If it fails, check `package.json` for syntax errors
 
-3. **Environment variables needed**
+4. **Environment variables needed**
    - Check build output for errors about missing vars
    - Add in Pages → Settings → Environment variables
 
@@ -180,15 +210,16 @@ In Cloudflare Pages dashboard:
 
 ### Site Shows 404
 
-1. Verify build output directory is `deploy`
-2. Check file exists: `ls deploy/index.html`
-3. Cloudflare Pages requires `index.html` in root of build directory
+1. Verify root directory is `percentdosegraph`
+2. Verify build output directory is `deploy`
+3. Check file exists: `ls deploy/index.html`
+4. Cloudflare Pages requires `index.html` in root of build directory
 
 ### API Calls Fail (CORS)
 
 Your frontend needs to know where the backend is:
 
-1. Get your Google Cloud Run URL (from next guide)
+1. Get your API URL (from your backend host)
 2. Edit [frontend-react/app.js](../frontend-react/app.js)
 3. Find `API_BASE_URL = ...` around line 15
 4. Update to: `const API_BASE_URL = 'https://pdg-api-xxxxx.run.app';`
@@ -222,7 +253,7 @@ Typical metrics for PDG on Cloudflare Pages:
 
 ## Next Steps
 
-1. ✅ Deploy frontend to Cloudflare Pages
+1. ✅ Deploy frontend to Cloudflare Pages from `percentdosegraph/`
 2. 📋 Deploy backend to Google Cloud Run (see [HOSTING_GOOGLE_CLOUD_RUN.md](./HOSTING_GOOGLE_CLOUD_RUN.md))
 3. 🔗 Update frontend API URL to point to backend
 4. ✨ Test end-to-end (frontend → backend)

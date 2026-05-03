@@ -4750,7 +4750,7 @@ async function refreshFhirSession() {
     if (response.status === 404 || response.status === 400) {
       fhirState.connected = false;
       fhirState.sessionId = '';
-      try { window.localStorage.removeItem(FHIR_SESSION_STORAGE_KEY); } catch {}
+      try { window.localStorage.removeItem(FHIR_SESSION_STORAGE_KEY); } catch { /* ignore storage cleanup errors */ }
       return;
     }
     const data = await response.json();
@@ -4883,7 +4883,7 @@ async function disconnectEhr() {
   fhirState.patientName = null;
   fhirState.patientId = null;
   fhirState.expired = false;
-  try { window.localStorage.removeItem(FHIR_SESSION_STORAGE_KEY); } catch {}
+  try { window.localStorage.removeItem(FHIR_SESSION_STORAGE_KEY); } catch { /* ignore storage cleanup errors */ }
   syncFhirConnectUI();
 }
 
@@ -5362,7 +5362,7 @@ async function submitFhirImport() {
     fhirState.sessionId = '';
     fhirState.expired = false;
     fhirState.connected = false;
-    try { window.localStorage.removeItem(FHIR_SESSION_STORAGE_KEY); } catch {}
+    try { window.localStorage.removeItem(FHIR_SESSION_STORAGE_KEY); } catch { /* ignore storage cleanup errors */ }
     syncFhirConnectUI();
     startEhrConnect();
   });

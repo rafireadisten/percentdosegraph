@@ -71,7 +71,7 @@ Browser — displays imported medications for review
 |------|---------|
 | `artifacts/api-server/src/routes/fhir-smart.ts` | SMART OAuth routes: `/fhir/auth/start`, `/fhir/auth/callback`, `/fhir/config`, plus the EHR registry |
 | `artifacts/api-server/src/routes/fhir.ts` | FHIR R4 data-fetch routes: `/fhir/medications`, `/fhir/patient` |
-| `lib/db/src/schema/fhir.ts` | Database schema for `fhir_pending_states` and `fhir_sessions` tables |
+| `lib/db/src/schema/fhir-sessions.ts` | Database schema for `fhir_pending_states` and `fhir_sessions` tables |
 
 ---
 
@@ -103,11 +103,13 @@ The server maintains a static registry of known EHR systems in `fhir-smart.ts`. 
 
 Production entries appear in the registry **only when all required secrets are set and differ from the sandbox defaults**. If a secret is missing or set to a sandbox placeholder, the entry is silently omitted and the sandbox entry remains available.
 
+SMART on FHIR live EHR connection should currently be treated as a **beta workflow**, not the core MVP promise. Manual FHIR bundle paste/upload import remains available even when live EHR connection is disabled for a deployment environment.
+
 ---
 
 ## Environment Secrets
 
-Set these via the Replit Secrets panel (never commit actual values):
+Set these via your server environment or secrets manager (never commit actual values):
 
 | Secret | Description | Where to get it |
 |--------|-------------|----------------|
@@ -117,29 +119,38 @@ Set these via the Replit Secrets panel (never commit actual values):
 
 When any of these secrets are absent the app falls back gracefully to sandbox mode.
 
+Additional deployment flags:
+
+| Secret | Description |
+|--------|-------------|
+| `ENABLE_FHIR_SMART` | Enables the live SMART-on-FHIR EHR connection endpoints for the environment |
+| `ENABLE_CUSTOM_FHIR_EHR` | Allows user-entered custom FHIR base/auth/token URLs; keep `false` for production by default |
+| `ALLOWED_APP_ORIGINS` | Comma-separated list of allowed frontend origins that may start the SMART redirect flow |
+| `APP_BASE_URL` | Primary public frontend origin for the deployment |
+
 ---
 
 ## Redirect URIs
 
 The redirect URI is sent by the frontend when starting the OAuth flow. It must:
-1. Match an origin the server trusts (built from `REPLIT_DOMAINS` and `REPLIT_DEV_DOMAIN`)
+1. Match an origin the server trusts (built from `ALLOWED_APP_ORIGINS`, plus safe local defaults)
 2. Be registered in the EHR vendor's developer portal
 
 ### Development redirect URI
 ```
-https://<REPLIT_DEV_DOMAIN>/fhir-callback
+http://localhost:8080/frontend-react/
 ```
 
 ### Production redirect URI
 ```
-https://<your-deployed-domain>/fhir-callback
+https://dosegraph.io/
 ```
 
 Register both URIs in:
 - **Epic App Orchard**: App registration → Redirect URIs
 - **Cerner Code Console**: App registration → Redirect URIs
 
-The server validates incoming `redirectUri` values at `/api/fhir/auth/start` against an allowlist of known app origins and rejects requests from unknown origins.
+The server validates incoming `redirectUri` values at `/api/fhir/auth/start` against an allowlist of known app origins and rejects requests from unknown origins. Custom FHIR server URLs are also disabled by default and require explicit backend enablement.
 
 ---
 
@@ -194,16 +205,17 @@ Stores active FHIR access tokens after a successful token exchange (max 8 hour T
 - PKCE (`code_challenge_method=S256`) is always used — no implicit flow
 - `state` nonces are single-use and expire after 10 minutes
 - All custom URLs submitted by clients are validated against an SSRF blocklist
-- Redirect URIs are validated against a server-side allowlist built from `REPLIT_DOMAINS`
+- Redirect URIs are validated against a server-side allowlist built from `ALLOWED_APP_ORIGINS`
 - Access tokens are stored server-side only; the browser receives only an opaque `sessionId`
 - Sessions expire after 8 hours and are purged by a background cleanup task
+- Live EHR connection can be disabled per environment while retaining manual FHIR bundle import
 
 ---
 
 ## Adding a New EHR System
 
 1. Register the app with the EHR vendor and obtain a client ID
-2. Add the credentials as Replit secrets
+2. Add the credentials as deployment secrets
 3. Add a new entry to `EHR_REGISTRY` in `artifacts/api-server/src/routes/fhir-smart.ts`, gated on the relevant env var
 4. Register the redirect URI with the vendor
 5. Restart the API server workflow

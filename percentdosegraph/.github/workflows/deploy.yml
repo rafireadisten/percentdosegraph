@@ -1,8 +1,6 @@
-name: Deploy Web To GitHub Pages
+name: GitHub Pages Fallback Deploy
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -11,7 +9,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: github-pages
+  group: github-pages-fallback
   cancel-in-progress: true
 
 jobs:
@@ -30,9 +28,11 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        working-directory: percentdosegraph
 
       - name: Build deployable web bundle
         run: npm run build:deploy
+        working-directory: percentdosegraph
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -40,7 +40,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: deploy
+          path: percentdosegraph/deploy
 
   deploy:
     needs: build

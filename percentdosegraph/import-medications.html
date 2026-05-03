@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Import Medications | DoseGraph</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --panel: rgba(255, 255, 255, 0.96);
+        --ink: #202124;
+        --muted: #5f6368;
+        --accent: #0f5a2d;
+        --accent-strong: #0a4723;
+        --border: #e0e3e7;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Google Sans', 'Roboto', 'Segoe UI', sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+      }
+
+      .menu-shell {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        z-index: 30;
+      }
+
+      .menu-button {
+        border: 1px solid var(--accent-strong);
+        border-radius: 999px;
+        padding: 9px 12px;
+        font-weight: 600;
+        color: white;
+        background: var(--accent);
+        box-shadow: 0 1px 2px rgba(60, 64, 67, 0.18), 0 2px 6px rgba(60, 64, 67, 0.14);
+        cursor: pointer;
+      }
+
+      .menu-drawer {
+        position: absolute;
+        top: 48px;
+        right: 0;
+        width: min(320px, calc(100vw - 32px));
+        padding: 12px;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 2px 8px rgba(60, 64, 67, 0.2);
+      }
+
+      .menu-drawer.hidden {
+        display: none;
+      }
+
+      .menu-label {
+        margin: 0 0 8px;
+        padding: 0 4px;
+        color: var(--muted);
+        font-size: 0.74rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .menu-drawer a {
+        display: block;
+        padding: 11px 12px;
+        border-radius: 14px;
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .menu-drawer a:hover {
+        background: rgba(30, 142, 62, 0.08);
+      }
+
+      main {
+        width: min(980px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 4rem 0 3rem;
+      }
+
+      .hero {
+        margin-bottom: 1.25rem;
+      }
+
+      .eyebrow {
+        margin: 0 0 0.6rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 0.78rem;
+        color: var(--accent-strong);
+      }
+
+      h1 {
+        margin: 0 0 0.65rem;
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 1;
+      }
+
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+        max-width: 62ch;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-top: 1.4rem;
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 1.2rem;
+        background: var(--panel);
+      }
+
+      .card h2 {
+        margin: 0 0 0.6rem;
+        font-size: 1.2rem;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .actions {
+        margin-top: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+      }
+
+      .link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.78rem 0.95rem;
+        border-radius: 12px;
+        text-decoration: none;
+        color: white;
+        background: var(--accent);
+        font-weight: 600;
+      }
+
+      .link:hover {
+        background: var(--accent-strong);
+      }
+
+      .link.secondary {
+        background: white;
+        color: var(--accent-strong);
+        border: 1px solid var(--border);
+      }
+
+      .steps {
+        margin-top: 1rem;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 1rem 1.2rem;
+        background: var(--panel);
+      }
+
+      .steps h2 {
+        margin: 0 0 0.6rem;
+      }
+
+      .steps ol {
+        margin: 0;
+        padding-left: 1.2rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="menu-shell">
+      <button id="globalMenuButton" type="button" class="menu-button">Menu</button>
+      <nav id="globalMenuDrawer" class="menu-drawer hidden" aria-label="Universal navigation">
+        <p class="menu-label">DoseGraph</p>
+        <a href="./index.html">Home</a>
+        <a href="./about.html">About</a>
+        <a href="./updates.html">Updates</a>
+        <a href="./frontend-static/">DoseGraph Basic</a>
+        <a href="./import-medications.html">Import Medications (FHIR/SMART/EHR)</a>
+        <a href="./frontend-react/">DoseGraph Full (advanced)</a>
+        <a href="mailto:rafi@readisten.com">Contact</a>
+        <a href="./accounts.html">Accounts &amp; profiles</a>
+      </nav>
+    </div>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Medication Import</p>
+        <h1>Import medications from FHIR, SMART, or EHR systems</h1>
+        <p>
+          This page is the dedicated import entry point. Use it to start importing current
+          medication lists from connected EHR systems, SMART on FHIR portals, or existing JSON
+          files.
+        </p>
+      </section>
+
+      <section class="grid" aria-label="Import options">
+        <article class="card">
+          <h2>Start EHR / SMART on FHIR import</h2>
+          <p>
+            Open DoseGraph Basic directly at the import workspace where you can connect to an EHR,
+            sign in through SMART on FHIR, and load medication data.
+          </p>
+          <div class="actions">
+            <a class="link" href="./frontend-static/#import-medications">Open Import Workspace</a>
+            <a class="link secondary" href="./frontend-static/">Open DoseGraph Basic</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Use advanced dynamic workspace</h2>
+          <p>
+            If you need account-linked workflows and expanded tools, open DoseGraph Full and use
+            its dynamic workspace features.
+          </p>
+          <div class="actions">
+            <a class="link" href="./frontend-react/">Open DoseGraph Full</a>
+          </div>
+        </article>
+      </section>
+
+      <section class="steps" aria-label="Import steps">
+        <h2>Quick start</h2>
+        <ol>
+          <li>Open the import workspace using the button above.</li>
+          <li>Select your EHR system and connect through SMART on FHIR.</li>
+          <li>Load medications, review entries, and graph dose percentages.</li>
+        </ol>
+      </section>
+    </main>
+
+    <script>
+      const globalMenuButton = document.getElementById('globalMenuButton');
+      const globalMenuDrawer = document.getElementById('globalMenuDrawer');
+      globalMenuButton?.addEventListener('click', () => {
+        globalMenuDrawer?.classList.toggle('hidden');
+      });
+    </script>
+  </body>
+</html>

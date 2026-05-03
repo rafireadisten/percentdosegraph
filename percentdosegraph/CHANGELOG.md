@@ -2,6 +2,14 @@
 
 All notable project changes should be recorded in this file.
 
+## 2026-05-02
+
+### `chore: narrow SMART/FHIR production surface and align Cloudflare hosting`
+- Marked live SMART-on-FHIR EHR connection as a beta workflow while keeping manual FHIR bundle import available in the main app flow.
+- Added backend feature flags and safety checks for SMART enablement, custom EHR entry, redirect-origin allowlisting, and safer FHIR proxy target construction.
+- Updated Cloudflare Pages guidance to use the `percentdosegraph/` app subtree as the deploy root and documented GitHub as source control rather than the public-domain host.
+- Converted GitHub Pages workflows to manual fallback use so `main` no longer implies GitHub Pages should be the public production path.
+
 ## 2026-04-20
 
 ### `fix: sync hosted dynamic app updates`

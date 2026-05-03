@@ -28,9 +28,9 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
-// node_modules/react/cjs/react.development.js
+// ../node_modules/react/cjs/react.development.js
 var require_react_development = __commonJS({
-  "node_modules/react/cjs/react.development.js"(exports, module) {
+  "../node_modules/react/cjs/react.development.js"(exports, module) {
     "use strict";
     (function() {
       function defineDeprecationWarning(methodName, info) {
@@ -1000,9 +1000,9 @@ var require_react_development = __commonJS({
   }
 });
 
-// node_modules/react/index.js
+// ../node_modules/react/index.js
 var require_react = __commonJS({
-  "node_modules/react/index.js"(exports, module) {
+  "../node_modules/react/index.js"(exports, module) {
     "use strict";
     if (false) {
       module.exports = null;
@@ -1012,9 +1012,9 @@ var require_react = __commonJS({
   }
 });
 
-// node_modules/scheduler/cjs/scheduler.development.js
+// ../node_modules/scheduler/cjs/scheduler.development.js
 var require_scheduler_development = __commonJS({
-  "node_modules/scheduler/cjs/scheduler.development.js"(exports) {
+  "../node_modules/scheduler/cjs/scheduler.development.js"(exports) {
     "use strict";
     (function() {
       function performWorkUntilDeadline() {
@@ -1271,9 +1271,9 @@ var require_scheduler_development = __commonJS({
   }
 });
 
-// node_modules/scheduler/index.js
+// ../node_modules/scheduler/index.js
 var require_scheduler = __commonJS({
-  "node_modules/scheduler/index.js"(exports, module) {
+  "../node_modules/scheduler/index.js"(exports, module) {
     "use strict";
     if (false) {
       module.exports = null;
@@ -1283,9 +1283,9 @@ var require_scheduler = __commonJS({
   }
 });
 
-// node_modules/react-dom/cjs/react-dom.development.js
+// ../node_modules/react-dom/cjs/react-dom.development.js
 var require_react_dom_development = __commonJS({
-  "node_modules/react-dom/cjs/react-dom.development.js"(exports) {
+  "../node_modules/react-dom/cjs/react-dom.development.js"(exports) {
     "use strict";
     (function() {
       function noop4() {
@@ -1527,9 +1527,9 @@ var require_react_dom_development = __commonJS({
   }
 });
 
-// node_modules/react-dom/index.js
+// ../node_modules/react-dom/index.js
 var require_react_dom = __commonJS({
-  "node_modules/react-dom/index.js"(exports, module) {
+  "../node_modules/react-dom/index.js"(exports, module) {
     "use strict";
     if (false) {
       checkDCE();
@@ -1540,9 +1540,9 @@ var require_react_dom = __commonJS({
   }
 });
 
-// node_modules/react-dom/cjs/react-dom-client.development.js
+// ../node_modules/react-dom/cjs/react-dom-client.development.js
 var require_react_dom_client_development = __commonJS({
-  "node_modules/react-dom/cjs/react-dom-client.development.js"(exports) {
+  "../node_modules/react-dom/cjs/react-dom-client.development.js"(exports) {
     "use strict";
     (function() {
       function findHook(fiber, id) {
@@ -21439,9 +21439,9 @@ var require_react_dom_client_development = __commonJS({
   }
 });
 
-// node_modules/react-dom/client.js
+// ../node_modules/react-dom/client.js
 var require_client = __commonJS({
-  "node_modules/react-dom/client.js"(exports, module) {
+  "../node_modules/react-dom/client.js"(exports, module) {
     "use strict";
     if (false) {
       checkDCE();
@@ -21452,9 +21452,9 @@ var require_client = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/_internal/isUnsafeProperty.js
+// ../node_modules/es-toolkit/dist/_internal/isUnsafeProperty.js
 var require_isUnsafeProperty = __commonJS({
-  "node_modules/es-toolkit/dist/_internal/isUnsafeProperty.js"(exports) {
+  "../node_modules/es-toolkit/dist/_internal/isUnsafeProperty.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function isUnsafeProperty(key) {
@@ -21464,9 +21464,9 @@ var require_isUnsafeProperty = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/_internal/isDeepKey.js
+// ../node_modules/es-toolkit/dist/compat/_internal/isDeepKey.js
 var require_isDeepKey = __commonJS({
-  "node_modules/es-toolkit/dist/compat/_internal/isDeepKey.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/_internal/isDeepKey.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function isDeepKey(key) {
@@ -21484,9 +21484,9 @@ var require_isDeepKey = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/_internal/toKey.js
+// ../node_modules/es-toolkit/dist/compat/_internal/toKey.js
 var require_toKey = __commonJS({
-  "node_modules/es-toolkit/dist/compat/_internal/toKey.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/_internal/toKey.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function toKey(value) {
@@ -21502,9 +21502,9 @@ var require_toKey = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/util/toString.js
+// ../node_modules/es-toolkit/dist/compat/util/toString.js
 var require_toString = __commonJS({
-  "node_modules/es-toolkit/dist/compat/util/toString.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/util/toString.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function toString(value) {
@@ -21527,9 +21527,9 @@ var require_toString = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/util/toPath.js
+// ../node_modules/es-toolkit/dist/compat/util/toPath.js
 var require_toPath = __commonJS({
-  "node_modules/es-toolkit/dist/compat/util/toPath.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/util/toPath.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var toString = require_toString();
@@ -21603,9 +21603,9 @@ var require_toPath = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/object/get.js
+// ../node_modules/es-toolkit/dist/compat/object/get.js
 var require_get = __commonJS({
-  "node_modules/es-toolkit/dist/compat/object/get.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/object/get.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var isUnsafeProperty = require_isUnsafeProperty();
@@ -21685,16 +21685,16 @@ var require_get = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/compat/get.js
+// ../node_modules/es-toolkit/compat/get.js
 var require_get2 = __commonJS({
-  "node_modules/es-toolkit/compat/get.js"(exports, module) {
+  "../node_modules/es-toolkit/compat/get.js"(exports, module) {
     module.exports = require_get().get;
   }
 });
 
-// node_modules/es-toolkit/dist/array/uniqBy.js
+// ../node_modules/es-toolkit/dist/array/uniqBy.js
 var require_uniqBy = __commonJS({
-  "node_modules/es-toolkit/dist/array/uniqBy.js"(exports) {
+  "../node_modules/es-toolkit/dist/array/uniqBy.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function uniqBy2(arr, mapper) {
@@ -21712,9 +21712,9 @@ var require_uniqBy = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/function/ary.js
+// ../node_modules/es-toolkit/dist/function/ary.js
 var require_ary = __commonJS({
-  "node_modules/es-toolkit/dist/function/ary.js"(exports) {
+  "../node_modules/es-toolkit/dist/function/ary.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function ary(func, n) {
@@ -21726,9 +21726,9 @@ var require_ary = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/function/identity.js
+// ../node_modules/es-toolkit/dist/function/identity.js
 var require_identity = __commonJS({
-  "node_modules/es-toolkit/dist/function/identity.js"(exports) {
+  "../node_modules/es-toolkit/dist/function/identity.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function identity3(x2) {
@@ -21738,9 +21738,9 @@ var require_identity = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/predicate/isLength.js
+// ../node_modules/es-toolkit/dist/predicate/isLength.js
 var require_isLength = __commonJS({
-  "node_modules/es-toolkit/dist/predicate/isLength.js"(exports) {
+  "../node_modules/es-toolkit/dist/predicate/isLength.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function isLength(value) {
@@ -21750,9 +21750,9 @@ var require_isLength = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/predicate/isArrayLike.js
+// ../node_modules/es-toolkit/dist/compat/predicate/isArrayLike.js
 var require_isArrayLike = __commonJS({
-  "node_modules/es-toolkit/dist/compat/predicate/isArrayLike.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/predicate/isArrayLike.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var isLength = require_isLength();
@@ -21763,9 +21763,9 @@ var require_isArrayLike = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/predicate/isObjectLike.js
+// ../node_modules/es-toolkit/dist/compat/predicate/isObjectLike.js
 var require_isObjectLike = __commonJS({
-  "node_modules/es-toolkit/dist/compat/predicate/isObjectLike.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/predicate/isObjectLike.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function isObjectLike(value) {
@@ -21775,9 +21775,9 @@ var require_isObjectLike = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/predicate/isArrayLikeObject.js
+// ../node_modules/es-toolkit/dist/compat/predicate/isArrayLikeObject.js
 var require_isArrayLikeObject = __commonJS({
-  "node_modules/es-toolkit/dist/compat/predicate/isArrayLikeObject.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/predicate/isArrayLikeObject.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var isArrayLike = require_isArrayLike();
@@ -21789,9 +21789,9 @@ var require_isArrayLikeObject = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/object/property.js
+// ../node_modules/es-toolkit/dist/compat/object/property.js
 var require_property = __commonJS({
-  "node_modules/es-toolkit/dist/compat/object/property.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/object/property.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var get5 = require_get();
@@ -21804,9 +21804,9 @@ var require_property = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/predicate/isObject.js
+// ../node_modules/es-toolkit/dist/compat/predicate/isObject.js
 var require_isObject = __commonJS({
-  "node_modules/es-toolkit/dist/compat/predicate/isObject.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/predicate/isObject.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function isObject(value) {
@@ -21816,9 +21816,9 @@ var require_isObject = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/predicate/isPrimitive.js
+// ../node_modules/es-toolkit/dist/predicate/isPrimitive.js
 var require_isPrimitive = __commonJS({
-  "node_modules/es-toolkit/dist/predicate/isPrimitive.js"(exports) {
+  "../node_modules/es-toolkit/dist/predicate/isPrimitive.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function isPrimitive(value) {
@@ -21828,9 +21828,9 @@ var require_isPrimitive = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/_internal/isEqualsSameValueZero.js
+// ../node_modules/es-toolkit/dist/_internal/isEqualsSameValueZero.js
 var require_isEqualsSameValueZero = __commonJS({
-  "node_modules/es-toolkit/dist/_internal/isEqualsSameValueZero.js"(exports) {
+  "../node_modules/es-toolkit/dist/_internal/isEqualsSameValueZero.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function isEqualsSameValueZero(value, other) {
@@ -21840,9 +21840,9 @@ var require_isEqualsSameValueZero = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/predicate/isMatchWith.js
+// ../node_modules/es-toolkit/dist/compat/predicate/isMatchWith.js
 var require_isMatchWith = __commonJS({
-  "node_modules/es-toolkit/dist/compat/predicate/isMatchWith.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/predicate/isMatchWith.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var isObject = require_isObject();
@@ -21995,9 +21995,9 @@ var require_isMatchWith = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/predicate/isMatch.js
+// ../node_modules/es-toolkit/dist/compat/predicate/isMatch.js
 var require_isMatch = __commonJS({
-  "node_modules/es-toolkit/dist/compat/predicate/isMatch.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/predicate/isMatch.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var isMatchWith = require_isMatchWith();
@@ -22008,9 +22008,9 @@ var require_isMatch = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/_internal/getSymbols.js
+// ../node_modules/es-toolkit/dist/compat/_internal/getSymbols.js
 var require_getSymbols = __commonJS({
-  "node_modules/es-toolkit/dist/compat/_internal/getSymbols.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/_internal/getSymbols.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function getSymbols(object) {
@@ -22020,9 +22020,9 @@ var require_getSymbols = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/_internal/getTag.js
+// ../node_modules/es-toolkit/dist/compat/_internal/getTag.js
 var require_getTag = __commonJS({
-  "node_modules/es-toolkit/dist/compat/_internal/getTag.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/_internal/getTag.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function getTag(value) {
@@ -22035,9 +22035,9 @@ var require_getTag = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/_internal/tags.js
+// ../node_modules/es-toolkit/dist/compat/_internal/tags.js
 var require_tags = __commonJS({
-  "node_modules/es-toolkit/dist/compat/_internal/tags.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/_internal/tags.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var regexpTag = "[object RegExp]";
@@ -22095,9 +22095,9 @@ var require_tags = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/predicate/isTypedArray.js
+// ../node_modules/es-toolkit/dist/predicate/isTypedArray.js
 var require_isTypedArray = __commonJS({
-  "node_modules/es-toolkit/dist/predicate/isTypedArray.js"(exports) {
+  "../node_modules/es-toolkit/dist/predicate/isTypedArray.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function isTypedArray(x2) {
@@ -22107,9 +22107,9 @@ var require_isTypedArray = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/object/cloneDeepWith.js
+// ../node_modules/es-toolkit/dist/object/cloneDeepWith.js
 var require_cloneDeepWith = __commonJS({
-  "node_modules/es-toolkit/dist/object/cloneDeepWith.js"(exports) {
+  "../node_modules/es-toolkit/dist/object/cloneDeepWith.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var getSymbols = require_getSymbols();
@@ -22287,9 +22287,9 @@ var require_cloneDeepWith = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/object/cloneDeep.js
+// ../node_modules/es-toolkit/dist/object/cloneDeep.js
 var require_cloneDeep = __commonJS({
-  "node_modules/es-toolkit/dist/object/cloneDeep.js"(exports) {
+  "../node_modules/es-toolkit/dist/object/cloneDeep.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var cloneDeepWith = require_cloneDeepWith();
@@ -22300,9 +22300,9 @@ var require_cloneDeep = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/predicate/matches.js
+// ../node_modules/es-toolkit/dist/compat/predicate/matches.js
 var require_matches = __commonJS({
-  "node_modules/es-toolkit/dist/compat/predicate/matches.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/predicate/matches.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var isMatch = require_isMatch();
@@ -22317,9 +22317,9 @@ var require_matches = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/object/cloneDeepWith.js
+// ../node_modules/es-toolkit/dist/compat/object/cloneDeepWith.js
 var require_cloneDeepWith2 = __commonJS({
-  "node_modules/es-toolkit/dist/compat/object/cloneDeepWith.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/object/cloneDeepWith.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var cloneDeepWith$1 = require_cloneDeepWith();
@@ -22365,9 +22365,9 @@ var require_cloneDeepWith2 = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/object/cloneDeep.js
+// ../node_modules/es-toolkit/dist/compat/object/cloneDeep.js
 var require_cloneDeep2 = __commonJS({
-  "node_modules/es-toolkit/dist/compat/object/cloneDeep.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/object/cloneDeep.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var cloneDeepWith = require_cloneDeepWith2();
@@ -22378,9 +22378,9 @@ var require_cloneDeep2 = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/_internal/isIndex.js
+// ../node_modules/es-toolkit/dist/compat/_internal/isIndex.js
 var require_isIndex = __commonJS({
-  "node_modules/es-toolkit/dist/compat/_internal/isIndex.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/_internal/isIndex.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var IS_UNSIGNED_INTEGER = /^(?:0|[1-9]\d*)$/;
@@ -22401,9 +22401,9 @@ var require_isIndex = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/predicate/isArguments.js
+// ../node_modules/es-toolkit/dist/compat/predicate/isArguments.js
 var require_isArguments = __commonJS({
-  "node_modules/es-toolkit/dist/compat/predicate/isArguments.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/predicate/isArguments.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var getTag = require_getTag();
@@ -22414,9 +22414,9 @@ var require_isArguments = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/object/has.js
+// ../node_modules/es-toolkit/dist/compat/object/has.js
 var require_has = __commonJS({
-  "node_modules/es-toolkit/dist/compat/object/has.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/object/has.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var isDeepKey = require_isDeepKey();
@@ -22452,9 +22452,9 @@ var require_has = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/predicate/matchesProperty.js
+// ../node_modules/es-toolkit/dist/compat/predicate/matchesProperty.js
 var require_matchesProperty = __commonJS({
-  "node_modules/es-toolkit/dist/compat/predicate/matchesProperty.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/predicate/matchesProperty.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var isMatch = require_isMatch();
@@ -22491,9 +22491,9 @@ var require_matchesProperty = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/util/iteratee.js
+// ../node_modules/es-toolkit/dist/compat/util/iteratee.js
 var require_iteratee = __commonJS({
-  "node_modules/es-toolkit/dist/compat/util/iteratee.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/util/iteratee.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var identity3 = require_identity();
@@ -22525,9 +22525,9 @@ var require_iteratee = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/array/uniqBy.js
+// ../node_modules/es-toolkit/dist/compat/array/uniqBy.js
 var require_uniqBy2 = __commonJS({
-  "node_modules/es-toolkit/dist/compat/array/uniqBy.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/array/uniqBy.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var uniqBy$1 = require_uniqBy();
@@ -22545,16 +22545,16 @@ var require_uniqBy2 = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/compat/uniqBy.js
+// ../node_modules/es-toolkit/compat/uniqBy.js
 var require_uniqBy3 = __commonJS({
-  "node_modules/es-toolkit/compat/uniqBy.js"(exports, module) {
+  "../node_modules/es-toolkit/compat/uniqBy.js"(exports, module) {
     module.exports = require_uniqBy2().uniqBy;
   }
 });
 
-// node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.development.js
+// ../node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.development.js
 var require_use_sync_external_store_shim_development = __commonJS({
-  "node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.development.js"(exports) {
+  "../node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.development.js"(exports) {
     "use strict";
     (function() {
       function is4(x2, y2) {
@@ -22616,9 +22616,9 @@ var require_use_sync_external_store_shim_development = __commonJS({
   }
 });
 
-// node_modules/use-sync-external-store/shim/index.js
+// ../node_modules/use-sync-external-store/shim/index.js
 var require_shim = __commonJS({
-  "node_modules/use-sync-external-store/shim/index.js"(exports, module) {
+  "../node_modules/use-sync-external-store/shim/index.js"(exports, module) {
     "use strict";
     if (false) {
       module.exports = null;
@@ -22628,9 +22628,9 @@ var require_shim = __commonJS({
   }
 });
 
-// node_modules/use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.development.js
+// ../node_modules/use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.development.js
 var require_with_selector_development = __commonJS({
-  "node_modules/use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.development.js"(exports) {
+  "../node_modules/use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.development.js"(exports) {
     "use strict";
     (function() {
       function is4(x2, y2) {
@@ -22695,9 +22695,9 @@ var require_with_selector_development = __commonJS({
   }
 });
 
-// node_modules/use-sync-external-store/shim/with-selector.js
+// ../node_modules/use-sync-external-store/shim/with-selector.js
 var require_with_selector = __commonJS({
-  "node_modules/use-sync-external-store/shim/with-selector.js"(exports, module) {
+  "../node_modules/use-sync-external-store/shim/with-selector.js"(exports, module) {
     "use strict";
     if (false) {
       module.exports = null;
@@ -22707,9 +22707,9 @@ var require_with_selector = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/_internal/compareValues.js
+// ../node_modules/es-toolkit/dist/compat/_internal/compareValues.js
 var require_compareValues = __commonJS({
-  "node_modules/es-toolkit/dist/compat/_internal/compareValues.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/_internal/compareValues.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function getPriority(a2) {
@@ -22747,9 +22747,9 @@ var require_compareValues = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/predicate/isSymbol.js
+// ../node_modules/es-toolkit/dist/compat/predicate/isSymbol.js
 var require_isSymbol = __commonJS({
-  "node_modules/es-toolkit/dist/compat/predicate/isSymbol.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/predicate/isSymbol.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function isSymbol(value) {
@@ -22759,9 +22759,9 @@ var require_isSymbol = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/_internal/isKey.js
+// ../node_modules/es-toolkit/dist/compat/_internal/isKey.js
 var require_isKey = __commonJS({
-  "node_modules/es-toolkit/dist/compat/_internal/isKey.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/_internal/isKey.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var isSymbol = require_isSymbol();
@@ -22780,9 +22780,9 @@ var require_isKey = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/array/orderBy.js
+// ../node_modules/es-toolkit/dist/compat/array/orderBy.js
 var require_orderBy = __commonJS({
-  "node_modules/es-toolkit/dist/compat/array/orderBy.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/array/orderBy.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var compareValues = require_compareValues();
@@ -22861,9 +22861,9 @@ var require_orderBy = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/array/flatten.js
+// ../node_modules/es-toolkit/dist/array/flatten.js
 var require_flatten = __commonJS({
-  "node_modules/es-toolkit/dist/array/flatten.js"(exports) {
+  "../node_modules/es-toolkit/dist/array/flatten.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function flatten(arr, depth = 1) {
@@ -22886,9 +22886,9 @@ var require_flatten = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/_internal/isIterateeCall.js
+// ../node_modules/es-toolkit/dist/compat/_internal/isIterateeCall.js
 var require_isIterateeCall = __commonJS({
-  "node_modules/es-toolkit/dist/compat/_internal/isIterateeCall.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/_internal/isIterateeCall.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var isIndex = require_isIndex();
@@ -22908,9 +22908,9 @@ var require_isIterateeCall = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/array/sortBy.js
+// ../node_modules/es-toolkit/dist/compat/array/sortBy.js
 var require_sortBy = __commonJS({
-  "node_modules/es-toolkit/dist/compat/array/sortBy.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/array/sortBy.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var orderBy = require_orderBy();
@@ -22929,16 +22929,16 @@ var require_sortBy = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/compat/sortBy.js
+// ../node_modules/es-toolkit/compat/sortBy.js
 var require_sortBy2 = __commonJS({
-  "node_modules/es-toolkit/compat/sortBy.js"(exports, module) {
+  "../node_modules/es-toolkit/compat/sortBy.js"(exports, module) {
     module.exports = require_sortBy().sortBy;
   }
 });
 
-// node_modules/es-toolkit/dist/function/debounce.js
+// ../node_modules/es-toolkit/dist/function/debounce.js
 var require_debounce = __commonJS({
-  "node_modules/es-toolkit/dist/function/debounce.js"(exports) {
+  "../node_modules/es-toolkit/dist/function/debounce.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function debounce(func, debounceMs, { signal, edges } = {}) {
@@ -23005,9 +23005,9 @@ var require_debounce = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/function/debounce.js
+// ../node_modules/es-toolkit/dist/compat/function/debounce.js
 var require_debounce2 = __commonJS({
-  "node_modules/es-toolkit/dist/compat/function/debounce.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/function/debounce.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var debounce$1 = require_debounce();
@@ -23057,9 +23057,9 @@ var require_debounce2 = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/function/throttle.js
+// ../node_modules/es-toolkit/dist/compat/function/throttle.js
 var require_throttle = __commonJS({
-  "node_modules/es-toolkit/dist/compat/function/throttle.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/function/throttle.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var debounce = require_debounce2();
@@ -23075,16 +23075,16 @@ var require_throttle = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/compat/throttle.js
+// ../node_modules/es-toolkit/compat/throttle.js
 var require_throttle2 = __commonJS({
-  "node_modules/es-toolkit/compat/throttle.js"(exports, module) {
+  "../node_modules/es-toolkit/compat/throttle.js"(exports, module) {
     module.exports = require_throttle().throttle;
   }
 });
 
-// node_modules/use-sync-external-store/cjs/use-sync-external-store-with-selector.development.js
+// ../node_modules/use-sync-external-store/cjs/use-sync-external-store-with-selector.development.js
 var require_use_sync_external_store_with_selector_development = __commonJS({
-  "node_modules/use-sync-external-store/cjs/use-sync-external-store-with-selector.development.js"(exports) {
+  "../node_modules/use-sync-external-store/cjs/use-sync-external-store-with-selector.development.js"(exports) {
     "use strict";
     (function() {
       function is4(x2, y2) {
@@ -23149,9 +23149,9 @@ var require_use_sync_external_store_with_selector_development = __commonJS({
   }
 });
 
-// node_modules/use-sync-external-store/with-selector.js
+// ../node_modules/use-sync-external-store/with-selector.js
 var require_with_selector2 = __commonJS({
-  "node_modules/use-sync-external-store/with-selector.js"(exports, module) {
+  "../node_modules/use-sync-external-store/with-selector.js"(exports, module) {
     "use strict";
     if (false) {
       module.exports = null;
@@ -23161,9 +23161,9 @@ var require_with_selector2 = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/util/toNumber.js
+// ../node_modules/es-toolkit/dist/compat/util/toNumber.js
 var require_toNumber = __commonJS({
-  "node_modules/es-toolkit/dist/compat/util/toNumber.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/util/toNumber.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var isSymbol = require_isSymbol();
@@ -23177,9 +23177,9 @@ var require_toNumber = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/util/toFinite.js
+// ../node_modules/es-toolkit/dist/compat/util/toFinite.js
 var require_toFinite = __commonJS({
-  "node_modules/es-toolkit/dist/compat/util/toFinite.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/util/toFinite.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var toNumber = require_toNumber();
@@ -23198,9 +23198,9 @@ var require_toFinite = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/math/range.js
+// ../node_modules/es-toolkit/dist/compat/math/range.js
 var require_range = __commonJS({
-  "node_modules/es-toolkit/dist/compat/math/range.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/math/range.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     var isIterateeCall = require_isIterateeCall();
@@ -23229,16 +23229,16 @@ var require_range = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/compat/range.js
+// ../node_modules/es-toolkit/compat/range.js
 var require_range2 = __commonJS({
-  "node_modules/es-toolkit/compat/range.js"(exports, module) {
+  "../node_modules/es-toolkit/compat/range.js"(exports, module) {
     module.exports = require_range().range;
   }
 });
 
-// node_modules/decimal.js-light/decimal.js
+// ../node_modules/decimal.js-light/decimal.js
 var require_decimal = __commonJS({
-  "node_modules/decimal.js-light/decimal.js"(exports, module) {
+  "../node_modules/decimal.js-light/decimal.js"(exports, module) {
     (function(globalScope) {
       "use strict";
       var MAX_DIGITS = 1e9, Decimal3 = {
@@ -24222,9 +24222,9 @@ var require_decimal = __commonJS({
   }
 });
 
-// node_modules/eventemitter3/index.js
+// ../node_modules/eventemitter3/index.js
 var require_eventemitter3 = __commonJS({
-  "node_modules/eventemitter3/index.js"(exports, module) {
+  "../node_modules/eventemitter3/index.js"(exports, module) {
     "use strict";
     var has3 = Object.prototype.hasOwnProperty;
     var prefix = "~";
@@ -24384,9 +24384,9 @@ var require_eventemitter3 = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/dist/compat/predicate/isPlainObject.js
+// ../node_modules/es-toolkit/dist/compat/predicate/isPlainObject.js
 var require_isPlainObject = __commonJS({
-  "node_modules/es-toolkit/dist/compat/predicate/isPlainObject.js"(exports) {
+  "../node_modules/es-toolkit/dist/compat/predicate/isPlainObject.js"(exports) {
     "use strict";
     Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
     function isPlainObject5(object) {
@@ -24420,9 +24420,9 @@ var require_isPlainObject = __commonJS({
   }
 });
 
-// node_modules/es-toolkit/compat/isPlainObject.js
+// ../node_modules/es-toolkit/compat/isPlainObject.js
 var require_isPlainObject2 = __commonJS({
-  "node_modules/es-toolkit/compat/isPlainObject.js"(exports, module) {
+  "../node_modules/es-toolkit/compat/isPlainObject.js"(exports, module) {
     module.exports = require_isPlainObject().isPlainObject;
   }
 });
@@ -24431,11 +24431,11 @@ var require_isPlainObject2 = __commonJS({
 var import_react56 = __toESM(require_react());
 var import_client = __toESM(require_client());
 
-// node_modules/recharts/es6/container/Surface.js
+// ../node_modules/recharts/es6/container/Surface.js
 var React = __toESM(require_react());
 var import_react3 = __toESM(require_react());
 
-// node_modules/clsx/dist/clsx.mjs
+// ../node_modules/clsx/dist/clsx.mjs
 function r(e) {
   var t, f, n = "";
   if ("string" == typeof e || "number" == typeof e) n += e;
@@ -24450,10 +24450,10 @@ function clsx() {
   return n;
 }
 
-// node_modules/recharts/es6/util/svgPropertiesAndEvents.js
+// ../node_modules/recharts/es6/util/svgPropertiesAndEvents.js
 var import_react2 = __toESM(require_react());
 
-// node_modules/recharts/es6/util/excludeEventProps.js
+// ../node_modules/recharts/es6/util/excludeEventProps.js
 var EventKeys = ["dangerouslySetInnerHTML", "onCopy", "onCopyCapture", "onCut", "onCutCapture", "onPaste", "onPasteCapture", "onCompositionEnd", "onCompositionEndCapture", "onCompositionStart", "onCompositionStartCapture", "onCompositionUpdate", "onCompositionUpdateCapture", "onFocus", "onFocusCapture", "onBlur", "onBlurCapture", "onChange", "onChangeCapture", "onBeforeInput", "onBeforeInputCapture", "onInput", "onInputCapture", "onReset", "onResetCapture", "onSubmit", "onSubmitCapture", "onInvalid", "onInvalidCapture", "onLoad", "onLoadCapture", "onError", "onErrorCapture", "onKeyDown", "onKeyDownCapture", "onKeyPress", "onKeyPressCapture", "onKeyUp", "onKeyUpCapture", "onAbort", "onAbortCapture", "onCanPlay", "onCanPlayCapture", "onCanPlayThrough", "onCanPlayThroughCapture", "onDurationChange", "onDurationChangeCapture", "onEmptied", "onEmptiedCapture", "onEncrypted", "onEncryptedCapture", "onEnded", "onEndedCapture", "onLoadedData", "onLoadedDataCapture", "onLoadedMetadata", "onLoadedMetadataCapture", "onLoadStart", "onLoadStartCapture", "onPause", "onPauseCapture", "onPlay", "onPlayCapture", "onPlaying", "onPlayingCapture", "onProgress", "onProgressCapture", "onRateChange", "onRateChangeCapture", "onSeeked", "onSeekedCapture", "onSeeking", "onSeekingCapture", "onStalled", "onStalledCapture", "onSuspend", "onSuspendCapture", "onTimeUpdate", "onTimeUpdateCapture", "onVolumeChange", "onVolumeChangeCapture", "onWaiting", "onWaitingCapture", "onAuxClick", "onAuxClickCapture", "onClick", "onClickCapture", "onContextMenu", "onContextMenuCapture", "onDoubleClick", "onDoubleClickCapture", "onDrag", "onDragCapture", "onDragEnd", "onDragEndCapture", "onDragEnter", "onDragEnterCapture", "onDragExit", "onDragExitCapture", "onDragLeave", "onDragLeaveCapture", "onDragOver", "onDragOverCapture", "onDragStart", "onDragStartCapture", "onDrop", "onDropCapture", "onMouseDown", "onMouseDownCapture", "onMouseEnter", "onMouseLeave", "onMouseMove", "onMouseMoveCapture", "onMouseOut", "onMouseOutCapture", "onMouseOver", "onMouseOverCapture", "onMouseUp", "onMouseUpCapture", "onSelect", "onSelectCapture", "onTouchCancel", "onTouchCancelCapture", "onTouchEnd", "onTouchEndCapture", "onTouchMove", "onTouchMoveCapture", "onTouchStart", "onTouchStartCapture", "onPointerDown", "onPointerDownCapture", "onPointerMove", "onPointerMoveCapture", "onPointerUp", "onPointerUpCapture", "onPointerCancel", "onPointerCancelCapture", "onPointerEnter", "onPointerEnterCapture", "onPointerLeave", "onPointerLeaveCapture", "onPointerOver", "onPointerOverCapture", "onPointerOut", "onPointerOutCapture", "onGotPointerCapture", "onGotPointerCaptureCapture", "onLostPointerCapture", "onLostPointerCaptureCapture", "onScroll", "onScrollCapture", "onWheel", "onWheelCapture", "onAnimationStart", "onAnimationStartCapture", "onAnimationEnd", "onAnimationEndCapture", "onAnimationIteration", "onAnimationIterationCapture", "onTransitionEnd", "onTransitionEndCapture"];
 function isEventKey(key) {
   if (typeof key !== "string") {
@@ -24463,7 +24463,7 @@ function isEventKey(key) {
   return allowedEventKeys.includes(key);
 }
 
-// node_modules/recharts/es6/util/svgPropertiesNoEvents.js
+// ../node_modules/recharts/es6/util/svgPropertiesNoEvents.js
 var import_react = __toESM(require_react());
 var SVGElementPropKeys = [
   "aria-activedescendant",
@@ -24813,7 +24813,7 @@ function svgPropertiesNoEventsFromUnknown(input) {
   return null;
 }
 
-// node_modules/recharts/es6/util/svgPropertiesAndEvents.js
+// ../node_modules/recharts/es6/util/svgPropertiesAndEvents.js
 function svgPropertiesAndEvents(obj) {
   var result = {};
   for (var key in obj) {
@@ -24838,7 +24838,7 @@ function svgPropertiesAndEventsFromUnknown(input) {
   return null;
 }
 
-// node_modules/recharts/es6/container/Surface.js
+// ../node_modules/recharts/es6/container/Surface.js
 var _excluded = ["children", "width", "height", "viewBox", "className", "style", "title", "desc"];
 function _extends() {
   return _extends = Object.assign ? Object.assign.bind() : function(n) {
@@ -24895,7 +24895,7 @@ var Surface = /* @__PURE__ */ (0, import_react3.forwardRef)((props, ref) => {
   }), /* @__PURE__ */ React.createElement("title", null, title), /* @__PURE__ */ React.createElement("desc", null, desc), children);
 });
 
-// node_modules/recharts/es6/container/Layer.js
+// ../node_modules/recharts/es6/container/Layer.js
 var React2 = __toESM(require_react());
 var _excluded2 = ["children", "className"];
 function _extends2() {
@@ -24938,30 +24938,30 @@ var Layer = /* @__PURE__ */ React2.forwardRef((props, ref) => {
   }), children);
 });
 
-// node_modules/recharts/es6/component/Legend.js
+// ../node_modules/recharts/es6/component/Legend.js
 var React8 = __toESM(require_react());
 var import_react12 = __toESM(require_react());
 var import_react_dom = __toESM(require_react_dom());
 
-// node_modules/recharts/es6/context/legendPortalContext.js
+// ../node_modules/recharts/es6/context/legendPortalContext.js
 var import_react4 = __toESM(require_react());
 var LegendPortalContext = /* @__PURE__ */ (0, import_react4.createContext)(null);
 var useLegendPortal = () => (0, import_react4.useContext)(LegendPortalContext);
 
-// node_modules/recharts/es6/component/DefaultLegendContent.js
+// ../node_modules/recharts/es6/component/DefaultLegendContent.js
 var React4 = __toESM(require_react());
 
-// node_modules/recharts/es6/shape/Symbols.js
+// ../node_modules/recharts/es6/shape/Symbols.js
 var React3 = __toESM(require_react());
 
-// node_modules/d3-shape/src/constant.js
+// ../node_modules/d3-shape/src/constant.js
 function constant_default(x2) {
   return function constant() {
     return x2;
   };
 }
 
-// node_modules/d3-shape/src/math.js
+// ../node_modules/d3-shape/src/math.js
 var cos = Math.cos;
 var sin = Math.sin;
 var sqrt = Math.sqrt;
@@ -24969,7 +24969,7 @@ var pi = Math.PI;
 var halfPi = pi / 2;
 var tau = 2 * pi;
 
-// node_modules/d3-path/src/path.js
+// ../node_modules/d3-path/src/path.js
 var pi2 = Math.PI;
 var tau2 = 2 * pi2;
 var epsilon = 1e-6;
@@ -25063,7 +25063,7 @@ function path() {
 }
 path.prototype = Path.prototype;
 
-// node_modules/d3-shape/src/path.js
+// ../node_modules/d3-shape/src/path.js
 function withPath(shape) {
   let digits = 3;
   shape.digits = function(_) {
@@ -25080,13 +25080,13 @@ function withPath(shape) {
   return () => new Path(digits);
 }
 
-// node_modules/d3-shape/src/array.js
+// ../node_modules/d3-shape/src/array.js
 var slice = Array.prototype.slice;
 function array_default(x2) {
   return typeof x2 === "object" && "length" in x2 ? x2 : Array.from(x2);
 }
 
-// node_modules/d3-shape/src/curve/linear.js
+// ../node_modules/d3-shape/src/curve/linear.js
 function Linear(context) {
   this._context = context;
 }
@@ -25124,7 +25124,7 @@ function linear_default(context) {
   return new Linear(context);
 }
 
-// node_modules/d3-shape/src/point.js
+// ../node_modules/d3-shape/src/point.js
 function x(p) {
   return p[0];
 }
@@ -25132,7 +25132,7 @@ function y(p) {
   return p[1];
 }
 
-// node_modules/d3-shape/src/line.js
+// ../node_modules/d3-shape/src/line.js
 function line_default(x2, y2) {
   var defined2 = constant_default(true), context = null, curve = linear_default, output = null, path2 = withPath(line);
   x2 = typeof x2 === "function" ? x2 : x2 === void 0 ? x : constant_default(x2);
@@ -25167,7 +25167,7 @@ function line_default(x2, y2) {
   return line;
 }
 
-// node_modules/d3-shape/src/area.js
+// ../node_modules/d3-shape/src/area.js
 function area_default(x0, y0, y1) {
   var x1 = null, defined2 = constant_default(true), context = null, curve = linear_default, output = null, path2 = withPath(area);
   x0 = typeof x0 === "function" ? x0 : x0 === void 0 ? x : constant_default(+x0);
@@ -25241,7 +25241,7 @@ function area_default(x0, y0, y1) {
   return area;
 }
 
-// node_modules/d3-shape/src/curve/bump.js
+// ../node_modules/d3-shape/src/curve/bump.js
 var Bump = class {
   constructor(context, x2) {
     this._context = context;
@@ -25288,7 +25288,7 @@ function bumpY(context) {
   return new Bump(context, false);
 }
 
-// node_modules/d3-shape/src/symbol/circle.js
+// ../node_modules/d3-shape/src/symbol/circle.js
 var circle_default = {
   draw(context, size) {
     const r2 = sqrt(size / pi);
@@ -25297,7 +25297,7 @@ var circle_default = {
   }
 };
 
-// node_modules/d3-shape/src/symbol/cross.js
+// ../node_modules/d3-shape/src/symbol/cross.js
 var cross_default = {
   draw(context, size) {
     const r2 = sqrt(size / 5) / 2;
@@ -25317,7 +25317,7 @@ var cross_default = {
   }
 };
 
-// node_modules/d3-shape/src/symbol/diamond.js
+// ../node_modules/d3-shape/src/symbol/diamond.js
 var tan30 = sqrt(1 / 3);
 var tan30_2 = tan30 * 2;
 var diamond_default = {
@@ -25332,7 +25332,7 @@ var diamond_default = {
   }
 };
 
-// node_modules/d3-shape/src/symbol/square.js
+// ../node_modules/d3-shape/src/symbol/square.js
 var square_default = {
   draw(context, size) {
     const w = sqrt(size);
@@ -25341,7 +25341,7 @@ var square_default = {
   }
 };
 
-// node_modules/d3-shape/src/symbol/star.js
+// ../node_modules/d3-shape/src/symbol/star.js
 var ka = 0.8908130915292852;
 var kr = sin(pi / 10) / sin(7 * pi / 10);
 var kx = sin(tau / 10) * kr;
@@ -25364,7 +25364,7 @@ var star_default = {
   }
 };
 
-// node_modules/d3-shape/src/symbol/triangle.js
+// ../node_modules/d3-shape/src/symbol/triangle.js
 var sqrt3 = sqrt(3);
 var triangle_default = {
   draw(context, size) {
@@ -25376,7 +25376,7 @@ var triangle_default = {
   }
 };
 
-// node_modules/d3-shape/src/symbol/wye.js
+// ../node_modules/d3-shape/src/symbol/wye.js
 var c = -0.5;
 var s = sqrt(3) / 2;
 var k = 1 / sqrt(12);
@@ -25400,7 +25400,7 @@ var wye_default = {
   }
 };
 
-// node_modules/d3-shape/src/symbol.js
+// ../node_modules/d3-shape/src/symbol.js
 function Symbol2(type, size) {
   let context = null, path2 = withPath(symbol);
   type = typeof type === "function" ? type : constant_default(type || circle_default);
@@ -25423,11 +25423,11 @@ function Symbol2(type, size) {
   return symbol;
 }
 
-// node_modules/d3-shape/src/noop.js
+// ../node_modules/d3-shape/src/noop.js
 function noop_default() {
 }
 
-// node_modules/d3-shape/src/curve/basis.js
+// ../node_modules/d3-shape/src/curve/basis.js
 function point(that, x2, y2) {
   that._context.bezierCurveTo(
     (2 * that._x0 + that._x1) / 3,
@@ -25490,7 +25490,7 @@ function basis_default(context) {
   return new Basis(context);
 }
 
-// node_modules/d3-shape/src/curve/basisClosed.js
+// ../node_modules/d3-shape/src/curve/basisClosed.js
 function BasisClosed(context) {
   this._context = context;
 }
@@ -25550,7 +25550,7 @@ function basisClosed_default(context) {
   return new BasisClosed(context);
 }
 
-// node_modules/d3-shape/src/curve/basisOpen.js
+// ../node_modules/d3-shape/src/curve/basisOpen.js
 function BasisOpen(context) {
   this._context = context;
 }
@@ -25598,7 +25598,7 @@ function basisOpen_default(context) {
   return new BasisOpen(context);
 }
 
-// node_modules/d3-shape/src/curve/linearClosed.js
+// ../node_modules/d3-shape/src/curve/linearClosed.js
 function LinearClosed(context) {
   this._context = context;
 }
@@ -25621,7 +25621,7 @@ function linearClosed_default(context) {
   return new LinearClosed(context);
 }
 
-// node_modules/d3-shape/src/curve/monotone.js
+// ../node_modules/d3-shape/src/curve/monotone.js
 function sign(x2) {
   return x2 < 0 ? -1 : 1;
 }
@@ -25718,7 +25718,7 @@ function monotoneY(context) {
   return new MonotoneY(context);
 }
 
-// node_modules/d3-shape/src/curve/natural.js
+// ../node_modules/d3-shape/src/curve/natural.js
 function Natural(context) {
   this._context = context;
 }
@@ -25771,7 +25771,7 @@ function natural_default(context) {
   return new Natural(context);
 }
 
-// node_modules/d3-shape/src/curve/step.js
+// ../node_modules/d3-shape/src/curve/step.js
 function Step(context, t) {
   this._context = context;
   this._t = t;
@@ -25827,7 +25827,7 @@ function stepAfter(context) {
   return new Step(context, 1);
 }
 
-// node_modules/d3-shape/src/offset/none.js
+// ../node_modules/d3-shape/src/offset/none.js
 function none_default(series, order) {
   if (!((n = series.length) > 1)) return;
   for (var i = 1, j, s0, s1 = series[order[0]], n, m = s1.length; i < n; ++i) {
@@ -25838,14 +25838,14 @@ function none_default(series, order) {
   }
 }
 
-// node_modules/d3-shape/src/order/none.js
+// ../node_modules/d3-shape/src/order/none.js
 function none_default2(series) {
   var n = series.length, o = new Array(n);
   while (--n >= 0) o[n] = n;
   return o;
 }
 
-// node_modules/d3-shape/src/stack.js
+// ../node_modules/d3-shape/src/stack.js
 function stackValue(d, key) {
   return d[key];
 }
@@ -25884,7 +25884,7 @@ function stack_default() {
   return stack;
 }
 
-// node_modules/d3-shape/src/offset/expand.js
+// ../node_modules/d3-shape/src/offset/expand.js
 function expand_default(series, order) {
   if (!((n = series.length) > 0)) return;
   for (var i, n, j = 0, m = series[0].length, y2; j < m; ++j) {
@@ -25894,7 +25894,7 @@ function expand_default(series, order) {
   none_default(series, order);
 }
 
-// node_modules/d3-shape/src/offset/silhouette.js
+// ../node_modules/d3-shape/src/offset/silhouette.js
 function silhouette_default(series, order) {
   if (!((n = series.length) > 0)) return;
   for (var j = 0, s0 = series[order[0]], n, m = s0.length; j < m; ++j) {
@@ -25904,7 +25904,7 @@ function silhouette_default(series, order) {
   none_default(series, order);
 }
 
-// node_modules/d3-shape/src/offset/wiggle.js
+// ../node_modules/d3-shape/src/offset/wiggle.js
 function wiggle_default(series, order) {
   if (!((n = series.length) > 0) || !((m = (s0 = series[order[0]]).length) > 0)) return;
   for (var y2 = 0, j = 1, s0, m, n; j < m; ++j) {
@@ -25923,10 +25923,10 @@ function wiggle_default(series, order) {
   none_default(series, order);
 }
 
-// node_modules/recharts/es6/util/DataUtils.js
+// ../node_modules/recharts/es6/util/DataUtils.js
 var import_get = __toESM(require_get2());
 
-// node_modules/recharts/es6/util/round.js
+// ../node_modules/recharts/es6/util/round.js
 var defaultRoundPrecision = 4;
 function round(num) {
   var roundPrecision = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : defaultRoundPrecision;
@@ -25953,7 +25953,7 @@ function roundTemplateLiteral(strings) {
   }, "");
 }
 
-// node_modules/recharts/es6/util/DataUtils.js
+// ../node_modules/recharts/es6/util/DataUtils.js
 var mathSign = (value) => {
   if (value === 0) {
     return 0;
@@ -26040,7 +26040,7 @@ function isNotNil(value) {
 function noop() {
 }
 
-// node_modules/recharts/es6/shape/Symbols.js
+// ../node_modules/recharts/es6/shape/Symbols.js
 var _excluded3 = ["type", "size", "sizeType"];
 function _extends3() {
   return _extends3 = Object.assign ? Object.assign.bind() : function(n) {
@@ -26188,7 +26188,7 @@ var Symbols = (_ref2) => {
 };
 Symbols.registerSymbol = registerSymbol;
 
-// node_modules/recharts/es6/util/types.js
+// ../node_modules/recharts/es6/util/types.js
 var import_react5 = __toESM(require_react());
 var isPolarCoordinate = (c2) => {
   return "radius" in c2 && "startAngle" in c2 && "endAngle" in c2;
@@ -26231,7 +26231,7 @@ var adaptEventsOfChild = (props, data, index) => {
   return out;
 };
 
-// node_modules/recharts/es6/util/resolveDefaultProps.js
+// ../node_modules/recharts/es6/util/resolveDefaultProps.js
 function ownKeys2(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -26283,7 +26283,7 @@ function resolveDefaultProps(realProps, defaultProps) {
   return withDefaults;
 }
 
-// node_modules/recharts/es6/component/DefaultLegendContent.js
+// ../node_modules/recharts/es6/component/DefaultLegendContent.js
 function _extends4() {
   return _extends4 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
@@ -26485,7 +26485,7 @@ var DefaultLegendContent = (outsideProps) => {
   })));
 };
 
-// node_modules/recharts/es6/util/payload/getUniqPayload.js
+// ../node_modules/recharts/es6/util/payload/getUniqPayload.js
 var import_uniqBy = __toESM(require_uniqBy3());
 function getUniqPayload(payload, option, defaultUniqBy3) {
   if (option === true) {
@@ -26497,15 +26497,15 @@ function getUniqPayload(payload, option, defaultUniqBy3) {
   return payload;
 }
 
-// node_modules/recharts/es6/state/hooks.js
+// ../node_modules/recharts/es6/state/hooks.js
 var import_with_selector = __toESM(require_with_selector());
 var import_react7 = __toESM(require_react());
 
-// node_modules/recharts/es6/state/RechartsReduxContext.js
+// ../node_modules/recharts/es6/state/RechartsReduxContext.js
 var import_react6 = __toESM(require_react());
 var RechartsReduxContext = /* @__PURE__ */ (0, import_react6.createContext)(null);
 
-// node_modules/recharts/es6/state/hooks.js
+// ../node_modules/recharts/es6/state/hooks.js
 var noopDispatch = (a2) => a2;
 var useAppDispatch = () => {
   var context = (0, import_react7.useContext)(RechartsReduxContext);
@@ -26534,7 +26534,7 @@ function useAppSelector(selector) {
   return (0, import_with_selector.useSyncExternalStoreWithSelector)(context ? context.subscription.addNestedSub : addNestedSubNoop, context ? context.store.getState : noop2, context ? context.store.getState : noop2, outOfContextSelector, refEquality);
 }
 
-// node_modules/reselect/dist/reselect.mjs
+// ../node_modules/reselect/dist/reselect.mjs
 var runIdentityFunctionCheck = (resultFunc, inputSelectorsResults, outputSelectorResult) => {
   if (inputSelectorsResults.length === 1 && inputSelectorsResults[0] === outputSelectorResult) {
     let isInputSameAsOutput = false;
@@ -26847,7 +26847,7 @@ var createStructuredSelector = Object.assign(
   { withTypes: () => createStructuredSelector }
 );
 
-// node_modules/recharts/es6/state/selectors/legendSelectors.js
+// ../node_modules/recharts/es6/state/selectors/legendSelectors.js
 var import_sortBy = __toESM(require_sortBy2());
 var selectLegendSettings = (state) => state.legend.settings;
 var selectLegendSize = (state) => state.legend.size;
@@ -26860,12 +26860,12 @@ var selectLegendPayload = createSelector([selectAllLegendPayload2DArray, selectL
   return itemSorter ? (0, import_sortBy.default)(flat, itemSorter) : flat;
 });
 
-// node_modules/recharts/es6/context/legendPayloadContext.js
+// ../node_modules/recharts/es6/context/legendPayloadContext.js
 function useLegendPayload() {
   return useAppSelector(selectLegendPayload);
 }
 
-// node_modules/recharts/es6/util/useElementOffset.js
+// ../node_modules/recharts/es6/util/useElementOffset.js
 var import_react8 = __toESM(require_react());
 var EPS = 1;
 function useElementOffset() {
@@ -26902,10 +26902,10 @@ function useElementOffset() {
   return [lastBoundingBox, updateBoundingBox];
 }
 
-// node_modules/recharts/es6/context/chartLayoutContext.js
+// ../node_modules/recharts/es6/context/chartLayoutContext.js
 var import_react11 = __toESM(require_react());
 
-// node_modules/redux/dist/redux.mjs
+// ../node_modules/redux/dist/redux.mjs
 var $$observable = /* @__PURE__ */ (() => typeof Symbol === "function" && Symbol.observable || "@@observable")();
 var symbol_observable_default = $$observable;
 var randomString = () => Math.random().toString(36).substring(7).split("").join(".");
@@ -27242,7 +27242,7 @@ function isAction(action) {
   return isPlainObject(action) && "type" in action && typeof action.type === "string";
 }
 
-// node_modules/@reduxjs/toolkit/node_modules/immer/dist/immer.mjs
+// ../node_modules/@reduxjs/toolkit/node_modules/immer/dist/immer.mjs
 var NOTHING = /* @__PURE__ */ Symbol.for("immer-nothing");
 var DRAFTABLE = /* @__PURE__ */ Symbol.for("immer-draftable");
 var DRAFT_STATE = /* @__PURE__ */ Symbol.for("immer-state");
@@ -28063,7 +28063,7 @@ function currentImpl(value) {
 var immer = new Immer2();
 var produce = immer.produce;
 
-// node_modules/redux-thunk/dist/redux-thunk.mjs
+// ../node_modules/redux-thunk/dist/redux-thunk.mjs
 function createThunkMiddleware(extraArgument) {
   const middleware = ({ dispatch, getState }) => (next) => (action) => {
     if (typeof action === "function") {
@@ -28076,7 +28076,7 @@ function createThunkMiddleware(extraArgument) {
 var thunk = createThunkMiddleware();
 var withExtraArgument = createThunkMiddleware;
 
-// node_modules/@reduxjs/toolkit/dist/redux-toolkit.modern.mjs
+// ../node_modules/@reduxjs/toolkit/dist/redux-toolkit.modern.mjs
 var composeWithDevTools = typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : function() {
   if (arguments.length === 0) return void 0;
   if (typeof arguments[0] === "object") return compose;
@@ -29631,7 +29631,7 @@ var createListenerMiddleware = (middlewareOptions = {}) => {
   };
 };
 
-// node_modules/recharts/es6/state/layoutSlice.js
+// ../node_modules/recharts/es6/state/layoutSlice.js
 var initialState = {
   layoutType: "horizontal",
   width: 0,
@@ -29675,11 +29675,11 @@ var {
 } = chartLayoutSlice.actions;
 var chartLayoutReducer = chartLayoutSlice.reducer;
 
-// node_modules/recharts/es6/util/ChartUtils.js
+// ../node_modules/recharts/es6/util/ChartUtils.js
 var import_sortBy2 = __toESM(require_sortBy2());
 var import_get2 = __toESM(require_get2());
 
-// node_modules/recharts/es6/util/getSliced.js
+// ../node_modules/recharts/es6/util/getSliced.js
 function getSliced(arr, startIndex, endIndex) {
   if (!Array.isArray(arr)) {
     return arr;
@@ -29690,7 +29690,7 @@ function getSliced(arr, startIndex, endIndex) {
   return arr;
 }
 
-// node_modules/recharts/es6/util/isWellBehavedNumber.js
+// ../node_modules/recharts/es6/util/isWellBehavedNumber.js
 function isWellBehavedNumber(n) {
   return Number.isFinite(n);
 }
@@ -29698,7 +29698,7 @@ function isPositiveNumber(n) {
   return typeof n === "number" && n > 0 && Number.isFinite(n);
 }
 
-// node_modules/recharts/es6/util/ChartUtils.js
+// ../node_modules/recharts/es6/util/ChartUtils.js
 function ownKeys4(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -30087,13 +30087,13 @@ var calculatePolarTooltipPos = (rangeObj, layout) => {
   return rangeObj.radius;
 };
 
-// node_modules/recharts/es6/state/selectors/containerSelectors.js
+// ../node_modules/recharts/es6/state/selectors/containerSelectors.js
 var selectChartWidth = (state) => state.layout.width;
 var selectChartHeight = (state) => state.layout.height;
 var selectContainerScale = (state) => state.layout.scale;
 var selectMargin = (state) => state.layout.margin;
 
-// node_modules/recharts/es6/state/selectors/selectAllAxes.js
+// ../node_modules/recharts/es6/state/selectors/selectAllAxes.js
 var selectAllXAxes = createSelector((state) => state.cartesianAxis.xAxis, (xAxisMap) => {
   return Object.values(xAxisMap);
 });
@@ -30101,12 +30101,12 @@ var selectAllYAxes = createSelector((state) => state.cartesianAxis.yAxis, (yAxis
   return Object.values(yAxisMap);
 });
 
-// node_modules/recharts/es6/util/Constants.js
+// ../node_modules/recharts/es6/util/Constants.js
 var DATA_ITEM_INDEX_ATTRIBUTE_NAME = "data-recharts-item-index";
 var DATA_ITEM_GRAPHICAL_ITEM_ID_ATTRIBUTE_NAME = "data-recharts-item-id";
 var DEFAULT_Y_AXIS_WIDTH = 60;
 
-// node_modules/recharts/es6/state/selectors/selectChartOffsetInternal.js
+// ../node_modules/recharts/es6/state/selectors/selectChartOffsetInternal.js
 function ownKeys5(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -30220,7 +30220,7 @@ var selectAxisViewBox = createSelector(selectChartWidth, selectChartHeight, (wid
   height
 }));
 
-// node_modules/recharts/es6/context/PanoramaContext.js
+// ../node_modules/recharts/es6/context/PanoramaContext.js
 var React5 = __toESM(require_react());
 var import_react9 = __toESM(require_react());
 var PanoramaContext = /* @__PURE__ */ (0, import_react9.createContext)(null);
@@ -30234,7 +30234,7 @@ var PanoramaContextProvider = (_ref2) => {
   }, children);
 };
 
-// node_modules/recharts/es6/state/selectors/brushSelectors.js
+// ../node_modules/recharts/es6/state/selectors/brushSelectors.js
 var selectBrushSettings = (state) => state.brush;
 var selectBrushDimensions = createSelector([selectBrushSettings, selectChartOffsetInternal, selectMargin], (brushSettings, offset, margin) => ({
   height: brushSettings.height,
@@ -30243,12 +30243,12 @@ var selectBrushDimensions = createSelector([selectBrushSettings, selectChartOffs
   width: isNumber(brushSettings.width) ? brushSettings.width : offset.width
 }));
 
-// node_modules/recharts/es6/component/ResponsiveContainer.js
+// ../node_modules/recharts/es6/component/ResponsiveContainer.js
 var React6 = __toESM(require_react());
 var import_react10 = __toESM(require_react());
 var import_throttle = __toESM(require_throttle2());
 
-// node_modules/recharts/es6/util/LogUtils.js
+// ../node_modules/recharts/es6/util/LogUtils.js
 var isDev = true;
 var warn = function warn2(condition, format2) {
   for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
@@ -30269,7 +30269,7 @@ var warn = function warn2(condition, format2) {
   }
 };
 
-// node_modules/recharts/es6/component/responsiveContainerUtils.js
+// ../node_modules/recharts/es6/component/responsiveContainerUtils.js
 var defaultResponsiveContainerProps = {
   width: "100%",
   height: "100%",
@@ -30358,7 +30358,7 @@ function getDefaultWidthAndHeight(_ref2) {
   };
 }
 
-// node_modules/recharts/es6/component/ResponsiveContainer.js
+// ../node_modules/recharts/es6/component/ResponsiveContainer.js
 function _extends5() {
   return _extends5 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
@@ -30574,7 +30574,7 @@ var ResponsiveContainer = /* @__PURE__ */ (0, import_react10.forwardRef)((props,
   }));
 });
 
-// node_modules/recharts/es6/context/chartLayoutContext.js
+// ../node_modules/recharts/es6/context/chartLayoutContext.js
 function cartesianViewBoxToTrapezoid(box) {
   if (!box) {
     return void 0;
@@ -30671,7 +30671,7 @@ var ReportChartSize = (props) => {
   return null;
 };
 
-// node_modules/immer/dist/immer.mjs
+// ../node_modules/immer/dist/immer.mjs
 var NOTHING2 = /* @__PURE__ */ Symbol.for("immer-nothing");
 var DRAFTABLE2 = /* @__PURE__ */ Symbol.for("immer-draftable");
 var DRAFT_STATE2 = /* @__PURE__ */ Symbol.for("immer-state");
@@ -31398,7 +31398,7 @@ function castDraft(value) {
   return value;
 }
 
-// node_modules/recharts/es6/state/legendSlice.js
+// ../node_modules/recharts/es6/state/legendSlice.js
 var initialState2 = {
   settings: {
     layout: "horizontal",
@@ -31465,7 +31465,7 @@ var {
 } = legendSlice.actions;
 var legendReducer = legendSlice.reducer;
 
-// node_modules/react-redux/dist/react-redux.mjs
+// ../node_modules/react-redux/dist/react-redux.mjs
 var React7 = __toESM(require_react(), 1);
 var import_with_selector2 = __toESM(require_with_selector2(), 1);
 var REACT_FORWARD_REF_TYPE = /* @__PURE__ */ Symbol.for("react.forward_ref");
@@ -31708,7 +31708,7 @@ function Provider(providerProps) {
 }
 var Provider_default = Provider;
 
-// node_modules/recharts/es6/util/propsAreEqual.js
+// ../node_modules/recharts/es6/util/propsAreEqual.js
 var propsToShallowCompare = /* @__PURE__ */ new Set([
   "axisLine",
   "tickLine",
@@ -31759,7 +31759,7 @@ function propsAreEqual(prevProps, nextProps) {
   return true;
 }
 
-// node_modules/recharts/es6/component/Legend.js
+// ../node_modules/recharts/es6/component/Legend.js
 var _excluded4 = ["contextPayload"];
 function _extends6() {
   return _extends6 = Object.assign ? Object.assign.bind() : function(n) {
@@ -31972,12 +31972,12 @@ function LegendImpl(outsideProps) {
 var Legend = /* @__PURE__ */ React8.memo(LegendImpl, propsAreEqual);
 Legend.displayName = "Legend";
 
-// node_modules/recharts/es6/component/Tooltip.js
+// ../node_modules/recharts/es6/component/Tooltip.js
 var React16 = __toESM(require_react());
 var import_react22 = __toESM(require_react());
 var import_react_dom3 = __toESM(require_react_dom());
 
-// node_modules/recharts/es6/component/DefaultTooltipContent.js
+// ../node_modules/recharts/es6/component/DefaultTooltipContent.js
 var React9 = __toESM(require_react());
 var import_sortBy3 = __toESM(require_sortBy2());
 function _extends7() {
@@ -32145,10 +32145,10 @@ var DefaultTooltipContent = (props) => {
   }, /* @__PURE__ */ React9.isValidElement(finalLabel) ? finalLabel : "".concat(finalLabel)), renderContent2());
 };
 
-// node_modules/recharts/es6/component/TooltipBoundingBox.js
+// ../node_modules/recharts/es6/component/TooltipBoundingBox.js
 var React10 = __toESM(require_react());
 
-// node_modules/recharts/es6/util/tooltip/translate.js
+// ../node_modules/recharts/es6/util/tooltip/translate.js
 var CSS_CLASS_PREFIX = "recharts-tooltip-wrapper";
 var TOOLTIP_HIDDEN = {
   visibility: "hidden"
@@ -32272,17 +32272,17 @@ function getTooltipTranslate(_ref4) {
   };
 }
 
-// node_modules/recharts/es6/util/usePrefersReducedMotion.js
+// ../node_modules/recharts/es6/util/usePrefersReducedMotion.js
 var import_react13 = __toESM(require_react());
 
-// node_modules/recharts/es6/util/Global.js
+// ../node_modules/recharts/es6/util/Global.js
 var parseIsSsrByDefault = () => !(typeof window !== "undefined" && window.document && Boolean(window.document.createElement) && window.setTimeout);
 var Global = {
   devToolsEnabled: true,
   isSsr: parseIsSsrByDefault()
 };
 
-// node_modules/recharts/es6/util/usePrefersReducedMotion.js
+// ../node_modules/recharts/es6/util/usePrefersReducedMotion.js
 function usePrefersReducedMotion() {
   var [prefersReducedMotion, setPrefersReducedMotion] = (0, import_react13.useState)(() => {
     if (Global.isSsr) {
@@ -32309,7 +32309,7 @@ function usePrefersReducedMotion() {
   return prefersReducedMotion;
 }
 
-// node_modules/recharts/es6/component/TooltipBoundingBox.js
+// ../node_modules/recharts/es6/component/TooltipBoundingBox.js
 function ownKeys9(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -32435,17 +32435,17 @@ function TooltipBoundingBoxImpl(props) {
 }
 var TooltipBoundingBox = /* @__PURE__ */ React10.memo(TooltipBoundingBoxImpl);
 
-// node_modules/recharts/es6/context/accessibilityContext.js
+// ../node_modules/recharts/es6/context/accessibilityContext.js
 var useAccessibilityLayer = () => {
   var _useAppSelector;
   return (_useAppSelector = useAppSelector((state) => state.rootProps.accessibilityLayer)) !== null && _useAppSelector !== void 0 ? _useAppSelector : true;
 };
 
-// node_modules/recharts/es6/component/Cursor.js
+// ../node_modules/recharts/es6/component/Cursor.js
 var React15 = __toESM(require_react());
 var import_react19 = __toESM(require_react());
 
-// node_modules/recharts/es6/shape/Curve.js
+// ../node_modules/recharts/es6/shape/Curve.js
 var React11 = __toESM(require_react());
 function _extends8() {
   return _extends8 = Object.assign ? Object.assign.bind() : function(n) {
@@ -32591,7 +32591,7 @@ var Curve = (props) => {
   }));
 };
 
-// node_modules/recharts/es6/shape/Cross.js
+// ../node_modules/recharts/es6/shape/Cross.js
 var React12 = __toESM(require_react());
 var _excluded5 = ["x", "y", "top", "left", "width", "height", "className"];
 function _extends9() {
@@ -32689,7 +32689,7 @@ var Cross = (_ref2) => {
   }));
 };
 
-// node_modules/recharts/es6/util/cursor/getCursorRectangle.js
+// ../node_modules/recharts/es6/util/cursor/getCursorRectangle.js
 function getCursorRectangle(layout, activeCoordinate, offset, tooltipAxisBandSize) {
   var halfSize = tooltipAxisBandSize / 2;
   return {
@@ -32702,14 +32702,14 @@ function getCursorRectangle(layout, activeCoordinate, offset, tooltipAxisBandSiz
   };
 }
 
-// node_modules/recharts/es6/shape/Rectangle.js
+// ../node_modules/recharts/es6/shape/Rectangle.js
 var React13 = __toESM(require_react());
 var import_react17 = __toESM(require_react());
 
-// node_modules/recharts/es6/animation/JavascriptAnimate.js
+// ../node_modules/recharts/es6/animation/JavascriptAnimate.js
 var import_react15 = __toESM(require_react());
 
-// node_modules/recharts/es6/animation/util.js
+// ../node_modules/recharts/es6/animation/util.js
 function ownKeys12(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -32755,7 +32755,7 @@ var mapObject = (fn, obj) => Object.keys(obj).reduce((res, key) => _objectSpread
   [key]: fn(key, obj[key])
 }), {});
 
-// node_modules/recharts/es6/animation/configUpdate.js
+// ../node_modules/recharts/es6/animation/configUpdate.js
 function ownKeys13(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -32906,7 +32906,7 @@ var configUpdate_default = (from2, to2, easing, duration, render, timeoutControl
   return easing.isStepper === true ? createStepperUpdate(from2, to2, easing, interKeys, render, timeoutController) : createTimingUpdate(from2, to2, easing, duration, interKeys, render, timeoutController);
 };
 
-// node_modules/recharts/es6/animation/easing.js
+// ../node_modules/recharts/es6/animation/easing.js
 var ACCURACY = 1e-4;
 var cubicBezierFactor = (c1, c2) => [0, 3 * c1, 3 * c2 - 6 * c1, 3 * c1 - 3 * c2 + 1];
 var evaluatePolynomial = (params, t) => params.map((param, i) => param * t ** i).reduce((pre, curr) => pre + curr);
@@ -33037,10 +33037,10 @@ var configEasing = (easing) => {
   return null;
 };
 
-// node_modules/recharts/es6/animation/useAnimationManager.js
+// ../node_modules/recharts/es6/animation/useAnimationManager.js
 var import_react14 = __toESM(require_react());
 
-// node_modules/recharts/es6/animation/AnimationManager.js
+// ../node_modules/recharts/es6/animation/AnimationManager.js
 function createAnimateManager(timeoutController) {
   var currStyle;
   var handleChange = () => null;
@@ -33098,7 +33098,7 @@ function createAnimateManager(timeoutController) {
   };
 }
 
-// node_modules/recharts/es6/animation/timeoutController.js
+// ../node_modules/recharts/es6/animation/timeoutController.js
 var RequestAnimationFrameTimeoutController = class {
   setTimeout(callback) {
     var delay = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 0;
@@ -33120,19 +33120,19 @@ var RequestAnimationFrameTimeoutController = class {
   }
 };
 
-// node_modules/recharts/es6/animation/createDefaultAnimationManager.js
+// ../node_modules/recharts/es6/animation/createDefaultAnimationManager.js
 function createDefaultAnimationManager() {
   return createAnimateManager(new RequestAnimationFrameTimeoutController());
 }
 
-// node_modules/recharts/es6/animation/useAnimationManager.js
+// ../node_modules/recharts/es6/animation/useAnimationManager.js
 var AnimationManagerContext = /* @__PURE__ */ (0, import_react14.createContext)(createDefaultAnimationManager);
 function useAnimationManager(animationId, animationManagerFromProps) {
   var contextAnimationManager = (0, import_react14.useContext)(AnimationManagerContext);
   return (0, import_react14.useMemo)(() => animationManagerFromProps !== null && animationManagerFromProps !== void 0 ? animationManagerFromProps : contextAnimationManager(animationId), [animationId, animationManagerFromProps, contextAnimationManager]);
 }
 
-// node_modules/recharts/es6/animation/JavascriptAnimate.js
+// ../node_modules/recharts/es6/animation/JavascriptAnimate.js
 var defaultJavascriptAnimateProps = {
   begin: 0,
   duration: 1e3,
@@ -33192,7 +33192,7 @@ function JavascriptAnimate(outsideProps) {
   return children(style.t);
 }
 
-// node_modules/recharts/es6/util/useAnimationId.js
+// ../node_modules/recharts/es6/util/useAnimationId.js
 var import_react16 = __toESM(require_react());
 function useAnimationId(input) {
   var prefix = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "animation-";
@@ -33205,7 +33205,7 @@ function useAnimationId(input) {
   return animationId.current;
 }
 
-// node_modules/recharts/es6/shape/Rectangle.js
+// ../node_modules/recharts/es6/shape/Rectangle.js
 var _excluded6 = ["radius"];
 var _excluded22 = ["radius"];
 var _templateObject;
@@ -33452,7 +33452,7 @@ var Rectangle = (rectangleProps) => {
   });
 };
 
-// node_modules/recharts/es6/util/PolarUtils.js
+// ../node_modules/recharts/es6/util/PolarUtils.js
 function ownKeys15(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -33630,7 +33630,7 @@ var inRangeOfSector = (_ref5, viewBox) => {
   return null;
 };
 
-// node_modules/recharts/es6/util/cursor/getRadialCursorPoints.js
+// ../node_modules/recharts/es6/util/cursor/getRadialCursorPoints.js
 function getRadialCursorPoints(activeCoordinate) {
   var {
     cx,
@@ -33651,7 +33651,7 @@ function getRadialCursorPoints(activeCoordinate) {
   };
 }
 
-// node_modules/recharts/es6/shape/Sector.js
+// ../node_modules/recharts/es6/shape/Sector.js
 var React14 = __toESM(require_react());
 var _templateObject10;
 var _templateObject22;
@@ -33878,7 +33878,7 @@ var Sector = (sectorProps) => {
   }));
 };
 
-// node_modules/recharts/es6/util/cursor/getCursorPoints.js
+// ../node_modules/recharts/es6/util/cursor/getCursorPoints.js
 function getCursorPoints(layout, activeCoordinate, offset) {
   if (layout === "horizontal") {
     return [{
@@ -33922,10 +33922,10 @@ function getCursorPoints(layout, activeCoordinate, offset) {
   return void 0;
 }
 
-// node_modules/recharts/es6/state/selectors/axisSelectors.js
+// ../node_modules/recharts/es6/state/selectors/axisSelectors.js
 var import_range2 = __toESM(require_range2());
 
-// node_modules/recharts/es6/state/selectors/dataSelectors.js
+// ../node_modules/recharts/es6/state/selectors/dataSelectors.js
 var selectChartDataWithIndexes = (state) => state.chartData;
 var selectChartDataAndAlwaysIgnoreIndexes = createSelector([selectChartDataWithIndexes], (dataState) => {
   var dataEndIndex = dataState.chartData != null ? dataState.chartData.length - 1 : 0;
@@ -33967,7 +33967,7 @@ var selectChartDataSliceWithIndexes = createSelector([selectChartDataWithIndexes
   return chartData != null ? chartData.slice(dataStartIndex, dataEndIndex + 1) : [];
 });
 
-// node_modules/recharts/es6/util/isDomainSpecifiedByUser.js
+// ../node_modules/recharts/es6/util/isDomainSpecifiedByUser.js
 function isWellFormedNumberDomain(v) {
   if (Array.isArray(v) && v.length === 2) {
     var [min2, max2] = v;
@@ -34085,10 +34085,10 @@ function parseNumericalUserDomain(userDomain, dataDomain, allowDataOverflow) {
   return void 0;
 }
 
-// node_modules/recharts/es6/util/scale/getNiceTickValues.js
+// ../node_modules/recharts/es6/util/scale/getNiceTickValues.js
 var import_decimal2 = __toESM(require_decimal());
 
-// node_modules/recharts/es6/util/scale/util/arithmetic.js
+// ../node_modules/recharts/es6/util/scale/util/arithmetic.js
 var import_decimal = __toESM(require_decimal());
 function getDigitCount(value) {
   var result;
@@ -34111,7 +34111,7 @@ function rangeStep(start, end, step) {
   return result;
 }
 
-// node_modules/recharts/es6/util/scale/getNiceTickValues.js
+// ../node_modules/recharts/es6/util/scale/getNiceTickValues.js
 var getValidInterval = (_ref2) => {
   var [min2, max2] = _ref2;
   var [validMin, validMax] = [min2, max2];
@@ -34258,7 +34258,7 @@ var getTickValuesFixedDomain = function getTickValuesFixedDomain2(_ref3, tickCou
   return min2 > max2 ? values.reverse() : values;
 };
 
-// node_modules/recharts/es6/state/selectors/rootPropsSelectors.js
+// ../node_modules/recharts/es6/state/selectors/rootPropsSelectors.js
 var selectBarCategoryGap = (state) => state.rootProps.barCategoryGap;
 var selectStackOffsetType = (state) => state.rootProps.stackOffset;
 var selectReverseStackOrder = (state) => state.rootProps.reverseStackOrder;
@@ -34267,7 +34267,7 @@ var selectSyncId = (state) => state.rootProps.syncId;
 var selectSyncMethod = (state) => state.rootProps.syncMethod;
 var selectEventEmitter = (state) => state.options.eventEmitter;
 
-// node_modules/recharts/es6/zIndex/DefaultZIndexes.js
+// ../node_modules/recharts/es6/zIndex/DefaultZIndexes.js
 var DefaultZIndexes = {
   /**
    * CartesianGrid and PolarGrid
@@ -34336,7 +34336,7 @@ var DefaultZIndexes = {
   label: 2e3
 };
 
-// node_modules/recharts/es6/polar/defaultPolarAngleAxisProps.js
+// ../node_modules/recharts/es6/polar/defaultPolarAngleAxisProps.js
 var defaultPolarAngleAxisProps = {
   allowDecimals: false,
   allowDuplicatedCategory: true,
@@ -34362,7 +34362,7 @@ var defaultPolarAngleAxisProps = {
   zIndex: DefaultZIndexes.axis
 };
 
-// node_modules/recharts/es6/polar/defaultPolarRadiusAxisProps.js
+// ../node_modules/recharts/es6/polar/defaultPolarRadiusAxisProps.js
 var defaultPolarRadiusAxisProps = {
   allowDataOverflow: false,
   allowDecimals: false,
@@ -34385,7 +34385,7 @@ var defaultPolarRadiusAxisProps = {
   zIndex: DefaultZIndexes.axis
 };
 
-// node_modules/recharts/es6/state/selectors/combiners/combineAxisRangeWithReverse.js
+// ../node_modules/recharts/es6/state/selectors/combiners/combineAxisRangeWithReverse.js
 var combineAxisRangeWithReverse = (axisSettings, axisRange) => {
   if (!axisSettings || !axisRange) {
     return void 0;
@@ -34396,7 +34396,7 @@ var combineAxisRangeWithReverse = (axisSettings, axisRange) => {
   return axisRange;
 };
 
-// node_modules/recharts/es6/util/getAxisTypeBasedOnLayout.js
+// ../node_modules/recharts/es6/util/getAxisTypeBasedOnLayout.js
 function getAxisTypeBasedOnLayout(layout, axisType, axisDomainType) {
   if (axisDomainType !== "auto") {
     return axisDomainType;
@@ -34407,7 +34407,7 @@ function getAxisTypeBasedOnLayout(layout, axisType, axisDomainType) {
   return isCategoricalAxis(layout, axisType) ? "category" : "number";
 }
 
-// node_modules/recharts/es6/state/selectors/polarAxisSelectors.js
+// ../node_modules/recharts/es6/state/selectors/polarAxisSelectors.js
 function ownKeys16(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -34567,18 +34567,18 @@ var selectPolarViewBox = createSelector([selectChartLayout, selectPolarOptions, 
   };
 });
 
-// node_modules/recharts/es6/state/selectors/pickAxisType.js
+// ../node_modules/recharts/es6/state/selectors/pickAxisType.js
 var pickAxisType = (_state, axisType) => axisType;
 
-// node_modules/recharts/es6/state/selectors/pickAxisId.js
+// ../node_modules/recharts/es6/state/selectors/pickAxisId.js
 var pickAxisId = (_state, _axisType, axisId) => axisId;
 
-// node_modules/recharts/es6/util/stacks/getStackSeriesIdentifier.js
+// ../node_modules/recharts/es6/util/stacks/getStackSeriesIdentifier.js
 function getStackSeriesIdentifier(graphicalItem) {
   return graphicalItem === null || graphicalItem === void 0 ? void 0 : graphicalItem.id;
 }
 
-// node_modules/recharts/es6/state/selectors/combiners/combineDisplayedStackedData.js
+// ../node_modules/recharts/es6/state/selectors/combiners/combineDisplayedStackedData.js
 function combineDisplayedStackedData(stackedGraphicalItems, _ref2, tooltipAxisSettings) {
   var {
     chartData = []
@@ -34613,12 +34613,12 @@ function combineDisplayedStackedData(stackedGraphicalItems, _ref2, tooltipAxisSe
   return Array.from(knownItemsByDataKey.values());
 }
 
-// node_modules/recharts/es6/state/types/StackedGraphicalItem.js
+// ../node_modules/recharts/es6/state/types/StackedGraphicalItem.js
 function isStacked(graphicalItem) {
   return "stackId" in graphicalItem && graphicalItem.stackId != null && graphicalItem.dataKey != null;
 }
 
-// node_modules/recharts/es6/state/selectors/numberDomainEqualityCheck.js
+// ../node_modules/recharts/es6/state/selectors/numberDomainEqualityCheck.js
 var numberDomainEqualityCheck = (a2, b) => {
   if (a2 === b) {
     return true;
@@ -34629,7 +34629,7 @@ var numberDomainEqualityCheck = (a2, b) => {
   return a2[0] === b[0] && a2[1] === b[1];
 };
 
-// node_modules/recharts/es6/state/selectors/arrayEqualityCheck.js
+// ../node_modules/recharts/es6/state/selectors/arrayEqualityCheck.js
 function emptyArraysAreEqualCheck(a2, b) {
   if (Array.isArray(a2) && Array.isArray(b) && a2.length === 0 && b.length === 0) {
     return true;
@@ -34648,7 +34648,7 @@ function arrayContentsAreEqualCheck(a2, b) {
   return false;
 }
 
-// node_modules/recharts/es6/state/selectors/selectTooltipAxisType.js
+// ../node_modules/recharts/es6/state/selectors/selectTooltipAxisType.js
 var selectTooltipAxisType = (state) => {
   var layout = selectChartLayout(state);
   if (layout === "horizontal") {
@@ -34663,10 +34663,10 @@ var selectTooltipAxisType = (state) => {
   return "radiusAxis";
 };
 
-// node_modules/recharts/es6/state/selectors/selectTooltipAxisId.js
+// ../node_modules/recharts/es6/state/selectors/selectTooltipAxisId.js
 var selectTooltipAxisId = (state) => state.tooltip.settings.axisId;
 
-// node_modules/recharts/es6/util/scale/RechartsScale.js
+// ../node_modules/recharts/es6/util/scale/RechartsScale.js
 function rechartsScaleFactory(d3Scale) {
   if (d3Scale == null) {
     return void 0;
@@ -34718,7 +34718,7 @@ function rechartsScaleFactory(d3Scale) {
   };
 }
 
-// node_modules/recharts/es6/state/selectors/combiners/combineCheckedDomain.js
+// ../node_modules/recharts/es6/state/selectors/combiners/combineCheckedDomain.js
 var combineCheckedDomain = (realScaleType, axisDomain) => {
   if (axisDomain == null) {
     return void 0;
@@ -34751,7 +34751,7 @@ var combineCheckedDomain = (realScaleType, axisDomain) => {
   }
 };
 
-// node_modules/victory-vendor/es/d3-scale.js
+// ../node_modules/victory-vendor/es/d3-scale.js
 var d3_scale_exports = {};
 __export(d3_scale_exports, {
   scaleBand: () => band,
@@ -34784,17 +34784,17 @@ __export(d3_scale_exports, {
   tickFormat: () => tickFormat
 });
 
-// node_modules/d3-array/src/ascending.js
+// ../node_modules/d3-array/src/ascending.js
 function ascending(a2, b) {
   return a2 == null || b == null ? NaN : a2 < b ? -1 : a2 > b ? 1 : a2 >= b ? 0 : NaN;
 }
 
-// node_modules/d3-array/src/descending.js
+// ../node_modules/d3-array/src/descending.js
 function descending(a2, b) {
   return a2 == null || b == null ? NaN : b < a2 ? -1 : b > a2 ? 1 : b >= a2 ? 0 : NaN;
 }
 
-// node_modules/d3-array/src/bisector.js
+// ../node_modules/d3-array/src/bisector.js
 function bisector(f) {
   let compare1, compare2, delta;
   if (f.length !== 2) {
@@ -34838,7 +34838,7 @@ function zero() {
   return 0;
 }
 
-// node_modules/d3-array/src/number.js
+// ../node_modules/d3-array/src/number.js
 function number(x2) {
   return x2 === null ? NaN : +x2;
 }
@@ -34859,14 +34859,14 @@ function* numbers(values, valueof) {
   }
 }
 
-// node_modules/d3-array/src/bisect.js
+// ../node_modules/d3-array/src/bisect.js
 var ascendingBisect = bisector(ascending);
 var bisectRight = ascendingBisect.right;
 var bisectLeft = ascendingBisect.left;
 var bisectCenter = bisector(number).center;
 var bisect_default = bisectRight;
 
-// node_modules/internmap/src/index.js
+// ../node_modules/internmap/src/index.js
 var InternMap = class extends Map {
   constructor(entries, key = keyof) {
     super();
@@ -34908,7 +34908,7 @@ function keyof(value) {
   return value !== null && typeof value === "object" ? value.valueOf() : value;
 }
 
-// node_modules/d3-array/src/sort.js
+// ../node_modules/d3-array/src/sort.js
 function compareDefined(compare = ascending) {
   if (compare === ascending) return ascendingDefined;
   if (typeof compare !== "function") throw new TypeError("compare is not a function");
@@ -34922,7 +34922,7 @@ function ascendingDefined(a2, b) {
   return (a2 == null || !(a2 >= a2)) - (b == null || !(b >= b)) || (a2 < b ? -1 : a2 > b ? 1 : 0);
 }
 
-// node_modules/d3-array/src/ticks.js
+// ../node_modules/d3-array/src/ticks.js
 var e10 = Math.sqrt(50);
 var e5 = Math.sqrt(10);
 var e2 = Math.sqrt(2);
@@ -34972,7 +34972,7 @@ function tickStep(start, stop, count) {
   return (reverse ? -1 : 1) * (inc < 0 ? 1 / -inc : inc);
 }
 
-// node_modules/d3-array/src/max.js
+// ../node_modules/d3-array/src/max.js
 function max(values, valueof) {
   let max2;
   if (valueof === void 0) {
@@ -34992,7 +34992,7 @@ function max(values, valueof) {
   return max2;
 }
 
-// node_modules/d3-array/src/min.js
+// ../node_modules/d3-array/src/min.js
 function min(values, valueof) {
   let min2;
   if (valueof === void 0) {
@@ -35012,7 +35012,7 @@ function min(values, valueof) {
   return min2;
 }
 
-// node_modules/d3-array/src/quickselect.js
+// ../node_modules/d3-array/src/quickselect.js
 function quickselect(array, k2, left = 0, right = Infinity, compare) {
   k2 = Math.floor(k2);
   left = Math.floor(Math.max(0, left));
@@ -35053,7 +35053,7 @@ function swap(array, i, j) {
   array[j] = t;
 }
 
-// node_modules/d3-array/src/quantile.js
+// ../node_modules/d3-array/src/quantile.js
 function quantile(values, p, valueof) {
   values = Float64Array.from(numbers(values, valueof));
   if (!(n = values.length) || isNaN(p = +p)) return;
@@ -35070,7 +35070,7 @@ function quantileSorted(values, p, valueof = number) {
   return value0 + (value1 - value0) * (i - i0);
 }
 
-// node_modules/d3-array/src/range.js
+// ../node_modules/d3-array/src/range.js
 function range(start, stop, step) {
   start = +start, stop = +stop, step = (n = arguments.length) < 2 ? (stop = start, start = 0, 1) : n < 3 ? 1 : +step;
   var i = -1, n = Math.max(0, Math.ceil((stop - start) / step)) | 0, range4 = new Array(n);
@@ -35080,7 +35080,7 @@ function range(start, stop, step) {
   return range4;
 }
 
-// node_modules/d3-scale/src/init.js
+// ../node_modules/d3-scale/src/init.js
 function initRange(domain, range4) {
   switch (arguments.length) {
     case 0:
@@ -35113,7 +35113,7 @@ function initInterpolator(domain, interpolator) {
   return this;
 }
 
-// node_modules/d3-scale/src/ordinal.js
+// ../node_modules/d3-scale/src/ordinal.js
 var implicit = /* @__PURE__ */ Symbol("implicit");
 function ordinal() {
   var index = new InternMap(), domain = [], range4 = [], unknown = implicit;
@@ -35147,7 +35147,7 @@ function ordinal() {
   return scale;
 }
 
-// node_modules/d3-scale/src/band.js
+// ../node_modules/d3-scale/src/band.js
 function band() {
   var scale = ordinal().unknown(void 0), domain = scale.domain, ordinalRange = scale.range, r0 = 0, r1 = 1, step, bandwidth, round2 = false, paddingInner = 0, paddingOuter = 0, align = 0.5;
   delete scale.unknown;
@@ -35212,7 +35212,7 @@ function point3() {
   return pointish(band.apply(null, arguments).paddingInner(1));
 }
 
-// node_modules/d3-color/src/define.js
+// ../node_modules/d3-color/src/define.js
 function define_default(constructor, factory, prototype) {
   constructor.prototype = factory.prototype = prototype;
   prototype.constructor = constructor;
@@ -35223,7 +35223,7 @@ function extend(parent, definition) {
   return prototype;
 }
 
-// node_modules/d3-color/src/color.js
+// ../node_modules/d3-color/src/color.js
 function Color() {
 }
 var darker = 0.7;
@@ -35560,7 +35560,7 @@ function hsl2rgb(h2, m1, m2) {
   return (h2 < 60 ? m1 + (m2 - m1) * h2 / 60 : h2 < 180 ? m2 : h2 < 240 ? m1 + (m2 - m1) * (240 - h2) / 60 : m1) * 255;
 }
 
-// node_modules/d3-interpolate/src/basis.js
+// ../node_modules/d3-interpolate/src/basis.js
 function basis(t12, v0, v1, v2, v3) {
   var t2 = t12 * t12, t3 = t2 * t12;
   return ((1 - 3 * t12 + 3 * t2 - t3) * v0 + (4 - 6 * t2 + 3 * t3) * v1 + (1 + 3 * t12 + 3 * t2 - 3 * t3) * v2 + t3 * v3) / 6;
@@ -35573,7 +35573,7 @@ function basis_default2(values) {
   };
 }
 
-// node_modules/d3-interpolate/src/basisClosed.js
+// ../node_modules/d3-interpolate/src/basisClosed.js
 function basisClosed_default2(values) {
   var n = values.length;
   return function(t) {
@@ -35582,10 +35582,10 @@ function basisClosed_default2(values) {
   };
 }
 
-// node_modules/d3-interpolate/src/constant.js
+// ../node_modules/d3-interpolate/src/constant.js
 var constant_default2 = (x2) => () => x2;
 
-// node_modules/d3-interpolate/src/color.js
+// ../node_modules/d3-interpolate/src/color.js
 function linear(a2, d) {
   return function(t) {
     return a2 + t * d;
@@ -35606,7 +35606,7 @@ function nogamma(a2, b) {
   return d ? linear(a2, d) : constant_default2(isNaN(a2) ? b : a2);
 }
 
-// node_modules/d3-interpolate/src/rgb.js
+// ../node_modules/d3-interpolate/src/rgb.js
 var rgb_default = (function rgbGamma(y2) {
   var color2 = gamma(y2);
   function rgb2(start, end) {
@@ -35646,7 +35646,7 @@ function rgbSpline(spline) {
 var rgbBasis = rgbSpline(basis_default2);
 var rgbBasisClosed = rgbSpline(basisClosed_default2);
 
-// node_modules/d3-interpolate/src/numberArray.js
+// ../node_modules/d3-interpolate/src/numberArray.js
 function numberArray_default(a2, b) {
   if (!b) b = [];
   var n = a2 ? Math.min(b.length, a2.length) : 0, c2 = b.slice(), i;
@@ -35659,7 +35659,7 @@ function isNumberArray(x2) {
   return ArrayBuffer.isView(x2) && !(x2 instanceof DataView);
 }
 
-// node_modules/d3-interpolate/src/array.js
+// ../node_modules/d3-interpolate/src/array.js
 function genericArray(a2, b) {
   var nb = b ? b.length : 0, na = a2 ? Math.min(nb, a2.length) : 0, x2 = new Array(na), c2 = new Array(nb), i;
   for (i = 0; i < na; ++i) x2[i] = value_default(a2[i], b[i]);
@@ -35670,7 +35670,7 @@ function genericArray(a2, b) {
   };
 }
 
-// node_modules/d3-interpolate/src/date.js
+// ../node_modules/d3-interpolate/src/date.js
 function date_default(a2, b) {
   var d = /* @__PURE__ */ new Date();
   return a2 = +a2, b = +b, function(t) {
@@ -35678,14 +35678,14 @@ function date_default(a2, b) {
   };
 }
 
-// node_modules/d3-interpolate/src/number.js
+// ../node_modules/d3-interpolate/src/number.js
 function number_default(a2, b) {
   return a2 = +a2, b = +b, function(t) {
     return a2 * (1 - t) + b * t;
   };
 }
 
-// node_modules/d3-interpolate/src/object.js
+// ../node_modules/d3-interpolate/src/object.js
 function object_default(a2, b) {
   var i = {}, c2 = {}, k2;
   if (a2 === null || typeof a2 !== "object") a2 = {};
@@ -35703,7 +35703,7 @@ function object_default(a2, b) {
   };
 }
 
-// node_modules/d3-interpolate/src/string.js
+// ../node_modules/d3-interpolate/src/string.js
 var reA = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g;
 var reB = new RegExp(reA.source, "g");
 function zero2(b) {
@@ -35745,20 +35745,20 @@ function string_default(a2, b) {
   });
 }
 
-// node_modules/d3-interpolate/src/value.js
+// ../node_modules/d3-interpolate/src/value.js
 function value_default(a2, b) {
   var t = typeof b, c2;
   return b == null || t === "boolean" ? constant_default2(b) : (t === "number" ? number_default : t === "string" ? (c2 = color(b)) ? (b = c2, rgb_default) : string_default : b instanceof color ? rgb_default : b instanceof Date ? date_default : isNumberArray(b) ? numberArray_default : Array.isArray(b) ? genericArray : typeof b.valueOf !== "function" && typeof b.toString !== "function" || isNaN(b) ? object_default : number_default)(a2, b);
 }
 
-// node_modules/d3-interpolate/src/round.js
+// ../node_modules/d3-interpolate/src/round.js
 function round_default(a2, b) {
   return a2 = +a2, b = +b, function(t) {
     return Math.round(a2 * (1 - t) + b * t);
   };
 }
 
-// node_modules/d3-interpolate/src/piecewise.js
+// ../node_modules/d3-interpolate/src/piecewise.js
 function piecewise(interpolate2, values) {
   if (values === void 0) values = interpolate2, interpolate2 = value_default;
   var i = 0, n = values.length - 1, v = values[0], I = new Array(n < 0 ? 0 : n);
@@ -35769,19 +35769,19 @@ function piecewise(interpolate2, values) {
   };
 }
 
-// node_modules/d3-scale/src/constant.js
+// ../node_modules/d3-scale/src/constant.js
 function constants(x2) {
   return function() {
     return x2;
   };
 }
 
-// node_modules/d3-scale/src/number.js
+// ../node_modules/d3-scale/src/number.js
 function number2(x2) {
   return +x2;
 }
 
-// node_modules/d3-scale/src/continuous.js
+// ../node_modules/d3-scale/src/continuous.js
 var unit = [0, 1];
 function identity(x2) {
   return x2;
@@ -35866,7 +35866,7 @@ function continuous() {
   return transformer()(identity, identity);
 }
 
-// node_modules/d3-format/src/formatDecimal.js
+// ../node_modules/d3-format/src/formatDecimal.js
 function formatDecimal_default(x2) {
   return Math.abs(x2 = Math.round(x2)) >= 1e21 ? x2.toLocaleString("en").replace(/,/g, "") : x2.toString(10);
 }
@@ -35879,12 +35879,12 @@ function formatDecimalParts(x2, p) {
   ];
 }
 
-// node_modules/d3-format/src/exponent.js
+// ../node_modules/d3-format/src/exponent.js
 function exponent_default(x2) {
   return x2 = formatDecimalParts(Math.abs(x2)), x2 ? x2[1] : NaN;
 }
 
-// node_modules/d3-format/src/formatGroup.js
+// ../node_modules/d3-format/src/formatGroup.js
 function formatGroup_default(grouping, thousands) {
   return function(value, width) {
     var i = value.length, t = [], j = 0, g = grouping[0], length = 0;
@@ -35898,7 +35898,7 @@ function formatGroup_default(grouping, thousands) {
   };
 }
 
-// node_modules/d3-format/src/formatNumerals.js
+// ../node_modules/d3-format/src/formatNumerals.js
 function formatNumerals_default(numerals) {
   return function(value) {
     return value.replace(/[0-9]/g, function(i) {
@@ -35907,7 +35907,7 @@ function formatNumerals_default(numerals) {
   };
 }
 
-// node_modules/d3-format/src/formatSpecifier.js
+// ../node_modules/d3-format/src/formatSpecifier.js
 var re = /^(?:(.)?([<>=^]))?([+\-( ])?([$#])?(0)?(\d+)?(,)?(\.\d+)?(~)?([a-z%])?$/i;
 function formatSpecifier(specifier) {
   if (!(match = re.exec(specifier))) throw new Error("invalid format: " + specifier);
@@ -35942,7 +35942,7 @@ FormatSpecifier.prototype.toString = function() {
   return this.fill + this.align + this.sign + this.symbol + (this.zero ? "0" : "") + (this.width === void 0 ? "" : Math.max(1, this.width | 0)) + (this.comma ? "," : "") + (this.precision === void 0 ? "" : "." + Math.max(0, this.precision | 0)) + (this.trim ? "~" : "") + this.type;
 };
 
-// node_modules/d3-format/src/formatTrim.js
+// ../node_modules/d3-format/src/formatTrim.js
 function formatTrim_default(s2) {
   out: for (var n = s2.length, i = 1, i0 = -1, i1; i < n; ++i) {
     switch (s2[i]) {
@@ -35962,7 +35962,7 @@ function formatTrim_default(s2) {
   return i0 > 0 ? s2.slice(0, i0) + s2.slice(i1 + 1) : s2;
 }
 
-// node_modules/d3-format/src/formatPrefixAuto.js
+// ../node_modules/d3-format/src/formatPrefixAuto.js
 var prefixExponent;
 function formatPrefixAuto_default(x2, p) {
   var d = formatDecimalParts(x2, p);
@@ -35971,7 +35971,7 @@ function formatPrefixAuto_default(x2, p) {
   return i === n ? coefficient : i > n ? coefficient + new Array(i - n + 1).join("0") : i > 0 ? coefficient.slice(0, i) + "." + coefficient.slice(i) : "0." + new Array(1 - i).join("0") + formatDecimalParts(x2, Math.max(0, p + i - 1))[0];
 }
 
-// node_modules/d3-format/src/formatRounded.js
+// ../node_modules/d3-format/src/formatRounded.js
 function formatRounded_default(x2, p) {
   var d = formatDecimalParts(x2, p);
   if (!d) return x2 + "";
@@ -35979,7 +35979,7 @@ function formatRounded_default(x2, p) {
   return exponent < 0 ? "0." + new Array(-exponent).join("0") + coefficient : coefficient.length > exponent + 1 ? coefficient.slice(0, exponent + 1) + "." + coefficient.slice(exponent + 1) : coefficient + new Array(exponent - coefficient.length + 2).join("0");
 }
 
-// node_modules/d3-format/src/formatTypes.js
+// ../node_modules/d3-format/src/formatTypes.js
 var formatTypes_default = {
   "%": (x2, p) => (x2 * 100).toFixed(p),
   "b": (x2) => Math.round(x2).toString(2),
@@ -35996,12 +35996,12 @@ var formatTypes_default = {
   "x": (x2) => Math.round(x2).toString(16)
 };
 
-// node_modules/d3-format/src/identity.js
+// ../node_modules/d3-format/src/identity.js
 function identity_default(x2) {
   return x2;
 }
 
-// node_modules/d3-format/src/locale.js
+// ../node_modules/d3-format/src/locale.js
 var map = Array.prototype.map;
 var prefixes = ["y", "z", "a", "f", "p", "n", "\xB5", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y"];
 function locale_default(locale3) {
@@ -36075,7 +36075,7 @@ function locale_default(locale3) {
   };
 }
 
-// node_modules/d3-format/src/defaultLocale.js
+// ../node_modules/d3-format/src/defaultLocale.js
 var locale;
 var format;
 var formatPrefix;
@@ -36091,23 +36091,23 @@ function defaultLocale(definition) {
   return locale;
 }
 
-// node_modules/d3-format/src/precisionFixed.js
+// ../node_modules/d3-format/src/precisionFixed.js
 function precisionFixed_default(step) {
   return Math.max(0, -exponent_default(Math.abs(step)));
 }
 
-// node_modules/d3-format/src/precisionPrefix.js
+// ../node_modules/d3-format/src/precisionPrefix.js
 function precisionPrefix_default(step, value) {
   return Math.max(0, Math.max(-8, Math.min(8, Math.floor(exponent_default(value) / 3))) * 3 - exponent_default(Math.abs(step)));
 }
 
-// node_modules/d3-format/src/precisionRound.js
+// ../node_modules/d3-format/src/precisionRound.js
 function precisionRound_default(step, max2) {
   step = Math.abs(step), max2 = Math.abs(max2) - step;
   return Math.max(0, exponent_default(max2) - exponent_default(step)) + 1;
 }
 
-// node_modules/d3-scale/src/tickFormat.js
+// ../node_modules/d3-scale/src/tickFormat.js
 function tickFormat(start, stop, count, specifier) {
   var step = tickStep(start, stop, count), precision;
   specifier = formatSpecifier(specifier == null ? ",f" : specifier);
@@ -36134,7 +36134,7 @@ function tickFormat(start, stop, count, specifier) {
   return format(specifier);
 }
 
-// node_modules/d3-scale/src/linear.js
+// ../node_modules/d3-scale/src/linear.js
 function linearish(scale) {
   var domain = scale.domain;
   scale.ticks = function(count) {
@@ -36189,7 +36189,7 @@ function linear2() {
   return linearish(scale);
 }
 
-// node_modules/d3-scale/src/identity.js
+// ../node_modules/d3-scale/src/identity.js
 function identity2(domain) {
   var unknown;
   function scale(x2) {
@@ -36209,7 +36209,7 @@ function identity2(domain) {
   return linearish(scale);
 }
 
-// node_modules/d3-scale/src/nice.js
+// ../node_modules/d3-scale/src/nice.js
 function nice(domain, interval) {
   domain = domain.slice();
   var i0 = 0, i1 = domain.length - 1, x0 = domain[i0], x1 = domain[i1], t;
@@ -36222,7 +36222,7 @@ function nice(domain, interval) {
   return domain;
 }
 
-// node_modules/d3-scale/src/log.js
+// ../node_modules/d3-scale/src/log.js
 function transformLog(x2) {
   return Math.log(x2);
 }
@@ -36335,7 +36335,7 @@ function log() {
   return scale;
 }
 
-// node_modules/d3-scale/src/symlog.js
+// ../node_modules/d3-scale/src/symlog.js
 function transformSymlog(c2) {
   return function(x2) {
     return Math.sign(x2) * Math.log1p(Math.abs(x2 / c2));
@@ -36361,7 +36361,7 @@ function symlog() {
   return initRange.apply(scale, arguments);
 }
 
-// node_modules/d3-scale/src/pow.js
+// ../node_modules/d3-scale/src/pow.js
 function transformPow(exponent) {
   return function(x2) {
     return x2 < 0 ? -Math.pow(-x2, exponent) : Math.pow(x2, exponent);
@@ -36395,7 +36395,7 @@ function sqrt2() {
   return pow.apply(null, arguments).exponent(0.5);
 }
 
-// node_modules/d3-scale/src/radial.js
+// ../node_modules/d3-scale/src/radial.js
 function square(x2) {
   return Math.sign(x2) * x2 * x2;
 }
@@ -36436,7 +36436,7 @@ function radial() {
   return linearish(scale);
 }
 
-// node_modules/d3-scale/src/quantile.js
+// ../node_modules/d3-scale/src/quantile.js
 function quantile2() {
   var domain = [], range4 = [], thresholds = [], unknown;
   function rescale() {
@@ -36477,7 +36477,7 @@ function quantile2() {
   return initRange.apply(scale, arguments);
 }
 
-// node_modules/d3-scale/src/quantize.js
+// ../node_modules/d3-scale/src/quantize.js
 function quantize() {
   var x0 = 0, x1 = 1, n = 1, domain = [0.5], range4 = [0, 1], unknown;
   function scale(x2) {
@@ -36511,7 +36511,7 @@ function quantize() {
   return initRange.apply(linearish(scale), arguments);
 }
 
-// node_modules/d3-scale/src/threshold.js
+// ../node_modules/d3-scale/src/threshold.js
 function threshold() {
   var domain = [0.5], range4 = [0, 1], unknown, n = 1;
   function scale(x2) {
@@ -36536,7 +36536,7 @@ function threshold() {
   return initRange.apply(scale, arguments);
 }
 
-// node_modules/d3-time/src/interval.js
+// ../node_modules/d3-time/src/interval.js
 var t0 = /* @__PURE__ */ new Date();
 var t1 = /* @__PURE__ */ new Date();
 function timeInterval(floori, offseti, count, field) {
@@ -36597,7 +36597,7 @@ function timeInterval(floori, offseti, count, field) {
   return interval;
 }
 
-// node_modules/d3-time/src/millisecond.js
+// ../node_modules/d3-time/src/millisecond.js
 var millisecond = timeInterval(() => {
 }, (date2, step) => {
   date2.setTime(+date2 + step);
@@ -36618,7 +36618,7 @@ millisecond.every = (k2) => {
 };
 var milliseconds = millisecond.range;
 
-// node_modules/d3-time/src/duration.js
+// ../node_modules/d3-time/src/duration.js
 var durationSecond = 1e3;
 var durationMinute = durationSecond * 60;
 var durationHour = durationMinute * 60;
@@ -36627,7 +36627,7 @@ var durationWeek = durationDay * 7;
 var durationMonth = durationDay * 30;
 var durationYear = durationDay * 365;
 
-// node_modules/d3-time/src/second.js
+// ../node_modules/d3-time/src/second.js
 var second = timeInterval((date2) => {
   date2.setTime(date2 - date2.getMilliseconds());
 }, (date2, step) => {
@@ -36639,7 +36639,7 @@ var second = timeInterval((date2) => {
 });
 var seconds = second.range;
 
-// node_modules/d3-time/src/minute.js
+// ../node_modules/d3-time/src/minute.js
 var timeMinute = timeInterval((date2) => {
   date2.setTime(date2 - date2.getMilliseconds() - date2.getSeconds() * durationSecond);
 }, (date2, step) => {
@@ -36661,7 +36661,7 @@ var utcMinute = timeInterval((date2) => {
 });
 var utcMinutes = utcMinute.range;
 
-// node_modules/d3-time/src/hour.js
+// ../node_modules/d3-time/src/hour.js
 var timeHour = timeInterval((date2) => {
   date2.setTime(date2 - date2.getMilliseconds() - date2.getSeconds() * durationSecond - date2.getMinutes() * durationMinute);
 }, (date2, step) => {
@@ -36683,7 +36683,7 @@ var utcHour = timeInterval((date2) => {
 });
 var utcHours = utcHour.range;
 
-// node_modules/d3-time/src/day.js
+// ../node_modules/d3-time/src/day.js
 var timeDay = timeInterval(
   (date2) => date2.setHours(0, 0, 0, 0),
   (date2, step) => date2.setDate(date2.getDate() + step),
@@ -36712,7 +36712,7 @@ var unixDay = timeInterval((date2) => {
 });
 var unixDays = unixDay.range;
 
-// node_modules/d3-time/src/week.js
+// ../node_modules/d3-time/src/week.js
 function timeWeekday(i) {
   return timeInterval((date2) => {
     date2.setDate(date2.getDate() - (date2.getDay() + 7 - i) % 7);
@@ -36762,7 +36762,7 @@ var utcThursdays = utcThursday.range;
 var utcFridays = utcFriday.range;
 var utcSaturdays = utcSaturday.range;
 
-// node_modules/d3-time/src/month.js
+// ../node_modules/d3-time/src/month.js
 var timeMonth = timeInterval((date2) => {
   date2.setDate(1);
   date2.setHours(0, 0, 0, 0);
@@ -36786,7 +36786,7 @@ var utcMonth = timeInterval((date2) => {
 });
 var utcMonths = utcMonth.range;
 
-// node_modules/d3-time/src/year.js
+// ../node_modules/d3-time/src/year.js
 var timeYear = timeInterval((date2) => {
   date2.setMonth(0, 1);
   date2.setHours(0, 0, 0, 0);
@@ -36828,7 +36828,7 @@ utcYear.every = (k2) => {
 };
 var utcYears = utcYear.range;
 
-// node_modules/d3-time/src/ticks.js
+// ../node_modules/d3-time/src/ticks.js
 function ticker(year, month, week, day, hour, minute) {
   const tickIntervals = [
     [second, 1, durationSecond],
@@ -36870,7 +36870,7 @@ function ticker(year, month, week, day, hour, minute) {
 var [utcTicks, utcTickInterval] = ticker(utcYear, utcMonth, utcSunday, unixDay, utcHour, utcMinute);
 var [timeTicks, timeTickInterval] = ticker(timeYear, timeMonth, timeSunday, timeDay, timeHour, timeMinute);
 
-// node_modules/d3-time-format/src/locale.js
+// ../node_modules/d3-time-format/src/locale.js
 function localDate(d) {
   if (0 <= d.y && d.y < 100) {
     var date2 = new Date(-1, d.m, d.d, d.H, d.M, d.S, d.L);
@@ -37411,7 +37411,7 @@ function formatUnixTimestampSeconds(d) {
   return Math.floor(+d / 1e3);
 }
 
-// node_modules/d3-time-format/src/defaultLocale.js
+// ../node_modules/d3-time-format/src/defaultLocale.js
 var locale2;
 var timeFormat;
 var timeParse;
@@ -37436,7 +37436,7 @@ function defaultLocale2(definition) {
   return locale2;
 }
 
-// node_modules/d3-scale/src/time.js
+// ../node_modules/d3-scale/src/time.js
 function date(t) {
   return new Date(t);
 }
@@ -37476,12 +37476,12 @@ function time() {
   return initRange.apply(calendar(timeTicks, timeTickInterval, timeYear, timeMonth, timeSunday, timeDay, timeHour, timeMinute, second, timeFormat).domain([new Date(2e3, 0, 1), new Date(2e3, 0, 2)]), arguments);
 }
 
-// node_modules/d3-scale/src/utcTime.js
+// ../node_modules/d3-scale/src/utcTime.js
 function utcTime() {
   return initRange.apply(calendar(utcTicks, utcTickInterval, utcYear, utcMonth, utcSunday, utcDay, utcHour, utcMinute, second, utcFormat).domain([Date.UTC(2e3, 0, 1), Date.UTC(2e3, 0, 2)]), arguments);
 }
 
-// node_modules/d3-scale/src/sequential.js
+// ../node_modules/d3-scale/src/sequential.js
 function transformer2() {
   var x0 = 0, x1 = 1, t02, t12, k10, transform, interpolator = identity, clamp = false, unknown;
   function scale(x2) {
@@ -37547,7 +37547,7 @@ function sequentialSqrt() {
   return sequentialPow.apply(null, arguments).exponent(0.5);
 }
 
-// node_modules/d3-scale/src/sequentialQuantile.js
+// ../node_modules/d3-scale/src/sequentialQuantile.js
 function sequentialQuantile() {
   var domain = [], interpolator = identity;
   function scale(x2) {
@@ -37575,7 +37575,7 @@ function sequentialQuantile() {
   return initInterpolator.apply(scale, arguments);
 }
 
-// node_modules/d3-scale/src/diverging.js
+// ../node_modules/d3-scale/src/diverging.js
 function transformer3() {
   var x0 = 0, x1 = 0.5, x2 = 1, s2 = 1, t02, t12, t2, k10, k21, interpolator = identity, transform, clamp = false, unknown;
   function scale(x3) {
@@ -37638,7 +37638,7 @@ function divergingSqrt() {
   return divergingPow.apply(null, arguments).exponent(0.5);
 }
 
-// node_modules/recharts/es6/state/selectors/combiners/combineConfiguredScale.js
+// ../node_modules/recharts/es6/state/selectors/combiners/combineConfiguredScale.js
 function getD3ScaleFromType(realScaleType) {
   var scales = d3_scale_exports;
   if (realScaleType in scales && typeof scales[realScaleType] === "function") {
@@ -37674,7 +37674,7 @@ function combineConfiguredScale(axis, realScaleType, axisDomain, axisRange) {
   return combineConfiguredScaleInternal(realScaleType, axisDomain, axisRange);
 }
 
-// node_modules/recharts/es6/state/selectors/combiners/combineRealScaleType.js
+// ../node_modules/recharts/es6/state/selectors/combiners/combineRealScaleType.js
 function getD3ScaleName(name) {
   return "scale".concat(upperFirst(name));
 }
@@ -37704,7 +37704,7 @@ var combineRealScaleType = (axisConfig, hasBar, chartType) => {
   return void 0;
 };
 
-// node_modules/recharts/es6/util/scale/createCategoricalInverse.js
+// ../node_modules/recharts/es6/util/scale/createCategoricalInverse.js
 function bisect(haystack, needle) {
   var lo = 0;
   var hi = haystack.length;
@@ -37750,7 +37750,7 @@ function createCategoricalInverse(scale, allDataPointsOnAxis) {
   };
 }
 
-// node_modules/recharts/es6/state/selectors/combiners/combineInverseScaleFunction.js
+// ../node_modules/recharts/es6/state/selectors/combiners/combineInverseScaleFunction.js
 function combineInverseScaleFunction(configuredScale) {
   if (configuredScale == null) {
     return void 0;
@@ -37761,7 +37761,7 @@ function combineInverseScaleFunction(configuredScale) {
   return createCategoricalInverse(configuredScale, void 0);
 }
 
-// node_modules/recharts/es6/state/selectors/axisSelectors.js
+// ../node_modules/recharts/es6/state/selectors/axisSelectors.js
 function ownKeys17(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -38969,7 +38969,7 @@ var selectAxisInverseTickSnapScale = createSelector([selectRenderedTicksOfAxis],
   };
 });
 
-// node_modules/recharts/es6/state/selectors/selectTooltipEventType.js
+// ../node_modules/recharts/es6/state/selectors/selectTooltipEventType.js
 var selectDefaultTooltipEventType = (state) => state.options.defaultTooltipEventType;
 var selectValidateTooltipEventTypes = (state) => state.options.validateTooltipEventTypes;
 function combineTooltipEventType(shared, defaultTooltipEventType, validateTooltipEventTypes) {
@@ -38991,7 +38991,7 @@ function useTooltipEventType(shared) {
   return useAppSelector((state) => selectTooltipEventType(state, shared));
 }
 
-// node_modules/recharts/es6/state/selectors/combiners/combineActiveLabel.js
+// ../node_modules/recharts/es6/state/selectors/combiners/combineActiveLabel.js
 var combineActiveLabel = (tooltipTicks, activeIndex) => {
   var _tooltipTicks$n;
   var n = Number(activeIndex);
@@ -39001,10 +39001,10 @@ var combineActiveLabel = (tooltipTicks, activeIndex) => {
   return n >= 0 ? tooltipTicks === null || tooltipTicks === void 0 || (_tooltipTicks$n = tooltipTicks[n]) === null || _tooltipTicks$n === void 0 ? void 0 : _tooltipTicks$n.value : void 0;
 };
 
-// node_modules/recharts/es6/state/selectors/selectTooltipSettings.js
+// ../node_modules/recharts/es6/state/selectors/selectTooltipSettings.js
 var selectTooltipSettings = (state) => state.tooltip.settings;
 
-// node_modules/recharts/es6/state/tooltipSlice.js
+// ../node_modules/recharts/es6/state/tooltipSlice.js
 var noInteraction = {
   active: false,
   index: null,
@@ -39146,7 +39146,7 @@ var {
 } = tooltipSlice.actions;
 var tooltipReducer = tooltipSlice.reducer;
 
-// node_modules/recharts/es6/state/selectors/combiners/combineTooltipInteractionState.js
+// ../node_modules/recharts/es6/state/selectors/combiners/combineTooltipInteractionState.js
 function ownKeys18(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -39238,7 +39238,7 @@ var combineTooltipInteractionState = (tooltipState, tooltipEventType, trigger, d
   });
 };
 
-// node_modules/recharts/es6/state/selectors/combiners/combineActiveTooltipIndex.js
+// ../node_modules/recharts/es6/state/selectors/combiners/combineActiveTooltipIndex.js
 function toFiniteNumber(value) {
   if (typeof value === "number") {
     return Number.isFinite(value) ? value : void 0;
@@ -39299,7 +39299,7 @@ var combineActiveTooltipIndex = (tooltipInteraction, chartData, axisDataKey, dom
   return String(clampedIndex);
 };
 
-// node_modules/recharts/es6/state/selectors/combiners/combineCoordinateForDefaultIndex.js
+// ../node_modules/recharts/es6/state/selectors/combiners/combineCoordinateForDefaultIndex.js
 var combineCoordinateForDefaultIndex = (width, height, layout, offset, tooltipTicks, defaultIndex, tooltipConfigurations) => {
   if (defaultIndex == null) {
     return void 0;
@@ -39329,7 +39329,7 @@ var combineCoordinateForDefaultIndex = (width, height, layout, offset, tooltipTi
   }
 };
 
-// node_modules/recharts/es6/state/selectors/combiners/combineTooltipPayloadConfigurations.js
+// ../node_modules/recharts/es6/state/selectors/combiners/combineTooltipPayloadConfigurations.js
 var combineTooltipPayloadConfigurations = (tooltipState, tooltipEventType, trigger, defaultIndex) => {
   if (tooltipEventType === "axis") {
     return tooltipState.tooltipItemPayloads;
@@ -39359,13 +39359,13 @@ var combineTooltipPayloadConfigurations = (tooltipState, tooltipEventType, trigg
   });
 };
 
-// node_modules/recharts/es6/state/selectors/selectTooltipPayloadSearcher.js
+// ../node_modules/recharts/es6/state/selectors/selectTooltipPayloadSearcher.js
 var selectTooltipPayloadSearcher = (state) => state.options.tooltipPayloadSearcher;
 
-// node_modules/recharts/es6/state/selectors/selectTooltipState.js
+// ../node_modules/recharts/es6/state/selectors/selectTooltipState.js
 var selectTooltipState = (state) => state.tooltip;
 
-// node_modules/recharts/es6/state/selectors/combiners/combineTooltipPayload.js
+// ../node_modules/recharts/es6/state/selectors/combiners/combineTooltipPayload.js
 function ownKeys19(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -39542,7 +39542,7 @@ var combineTooltipPayload = (tooltipPayloadConfigurations, activeIndex, chartDat
   }, init);
 };
 
-// node_modules/recharts/es6/state/selectors/tooltipSelectors.js
+// ../node_modules/recharts/es6/state/selectors/tooltipSelectors.js
 var selectTooltipAxisRealScaleType = createSelector([selectTooltipAxis, selectHasBar, selectChartName], combineRealScaleType);
 var selectAllUnfilteredGraphicalItems = createSelector([(state) => state.graphicalItems.cartesianItems, (state) => state.graphicalItems.polarItems], (cartesianItems, polarItems) => [...cartesianItems, ...polarItems]);
 var selectTooltipAxisPredicate = createSelector([selectTooltipAxisType, selectTooltipAxisId], itemAxisPredicate);
@@ -39677,7 +39677,7 @@ var selectActiveTooltipDataPoints = createSelector([selectActiveTooltipPayload],
   return Array.from(new Set(dataPoints));
 });
 
-// node_modules/recharts/es6/context/useTooltipAxis.js
+// ../node_modules/recharts/es6/context/useTooltipAxis.js
 function ownKeys20(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -39729,10 +39729,10 @@ var useTooltipAxisBandSize = () => {
   }), tooltipTicks);
 };
 
-// node_modules/recharts/es6/state/selectors/selectors.js
+// ../node_modules/recharts/es6/state/selectors/selectors.js
 var import_sortBy4 = __toESM(require_sortBy2());
 
-// node_modules/recharts/es6/util/getActiveCoordinate.js
+// ../node_modules/recharts/es6/util/getActiveCoordinate.js
 function ownKeys21(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -39900,7 +39900,7 @@ var calculateActiveTickIndex = (coordinate, ticks2, unsortedTicks, axisType, ran
   return -1;
 };
 
-// node_modules/recharts/es6/state/selectors/selectors.js
+// ../node_modules/recharts/es6/state/selectors/selectors.js
 var useChartName = () => {
   return useAppSelector(selectChartName);
 };
@@ -39981,11 +39981,11 @@ var combineActiveProps = (chartEvent, layout, polarViewBox, tooltipAxisType, too
   return combineActivePolarProps(chartEvent, layout, polarViewBox, tooltipAxisType, tooltipAxisRange, tooltipTicks, orderedTooltipTicks);
 };
 
-// node_modules/recharts/es6/zIndex/ZIndexLayer.js
+// ../node_modules/recharts/es6/zIndex/ZIndexLayer.js
 var import_react18 = __toESM(require_react());
 var import_react_dom2 = __toESM(require_react_dom());
 
-// node_modules/recharts/es6/zIndex/zIndexSelectors.js
+// ../node_modules/recharts/es6/zIndex/zIndexSelectors.js
 var selectZIndexPortalElement = createSelector((state) => state.zIndex.zIndexMap, (_, zIndex) => zIndex, (_, _zIndex, isPanorama) => isPanorama, (zIndexMap, zIndex, isPanorama) => {
   if (zIndex == null) {
     return void 0;
@@ -40009,7 +40009,7 @@ var selectAllRegisteredZIndexes = createSelector((state) => state.zIndex.zIndexM
   }
 });
 
-// node_modules/recharts/es6/state/zIndexSlice.js
+// ../node_modules/recharts/es6/state/zIndexSlice.js
 function ownKeys22(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -40145,7 +40145,7 @@ var {
 } = zIndexSlice.actions;
 var zIndexReducer = zIndexSlice.reducer;
 
-// node_modules/recharts/es6/zIndex/ZIndexLayer.js
+// ../node_modules/recharts/es6/zIndex/ZIndexLayer.js
 function ZIndexLayer(_ref2) {
   var {
     zIndex,
@@ -40210,7 +40210,7 @@ function ZIndexLayer(_ref2) {
   return /* @__PURE__ */ (0, import_react_dom2.createPortal)(children, targetElement);
 }
 
-// node_modules/recharts/es6/component/Cursor.js
+// ../node_modules/recharts/es6/component/Cursor.js
 function _extends12() {
   return _extends12 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
@@ -40355,24 +40355,24 @@ function Cursor(props) {
   }));
 }
 
-// node_modules/recharts/es6/context/tooltipPortalContext.js
+// ../node_modules/recharts/es6/context/tooltipPortalContext.js
 var import_react20 = __toESM(require_react());
 var TooltipPortalContext = /* @__PURE__ */ (0, import_react20.createContext)(null);
 var useTooltipPortal = () => (0, import_react20.useContext)(TooltipPortalContext);
 
-// node_modules/recharts/es6/synchronisation/useChartSynchronisation.js
+// ../node_modules/recharts/es6/synchronisation/useChartSynchronisation.js
 var import_react21 = __toESM(require_react());
 
-// node_modules/eventemitter3/index.mjs
+// ../node_modules/eventemitter3/index.mjs
 var import_index = __toESM(require_eventemitter3(), 1);
 var eventemitter3_default = import_index.default;
 
-// node_modules/recharts/es6/util/Events.js
+// ../node_modules/recharts/es6/util/Events.js
 var eventCenter = new eventemitter3_default();
 var TOOLTIP_SYNC_EVENT = "recharts.syncEvent.tooltip";
 var BRUSH_SYNC_EVENT = "recharts.syncEvent.brush";
 
-// node_modules/recharts/es6/state/optionsSlice.js
+// ../node_modules/recharts/es6/state/optionsSlice.js
 var arrayTooltipSearcher = (data, strIndex) => {
   if (!strIndex) return void 0;
   if (!Array.isArray(data)) return void 0;
@@ -40404,12 +40404,12 @@ var {
   createEventEmitter
 } = optionsSlice.actions;
 
-// node_modules/recharts/es6/synchronisation/syncSelectors.js
+// ../node_modules/recharts/es6/synchronisation/syncSelectors.js
 function selectSynchronisedTooltipState(state) {
   return state.tooltip.syncInteraction;
 }
 
-// node_modules/recharts/es6/state/chartDataSlice.js
+// ../node_modules/recharts/es6/state/chartDataSlice.js
 var initialChartDataState = {
   chartData: void 0,
   computedData: void 0,
@@ -40455,7 +40455,7 @@ var {
 } = chartDataSlice.actions;
 var chartDataReducer = chartDataSlice.reducer;
 
-// node_modules/recharts/es6/synchronisation/useChartSynchronisation.js
+// ../node_modules/recharts/es6/synchronisation/useChartSynchronisation.js
 var _excluded7 = ["x", "y"];
 function ownKeys24(e, r2) {
   var t = Object.keys(e);
@@ -40722,7 +40722,7 @@ function useBrushChartSynchronisation() {
   }, [brushEndIndex, brushStartIndex, eventEmitterSymbol, syncId]);
 }
 
-// node_modules/recharts/es6/component/Tooltip.js
+// ../node_modules/recharts/es6/component/Tooltip.js
 function ownKeys25(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -40898,11 +40898,11 @@ function Tooltip(outsideProps) {
   }));
 }
 
-// node_modules/recharts/es6/component/Text.js
+// ../node_modules/recharts/es6/component/Text.js
 var React17 = __toESM(require_react());
 var import_react23 = __toESM(require_react());
 
-// node_modules/recharts/es6/util/LRUCache.js
+// ../node_modules/recharts/es6/util/LRUCache.js
 function _defineProperty26(e, r2, t) {
   return (r2 = _toPropertyKey26(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
 }
@@ -40952,7 +40952,7 @@ var LRUCache = class {
   }
 };
 
-// node_modules/recharts/es6/util/DOMUtils.js
+// ../node_modules/recharts/es6/util/DOMUtils.js
 function ownKeys26(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -41060,7 +41060,7 @@ var getStringSize = function getStringSize2(text) {
   return result;
 };
 
-// node_modules/recharts/es6/util/ReduceCSSCalc.js
+// ../node_modules/recharts/es6/util/ReduceCSSCalc.js
 var _DecimalCSS;
 function _defineProperty28(e, r2, t) {
   return (r2 = _toPropertyKey28(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
@@ -41219,7 +41219,7 @@ function reduceCSSCalc(expression) {
   return result;
 }
 
-// node_modules/recharts/es6/component/Text.js
+// ../node_modules/recharts/es6/component/Text.js
 var _excluded8 = ["x", "y", "lineHeight", "capHeight", "fill", "scaleToFit", "textAnchor", "verticalAnchor"];
 var _excluded23 = ["dx", "dy", "angle", "className", "breakAll"];
 function _extends13() {
@@ -41499,11 +41499,11 @@ var Text = /* @__PURE__ */ (0, import_react23.forwardRef)((outsideProps, ref) =>
 });
 Text.displayName = "Text";
 
-// node_modules/recharts/es6/component/Label.js
+// ../node_modules/recharts/es6/component/Label.js
 var React18 = __toESM(require_react());
 var import_react24 = __toESM(require_react());
 
-// node_modules/recharts/es6/cartesian/getCartesianPosition.js
+// ../node_modules/recharts/es6/cartesian/getCartesianPosition.js
 function ownKeys27(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -41707,7 +41707,7 @@ var getCartesianPosition = (options) => {
   }, sizeAttrs);
 };
 
-// node_modules/recharts/es6/component/Label.js
+// ../node_modules/recharts/es6/component/Label.js
 var _excluded9 = ["labelRef"];
 var _excluded24 = ["content"];
 function _objectWithoutProperties9(e, t) {
@@ -42105,7 +42105,7 @@ function CartesianLabelFromLabelProp(_ref3) {
   return parseLabel(label, viewBox, labelRef) || null;
 }
 
-// node_modules/recharts/es6/component/LabelList.js
+// ../node_modules/recharts/es6/component/LabelList.js
 var React19 = __toESM(require_react());
 var import_react25 = __toESM(require_react());
 var _excluded10 = ["valueAccessor"];
@@ -42229,7 +42229,7 @@ function LabelListFromLabelProp(_ref2) {
   return null;
 }
 
-// node_modules/recharts/es6/shape/Dot.js
+// ../node_modules/recharts/es6/shape/Dot.js
 var React20 = __toESM(require_react());
 function _extends16() {
   return _extends16 = Object.assign ? Object.assign.bind() : function(n) {
@@ -42259,7 +42259,7 @@ var Dot = (props) => {
   return null;
 };
 
-// node_modules/recharts/es6/state/polarAxisSlice.js
+// ../node_modules/recharts/es6/state/polarAxisSlice.js
 var initialState6 = {
   radiusAxis: {},
   angleAxis: {}
@@ -42290,7 +42290,7 @@ var {
 } = polarAxisSlice.actions;
 var polarAxisReducer = polarAxisSlice.reducer;
 
-// node_modules/recharts/es6/util/getClassNameFromUnknown.js
+// ../node_modules/recharts/es6/util/getClassNameFromUnknown.js
 function getClassNameFromUnknown(u) {
   if (u && typeof u === "object" && "className" in u && typeof u.className === "string") {
     return u.className;
@@ -42298,7 +42298,7 @@ function getClassNameFromUnknown(u) {
   return "";
 }
 
-// node_modules/recharts/es6/util/ReactUtils.js
+// ../node_modules/recharts/es6/util/ReactUtils.js
 var import_react26 = __toESM(require_react());
 var isClipDot = (dot) => {
   if (dot && typeof dot === "object" && "clipDot" in dot) {
@@ -42307,12 +42307,12 @@ var isClipDot = (dot) => {
   return true;
 };
 
-// node_modules/recharts/es6/util/ActiveShapeUtils.js
+// ../node_modules/recharts/es6/util/ActiveShapeUtils.js
 var React22 = __toESM(require_react());
 var import_react28 = __toESM(require_react());
 var import_isPlainObject = __toESM(require_isPlainObject2());
 
-// node_modules/recharts/es6/shape/Trapezoid.js
+// ../node_modules/recharts/es6/shape/Trapezoid.js
 var React21 = __toESM(require_react());
 var import_react27 = __toESM(require_react());
 var _templateObject11;
@@ -42480,7 +42480,7 @@ var Trapezoid = (outsideProps) => {
   });
 };
 
-// node_modules/recharts/es6/util/ActiveShapeUtils.js
+// ../node_modules/recharts/es6/util/ActiveShapeUtils.js
 var _excluded11 = ["option", "shapeType", "activeClassName", "inActiveClassName"];
 function _objectWithoutProperties11(e, t) {
   if (null == e) return {};
@@ -42608,7 +42608,7 @@ function Shape(_ref2) {
   }, shape);
 }
 
-// node_modules/recharts/es6/state/SetTooltipEntrySettings.js
+// ../node_modules/recharts/es6/state/SetTooltipEntrySettings.js
 var import_react29 = __toESM(require_react());
 function SetTooltipEntrySettings(_ref2) {
   var {
@@ -42642,7 +42642,7 @@ function SetTooltipEntrySettings(_ref2) {
   return null;
 }
 
-// node_modules/recharts/es6/state/SetLegendPayload.js
+// ../node_modules/recharts/es6/state/SetLegendPayload.js
 var import_react30 = __toESM(require_react());
 function SetLegendPayload(_ref2) {
   var {
@@ -42676,11 +42676,11 @@ function SetLegendPayload(_ref2) {
   return null;
 }
 
-// node_modules/recharts/es6/context/RegisterGraphicalItemId.js
+// ../node_modules/recharts/es6/context/RegisterGraphicalItemId.js
 var React24 = __toESM(require_react());
 var import_react31 = __toESM(require_react());
 
-// node_modules/recharts/es6/util/useId.js
+// ../node_modules/recharts/es6/util/useId.js
 var React23 = __toESM(require_react());
 var _ref;
 var useIdFallback = () => {
@@ -42689,7 +42689,7 @@ var useIdFallback = () => {
 };
 var useId = (_ref = React23["useId".toString()]) !== null && _ref !== void 0 ? _ref : useIdFallback;
 
-// node_modules/recharts/es6/util/useUniqueId.js
+// ../node_modules/recharts/es6/util/useUniqueId.js
 function useUniqueId(prefix, customId) {
   var generatedId = useId();
   if (customId) {
@@ -42698,7 +42698,7 @@ function useUniqueId(prefix, customId) {
   return prefix ? "".concat(prefix, "-").concat(generatedId) : generatedId;
 }
 
-// node_modules/recharts/es6/context/RegisterGraphicalItemId.js
+// ../node_modules/recharts/es6/context/RegisterGraphicalItemId.js
 var GraphicalItemIdContext = /* @__PURE__ */ (0, import_react31.createContext)(void 0);
 var RegisterGraphicalItemId = (_ref2) => {
   var {
@@ -42712,10 +42712,10 @@ var RegisterGraphicalItemId = (_ref2) => {
   }, children(resolvedId));
 };
 
-// node_modules/recharts/es6/state/SetGraphicalItem.js
+// ../node_modules/recharts/es6/state/SetGraphicalItem.js
 var import_react32 = __toESM(require_react());
 
-// node_modules/recharts/es6/state/graphicalItemsSlice.js
+// ../node_modules/recharts/es6/state/graphicalItemsSlice.js
 var initialState7 = {
   cartesianItems: [],
   polarItems: []
@@ -42792,7 +42792,7 @@ var {
 } = graphicalItemsSlice.actions;
 var graphicalItemsReducer = graphicalItemsSlice.reducer;
 
-// node_modules/recharts/es6/state/SetGraphicalItem.js
+// ../node_modules/recharts/es6/state/SetGraphicalItem.js
 var SetCartesianGraphicalItemImpl = (props) => {
   var dispatch = useAppDispatch();
   var prevPropsRef = (0, import_react32.useRef)(null);
@@ -42819,7 +42819,7 @@ var SetCartesianGraphicalItemImpl = (props) => {
 };
 var SetCartesianGraphicalItem = /* @__PURE__ */ (0, import_react32.memo)(SetCartesianGraphicalItemImpl);
 
-// node_modules/recharts/es6/component/Dots.js
+// ../node_modules/recharts/es6/component/Dots.js
 var React25 = __toESM(require_react());
 var import_react33 = __toESM(require_react());
 var _excluded12 = ["points"];
@@ -42965,11 +42965,11 @@ function Dots(_ref3) {
   }, layerProps), dots));
 }
 
-// node_modules/recharts/es6/component/ActivePoints.js
+// ../node_modules/recharts/es6/component/ActivePoints.js
 var React26 = __toESM(require_react());
 var import_react34 = __toESM(require_react());
 
-// node_modules/recharts/es6/state/cartesianAxisSlice.js
+// ../node_modules/recharts/es6/state/cartesianAxisSlice.js
 function ownKeys32(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -43133,7 +43133,7 @@ var {
 } = cartesianAxisSlice.actions;
 var cartesianAxisReducer = cartesianAxisSlice.reducer;
 
-// node_modules/recharts/es6/state/selectors/selectChartOffset.js
+// ../node_modules/recharts/es6/state/selectors/selectChartOffset.js
 var selectChartOffset = createSelector([selectChartOffsetInternal], (offsetInternal) => {
   return {
     top: offsetInternal.top,
@@ -43143,7 +43143,7 @@ var selectChartOffset = createSelector([selectChartOffsetInternal], (offsetInter
   };
 });
 
-// node_modules/recharts/es6/state/selectors/selectPlotArea.js
+// ../node_modules/recharts/es6/state/selectors/selectPlotArea.js
 var selectPlotArea = createSelector([selectChartOffset, selectChartWidth, selectChartHeight], (offset, chartWidth, chartHeight) => {
   if (!offset || chartWidth == null || chartHeight == null) {
     return void 0;
@@ -43156,7 +43156,7 @@ var selectPlotArea = createSelector([selectChartOffset, selectChartWidth, select
   };
 });
 
-// node_modules/recharts/es6/hooks.js
+// ../node_modules/recharts/es6/hooks.js
 var usePlotArea = () => {
   return useAppSelector(selectPlotArea);
 };
@@ -43164,7 +43164,7 @@ var useActiveTooltipDataPoints = () => {
   return useAppSelector(selectActiveTooltipDataPoints);
 };
 
-// node_modules/recharts/es6/component/ActivePoints.js
+// ../node_modules/recharts/es6/component/ActivePoints.js
 function ownKeys33(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -43271,12 +43271,12 @@ function ActivePoints(_ref2) {
   }));
 }
 
-// node_modules/recharts/es6/cartesian/Brush.js
+// ../node_modules/recharts/es6/cartesian/Brush.js
 var React27 = __toESM(require_react());
 var import_react37 = __toESM(require_react());
 var import_range3 = __toESM(require_range2());
 
-// node_modules/recharts/es6/util/CssPrefixUtils.js
+// ../node_modules/recharts/es6/util/CssPrefixUtils.js
 function ownKeys34(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -43328,7 +43328,7 @@ var generatePrefixStyle = (name, value) => {
   return result;
 };
 
-// node_modules/recharts/es6/context/chartDataContext.js
+// ../node_modules/recharts/es6/context/chartDataContext.js
 var import_react35 = __toESM(require_react());
 var ChartDataContextProvider = (props) => {
   var {
@@ -43364,12 +43364,12 @@ var useDataIndex = () => {
   return useAppSelector(selectDataIndex);
 };
 
-// node_modules/recharts/es6/context/brushUpdateContext.js
+// ../node_modules/recharts/es6/context/brushUpdateContext.js
 var import_react36 = __toESM(require_react());
 var BrushUpdateDispatchContext = /* @__PURE__ */ (0, import_react36.createContext)(() => {
 });
 
-// node_modules/recharts/es6/state/brushSlice.js
+// ../node_modules/recharts/es6/state/brushSlice.js
 var initialState9 = {
   x: 0,
   y: 0,
@@ -43399,7 +43399,7 @@ var {
 } = brushSlice.actions;
 var brushReducer = brushSlice.reducer;
 
-// node_modules/recharts/es6/cartesian/Brush.js
+// ../node_modules/recharts/es6/cartesian/Brush.js
 function _extends19() {
   return _extends19 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
@@ -44292,11 +44292,11 @@ function Brush(outsideProps) {
 }
 Brush.displayName = "Brush";
 
-// node_modules/recharts/es6/cartesian/ReferenceLine.js
+// ../node_modules/recharts/es6/cartesian/ReferenceLine.js
 var React29 = __toESM(require_react());
 var import_react39 = __toESM(require_react());
 
-// node_modules/recharts/es6/util/CartesianUtils.js
+// ../node_modules/recharts/es6/util/CartesianUtils.js
 var rectWithPoints = (_ref2, _ref22) => {
   var {
     x: x1,
@@ -44344,7 +44344,7 @@ var getAngledRectangleWidth = function getAngledRectangleWidth2(_ref4) {
   return Math.abs(angledWidth);
 };
 
-// node_modules/recharts/es6/state/referenceElementsSlice.js
+// ../node_modules/recharts/es6/state/referenceElementsSlice.js
 var initialState10 = {
   dots: [],
   areas: [],
@@ -44393,7 +44393,7 @@ var {
 } = referenceElementsSlice.actions;
 var referenceElementsReducer = referenceElementsSlice.reducer;
 
-// node_modules/recharts/es6/container/ClipPathProvider.js
+// ../node_modules/recharts/es6/container/ClipPathProvider.js
 var React28 = __toESM(require_react());
 var import_react38 = __toESM(require_react());
 var ClipPathIdContext = /* @__PURE__ */ (0, import_react38.createContext)(void 0);
@@ -44427,7 +44427,7 @@ var useClipPathId = () => {
   return (0, import_react38.useContext)(ClipPathIdContext);
 };
 
-// node_modules/recharts/es6/util/scale/CartesianScaleHelper.js
+// ../node_modules/recharts/es6/util/scale/CartesianScaleHelper.js
 var CartesianScaleHelperImpl = class {
   constructor(_ref2) {
     var {
@@ -44492,7 +44492,7 @@ var CartesianScaleHelperImpl = class {
   }
 };
 
-// node_modules/recharts/es6/cartesian/ReferenceLine.js
+// ../node_modules/recharts/es6/cartesian/ReferenceLine.js
 function ownKeys36(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -44734,12 +44734,12 @@ function ReferenceLine(outsideProps) {
 }
 ReferenceLine.displayName = "ReferenceLine";
 
-// node_modules/recharts/es6/cartesian/CartesianAxis.js
+// ../node_modules/recharts/es6/cartesian/CartesianAxis.js
 var React30 = __toESM(require_react());
 var import_react40 = __toESM(require_react());
 var import_get3 = __toESM(require_get2());
 
-// node_modules/recharts/es6/util/getEveryNth.js
+// ../node_modules/recharts/es6/util/getEveryNth.js
 function getEveryNth(array, n) {
   if (n < 1) {
     return [];
@@ -44757,7 +44757,7 @@ function getEveryNth(array, n) {
   return result;
 }
 
-// node_modules/recharts/es6/util/TickUtils.js
+// ../node_modules/recharts/es6/util/TickUtils.js
 function getAngledTickWidth(contentSize, unitSize, angle) {
   var size = {
     width: contentSize.width + unitSize.width,
@@ -44795,7 +44795,7 @@ function getNumberIntervalTicks(ticks2, interval) {
   return getEveryNth(ticks2, interval + 1);
 }
 
-// node_modules/recharts/es6/cartesian/getEquidistantTicks.js
+// ../node_modules/recharts/es6/cartesian/getEquidistantTicks.js
 function getEquidistantTicks(sign2, boundaries, getTickSize, ticks2, minTickGap) {
   var result = (ticks2 || []).slice();
   var {
@@ -44894,7 +44894,7 @@ function getEquidistantPreserveEndTicks(sign2, boundaries, getTickSize, ticks2, 
   return [];
 }
 
-// node_modules/recharts/es6/cartesian/getTicks.js
+// ../node_modules/recharts/es6/cartesian/getTicks.js
 function ownKeys37(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -45101,7 +45101,7 @@ function getTicks(props, fontSize, letterSpacing) {
   return candidates.filter((entry) => entry.isShow);
 }
 
-// node_modules/recharts/es6/util/YAxisUtils.js
+// ../node_modules/recharts/es6/util/YAxisUtils.js
 var getCalculatedYAxisWidth = (_ref2) => {
   var {
     ticks: ticks2,
@@ -45129,7 +45129,7 @@ var getCalculatedYAxisWidth = (_ref2) => {
   return 0;
 };
 
-// node_modules/recharts/es6/state/renderedTicksSlice.js
+// ../node_modules/recharts/es6/state/renderedTicksSlice.js
 var initialState11 = {
   xAxis: {},
   yAxis: {}
@@ -45161,7 +45161,7 @@ var {
 } = renderedTicksSlice.actions;
 var renderedTicksReducer = renderedTicksSlice.reducer;
 
-// node_modules/recharts/es6/cartesian/CartesianAxis.js
+// ../node_modules/recharts/es6/cartesian/CartesianAxis.js
 var _excluded13 = ["axisLine", "width", "height", "className", "hide", "ticks", "axisType", "axisId"];
 function _objectWithoutProperties13(e, t) {
   if (null == e) return {};
@@ -45625,7 +45625,7 @@ var CartesianAxis = /* @__PURE__ */ React30.forwardRef((outsideProps, ref) => {
 });
 CartesianAxis.displayName = "CartesianAxis";
 
-// node_modules/recharts/es6/cartesian/CartesianGrid.js
+// ../node_modules/recharts/es6/cartesian/CartesianGrid.js
 var React31 = __toESM(require_react());
 var _excluded14 = ["x1", "y1", "x2", "y2", "key"];
 var _excluded26 = ["offset"];
@@ -46050,15 +46050,15 @@ function CartesianGrid(props) {
 }
 CartesianGrid.displayName = "CartesianGrid";
 
-// node_modules/recharts/es6/cartesian/Line.js
+// ../node_modules/recharts/es6/cartesian/Line.js
 var React34 = __toESM(require_react());
 var import_react42 = __toESM(require_react());
 
-// node_modules/recharts/es6/context/ErrorBarContext.js
+// ../node_modules/recharts/es6/context/ErrorBarContext.js
 var React32 = __toESM(require_react());
 var import_react41 = __toESM(require_react());
 
-// node_modules/recharts/es6/state/errorBarSlice.js
+// ../node_modules/recharts/es6/state/errorBarSlice.js
 var initialState12 = {};
 var errorBarSlice = createSlice({
   name: "errorBars",
@@ -46102,7 +46102,7 @@ var {
 } = errorBarSlice.actions;
 var errorBarReducer = errorBarSlice.reducer;
 
-// node_modules/recharts/es6/context/ErrorBarContext.js
+// ../node_modules/recharts/es6/context/ErrorBarContext.js
 var _excluded15 = ["children"];
 function _objectWithoutProperties15(e, t) {
   if (null == e) return {};
@@ -46143,7 +46143,7 @@ function SetErrorBarContext(props) {
   }, children);
 }
 
-// node_modules/recharts/es6/cartesian/GraphicalItemClipPath.js
+// ../node_modules/recharts/es6/cartesian/GraphicalItemClipPath.js
 var React33 = __toESM(require_react());
 function useNeedsClip(xAxisId, yAxisId) {
   var _xAxis$allowDataOverf, _yAxis$allowDataOverf;
@@ -46189,7 +46189,7 @@ function GraphicalItemClipPath(_ref2) {
   }));
 }
 
-// node_modules/recharts/es6/state/selectors/lineSelectors.js
+// ../node_modules/recharts/es6/state/selectors/lineSelectors.js
 var selectXAxisWithScale = (state, xAxisId, _yAxisId, isPanorama) => selectAxisWithScale(state, "xAxis", xAxisId, isPanorama);
 var selectXAxisTicks = (state, xAxisId, _yAxisId, isPanorama) => selectTicksOfGraphicalItem(state, "xAxis", xAxisId, isPanorama);
 var selectYAxisWithScale = (state, _xAxisId, yAxisId, isPanorama) => selectAxisWithScale(state, "yAxis", yAxisId, isPanorama);
@@ -46239,7 +46239,7 @@ var selectLinePoints = createSelector([selectChartLayout, selectXAxisWithScale, 
   });
 });
 
-// node_modules/recharts/es6/util/getRadiusAndStrokeWidthFromDot.js
+// ../node_modules/recharts/es6/util/getRadiusAndStrokeWidthFromDot.js
 function getRadiusAndStrokeWidthFromDot(dot) {
   var props = svgPropertiesNoEventsFromUnknown(dot);
   var defaultR = 3;
@@ -46268,7 +46268,7 @@ function getRadiusAndStrokeWidthFromDot(dot) {
   };
 }
 
-// node_modules/recharts/es6/cartesian/Line.js
+// ../node_modules/recharts/es6/cartesian/Line.js
 var _excluded16 = ["id"];
 var _excluded27 = ["type", "layout", "connectNulls", "needClip", "shape"];
 var _excluded33 = ["activeDot", "animateNewValues", "animationBegin", "animationDuration", "animationEasing", "connectNulls", "dot", "hide", "isAnimationActive", "label", "legendType", "xAxisId", "yAxisId", "id"];
@@ -46887,11 +46887,11 @@ function LineFn(outsideProps) {
 var Line = /* @__PURE__ */ React34.memo(LineFn, propsAreEqual);
 Line.displayName = "Line";
 
-// node_modules/recharts/es6/cartesian/XAxis.js
+// ../node_modules/recharts/es6/cartesian/XAxis.js
 var React35 = __toESM(require_react());
 var import_react43 = __toESM(require_react());
 
-// node_modules/recharts/es6/util/axisPropsAreEqual.js
+// ../node_modules/recharts/es6/util/axisPropsAreEqual.js
 var _excluded17 = ["domain", "range"];
 var _excluded28 = ["domain", "range"];
 function _objectWithoutProperties17(e, t) {
@@ -46942,7 +46942,7 @@ function axisPropsAreEqual(prevProps, nextProps) {
   return propsAreEqual(prevRest, nextRest);
 }
 
-// node_modules/recharts/es6/cartesian/XAxis.js
+// ../node_modules/recharts/es6/cartesian/XAxis.js
 var _excluded18 = ["type"];
 var _excluded29 = ["dangerouslySetInnerHTML", "ticks", "scale"];
 var _excluded34 = ["id", "scale"];
@@ -47145,7 +47145,7 @@ var XAxisSettingsDispatcher = (outsideProps) => {
 var XAxis = /* @__PURE__ */ React35.memo(XAxisSettingsDispatcher, axisPropsAreEqual);
 XAxis.displayName = "XAxis";
 
-// node_modules/recharts/es6/cartesian/YAxis.js
+// ../node_modules/recharts/es6/cartesian/YAxis.js
 var React36 = __toESM(require_react());
 var import_react44 = __toESM(require_react());
 var _excluded19 = ["type"];
@@ -47389,23 +47389,23 @@ var YAxisSettingsDispatcher = (outsideProps) => {
 var YAxis = /* @__PURE__ */ React36.memo(YAxisSettingsDispatcher, axisPropsAreEqual);
 YAxis.displayName = "YAxis";
 
-// node_modules/recharts/es6/chart/LineChart.js
+// ../node_modules/recharts/es6/chart/LineChart.js
 var React43 = __toESM(require_react());
 var import_react55 = __toESM(require_react());
 
-// node_modules/recharts/es6/chart/CartesianChart.js
+// ../node_modules/recharts/es6/chart/CartesianChart.js
 var React42 = __toESM(require_react());
 var import_react54 = __toESM(require_react());
 
-// node_modules/recharts/es6/state/RechartsStoreProvider.js
+// ../node_modules/recharts/es6/state/RechartsStoreProvider.js
 var React37 = __toESM(require_react());
 var import_react45 = __toESM(require_react());
 
-// node_modules/recharts/es6/state/selectors/selectActivePropsFromChartPointer.js
+// ../node_modules/recharts/es6/state/selectors/selectActivePropsFromChartPointer.js
 var pickChartPointer = (_state, chartPointer) => chartPointer;
 var selectActivePropsFromChartPointer = createSelector([pickChartPointer, selectChartLayout, selectPolarViewBox, selectTooltipAxisType, selectTooltipAxisRangeWithReverse, selectTooltipAxisTicks, selectOrderedTooltipTicks, selectChartOffsetInternal], combineActiveProps);
 
-// node_modules/recharts/es6/util/getRelativeCoordinate.js
+// ../node_modules/recharts/es6/util/getRelativeCoordinate.js
 function isSvgPointer(pointer) {
   return "getBBox" in pointer.currentTarget && typeof pointer.currentTarget.getBBox === "function";
 }
@@ -47441,7 +47441,7 @@ function getRelativeCoordinate(event) {
   return getCoordinates(event.clientX, event.clientY);
 }
 
-// node_modules/recharts/es6/state/mouseEventsMiddleware.js
+// ../node_modules/recharts/es6/state/mouseEventsMiddleware.js
 var mouseClickAction = createAction("mouseClick");
 var mouseClickMiddleware = createListenerMiddleware();
 mouseClickMiddleware.startListening({
@@ -47519,7 +47519,7 @@ mouseMoveMiddleware.startListening({
   }
 });
 
-// node_modules/recharts/es6/state/reduxDevtoolsJsonStringifyReplacer.js
+// ../node_modules/recharts/es6/state/reduxDevtoolsJsonStringifyReplacer.js
 function reduxDevtoolsJsonStringifyReplacer(key, value) {
   if (value instanceof HTMLElement) {
     return "HTMLElement <".concat(value.tagName, ' class="').concat(value.className, '">');
@@ -47533,7 +47533,7 @@ function reduxDevtoolsJsonStringifyReplacer(key, value) {
   return value;
 }
 
-// node_modules/recharts/es6/state/rootPropsSlice.js
+// ../node_modules/recharts/es6/state/rootPropsSlice.js
 var initialState13 = {
   accessibilityLayer: true,
   barCategoryGap: "10%",
@@ -47572,7 +47572,7 @@ var {
   updateOptions
 } = rootPropsSlice.actions;
 
-// node_modules/recharts/es6/state/polarOptionsSlice.js
+// ../node_modules/recharts/es6/state/polarOptionsSlice.js
 var initialState14 = null;
 var reducers = {
   updatePolarOptions: (state, action) => {
@@ -47598,7 +47598,7 @@ var {
 } = polarOptionsSlice.actions;
 var polarOptionsReducer = polarOptionsSlice.reducer;
 
-// node_modules/recharts/es6/state/keyboardEventsMiddleware.js
+// ../node_modules/recharts/es6/state/keyboardEventsMiddleware.js
 var keyDownAction = createAction("keyDown");
 var focusAction = createAction("focus");
 var blurAction = createAction("blur");
@@ -47777,7 +47777,7 @@ keyboardEventsMiddleware.startListening({
   }
 });
 
-// node_modules/recharts/es6/util/createEventProxy.js
+// ../node_modules/recharts/es6/util/createEventProxy.js
 function createEventProxy(reactEvent) {
   reactEvent.persist();
   var {
@@ -47797,7 +47797,7 @@ function createEventProxy(reactEvent) {
   });
 }
 
-// node_modules/recharts/es6/state/externalEventsMiddleware.js
+// ../node_modules/recharts/es6/state/externalEventsMiddleware.js
 var externalEventAction = createAction("externalEvent");
 var externalEventsMiddleware = createListenerMiddleware();
 var rafIdMap = /* @__PURE__ */ new Map();
@@ -47883,7 +47883,7 @@ externalEventsMiddleware.startListening({
   }
 });
 
-// node_modules/recharts/es6/state/selectors/touchSelectors.js
+// ../node_modules/recharts/es6/state/selectors/touchSelectors.js
 var selectAllTooltipPayloadConfiguration = createSelector([selectTooltipState], (tooltipState) => tooltipState.tooltipItemPayloads);
 var selectTooltipCoordinate = createSelector([selectAllTooltipPayloadConfiguration, (_state, tooltipIndex) => tooltipIndex, (_state, _tooltipIndex, graphicalItemId) => graphicalItemId], (allTooltipConfigurations, tooltipIndex, graphicalItemId) => {
   if (tooltipIndex == null) {
@@ -47904,7 +47904,7 @@ var selectTooltipCoordinate = createSelector([selectAllTooltipPayloadConfigurati
   return getPosition(tooltipIndex);
 });
 
-// node_modules/recharts/es6/state/touchEventsMiddleware.js
+// ../node_modules/recharts/es6/state/touchEventsMiddleware.js
 var touchEventAction = createAction("touchMove");
 var touchEventMiddleware = createListenerMiddleware();
 var rafId3 = null;
@@ -48013,7 +48013,7 @@ touchEventMiddleware.startListening({
   }
 });
 
-// node_modules/recharts/es6/state/eventSettingsSlice.js
+// ../node_modules/recharts/es6/state/eventSettingsSlice.js
 var initialEventSettingsState = {
   throttleDelay: "raf",
   throttledEvents: ["mousemove", "touchmove", "pointermove", "scroll", "wheel"]
@@ -48037,7 +48037,7 @@ var {
 } = eventSettingsSlice.actions;
 var eventSettingsReducer = eventSettingsSlice.reducer;
 
-// node_modules/recharts/es6/state/store.js
+// ../node_modules/recharts/es6/state/store.js
 var rootReducer = combineReducers({
   brush: brushReducer,
   cartesianAxis: cartesianAxisReducer,
@@ -48096,7 +48096,7 @@ var createRechartsStore = function createRechartsStore2(preloadedState) {
   });
 };
 
-// node_modules/recharts/es6/state/RechartsStoreProvider.js
+// ../node_modules/recharts/es6/state/RechartsStoreProvider.js
 function RechartsStoreProvider(_ref2) {
   var {
     preloadedState,
@@ -48118,7 +48118,7 @@ function RechartsStoreProvider(_ref2) {
   }, children);
 }
 
-// node_modules/recharts/es6/state/ReportMainChartProps.js
+// ../node_modules/recharts/es6/state/ReportMainChartProps.js
 var import_react46 = __toESM(require_react());
 function ReportMainChartPropsImpl(_ref2) {
   var {
@@ -48137,7 +48137,7 @@ function ReportMainChartPropsImpl(_ref2) {
 }
 var ReportMainChartProps = /* @__PURE__ */ (0, import_react46.memo)(ReportMainChartPropsImpl, propsAreEqual);
 
-// node_modules/recharts/es6/state/ReportChartProps.js
+// ../node_modules/recharts/es6/state/ReportChartProps.js
 var import_react47 = __toESM(require_react());
 function ReportChartProps(props) {
   var dispatch = useAppDispatch();
@@ -48147,7 +48147,7 @@ function ReportChartProps(props) {
   return null;
 }
 
-// node_modules/recharts/es6/state/ReportEventSettings.js
+// ../node_modules/recharts/es6/state/ReportEventSettings.js
 var import_react48 = __toESM(require_react());
 var ReportEventSettingsImpl = (props) => {
   var dispatch = useAppDispatch();
@@ -48158,15 +48158,15 @@ var ReportEventSettingsImpl = (props) => {
 };
 var ReportEventSettings = /* @__PURE__ */ (0, import_react48.memo)(ReportEventSettingsImpl, propsAreEqual);
 
-// node_modules/recharts/es6/chart/CategoricalChart.js
+// ../node_modules/recharts/es6/chart/CategoricalChart.js
 var React41 = __toESM(require_react());
 var import_react53 = __toESM(require_react());
 
-// node_modules/recharts/es6/container/RootSurface.js
+// ../node_modules/recharts/es6/container/RootSurface.js
 var React39 = __toESM(require_react());
 var import_react50 = __toESM(require_react());
 
-// node_modules/recharts/es6/zIndex/ZIndexPortal.js
+// ../node_modules/recharts/es6/zIndex/ZIndexPortal.js
 var React38 = __toESM(require_react());
 var import_react49 = __toESM(require_react());
 function ZIndexSvgPortal(_ref2) {
@@ -48219,7 +48219,7 @@ function AllZIndexPortals(_ref2) {
   })));
 }
 
-// node_modules/recharts/es6/container/RootSurface.js
+// ../node_modules/recharts/es6/container/RootSurface.js
 var _excluded20 = ["children"];
 function _objectWithoutProperties20(e, t) {
   if (null == e) return {};
@@ -48337,11 +48337,11 @@ var RootSurface = /* @__PURE__ */ (0, import_react50.forwardRef)((_ref2, ref) =>
   }, children));
 });
 
-// node_modules/recharts/es6/chart/RechartsWrapper.js
+// ../node_modules/recharts/es6/chart/RechartsWrapper.js
 var React40 = __toESM(require_react());
 var import_react52 = __toESM(require_react());
 
-// node_modules/recharts/es6/util/useReportScale.js
+// ../node_modules/recharts/es6/util/useReportScale.js
 var import_react51 = __toESM(require_react());
 function useReportScale() {
   var dispatch = useAppDispatch();
@@ -48360,7 +48360,7 @@ function useReportScale() {
   return setRef;
 }
 
-// node_modules/recharts/es6/chart/RechartsWrapper.js
+// ../node_modules/recharts/es6/chart/RechartsWrapper.js
 function ownKeys43(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -48724,7 +48724,7 @@ var RechartsWrapper = /* @__PURE__ */ (0, import_react52.forwardRef)((props, ref
   }, /* @__PURE__ */ React40.createElement(EventSynchronizer, null), children)));
 });
 
-// node_modules/recharts/es6/chart/CategoricalChart.js
+// ../node_modules/recharts/es6/chart/CategoricalChart.js
 var _excluded21 = ["width", "height", "responsive", "children", "className", "style", "compact", "title", "desc"];
 function _objectWithoutProperties21(e, t) {
   if (null == e) return {};
@@ -48792,7 +48792,7 @@ var CategoricalChart = /* @__PURE__ */ (0, import_react53.forwardRef)((props, re
   }, /* @__PURE__ */ React41.createElement(ClipPathProvider, null, children)));
 });
 
-// node_modules/recharts/es6/chart/CartesianChart.js
+// ../node_modules/recharts/es6/chart/CartesianChart.js
 function _extends28() {
   return _extends28 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
@@ -48904,7 +48904,7 @@ var CartesianChart = /* @__PURE__ */ (0, import_react54.forwardRef)(function Car
   })));
 });
 
-// node_modules/recharts/es6/chart/LineChart.js
+// ../node_modules/recharts/es6/chart/LineChart.js
 var allowedTooltipTypes = ["axis"];
 var LineChart = /* @__PURE__ */ (0, import_react55.forwardRef)((props, ref) => {
   return /* @__PURE__ */ React43.createElement(CartesianChart, {
@@ -48921,11 +48921,15 @@ var LineChart = /* @__PURE__ */ (0, import_react55.forwardRef)((props, ref) => {
 var h = import_react56.default.createElement;
 var MAX_VISIBLE_DRUGS = 20;
 var API_BASE_PATH = resolveApiBasePath();
-var ROUTE_OPTIONS = ["PO", "IV", "IM", "SC", "SL", "PR", "TD", "Other"];
+var ROUTE_OPTIONS = ["PO", "IV", "IM", "SC", "SL", "PR", "INH", "TD", "Other"];
 var TIMELINE_STATUS_OPTIONS = [
   { value: "current", label: "Current" },
   { value: "historic", label: "Historic" },
   { value: "planned", label: "Planned" }
+];
+var DOSE_STATUS_OPTIONS = [
+  { value: "active", label: "Active" },
+  { value: "ended", label: "Ended" }
 ];
 var TIMEFRAME_OPTIONS = [
   { value: "30d", label: "30 days", days: 30 },
@@ -48941,28 +48945,39 @@ var LAST_WORKSPACE_STORAGE_KEY = "percentdosegraph:react-last-workspace";
 var AUTH_TOKEN_STORAGE_KEY = "percentdosegraph:auth-token";
 var AUTH_ACCOUNT_STORAGE_KEY = "percentdosegraph:auth-account";
 var LEGAL_ACK_STORAGE_KEY = "percentdosegraph:legal-acknowledgements";
+var APP_VIEW_WORKSPACE = "workspace";
+var APP_VIEW_EXTERNAL_IMPORT = "external-import";
+var COMMON_DOSE_UNITS = ["mg", "mcg", "g", "mEq", "mL", "units", "IU", "drops"];
 var CHART_COLORS = [
-  "#0d8f78",
-  "#bf4f29",
+  "#0f5a2d",
   "#2956bf",
+  "#6b7a12",
+  "#6ea8ff",
   "#7e5bef",
-  "#986f0b",
-  "#c93d71",
-  "#2c7a7b",
-  "#805ad5",
-  "#c05621",
-  "#276749",
-  "#2b6cb0",
-  "#97266d",
-  "#4a5568",
-  "#d69e2e",
-  "#2f855a",
-  "#dd6b20",
-  "#3182ce",
-  "#b83280",
-  "#22543d",
-  "#744210"
+  "#c43d3d",
+  "#b794f4",
+  "#f28b82",
+  "#bf5a17",
+  "#c58b00",
+  "#f6ad55",
+  "#0d8f78",
+  "#1f6feb",
+  "#8f9f2b",
+  "#8ecdfc",
+  "#9f7aea",
+  "#d93025",
+  "#d6bcfa",
+  "#f4a7a1",
+  "#d97706",
+  "#b99600"
 ];
+function normalizeDoseUnit(unit2) {
+  const normalized = String(unit2 ?? "").trim();
+  return normalized || "mg";
+}
+function getPreferredDoseUnit(drug) {
+  return normalizeDoseUnit(drug?.unit);
+}
 function shuffleArray(array) {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -49092,6 +49107,7 @@ function App() {
   const sessionDefaults = loadAuthSessionFromStorage();
   const legalDefaults = loadLegalAcknowledgementsFromStorage();
   const importFileRef = (0, import_react56.useRef)(null);
+  const [currentView, setCurrentView] = (0, import_react56.useState)(() => getAppViewFromHash(window.location.hash));
   const [drugs, setDrugs] = (0, import_react56.useState)([]);
   const [doses, setDoses] = (0, import_react56.useState)([]);
   const [selectedDrugIds, setSelectedDrugIds] = (0, import_react56.useState)([]);
@@ -49122,8 +49138,10 @@ function App() {
   const [entryDrugId, setEntryDrugId] = (0, import_react56.useState)("");
   const [entryDate, setEntryDate] = (0, import_react56.useState)(formatDateKey(/* @__PURE__ */ new Date()));
   const [entryEndDate, setEntryEndDate] = (0, import_react56.useState)("");
+  const [entryDoseStatus, setEntryDoseStatus] = (0, import_react56.useState)("active");
   const [entryRoute, setEntryRoute] = (0, import_react56.useState)("PO");
   const [entryAmount, setEntryAmount] = (0, import_react56.useState)("");
+  const [entryDoseUnit, setEntryDoseUnit] = (0, import_react56.useState)("mg");
   const [entryNotes, setEntryNotes] = (0, import_react56.useState)("");
   const [entryStatus, setEntryStatus] = (0, import_react56.useState)("");
   const [entryError, setEntryError] = (0, import_react56.useState)("");
@@ -49138,6 +49156,10 @@ function App() {
   const [profileStatus, setProfileStatus] = (0, import_react56.useState)("");
   const [profileName, setProfileName] = (0, import_react56.useState)("");
   const [hoveredLineDrugId, setHoveredLineDrugId] = (0, import_react56.useState)(null);
+  const [compareBarOpen, setCompareBarOpen] = (0, import_react56.useState)(false);
+  const [compareBarTerm, setCompareBarTerm] = (0, import_react56.useState)("");
+  const [selectedChartBucket, setSelectedChartBucket] = (0, import_react56.useState)(null);
+  const [maxDoseDrafts, setMaxDoseDrafts] = (0, import_react56.useState)({});
   const [isAuthenticated, setIsAuthenticated] = (0, import_react56.useState)(Boolean(sessionDefaults.token));
   const [user, setUser] = (0, import_react56.useState)(sessionDefaults.account);
   const [authReady, setAuthReady] = (0, import_react56.useState)(false);
@@ -49148,6 +49170,7 @@ function App() {
   const [authName, setAuthName] = (0, import_react56.useState)("");
   const [authLoading, setAuthLoading] = (0, import_react56.useState)(false);
   const [authError, setAuthError] = (0, import_react56.useState)("");
+  const [authNotice, setAuthNotice] = (0, import_react56.useState)("");
   const [legalAcknowledgements, setLegalAcknowledgements] = (0, import_react56.useState)({
     acceptedEula: Boolean(legalDefaults.acceptedEula),
     acceptedHipaaNotice: Boolean(legalDefaults.acceptedHipaaNotice),
@@ -49155,9 +49178,27 @@ function App() {
   });
   const [randomProfile, setRandomProfile] = (0, import_react56.useState)(null);
   const [generatingRandom, setGeneratingRandom] = (0, import_react56.useState)(false);
+  const [menuOpen, setMenuOpen] = (0, import_react56.useState)(false);
+  const [fhirModalOpen, setFhirModalOpen] = (0, import_react56.useState)(false);
+  const [fhirModalInitialTab, setFhirModalInitialTab] = (0, import_react56.useState)("paste");
+  const [fhirImportStatus, setFhirImportStatus] = (0, import_react56.useState)("");
+  const [stepThreeAdvancedOpen, setStepThreeAdvancedOpen] = (0, import_react56.useState)(false);
+  const [ehrSessionId, setEhrSessionId] = (0, import_react56.useState)(() => localStorage.getItem("ehrSessionId") ?? "");
+  const [ehrPatientName, setEhrPatientName] = (0, import_react56.useState)(() => localStorage.getItem("ehrPatientName") ?? "");
+  const [ehrPatientId, setEhrPatientId] = (0, import_react56.useState)(() => localStorage.getItem("ehrPatientId") ?? "");
+  const [ehrSystemName, setEhrSystemName] = (0, import_react56.useState)(() => localStorage.getItem("ehrSystemName") ?? "");
+  const [ehrConnecting, setEhrConnecting] = (0, import_react56.useState)(false);
+  const [ehrError, setEhrError] = (0, import_react56.useState)("");
   (0, import_react56.useEffect)(() => {
     saveProfilesToStorage(profiles);
   }, [profiles]);
+  (0, import_react56.useEffect)(() => {
+    function handleHashChange() {
+      setCurrentView(getAppViewFromHash(window.location.hash));
+    }
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
   (0, import_react56.useEffect)(() => {
     saveMedicationEntriesToStorage(medicationEntries);
   }, [medicationEntries]);
@@ -49368,6 +49409,78 @@ function App() {
       setListDrugId(String(candidateDrugId));
     }
   }, [drugs, entryDrugId, listDrugId, selectedDrugIds]);
+  (0, import_react56.useEffect)(() => {
+    if (editingDoseId) {
+      return;
+    }
+    const selectedDrug = drugs.find((drug) => String(drug.id) === String(entryDrugId));
+    setEntryDoseUnit(getPreferredDoseUnit(selectedDrug));
+  }, [drugs, editingDoseId, entryDrugId]);
+  (0, import_react56.useEffect)(() => {
+    function handleSmartCallbackMessage(event) {
+      if (event.origin !== window.location.origin) return;
+      if (!event.data || event.data.type !== "smart_auth_callback") return;
+      const { code, state } = event.data;
+      if (!code || !state) return;
+      processEhrCallback(code, state);
+    }
+    window.addEventListener("message", handleSmartCallbackMessage);
+    const pending = sessionStorage.getItem("smart_auth_redirect_pending");
+    if (pending) {
+      sessionStorage.removeItem("smart_auth_redirect_pending");
+      try {
+        const { code, state } = JSON.parse(pending);
+        if (code && state) {
+          processEhrCallback(code, state);
+        }
+      } catch {
+      }
+    }
+    return () => window.removeEventListener("message", handleSmartCallbackMessage);
+  }, []);
+  (0, import_react56.useEffect)(() => {
+    const storedSessionId = localStorage.getItem("ehrSessionId");
+    if (!storedSessionId) return;
+    let cancelled2 = false;
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE_PATH}/fhir/smart/session`, {
+          headers: { "X-FHIR-Session": storedSessionId }
+        });
+        if (cancelled2) return;
+        if (!res.ok) {
+          setEhrSessionId("");
+          setEhrPatientName("");
+          setEhrPatientId("");
+          setEhrSystemName("");
+          localStorage.removeItem("ehrSessionId");
+          localStorage.removeItem("ehrPatientName");
+          localStorage.removeItem("ehrPatientId");
+          localStorage.removeItem("ehrSystemName");
+          localStorage.removeItem("ehrExpiresAt");
+        } else {
+          const data = await res.json();
+          if (!data.connected || data.expired) {
+            setEhrSessionId("");
+            setEhrPatientName("");
+            setEhrPatientId("");
+            setEhrSystemName("");
+            localStorage.removeItem("ehrSessionId");
+            localStorage.removeItem("ehrPatientName");
+            localStorage.removeItem("ehrPatientId");
+            localStorage.removeItem("ehrSystemName");
+            localStorage.removeItem("ehrExpiresAt");
+          } else if (data.expiresAt) {
+            localStorage.setItem("ehrExpiresAt", String(data.expiresAt));
+          }
+        }
+      } catch {
+      }
+    })();
+    return () => {
+      cancelled2 = true;
+    };
+  }, []);
   const drugLookup = (0, import_react56.useMemo)(() => {
     return new Map(drugs.map((drug) => [drug.id, drug]));
   }, [drugs]);
@@ -49415,6 +49528,25 @@ function App() {
       medicationEntries
     });
   }, [drugLookup, filteredEvents, hoveredLineDrugId, medicationEntries, range4, route, timeframe]);
+  const selectedChartEvents = (0, import_react56.useMemo)(() => {
+    if (!selectedChartBucket?.date || !selectedChartBucket?.endDate) {
+      return [];
+    }
+    const bucketStart = selectedChartBucket.date;
+    const bucketEnd = selectedChartBucket.endDate;
+    return filteredEvents.filter((event) => {
+      if (selectedChartBucket.drugId && String(event.drugId) !== String(selectedChartBucket.drugId)) {
+        return false;
+      }
+      const eventEndDate = event.resolvedEndDate ?? event.endDate ?? event.date;
+      return rangesOverlap(event.date, eventEndDate, bucketStart, bucketEnd);
+    });
+  }, [filteredEvents, selectedChartBucket]);
+  const timeframeLabel = TIMEFRAME_OPTIONS.find((option) => option.value === timeframe)?.label ?? timeframe;
+  const selectedDrugSummary = selectedDrugs.length ? selectedDrugs.slice(0, 3).map((drug) => drug.name).join(", ") : medicationEntries.length ? `${medicationEntries.length} medication entr${medicationEntries.length === 1 ? "y" : "ies"}` : "No medications selected";
+  const workspaceMaxDose = selectedDrugs[0]?.maxDailyDose ?? null;
+  const workspaceMaxDoseLabel = workspaceMaxDose ? `${workspaceMaxDose} ${selectedDrugs[0]?.unit ?? "mg"}/day` : "Not set yet";
+  const workspaceMaxDoseDetail = selectedDrugs.length > 1 ? "Per-drug ceilings are tracked independently in the dynamic workspace" : selectedDrugs[0] ? `Reference ceiling for ${selectedDrugs[0].name}` : "Manual or inferred max dose";
   function handleAddDrug(drug) {
     setDrugs((current3) => mergeDrugCatalog(current3, [drug]));
     setSelectedDrugIds((current3) => {
@@ -49438,6 +49570,12 @@ function App() {
       return [...current3, drugId];
     });
   }
+  function handleMaxDoseDraftChange(drugId, nextValue) {
+    setMaxDoseDrafts((current3) => ({
+      ...current3,
+      [String(drugId)]: nextValue
+    }));
+  }
   function handleMaxDoseChange(drugId, nextValue) {
     setDrugs(
       (current3) => current3.map((drug) => {
@@ -49454,6 +49592,23 @@ function App() {
         };
       })
     );
+  }
+  function commitMaxDoseChange(drugId) {
+    const draftValue = maxDoseDrafts[String(drugId)];
+    const drug = drugs.find((item) => item.id === String(drugId));
+    if (!drug) {
+      return;
+    }
+    if (draftValue === void 0) {
+      handleMaxDoseChange(drugId, String(drug.maxDailyDose ?? ""));
+      return;
+    }
+    handleMaxDoseChange(drugId, draftValue);
+    setMaxDoseDrafts((current3) => {
+      const nextDrafts = { ...current3 };
+      delete nextDrafts[String(drugId)];
+      return nextDrafts;
+    });
   }
   function handleMedicationEntrySubmit(event) {
     event.preventDefault();
@@ -49517,6 +49672,13 @@ function App() {
       return;
     }
     const existingProfile = activeProfileId ? profiles.find((profile) => profile.id === activeProfileId) : null;
+    const profileCreation = canCreateAnotherProfileForUser(user, profiles, existingProfile);
+    if (!profileCreation.allowed) {
+      setProfileStatus(
+        `${profileCreation.tier} users can save up to ${Number.isFinite(profileCreation.limit) ? profileCreation.limit : "unlimited"} profiles. Delete an old profile before creating a new one.`
+      );
+      return;
+    }
     const existingLabel = existingProfile?.label ?? existingProfile?.name;
     const id = existingProfile?.id ?? generateProfileId(
       {
@@ -49642,22 +49804,180 @@ function App() {
     }
     setProfileStatus("Profile deleted.");
   }
+  function handleFhirImportConfirm({ matchedDrugs, matchedMedicationEntries }) {
+    setDrugs((current3) => mergeDrugCatalog(current3, matchedDrugs));
+    setMedicationEntries((current3) => mergeMedicationEntries(current3, matchedMedicationEntries));
+    setSelectedDrugIds((current3) => {
+      const merged = new Set(current3);
+      for (const drugId of matchedDrugs.map((d) => String(d.id))) {
+        if (merged.size >= MAX_VISIBLE_DRUGS && !merged.has(drugId)) {
+          continue;
+        }
+        merged.add(drugId);
+      }
+      return Array.from(merged);
+    });
+    setFhirModalOpen(false);
+    setFhirImportStatus(
+      `Imported ${matchedMedicationEntries.length} medication entr${matchedMedicationEntries.length === 1 ? "y" : "ies"} from the FHIR bundle.`
+    );
+  }
+  async function processEhrCallback(code, state) {
+    setEhrConnecting(true);
+    setEhrError("");
+    try {
+      const res = await fetch(`${API_BASE_PATH}/fhir/smart/auth/callback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, state })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Authorization callback failed");
+      const sessionId = data.sessionId ?? "";
+      const patientName2 = data.patientName ?? "";
+      const patientId = data.patientId ?? "";
+      const systemName = data.ehrId ?? "EHR";
+      setEhrSessionId(sessionId);
+      setEhrPatientName(patientName2);
+      setEhrPatientId(patientId);
+      setEhrSystemName(systemName);
+      localStorage.setItem("ehrSessionId", sessionId);
+      localStorage.setItem("ehrPatientName", patientName2);
+      localStorage.setItem("ehrPatientId", patientId);
+      localStorage.setItem("ehrSystemName", systemName);
+      localStorage.setItem("ehrExpiresAt", String(data.expiresAt ?? 0));
+      if (sessionId && patientId) {
+        await autoLoadEhrMedications(sessionId, patientId);
+      }
+    } catch (err) {
+      setEhrError(err instanceof Error ? err.message : "EHR connection failed");
+    } finally {
+      setEhrConnecting(false);
+    }
+  }
+  async function autoLoadEhrMedications(sessionId, patientId) {
+    async function fetchFromProxy(path2) {
+      const encodedPath = encodeURIComponent(path2);
+      const res = await fetch(`${API_BASE_PATH}/fhir/proxy?path=${encodedPath}`, {
+        headers: { "X-FHIR-Session": sessionId }
+      });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error ?? `FHIR server returned ${res.status}`);
+      }
+      return res.json();
+    }
+    const pid = encodeURIComponent(patientId);
+    const [medReqResult, medStmtResult] = await Promise.allSettled([
+      fetchFromProxy(`/MedicationRequest?patient=${pid}&_count=100`),
+      fetchFromProxy(`/MedicationStatement?patient=${pid}&_count=100`)
+    ]);
+    const allEntries = [];
+    if (medReqResult.status === "fulfilled" && Array.isArray(medReqResult.value?.entry)) {
+      allEntries.push(...medReqResult.value.entry);
+    }
+    if (medStmtResult.status === "fulfilled" && Array.isArray(medStmtResult.value?.entry)) {
+      allEntries.push(...medStmtResult.value.entry);
+    }
+    if (allEntries.length === 0 && medReqResult.status === "rejected") {
+      throw medReqResult.reason;
+    }
+    const combinedBundle = {
+      resourceType: "Bundle",
+      type: "searchset",
+      total: allEntries.length,
+      entry: allEntries
+    };
+    const importRes = await fetch(`${API_BASE_PATH}/fhir/import`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(combinedBundle)
+    });
+    if (!importRes.ok) {
+      const err = await importRes.json().catch(() => ({ error: "Unknown error" }));
+      throw new Error(err.error ?? `Import server error ${importRes.status}`);
+    }
+    const result = await importRes.json();
+    const matchedDrugs = result.matched.map((m) => m.drug);
+    const matchedMedicationEntries = result.matched;
+    handleFhirImportConfirm({ matchedDrugs, matchedMedicationEntries });
+  }
+  async function handleEhrConnect({ ehrId, fhirBaseUrl, authorizeUrl, tokenUrl, clientId, scopes }) {
+    setEhrConnecting(true);
+    setEhrError("");
+    try {
+      const redirectUri = window.location.origin + window.location.pathname;
+      const params = new URLSearchParams({ redirectUri });
+      if (ehrId && ehrId !== "custom") {
+        params.set("ehrId", ehrId);
+      } else {
+        if (fhirBaseUrl) params.set("fhirBaseUrl", fhirBaseUrl);
+        if (authorizeUrl) params.set("authorizeUrl", authorizeUrl);
+        if (tokenUrl) params.set("tokenUrl", tokenUrl);
+        if (clientId) params.set("clientId", clientId);
+        if (scopes) params.set("scopes", scopes);
+      }
+      const res = await fetch(`${API_BASE_PATH}/fhir/smart/auth/start?${params.toString()}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Failed to initiate EHR authorization");
+      const popup = window.open(data.authUrl, "fhir_auth", "width=620,height=720");
+      if (!popup) {
+        window.location.href = data.authUrl;
+      }
+    } catch (err) {
+      setEhrConnecting(false);
+      setEhrError(err instanceof Error ? err.message : "Failed to connect to EHR");
+    }
+  }
+  async function handleEhrDisconnect() {
+    if (ehrSessionId) {
+      try {
+        await fetch(`${API_BASE_PATH}/fhir/smart/session`, {
+          method: "DELETE",
+          headers: { "X-FHIR-Session": ehrSessionId }
+        });
+      } catch {
+      }
+    }
+    setEhrSessionId("");
+    setEhrPatientName("");
+    setEhrPatientId("");
+    setEhrSystemName("");
+    setEhrError("");
+    localStorage.removeItem("ehrSessionId");
+    localStorage.removeItem("ehrPatientName");
+    localStorage.removeItem("ehrPatientId");
+    localStorage.removeItem("ehrSystemName");
+    localStorage.removeItem("ehrExpiresAt");
+  }
+  function handleEhrPatientSelected(patientId, patientName2) {
+    setEhrPatientId(patientId);
+    setEhrPatientName(patientName2);
+    localStorage.setItem("ehrPatientId", patientId);
+    localStorage.setItem("ehrPatientName", patientName2);
+  }
   function handleStartDoseEdit(dose) {
+    const selectedDrug = drugLookup.get(String(dose.drugId));
     setEditingDoseId(dose.id);
     setEntryDrugId(String(dose.drugId));
     setEntryDate(dose.date);
     setEntryEndDate(dose.endDate ?? "");
+    setEntryDoseStatus(dose.endDate ? "ended" : "active");
     setEntryRoute(dose.route);
     setEntryAmount(String(dose.amount));
+    setEntryDoseUnit(normalizeDoseUnit(dose.doseUnit ?? selectedDrug?.unit));
     setEntryNotes(dose.notes ?? "");
     setEntryStatus("Editing an existing dose event.");
     setEntryError("");
   }
   function handleCancelDoseEdit() {
+    const selectedDrug = drugLookup.get(String(entryDrugId));
     setEditingDoseId(null);
     setEntryDate(formatDateKey(/* @__PURE__ */ new Date()));
     setEntryEndDate("");
+    setEntryDoseStatus("active");
     setEntryAmount("");
+    setEntryDoseUnit(getPreferredDoseUnit(selectedDrug));
     setEntryNotes("");
     setEntryStatus("");
     setEntryError("");
@@ -49676,8 +49996,44 @@ function App() {
     }
     setWorkspaceStatus("Deleted the selected dose event.");
   }
+  function handleChartClick(state) {
+    const activePayload = state?.activePayload;
+    const activeLabel = state?.activeLabel;
+    if (!Array.isArray(activePayload) || !activePayload.length || !activeLabel) {
+      return;
+    }
+    const clickedSeries = activePayload.find((item) => String(item?.dataKey ?? "").startsWith("series:"));
+    const clickedPoint = clickedSeries?.payload ?? activePayload[0]?.payload;
+    if (!clickedSeries || !clickedPoint?.date) {
+      return;
+    }
+    const drugId = String(clickedSeries.dataKey).replace("series:", "");
+    const drug = drugLookup.get(drugId);
+    const matchingEvents = filteredEvents.filter((event) => {
+      if (String(event.drugId) !== drugId) {
+        return false;
+      }
+      const eventEndDate = event.resolvedEndDate ?? event.endDate ?? event.date;
+      return rangesOverlap(event.date, eventEndDate, clickedPoint.date, clickedPoint.endDate ?? clickedPoint.date);
+    });
+    setSelectedChartBucket({
+      drugId,
+      drugName: drug?.name ?? clickedSeries.name ?? "Selected drug",
+      label: activeLabel,
+      date: clickedPoint.date,
+      endDate: clickedPoint.endDate ?? clickedPoint.date,
+      percent: Number(clickedSeries.value ?? 0),
+      doseAmount: Number(clickedPoint[getDoseKey(drugId)] ?? 0),
+      eventCount: matchingEvents.length
+    });
+    setWorkspaceStatus(
+      matchingEvents.length ? `Selected ${matchingEvents.length} plotted dose event(s) for ${drug?.name ?? "the chosen drug"} from ${clickedPoint.date} to ${clickedPoint.endDate ?? clickedPoint.date}.` : `Selected the plotted ${drug?.name ?? "drug"} point for ${clickedPoint.date}.`
+    );
+  }
   async function handleDoseEntrySubmit(event) {
     event.preventDefault();
+    const submitter = event.nativeEvent?.submitter;
+    const saveAndAddAnother = submitter?.dataset?.submitMode === "save-add-another";
     const amount = Number(entryAmount);
     if (!entryDrugId) {
       setEntryError("Choose a drug before logging a dose.");
@@ -49694,6 +50050,11 @@ function App() {
       setEntryStatus("");
       return;
     }
+    if (entryDoseStatus === "ended" && !entryEndDate) {
+      setEntryError("Choose an end date when the dose state is marked ended.");
+      setEntryStatus("");
+      return;
+    }
     if (!Number.isFinite(amount) || amount <= 0) {
       setEntryError("Enter a dose amount greater than zero.");
       setEntryStatus("");
@@ -49702,9 +50063,10 @@ function App() {
     const payload = {
       drugId: coerceDrugId(entryDrugId),
       date: entryDate,
-      endDate: entryEndDate || void 0,
+      endDate: entryDoseStatus === "ended" ? entryEndDate || void 0 : void 0,
       route: entryRoute,
       amount,
+      doseUnit: normalizeDoseUnit(entryDoseUnit),
       notes: entryNotes.trim()
     };
     try {
@@ -49756,8 +50118,17 @@ function App() {
     setRoute(entryRoute);
     setEditingDoseId(null);
     setEntryAmount("");
-    setEntryEndDate("");
     setEntryNotes("");
+    if (!saveAndAddAnother) {
+      setEntryEndDate("");
+      setEntryDoseStatus("active");
+    }
+    if (saveAndAddAnother) {
+      setEntryDate(formatDateKey(/* @__PURE__ */ new Date()));
+      setEntryEndDate("");
+      setEntryDoseStatus("active");
+      setEntryStatus("Dose segment saved. Continue adding another segment.");
+    }
     setEntryError("");
     setWorkspaceStatus("");
   }
@@ -49917,6 +50288,7 @@ function App() {
     }
     setAuthLoading(true);
     setAuthError("");
+    setAuthNotice("");
     try {
       const endpoint = authMode === "login" ? "/auth/login" : "/auth/register";
       const body = authMode === "login" ? { email: authEmail, password: authPassword } : { name: authName, email: authEmail, password: authPassword };
@@ -49929,10 +50301,22 @@ function App() {
       if (!response.ok) {
         throw new Error(data.error || "Authentication failed");
       }
-      persistAuthSession(data.token, data.account);
-      setAuthToken(data.token);
-      setUser(data.account);
-      setIsAuthenticated(true);
+      if (data.token) {
+        persistAuthSession(data.token, data.account);
+        setAuthToken(data.token);
+        setUser(data.account);
+        setIsAuthenticated(true);
+      } else {
+        clearAuthSession();
+        setAuthToken("");
+        setUser(null);
+        setIsAuthenticated(false);
+      }
+      if (data.requiresEmailConfirmation) {
+        setAuthNotice(data.message || "Check your email to confirm the account, then sign in.");
+      } else {
+        setAuthNotice("");
+      }
       setAuthEmail("");
       setAuthPassword("");
       setAuthName("");
@@ -49947,6 +50331,7 @@ function App() {
     setAuthToken("");
     setUser(null);
     setIsAuthenticated(false);
+    setAuthNotice("");
     setProfiles(normalizeStoredProfiles(loadProfilesFromStorage()));
     setActiveProfileId(null);
     setProfileStatus("Signed out. Local browser profiles are still available.");
@@ -49969,7 +50354,7 @@ function App() {
     if (hasAcceptedComplianceRequirements) {
       return true;
     }
-    const message = `Accept the EULA, commercial licensing, HIPAA notice, and BAA acknowledgement before ${actionLabel}.`;
+    const message = `Account sync is blocked until you check all three legal boxes below: EULA, HIPAA notice, and BAA acknowledgement.`;
     setFailure?.(message);
     setStatus?.("");
     return false;
@@ -49978,7 +50363,7 @@ function App() {
     if (!patientIdentifierWarning) {
       return true;
     }
-    const message = `${patientIdentifierWarning} Update the patient label before ${actionLabel}.`;
+    const message = `${patientIdentifierWarning} Replace the patient label with something de-identified like "RD-001" or "Example Patient" before ${actionLabel}.`;
     setFailure?.(message);
     setStatus?.("");
     return false;
@@ -49986,80 +50371,165 @@ function App() {
   if (!authReady) {
     return h("div", { className: "auth-container" }, h("p", null, "Restoring session..."));
   }
+  function navigateToView(view) {
+    setCurrentView(view);
+    setMenuOpen(false);
+    const nextHash = view === APP_VIEW_EXTERNAL_IMPORT ? "#external-import" : "#workspace";
+    if (window.location.hash !== nextHash) {
+      window.history.replaceState(
+        {},
+        "",
+        `${window.location.pathname}${window.location.search}${nextHash}`
+      );
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  function openFhirModal(tab = "paste") {
+    setFhirModalInitialTab(tab);
+    setFhirModalOpen(true);
+  }
   return h(
     "div",
-    { className: "shell" },
+    { className: "app-shell" },
     h(
       "div",
-      { className: "topbar" },
-      h("a", { className: "home-link", href: "../index.html" }, "Back to home"),
-      h("span", { className: "badge" }, "Reactive Type"),
+      { className: "menu-shell" },
       h(
-        "span",
-        { className: "user-info" },
-        isAuthenticated ? `Signed in as ${user?.name || user?.email}` : "Guest mode active"
-      ),
-      h(
-        "a",
-        {
-          className: "topbar-link",
-          href: "https://github.com/rafireadisten/percentdosegraph/blob/main/MOBILE_DEPLOYMENT.md",
-          target: "_blank",
-          rel: "noopener noreferrer"
-        },
-        "Mobile App"
-      ),
-      isAuthenticated ? h(
         "button",
-        { type: "button", className: "pill-button secondary-button", onClick: handleLogout },
-        "Logout"
-      ) : null
+        {
+          id: "globalMenuButton",
+          type: "button",
+          className: "menu-button",
+          "aria-expanded": menuOpen,
+          "aria-controls": "globalMenuDrawer",
+          onClick: () => setMenuOpen((current3) => !current3)
+        },
+        "Menu"
+      ),
+      h(
+        "nav",
+        {
+          id: "globalMenuDrawer",
+          className: `menu-drawer${menuOpen ? "" : " hidden"}`,
+          "aria-label": "Universal navigation"
+        },
+        h("p", { className: "menu-label" }, "DoseGraph"),
+        h("a", { href: "../index.html" }, "Landing page"),
+        h("a", { href: "../about.html" }, "About"),
+        h("a", { href: "../updates.html" }, "Updates"),
+        h("a", { href: "../frontend-static/" }, "Static version"),
+        h("a", { href: "../import-medications.html" }, "Import Medications (FHIR/SMART/EHR)"),
+        h(
+          "a",
+          {
+            href: "#workspace",
+            onClick: (event) => {
+              event.preventDefault();
+              navigateToView(APP_VIEW_WORKSPACE);
+            }
+          },
+          "Dynamic workspace"
+        ),
+        h("a", { href: "mailto:rafi@readisten.com" }, "Contact developers / engineers"),
+        h("a", { href: "../accounts.html" }, "Accounts & profiles management")
+      )
     ),
     h(
       "section",
       { className: "hero" },
       h(
         "article",
-        { className: "hero-panel" },
-        h("p", { className: "badge" }, "React + Recharts"),
-        h(
-          "h1",
-          null,
-          workspaceLabel || "Multi-drug comparison charting for U.S. medication search."
-        ),
+        { className: "hero-copy" },
+        h("p", { className: "eyebrow" }, "DoseGraph Dynamic"),
+        h("h1", null, "Compare and see medication doses over time."),
         h(
           "p",
-          null,
-          `${patientName} \xB7 Plot up to 20 medications at once, compare each against its own ceiling, and expand the selector with official FDA-listed U.S. drug names when you need more than the bundled sample library. ${isAuthenticated ? "Account sync is active for saved profiles." : "You can use the full graph immediately without signing in; accounts only add backend profile sync."}`
+          { className: "hero-text" },
+          "DoseGraph shows each dose as a percent of that drug's maximum dose at each time point. This makes it easy to compare one drug to another, or compare the same drug across time."
         )
       ),
       h(
         "article",
-        { className: "hero-panel" },
-        h("p", { className: "metric-label" }, patientNotes ? "Clinical note" : "Plotted drugs"),
-        patientNotes ? h("p", { className: "helper" }, patientNotes) : null,
-        h("p", { className: "big-number" }, `${selectedDrugs.length}/${MAX_VISIBLE_DRUGS}`),
+        { className: "hero-card" },
+        h("p", { className: "card-label" }, "Dynamic workspace"),
+        h("p", { className: "card-value" }, `${selectedDrugs.length}`),
         h(
           "p",
-          null,
-          `${summary.activeDrugCount} selected drug(s) have data in the current ${route} view. Peak exposure across the chart is ${summary.peakPercent.toFixed(1)}%.`
-        )
+          { className: "card-caption" },
+          `${summary.activeDrugCount} selected drug(s) with data in the current ${route} view${isAuthenticated ? " and account sync available." : " in guest or signed-in mode."}`
+        ),
+        patientNotes ? h("p", { className: "workspace-detail hero-card-note" }, patientNotes) : null
+      )
+    ),
+    h(
+      "div",
+      { className: "workspace-heading" },
+      h("p", { className: "eyebrow" }, "Workspace snapshot"),
+      h(
+        "p",
+        { className: "workspace-heading-copy" },
+        isAuthenticated ? `Signed in as ${user?.name || user?.email}. The dynamic workspace keeps the static graphing flow while adding synced profiles.` : "Guest mode stays available here too. You can graph first and sign in later if you want synced profiles."
       )
     ),
     h(
       "section",
+      { className: "workspace-strip", "aria-label": "Current workspace overview" },
+      h(
+        "article",
+        { className: "workspace-card" },
+        h("p", { className: "card-label" }, "Patient + Drugs"),
+        h("strong", null, patientName || "Example Patient"),
+        h("p", { className: "workspace-detail" }, selectedDrugSummary)
+      ),
+      h(
+        "article",
+        { className: "workspace-card" },
+        h("p", { className: "card-label" }, "Route + Window"),
+        h("strong", null, route),
+        h("p", { className: "workspace-detail" }, timeframeLabel)
+      ),
+      h(
+        "article",
+        { className: "workspace-card" },
+        h("p", { className: "card-label" }, "Reference Ceiling"),
+        h("strong", null, workspaceMaxDoseLabel),
+        h("p", { className: "workspace-detail" }, workspaceMaxDoseDetail)
+      ),
+      h(
+        "article",
+        { className: "workspace-card" },
+        h("p", { className: "card-label" }, "Dose Segments"),
+        h("strong", null, `${summary.eventCount} in view`),
+        h(
+          "p",
+          { className: "workspace-detail" },
+          filteredEvents[0] ? `Most recent event ${filteredEvents[0].date}` : "No dose segments yet"
+        )
+      )
+    ),
+    currentView === APP_VIEW_EXTERNAL_IMPORT ? h(ExternalImportPage, {
+      onReturnToWorkspace: () => navigateToView(APP_VIEW_WORKSPACE),
+      onOpenImportModal: openFhirModal,
+      fhirImportStatus,
+      hasAcceptedComplianceRequirements,
+      ehrSessionId,
+      ehrPatientName,
+      ehrSystemName
+    }) : h(
+      "section",
       { className: "layout" },
       h(
         "aside",
-        { className: "panel controls selector-panel" },
+        { className: "panel controls-panel selector-panel" },
         h(
           "div",
-          null,
-          h("h2", null, "Drug selector"),
+          { className: "panel-header" },
+          h("p", { className: "section-kicker" }, "Step 1"),
+          h("h2", null, "Step 1 \xB7 Configure the regimen"),
           h(
             "p",
             null,
-            "Search the bundled sample library instantly and, when available, expand into the official FDA NDC directory for broader U.S. coverage."
+            "Set the patient context and the ceiling used to normalize every dose to % max, while keeping the search flow available for the bundled sample library and FDA-backed catalog."
           )
         ),
         h(
@@ -50140,7 +50610,8 @@ function App() {
           { className: "workspace-panel" },
           h(
             "div",
-            null,
+            { className: "panel-header compact" },
+            h("p", { className: "section-kicker" }, "Workspace"),
             h("h2", null, "Patient workspace"),
             h(
               "p",
@@ -50198,7 +50669,8 @@ function App() {
           { className: "dose-entry-form", onSubmit: handleMedicationEntrySubmit },
           h(
             "div",
-            null,
+            { className: "panel-header compact" },
+            h("p", { className: "section-kicker" }, "Step 2 \u2014 Manual entry"),
             h("h2", null, "Medication list entry"),
             h(
               "p",
@@ -50293,7 +50765,7 @@ function App() {
               })
             )
           ),
-          h("button", { type: "submit", className: "primary-button" }, "Add Medication To List"),
+          h("button", { type: "submit", className: "primary-button" }, "Save Medication List Entry"),
           listStatus ? h("p", { className: "helper success-text" }, listStatus) : null,
           listError ? h("p", { className: "helper error-text" }, listError) : null
         ),
@@ -50302,12 +50774,13 @@ function App() {
           { className: "dose-entry-form", onSubmit: handleDoseEntrySubmit },
           h(
             "div",
-            null,
-            h("h2", null, "Log dose"),
+            { className: "panel-header compact" },
+            h("p", { className: "section-kicker" }, "Step 3"),
+            h("h2", null, "Add and edit doses"),
             h(
               "p",
               null,
-              "Add a drug-specific dose event with its own date, route, and amount so the chart updates immediately."
+              "Add dose segments with a start date, optional end date, and an active or ended state. Use additional entries to represent titrations, repeat the same dose later, or capture a new dose level for the same drug and route."
             )
           ),
           h(
@@ -50330,7 +50803,7 @@ function App() {
             h(
               "div",
               { className: "field" },
-              h("label", { htmlFor: "entryDate" }, "Dose date"),
+              h("label", { htmlFor: "entryDate" }, "Start date"),
               h("input", {
                 id: "entryDate",
                 type: "date",
@@ -50341,12 +50814,13 @@ function App() {
             h(
               "div",
               { className: "field" },
-              h("label", { htmlFor: "entryEndDate" }, "Dose end date"),
+              h("label", { htmlFor: "entryEndDate" }, "End date"),
               h("input", {
                 id: "entryEndDate",
                 type: "date",
                 value: entryEndDate,
                 min: entryDate,
+                disabled: entryDoseStatus !== "ended",
                 onChange: (event) => setEntryEndDate(event.target.value)
               })
             ),
@@ -50367,7 +50841,29 @@ function App() {
           ),
           h(
             "div",
-            { className: "entry-grid two-up" },
+            { className: "entry-grid dose-entry-secondary-grid" },
+            h(
+              "div",
+              { className: "field" },
+              h("label", { htmlFor: "entryDoseStatus" }, "Dose state"),
+              h(
+                "select",
+                {
+                  id: "entryDoseStatus",
+                  value: entryDoseStatus,
+                  onChange: (event) => {
+                    const nextStatus = event.target.value;
+                    setEntryDoseStatus(nextStatus);
+                    if (nextStatus !== "ended") {
+                      setEntryEndDate("");
+                    }
+                  }
+                },
+                DOSE_STATUS_OPTIONS.map(
+                  (option) => h("option", { key: option.value, value: option.value }, option.label)
+                )
+              )
+            ),
             h(
               "div",
               { className: "field" },
@@ -50385,6 +50881,23 @@ function App() {
             h(
               "div",
               { className: "field" },
+              h("label", { htmlFor: "entryDoseUnit" }, "Dose unit"),
+              h("input", {
+                id: "entryDoseUnit",
+                type: "text",
+                list: "entryDoseUnitOptions",
+                value: entryDoseUnit,
+                onChange: (event) => setEntryDoseUnit(event.target.value)
+              }),
+              h(
+                "datalist",
+                { id: "entryDoseUnitOptions" },
+                COMMON_DOSE_UNITS.map((unit2) => h("option", { key: unit2, value: unit2 }))
+              )
+            ),
+            h(
+              "div",
+              { className: "field" },
               h("label", { htmlFor: "entryNotes" }, "Notes"),
               h("input", {
                 id: "entryNotes",
@@ -50396,9 +50909,22 @@ function App() {
             )
           ),
           h(
-            "button",
-            { type: "submit", className: "primary-button" },
-            editingDoseId ? "Update Dose Entry" : "Add Dose Entry"
+            "div",
+            { className: "dose-form-actions" },
+            h(
+              "button",
+              { type: "submit", className: "primary-button" },
+              editingDoseId ? "Update Dose Segment" : "Save Dose Segment"
+            ),
+            !editingDoseId ? h(
+              "button",
+              {
+                type: "submit",
+                className: "secondary-button",
+                "data-submit-mode": "save-add-another"
+              },
+              "Save & Add Another"
+            ) : null
           ),
           editingDoseId ? h(
             "button",
@@ -50410,27 +50936,137 @@ function App() {
             "Cancel edit"
           ) : null,
           entryStatus ? h("p", { className: "helper success-text" }, entryStatus) : null,
-          entryError ? h("p", { className: "helper error-text" }, entryError) : null
-        ),
-        h(
-          "div",
-          { className: "field" },
-          h("label", { htmlFor: "timeframe" }, "Timeframe"),
+          entryError ? h("p", { className: "helper error-text" }, entryError) : null,
           h(
-            "select",
+            "section",
             {
-              id: "timeframe",
-              value: timeframe,
-              onChange: (event) => setTimeframe(event.target.value)
+              className: `workspace-panel advanced-options-panel${stepThreeAdvancedOpen ? " open" : ""}`
             },
-            TIMEFRAME_OPTIONS.map(
-              (option) => h("option", { key: option.value, value: option.value }, option.label)
-            )
+            h(
+              "div",
+              { className: "advanced-options-header" },
+              h(
+                "div",
+                null,
+                h("p", { className: "section-kicker" }, "Advanced Options"),
+                h("h3", null, "External import and SMART / FHIR tools"),
+                h(
+                  "p",
+                  { className: "helper" },
+                  "Keep external-source import and beta EHR tools close at hand without interrupting the main dose-entry workflow."
+                )
+              )
+            ),
+            h(
+              "div",
+              { className: "step-three-toolbar" },
+              h(
+                "div",
+                { className: "field step-three-timeframe-field" },
+                h("label", { htmlFor: "timeframe" }, "Timeframe"),
+                h(
+                  "select",
+                  {
+                    id: "timeframe",
+                    value: timeframe,
+                    onChange: (event) => setTimeframe(event.target.value)
+                  },
+                  TIMEFRAME_OPTIONS.map(
+                    (option) => h("option", { key: option.value, value: option.value }, option.label)
+                  )
+                )
+              ),
+              h(
+                "button",
+                {
+                  type: "button",
+                  className: "secondary-button advanced-toggle",
+                  onClick: () => setStepThreeAdvancedOpen((current3) => !current3)
+                },
+                "Advanced Options"
+              ),
+              h(
+                "button",
+                {
+                  type: "button",
+                  className: "remove-button",
+                  onClick: handleClearWorkspace
+                },
+                "Clear All"
+              )
+            ),
+            stepThreeAdvancedOpen ? h(
+              "div",
+              { className: "advanced-options-grid" },
+              h(
+                "article",
+                { className: "advanced-option-card" },
+                h("p", { className: "card-label" }, "External source import"),
+                h("h4", null, "Import medicine data from external source"),
+                h(
+                  "p",
+                  null,
+                  "Open the dedicated import workspace or jump straight into a FHIR paste or upload import."
+                ),
+                h(
+                  "div",
+                  { className: "advanced-option-actions" },
+                  h(
+                    "button",
+                    {
+                      type: "button",
+                      className: "primary-button",
+                      onClick: () => navigateToView(APP_VIEW_EXTERNAL_IMPORT)
+                    },
+                    "Open import page"
+                  ),
+                  h(
+                    "button",
+                    {
+                      type: "button",
+                      className: "secondary-button",
+                      onClick: () => openFhirModal("paste")
+                    },
+                    "Import FHIR"
+                  )
+                )
+              ),
+              h(
+                "article",
+                { className: "advanced-option-card" },
+                h("p", { className: "card-label" }, "SMART on FHIR beta"),
+                h("h4", null, "Connect to a supported EHR"),
+                h(
+                  "p",
+                  null,
+                  "Launch the beta SMART / FHIR tools when you need a live EHR connection from within the current regimen workflow."
+                ),
+                h(
+                  "div",
+                  { className: "advanced-option-actions" },
+                  h(
+                    "button",
+                    {
+                      type: "button",
+                      className: "secondary-button",
+                      onClick: () => openFhirModal("ehr")
+                    },
+                    "Open SMART / FHIR tools"
+                  )
+                )
+              )
+            ) : h(
+              "p",
+              { className: "helper" },
+              "Open advanced options to access the dedicated external-source import page and SMART / FHIR beta tools from Step 3."
+            ),
+            fhirImportStatus ? h("p", { className: "helper success-text" }, fhirImportStatus) : null
           )
         ),
         h(
           "div",
           { className: "field profile-actions" },
+          h("p", { className: "metric-label" }, "Profile save"),
           h(
             "button",
             {
@@ -50458,7 +51094,12 @@ function App() {
         h(
           "section",
           { className: "workspace-panel" },
-          h("h2", null, "Data tools"),
+          h(
+            "div",
+            { className: "panel-header compact" },
+            h("p", { className: "section-kicker" }, "Step 5"),
+            h("h2", null, "Data tools")
+          ),
           h(
             "div",
             { className: "profile-card-actions" },
@@ -50520,7 +51161,12 @@ function App() {
         h(
           "section",
           { className: "profile-panel" },
-          h("h2", null, "Saved graph profiles"),
+          h(
+            "div",
+            { className: "panel-header compact" },
+            h("p", { className: "section-kicker" }, "Step 6"),
+            h("h2", null, "Saved graph profiles")
+          ),
           profiles.length ? h(
             "div",
             { className: "profile-list" },
@@ -50634,11 +51280,17 @@ function App() {
                   { className: "small-label" },
                   "Max/day",
                   h("input", {
-                    type: "number",
-                    min: "0.1",
-                    step: "0.1",
-                    value: row.maxDailyDose ?? "",
-                    onChange: (event) => handleMaxDoseChange(row.drugId, event.target.value)
+                    type: "text",
+                    inputMode: "decimal",
+                    value: maxDoseDrafts[String(row.drugId)] ?? String(row.maxDailyDose ?? ""),
+                    onChange: (event) => handleMaxDoseDraftChange(row.drugId, event.target.value),
+                    onBlur: () => commitMaxDoseChange(row.drugId),
+                    onKeyDown: (event) => {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        commitMaxDoseChange(row.drugId);
+                      }
+                    }
                   })
                 ),
                 h(
@@ -50674,16 +51326,117 @@ function App() {
         h(
           "section",
           { className: "workspace-panel auth-panel-shell" },
-          h("h2", null, isAuthenticated ? "Account sync" : "Optional account sign-in"),
+          h(
+            "div",
+            { className: "panel-header compact" },
+            h("p", { className: "section-kicker" }, "Step 7"),
+            h(
+              "h2",
+              null,
+              isAuthenticated ? "Account sync and legal checklist" : "Account registration and sign-in"
+            )
+          ),
           h(
             "p",
             null,
-            isAuthenticated ? "Your saved medication-list profiles can sync with the backend while local browser storage remains available as a fallback." : "The graph, dose entry, imports, exports, and local profiles all work in guest mode. Sign in only if you want backend-synced profiles."
+            isAuthenticated ? "Your saved medication-list profiles can sync with the backend while local browser storage remains available as a fallback." : "Register or sign in here when you want saved profiles and backend sync. Guest mode still lets you use the graph and basic medication entry tools."
+          ),
+          isAuthenticated ? [
+            h(
+              "div",
+              { className: "auth-inline-status", key: "auth-status" },
+              h(
+                "p",
+                { className: "helper" },
+                `Currently signed in as ${user?.name || user?.email}.`
+              ),
+              h(
+                "button",
+                {
+                  type: "button",
+                  className: "pill-button secondary-button",
+                  onClick: handleLogout
+                },
+                "Logout"
+              )
+            ),
+            h(
+              "div",
+              { className: "account-data-grid", key: "account-data" },
+              buildAccountDataRows(user).map(
+                (row) => h(
+                  "div",
+                  { className: "account-data-row", key: row.label },
+                  h("span", { className: "metric-label" }, row.label),
+                  h("strong", null, row.value)
+                )
+              )
+            )
+          ] : h(
+            "div",
+            { className: "auth-form auth-inline-form" },
+            authError ? h("div", { className: "error" }, authError) : null,
+            authNotice ? h("p", { className: "helper success-text" }, authNotice) : null,
+            h(
+              "div",
+              { className: "notice-card legal-copy auth-legal-reminder" },
+              h("strong", null, "Before creating or using a synced account"),
+              h(
+                "p",
+                null,
+                "Review the legal checklist below. Do not use direct patient names, and only use identifiable health data when your organization has approved that use."
+              )
+            ),
+            h(
+              "p",
+              { className: "helper auth-preflight-hint" },
+              "Login only works after two things are true: the patient label is de-identified, and all three legal checkboxes below are accepted."
+            ),
+            authMode === "register" ? h("input", {
+              type: "text",
+              placeholder: "Name",
+              value: authName,
+              onChange: (e) => setAuthName(e.target.value)
+            }) : null,
+            h("input", {
+              type: "email",
+              placeholder: "Email",
+              value: authEmail,
+              onChange: (e) => setAuthEmail(e.target.value)
+            }),
+            h("input", {
+              type: "password",
+              placeholder: "Password",
+              value: authPassword,
+              onChange: (e) => setAuthPassword(e.target.value)
+            }),
+            h(
+              "div",
+              { className: "auth-inline-actions" },
+              h(
+                "button",
+                {
+                  type: "button",
+                  onClick: handleAuth,
+                  disabled: authLoading
+                },
+                authLoading ? "Loading..." : authMode === "login" ? "Login" : "Register"
+              ),
+              h(
+                "button",
+                {
+                  type: "button",
+                  className: "secondary-button",
+                  onClick: () => setAuthMode(authMode === "login" ? "register" : "login")
+                },
+                authMode === "login" ? "Need an account?" : "Have an account?"
+              )
+            )
           ),
           h(
             "div",
             { className: "compliance-panel" },
-            h("p", { className: "metric-label" }, "Compliance and licensing notices"),
+            h("p", { className: "metric-label" }, "Legal checklist"),
             h(
               "p",
               { className: "helper" },
@@ -50757,82 +51510,6 @@ function App() {
                 hasAcceptedComplianceRequirements ? "Account sync, imports, exports, and profile saves are enabled." : "Until all three notices are accepted, account sync, imports, exports, and profile saves stay blocked."
               )
             )
-          ),
-          isAuthenticated ? [
-            h(
-              "div",
-              { className: "auth-inline-status", key: "auth-status" },
-              h(
-                "p",
-                { className: "helper" },
-                `Currently signed in as ${user?.name || user?.email}.`
-              ),
-              h(
-                "button",
-                {
-                  type: "button",
-                  className: "pill-button secondary-button",
-                  onClick: handleLogout
-                },
-                "Logout"
-              )
-            ),
-            h(
-              "div",
-              { className: "account-data-grid", key: "account-data" },
-              buildAccountDataRows(user).map(
-                (row) => h(
-                  "div",
-                  { className: "account-data-row", key: row.label },
-                  h("span", { className: "metric-label" }, row.label),
-                  h("strong", null, row.value)
-                )
-              )
-            )
-          ] : h(
-            "div",
-            { className: "auth-form auth-inline-form" },
-            authError ? h("div", { className: "error" }, authError) : null,
-            authMode === "register" ? h("input", {
-              type: "text",
-              placeholder: "Name",
-              value: authName,
-              onChange: (e) => setAuthName(e.target.value)
-            }) : null,
-            h("input", {
-              type: "email",
-              placeholder: "Email",
-              value: authEmail,
-              onChange: (e) => setAuthEmail(e.target.value)
-            }),
-            h("input", {
-              type: "password",
-              placeholder: "Password",
-              value: authPassword,
-              onChange: (e) => setAuthPassword(e.target.value)
-            }),
-            h(
-              "div",
-              { className: "auth-inline-actions" },
-              h(
-                "button",
-                {
-                  type: "button",
-                  onClick: handleAuth,
-                  disabled: authLoading
-                },
-                authLoading ? "Loading..." : authMode === "login" ? "Login" : "Register"
-              ),
-              h(
-                "button",
-                {
-                  type: "button",
-                  className: "secondary-button",
-                  onClick: () => setAuthMode(authMode === "login" ? "register" : "login")
-                },
-                authMode === "login" ? "Need an account?" : "Have an account?"
-              )
-            )
           )
         ),
         h(
@@ -50874,7 +51551,8 @@ function App() {
           h(
             "div",
             { className: "panel-copy" },
-            h("h2", null, "Comparison chart"),
+            h("p", { className: "section-kicker" }, "Step 4"),
+            h("h2", null, "Review the trend"),
             h(
               "p",
               null,
@@ -50937,7 +51615,8 @@ function App() {
                 LineChart,
                 {
                   data: chartData,
-                  margin: { top: 12, right: 18, left: 0, bottom: 12 }
+                  margin: { top: 12, right: 18, left: 0, bottom: 12 },
+                  onClick: handleChartClick
                 },
                 h(CartesianGrid, {
                   stroke: "rgba(33, 49, 58, 0.12)",
@@ -50971,11 +51650,12 @@ function App() {
                   stroke: "rgba(33, 49, 58, 0.18)",
                   strokeDasharray: "4 4"
                 }),
-                h(ReferenceLine, {
-                  y: 80,
-                  stroke: "var(--danger)",
-                  strokeDasharray: "5 5"
-                }),
+                // MARKER: PDG-80PCT-DISABLED-2026-04-20 — re-enable block below to restore 80% max dose reference line
+                // h(ReferenceLine, {
+                //   y: 80,
+                //   stroke: 'var(--danger)',
+                //   strokeDasharray: '5 5',
+                // }),
                 h(ReferenceLine, {
                   y: 100,
                   stroke: "rgba(191, 79, 41, 0.45)",
@@ -51006,6 +51686,120 @@ function App() {
               )
             )
           ),
+          h(
+            "div",
+            { className: "chart-legend", "aria-label": "Active comparison legend" },
+            selectedDrugs.map(
+              (drug, index) => h(
+                "span",
+                { className: "legend-chip", key: `legend-${drug.id}` },
+                h("span", {
+                  className: "legend-swatch",
+                  style: { backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }
+                }),
+                h("span", null, drug.name),
+                h(
+                  "button",
+                  {
+                    type: "button",
+                    className: "table-action secondary compact-button",
+                    onClick: () => handleToggleDrugSelection(drug.id)
+                  },
+                  "Remove"
+                )
+              )
+            )
+          ),
+          h(
+            "div",
+            { className: "graph-toolbar" },
+            h(
+              "button",
+              {
+                type: "button",
+                className: "secondary-button",
+                disabled: !canAddMore && !compareBarOpen,
+                onClick: () => {
+                  setCompareBarOpen((current3) => !current3);
+                  if (compareBarOpen) {
+                    setCompareBarTerm("");
+                  }
+                }
+              },
+              compareBarOpen ? "Hide Add Drug Panel" : "Add Drug To Graph"
+            )
+          ),
+          compareBarOpen ? h(
+            "section",
+            { className: "add-drug-panel", "aria-label": "Add drug to graph" },
+            h(
+              "div",
+              { className: "panel-header compact" },
+              h("p", { className: "section-kicker" }, "Graph Add"),
+              h("h3", null, "Add another drug series"),
+              h(
+                "p",
+                null,
+                "Add a new medication line to the current graph with the same static Add Drug To Graph flow, using the existing dynamic medication library."
+              )
+            ),
+            h(
+              "div",
+              { className: "field" },
+              h("label", { htmlFor: "compareBarSearch" }, "Medication"),
+              h("input", {
+                id: "compareBarSearch",
+                autoFocus: true,
+                className: "search-input",
+                type: "search",
+                placeholder: "Search medication to add to graph",
+                value: compareBarTerm,
+                onChange: (event) => setCompareBarTerm(event.target.value)
+              })
+            ),
+            compareBarTerm.length >= 2 ? h(
+              "div",
+              { className: "search-results add-drug-panel-results" },
+              drugs.filter(
+                (d) => d.name.toLowerCase().includes(compareBarTerm.toLowerCase()) && !selectedDrugIds.includes(d.id)
+              ).slice(0, 8).map(
+                (d) => h(
+                  "div",
+                  { className: "result-row", key: `compare-${d.id}` },
+                  h(
+                    "div",
+                    { className: "result-copy" },
+                    h("strong", null, d.name),
+                    h("p", null, buildDrugResultCaption(d))
+                  ),
+                  h(
+                    "button",
+                    {
+                      type: "button",
+                      className: "pill-button",
+                      onClick: () => {
+                        handleAddDrug(d);
+                        setCompareBarOpen(false);
+                        setCompareBarTerm("");
+                      }
+                    },
+                    "Add To Graph"
+                  )
+                )
+              )
+            ) : h(
+              "p",
+              { className: "helper" },
+              "Type at least two letters to search the existing medication library and add another plotted drug."
+            ),
+            compareBarTerm.length >= 2 && !drugs.some(
+              (d) => d.name.toLowerCase().includes(compareBarTerm.toLowerCase()) && !selectedDrugIds.includes(d.id)
+            ) ? h(
+              "div",
+              { className: "empty small-empty" },
+              "No additional medication matches were found for this graph search."
+            ) : null
+          ) : null,
           h(
             "div",
             { className: "insights" },
@@ -51040,6 +51834,103 @@ function App() {
                 null,
                 medicationEntries.length ? `${medicationSummary.currentCount} current, ${medicationSummary.historicCount} historic, and ${medicationSummary.plannedCount} planned entry/entries are available for this patient list.` : "Add a few medications from the list entry module to start a reusable medication history."
               )
+            )
+          ),
+          h(
+            "section",
+            { className: "panel" },
+            h("h2", null, "Graph interaction"),
+            h(
+              "p",
+              null,
+              "This graph is rendered as F(x) = y where x is time and y is the selected medication dose expressed as % of max daily dose. Click any plotted line segment to inspect the underlying dose event(s) and jump into editing."
+            ),
+            selectedChartBucket ? h(
+              import_react56.default.Fragment,
+              null,
+              h(
+                "p",
+                { className: "helper" },
+                `${selectedChartBucket.drugName} \xB7 ${selectedChartBucket.label} \xB7 ${selectedChartBucket.percent.toFixed(1)}% max dose \xB7 ${selectedChartBucket.doseAmount.toFixed(1)} total visible units across ${selectedChartBucket.date === selectedChartBucket.endDate ? selectedChartBucket.date : `${selectedChartBucket.date} to ${selectedChartBucket.endDate}`}`
+              ),
+              h(
+                "div",
+                { className: "table-wrap" },
+                h(
+                  "table",
+                  { className: "table" },
+                  h(
+                    "thead",
+                    null,
+                    h(
+                      "tr",
+                      null,
+                      h("th", null, "Date"),
+                      h("th", null, "End"),
+                      h("th", null, "Dose"),
+                      h("th", null, "% Max"),
+                      h("th", null, "Notes"),
+                      h("th", null, "Actions")
+                    )
+                  ),
+                  h(
+                    "tbody",
+                    null,
+                    selectedChartEvents.length ? selectedChartEvents.map((event) => {
+                      const drug = drugLookup.get(event.drugId);
+                      const maxDose = drug?.maxDailyDose ?? 100;
+                      const percent = maxDose > 0 ? event.amount / maxDose * 100 : 0;
+                      return h(
+                        "tr",
+                        { key: `chart-selection-${event.id}` },
+                        h("td", null, event.date),
+                        h("td", null, event.endDate ?? event.resolvedEndDate ?? "\u2014"),
+                        h(
+                          "td",
+                          null,
+                          `${event.amount.toFixed(1)} ${event.doseUnit ?? drug?.unit ?? "mg"}`
+                        ),
+                        h("td", null, `${percent.toFixed(1)}%`),
+                        h("td", null, event.notes || "\u2014"),
+                        h(
+                          "td",
+                          { className: "table-actions" },
+                          h(
+                            "button",
+                            {
+                              type: "button",
+                              className: "pill-button secondary-button compact-button",
+                              onClick: () => handleStartDoseEdit(event)
+                            },
+                            "Edit"
+                          ),
+                          h(
+                            "button",
+                            {
+                              type: "button",
+                              className: "remove-button compact-button",
+                              onClick: () => handleDeleteDose(event.id)
+                            },
+                            "Delete"
+                          )
+                        )
+                      );
+                    }) : h(
+                      "tr",
+                      null,
+                      h(
+                        "td",
+                        { colSpan: 6 },
+                        "This plotted bucket does not map cleanly to a single editable event. Try a shorter timeframe for more granular point selection."
+                      )
+                    )
+                  )
+                )
+              )
+            ) : h(
+              "div",
+              { className: "empty small-empty" },
+              "Click a plotted line segment to review and edit the dose events behind that point."
             )
           )
         ),
@@ -51134,7 +52025,7 @@ function App() {
                 filteredEvents.length ? filteredEvents.slice(0, 20).map((event) => {
                   const drug = drugLookup.get(event.drugId);
                   const maxDose = drug?.maxDailyDose ?? 100;
-                  const unit2 = drug?.unit ?? "mg";
+                  const unit2 = event.doseUnit ?? drug?.unit ?? "mg";
                   const percent = maxDose > 0 ? event.amount / maxDose * 100 : 0;
                   return h(
                     "tr",
@@ -51185,11 +52076,11 @@ function App() {
       h(
         "section",
         { className: "panel" },
-        h("h2", null, "3-Drug Hypothetical Profile Generator"),
+        h("h2", null, "Demo tools \xB7 Random MedGraf Generator"),
         h(
           "p",
           null,
-          "Generate a synthetic 3-year cardiovascular medication timeline with realistic dose changes to demonstrate charting capabilities."
+          "Generate a three-drug cardiovascular profile with stepwise dose changes over three years. The chart plots % max daily dose against calendar dates."
         ),
         h(
           "div",
@@ -51276,11 +52167,12 @@ function App() {
                   stroke: "rgba(33, 49, 58, 0.18)",
                   strokeDasharray: "4 4"
                 }),
-                h(ReferenceLine, {
-                  y: 80,
-                  stroke: "var(--danger)",
-                  strokeDasharray: "5 5"
-                }),
+                // MARKER: PDG-80PCT-DISABLED-2026-04-20 — re-enable block below to restore 80% max dose reference line (preview chart)
+                // h(ReferenceLine, {
+                //   y: 80,
+                //   stroke: 'var(--danger)',
+                //   strokeDasharray: '5 5',
+                // }),
                 h(ReferenceLine, {
                   y: 100,
                   stroke: "rgba(191, 79, 41, 0.45)",
@@ -51348,7 +52240,23 @@ function App() {
             )
           )
         ) : null
-      )
+      ),
+      fhirModalOpen ? h(FhirImportModal, {
+        key: "fhir-import-modal",
+        initialTab: fhirModalInitialTab,
+        drugs,
+        onClose: () => setFhirModalOpen(false),
+        onConfirm: handleFhirImportConfirm,
+        ehrSessionId,
+        ehrPatientName,
+        ehrPatientId,
+        ehrSystemName,
+        ehrConnecting,
+        ehrError,
+        onEhrConnect: handleEhrConnect,
+        onEhrDisconnect: handleEhrDisconnect,
+        onPatientSelected: handleEhrPatientSelected
+      }) : null
     )
   );
 }
@@ -51360,6 +52268,980 @@ function resolveApiBasePath() {
     return "http://localhost:3001/api";
   }
   return `${window.location.origin}/api`;
+}
+function getAppViewFromHash(hash) {
+  return hash === "#external-import" ? APP_VIEW_EXTERNAL_IMPORT : APP_VIEW_WORKSPACE;
+}
+function ExternalImportPage({
+  onReturnToWorkspace,
+  onOpenImportModal,
+  fhirImportStatus,
+  hasAcceptedComplianceRequirements,
+  ehrSessionId,
+  ehrPatientName,
+  ehrSystemName
+}) {
+  return h(
+    "section",
+    { className: "external-import-layout" },
+    h(
+      "aside",
+      { className: "panel external-import-sidebar" },
+      h("p", { className: "section-kicker" }, "External source import"),
+      h("h2", null, "Compare and see medication doses over time."),
+      h(
+        "p",
+        null,
+        "DoseGraph shows each dose as a percent of that drug's maximum dose at each time point. This makes it easy to compare one drug to another, or compare the same drug across time."
+      ),
+      h(
+        "div",
+        { className: "external-import-actions" },
+        h(
+          "button",
+          {
+            type: "button",
+            className: "primary-button",
+            onClick: () => onOpenImportModal("paste")
+          },
+          "Paste FHIR bundle JSON"
+        ),
+        h(
+          "button",
+          {
+            type: "button",
+            className: "secondary-button",
+            onClick: () => onOpenImportModal("upload")
+          },
+          "Upload FHIR bundle file"
+        ),
+        h(
+          "button",
+          {
+            type: "button",
+            className: "secondary-button",
+            onClick: () => onOpenImportModal("ehr")
+          },
+          "Open SMART / FHIR beta"
+        ),
+        h(
+          "button",
+          {
+            type: "button",
+            className: "pill-button secondary-button",
+            onClick: onReturnToWorkspace
+          },
+          "Return to workspace"
+        )
+      ),
+      fhirImportStatus ? h("p", { className: "helper success-text" }, fhirImportStatus) : null
+    ),
+    h(
+      "div",
+      { className: "external-import-main" },
+      h(
+        "section",
+        { className: "workspace-panel" },
+        h("p", { className: "section-kicker" }, "How this works"),
+        h("h2", null, "Review first, then add to the active workspace"),
+        h(
+          "div",
+          { className: "external-import-card-grid" },
+          h(
+            "article",
+            { className: "external-import-card" },
+            h("p", { className: "card-label" }, "1. Bring in data"),
+            h(
+              "p",
+              null,
+              "Paste JSON, upload a FHIR Bundle file, or open the SMART on FHIR beta connection tools."
+            )
+          ),
+          h(
+            "article",
+            { className: "external-import-card" },
+            h("p", { className: "card-label" }, "2. Review matches"),
+            h(
+              "p",
+              null,
+              "DoseGraph maps medications against the local library and flags anything that needs manual review before it is added."
+            )
+          ),
+          h(
+            "article",
+            { className: "external-import-card" },
+            h("p", { className: "card-label" }, "3. Continue in graph workflow"),
+            h(
+              "p",
+              null,
+              "Accepted medications flow back into the active medication list and dose-graph workspace for editing and comparison."
+            )
+          )
+        )
+      ),
+      h(
+        "section",
+        { className: "panel external-import-status-panel" },
+        h("p", { className: "section-kicker" }, "Import status"),
+        h("h2", null, "Current import readiness"),
+        h(
+          "div",
+          { className: "external-import-status-grid" },
+          h(
+            "article",
+            { className: "workspace-card external-import-mini-card" },
+            h("p", { className: "card-label" }, "Legal checklist"),
+            h("strong", null, hasAcceptedComplianceRequirements ? "Accepted" : "Still pending"),
+            h(
+              "p",
+              { className: "workspace-detail" },
+              hasAcceptedComplianceRequirements ? "The legal acknowledgements for synced workflows and data tools have been accepted." : "Review the legal checklist in the main workspace before relying on synced account workflows."
+            )
+          ),
+          h(
+            "article",
+            { className: "workspace-card external-import-mini-card" },
+            h("p", { className: "card-label" }, "SMART / FHIR beta"),
+            h("strong", null, ehrSessionId ? "Connected" : "Not connected"),
+            h(
+              "p",
+              { className: "workspace-detail" },
+              ehrSessionId ? `${ehrSystemName || "EHR"}${ehrPatientName ? ` \xB7 ${ehrPatientName}` : ""}` : "Use this only when live EHR connection is enabled for the environment."
+            )
+          )
+        )
+      ),
+      h(
+        "section",
+        { className: "panel" },
+        h("p", { className: "section-kicker" }, "Source types"),
+        h("h2", null, "Supported external-source paths"),
+        h(
+          "div",
+          { className: "external-import-card-grid" },
+          h(
+            "article",
+            { className: "external-import-card" },
+            h("h3", null, "FHIR Bundle paste"),
+            h(
+              "p",
+              null,
+              "Best when another system gives you raw FHIR JSON that you want to review quickly without saving a file first."
+            )
+          ),
+          h(
+            "article",
+            { className: "external-import-card" },
+            h("h3", null, "FHIR file upload"),
+            h(
+              "p",
+              null,
+              "Useful for exported bundle files from EHR portals, developer sandboxes, or intermediary clinical data tools."
+            )
+          ),
+          h(
+            "article",
+            { className: "external-import-card" },
+            h("h3", null, "SMART on FHIR beta"),
+            h(
+              "p",
+              null,
+              "Available when the API environment explicitly enables live EHR connection. Keep this as an advanced workflow, not the default MVP path."
+            )
+          )
+        )
+      )
+    )
+  );
+}
+function FhirImportModal({
+  initialTab = "paste",
+  drugs,
+  onClose,
+  onConfirm,
+  ehrSessionId,
+  ehrPatientName,
+  ehrPatientId,
+  ehrSystemName,
+  ehrConnecting,
+  ehrError,
+  onEhrConnect,
+  onEhrDisconnect,
+  onPatientSelected
+}) {
+  const [activeTab, setActiveTab] = import_react56.default.useState(initialTab);
+  const [pasteText, setPasteText] = import_react56.default.useState("");
+  const [parseError, setParseError] = import_react56.default.useState("");
+  const [importing, setImporting] = import_react56.default.useState(false);
+  const [importResult, setImportResult] = import_react56.default.useState(null);
+  const [checkedIds, setCheckedIds] = import_react56.default.useState(/* @__PURE__ */ new Set());
+  const [unmatchedOverrides, setUnmatchedOverrides] = import_react56.default.useState({});
+  const fileInputRef = import_react56.default.useRef(null);
+  function fhirStatusToTimeline(status) {
+    if (status === "completed" || status === "stopped") return "historic";
+    if (status === "intended" || status === "on-hold") return "planned";
+    return "current";
+  }
+  async function processBundle(bundle) {
+    setImporting(true);
+    setParseError("");
+    setImportResult(null);
+    try {
+      const response = await fetch(`${API_BASE_PATH}/fhir/import`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bundle)
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(err.error ?? `Server error ${response.status}`);
+      }
+      const result = await response.json();
+      const initialChecked = new Set(result.matched.map((_, i) => i));
+      setCheckedIds(initialChecked);
+      setImportResult(result);
+    } catch (err) {
+      setParseError(err instanceof Error ? err.message : "Import failed. Please check the bundle and try again.");
+    } finally {
+      setImporting(false);
+    }
+  }
+  function handlePasteSubmit() {
+    let bundle;
+    try {
+      bundle = JSON.parse(pasteText.trim());
+    } catch {
+      setParseError("Invalid JSON. Please paste a valid FHIR Bundle.");
+      return;
+    }
+    if (!bundle?.resourceType) {
+      setParseError('The pasted text does not look like a FHIR resource. Make sure it includes "resourceType": "Bundle".');
+      return;
+    }
+    processBundle(bundle);
+  }
+  function handleFileChange(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      let bundle;
+      try {
+        bundle = JSON.parse(e.target.result);
+      } catch {
+        setParseError("Could not parse the file as JSON. Make sure it is a valid FHIR Bundle JSON file.");
+        return;
+      }
+      if (!bundle?.resourceType) {
+        setParseError('The uploaded file does not look like a FHIR resource. Make sure it includes "resourceType": "Bundle".');
+        return;
+      }
+      processBundle(bundle);
+    };
+    reader.readAsText(file);
+    event.target.value = "";
+  }
+  function toggleChecked(index) {
+    setCheckedIds((current3) => {
+      const next = new Set(current3);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
+  }
+  function handleConfirm() {
+    if (!importResult) return;
+    const selectedMatches = importResult.matched.filter((_, i) => checkedIds.has(i));
+    const matchedDrugs = [];
+    const matchedMedicationEntries = [];
+    for (const match of selectedMatches) {
+      const drug = normalizeDrugRecord(match.drug);
+      matchedDrugs.push(drug);
+      const parsed = match.parsedMedication;
+      const route = parsed.route ?? "PO";
+      const today = formatDateKey(/* @__PURE__ */ new Date());
+      const entry = normalizeMedicationEntry({
+        id: `fhir-${drug.id}-${parsed.startDate ?? today}-${route}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        drugId: String(drug.id),
+        startDate: parsed.startDate ?? today,
+        endDate: parsed.endDate ?? "",
+        route,
+        timelineStatus: fhirStatusToTimeline(parsed.status),
+        notes: parsed.dose != null ? `Imported from FHIR (${parsed.sourceResourceType}). Dose: ${parsed.dose} ${parsed.unit ?? ""}.`.trim() : `Imported from FHIR (${parsed.sourceResourceType}).`,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString()
+      });
+      matchedMedicationEntries.push(entry);
+    }
+    for (const [indexStr, selectedDrugId] of Object.entries(unmatchedOverrides)) {
+      const index = Number(indexStr);
+      const parsed = importResult.unmatched[index];
+      const drug = drugs.find((d) => String(d.id) === String(selectedDrugId));
+      if (!drug || !parsed) continue;
+      const normalizedDrug = normalizeDrugRecord(drug);
+      matchedDrugs.push(normalizedDrug);
+      const route = parsed.route ?? "PO";
+      const today = formatDateKey(/* @__PURE__ */ new Date());
+      const entry = normalizeMedicationEntry({
+        id: `fhir-unmatched-${normalizedDrug.id}-${parsed.startDate ?? today}-${route}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        drugId: String(normalizedDrug.id),
+        startDate: parsed.startDate ?? today,
+        endDate: parsed.endDate ?? "",
+        route,
+        timelineStatus: fhirStatusToTimeline(parsed.status),
+        notes: `Manually matched from FHIR (${parsed.sourceResourceType}, original name: ${parsed.name}).`,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString()
+      });
+      matchedMedicationEntries.push(entry);
+    }
+    onConfirm({ matchedDrugs, matchedMedicationEntries });
+  }
+  const checkedCount = checkedIds.size + Object.keys(unmatchedOverrides).filter((k2) => unmatchedOverrides[k2]).length;
+  return h(
+    "div",
+    {
+      className: "modal-overlay",
+      role: "dialog",
+      "aria-modal": "true",
+      "aria-label": "Import from FHIR",
+      onClick: (e) => {
+        if (e.target === e.currentTarget) onClose();
+      }
+    },
+    h(
+      "div",
+      { className: "modal-box fhir-modal" },
+      h(
+        "div",
+        { className: "modal-header" },
+        h("h2", { className: "modal-title" }, "Import from FHIR"),
+        h(
+          "button",
+          { type: "button", className: "modal-close-button", onClick: onClose, "aria-label": "Close" },
+          "\xD7"
+        )
+      ),
+      !importResult ? h(
+        "div",
+        { className: "modal-body" },
+        h(
+          "div",
+          { className: "fhir-tabs" },
+          h(
+            "button",
+            {
+              type: "button",
+              className: `fhir-tab${activeTab === "paste" ? " active" : ""}`,
+              onClick: () => {
+                setActiveTab("paste");
+                setParseError("");
+              }
+            },
+            "Paste JSON"
+          ),
+          h(
+            "button",
+            {
+              type: "button",
+              className: `fhir-tab${activeTab === "upload" ? " active" : ""}`,
+              onClick: () => {
+                setActiveTab("upload");
+                setParseError("");
+              }
+            },
+            "Upload File"
+          ),
+          h(
+            "button",
+            {
+              type: "button",
+              className: `fhir-tab${activeTab === "ehr" ? " active" : ""}`,
+              onClick: () => {
+                setActiveTab("ehr");
+                setParseError("");
+              }
+            },
+            ehrSessionId ? "\u2022 EHR beta connected" : "EHR beta"
+          )
+        ),
+        activeTab === "paste" ? h(
+          "div",
+          { className: "fhir-tab-panel" },
+          h("label", { className: "field-label", htmlFor: "fhirPasteArea" }, "Paste a FHIR Bundle JSON:"),
+          h("textarea", {
+            id: "fhirPasteArea",
+            className: "fhir-paste-area",
+            placeholder: '{\n  "resourceType": "Bundle",\n  "entry": [...]\n}',
+            value: pasteText,
+            onChange: (e) => setPasteText(e.target.value),
+            rows: 12
+          }),
+          parseError ? h("p", { className: "helper error-text" }, parseError) : null,
+          h(
+            "div",
+            { className: "fhir-actions" },
+            h(
+              "button",
+              {
+                type: "button",
+                className: "primary-button",
+                disabled: importing || !pasteText.trim(),
+                onClick: handlePasteSubmit
+              },
+              importing ? "Importing\u2026" : "Parse Bundle"
+            ),
+            h("button", { type: "button", className: "secondary-button", onClick: onClose }, "Cancel")
+          )
+        ) : activeTab === "ehr" ? h(EhrConnectPanel, {
+          ehrSessionId,
+          ehrPatientName,
+          ehrPatientId,
+          ehrSystemName,
+          ehrConnecting,
+          ehrError,
+          onEhrConnect,
+          onEhrDisconnect,
+          onLoadMedications: processBundle,
+          onPatientSelected,
+          onClose
+        }) : h(
+          "div",
+          { className: "fhir-tab-panel" },
+          h("p", { className: "helper" }, "Upload a .json file containing a FHIR Bundle exported from your EHR or patient portal."),
+          h("input", {
+            ref: fileInputRef,
+            type: "file",
+            accept: ".json,application/json",
+            className: "fhir-file-input",
+            onChange: handleFileChange,
+            disabled: importing
+          }),
+          parseError ? h("p", { className: "helper error-text" }, parseError) : null,
+          importing ? h("p", { className: "helper" }, "Importing\u2026") : null,
+          h(
+            "div",
+            { className: "fhir-actions" },
+            h("button", { type: "button", className: "secondary-button", onClick: onClose }, "Cancel")
+          )
+        )
+      ) : h(
+        "div",
+        { className: "modal-body" },
+        h(
+          "p",
+          { className: "helper" },
+          `Parsed ${importResult.totalParsed} medication resource(s). ${importResult.totalMatched} matched, ${importResult.totalUnmatched} need review.`
+        ),
+        importResult.autoCreated?.length > 0 ? h(
+          "p",
+          { className: "helper success-text" },
+          `${importResult.autoCreated.length} new drug(s) auto-created from the RxNorm database.`
+        ) : null,
+        importResult.matched.length > 0 ? h(
+          import_react56.default.Fragment,
+          null,
+          h("h3", { className: "fhir-section-title" }, "Matched medications \u2014 select to add"),
+          h(
+            "div",
+            { className: "fhir-matched-list" },
+            importResult.matched.map(
+              (match, i) => h(
+                "label",
+                { key: `match-${i}`, className: "fhir-match-row" },
+                h("input", {
+                  type: "checkbox",
+                  checked: checkedIds.has(i),
+                  onChange: () => toggleChecked(i)
+                }),
+                h(
+                  "div",
+                  { className: "fhir-match-info" },
+                  h("span", { className: "fhir-match-name" }, match.drug.name),
+                  match.parsedMedication.name !== match.drug.name ? h("span", { className: "fhir-match-original" }, ` (from "${match.parsedMedication.name}")`) : null,
+                  match.isNewDrug ? h("span", { className: "fhir-badge new" }, "New") : null,
+                  h(
+                    "span",
+                    { className: "fhir-match-meta" },
+                    [
+                      match.parsedMedication.dose != null ? `${match.parsedMedication.dose} ${match.parsedMedication.unit ?? ""}`.trim() : null,
+                      match.parsedMedication.route,
+                      match.parsedMedication.startDate
+                    ].filter(Boolean).join(" \xB7 ")
+                  )
+                )
+              )
+            )
+          )
+        ) : null,
+        importResult.unmatched.length > 0 ? h(
+          import_react56.default.Fragment,
+          null,
+          h("h3", { className: "fhir-section-title review" }, "Review needed \u2014 unrecognized medications"),
+          h(
+            "div",
+            { className: "fhir-unmatched-list" },
+            importResult.unmatched.map(
+              (parsed, i) => h(
+                "div",
+                { key: `unmatched-${i}`, className: "fhir-unmatched-row" },
+                h(
+                  "div",
+                  { className: "fhir-match-info" },
+                  h("span", { className: "fhir-match-name" }, parsed.name),
+                  h(
+                    "span",
+                    { className: "fhir-match-meta" },
+                    [
+                      parsed.dose != null ? `${parsed.dose} ${parsed.unit ?? ""}`.trim() : null,
+                      parsed.route,
+                      parsed.startDate
+                    ].filter(Boolean).join(" \xB7 ")
+                  )
+                ),
+                h(
+                  "select",
+                  {
+                    className: "fhir-override-select",
+                    value: unmatchedOverrides[i] ?? "",
+                    onChange: (e) => {
+                      const val = e.target.value;
+                      setUnmatchedOverrides((cur) => ({ ...cur, [i]: val }));
+                    }
+                  },
+                  h("option", { value: "" }, "\u2014 Skip \u2014"),
+                  drugs.map((drug) => h("option", { key: drug.id, value: drug.id }, drug.name))
+                )
+              )
+            )
+          )
+        ) : null,
+        h(
+          "div",
+          { className: "fhir-actions" },
+          h(
+            "button",
+            {
+              type: "button",
+              className: "primary-button",
+              disabled: checkedCount === 0,
+              onClick: handleConfirm
+            },
+            `Add ${checkedCount} medication${checkedCount === 1 ? "" : "s"} to workspace`
+          ),
+          h(
+            "button",
+            {
+              type: "button",
+              className: "secondary-button",
+              onClick: () => setImportResult(null)
+            },
+            "Back"
+          ),
+          h("button", { type: "button", className: "secondary-button", onClick: onClose }, "Cancel")
+        )
+      )
+    )
+  );
+}
+function EhrConnectPanel({
+  ehrSessionId,
+  ehrPatientName,
+  ehrPatientId,
+  ehrSystemName,
+  ehrConnecting,
+  ehrError,
+  onEhrConnect,
+  onEhrDisconnect,
+  onLoadMedications,
+  onPatientSelected,
+  onClose
+}) {
+  const DEFAULT_EHR_SYSTEMS = [
+    { id: "epic-sandbox", name: "Epic (Sandbox)" },
+    { id: "cerner-sandbox", name: "Cerner (Sandbox)" }
+  ];
+  const [selectedEhrId, setSelectedEhrId] = import_react56.default.useState("epic-sandbox");
+  const [ehrSystems, setEhrSystems] = import_react56.default.useState(DEFAULT_EHR_SYSTEMS);
+  const [smartEnabled, setSmartEnabled] = import_react56.default.useState(false);
+  const [customSupported, setCustomSupported] = import_react56.default.useState(false);
+  const [smartConfigLoaded, setSmartConfigLoaded] = import_react56.default.useState(false);
+  const [smartStatusMessage, setSmartStatusMessage] = import_react56.default.useState(
+    "Loading SMART on FHIR beta availability\u2026"
+  );
+  const [customFhirBaseUrl, setCustomFhirBaseUrl] = import_react56.default.useState("");
+  const [customAuthorizeUrl, setCustomAuthorizeUrl] = import_react56.default.useState("");
+  const [customTokenUrl, setCustomTokenUrl] = import_react56.default.useState("");
+  const [customClientId, setCustomClientId] = import_react56.default.useState("");
+  const [loadingMeds, setLoadingMeds] = import_react56.default.useState(false);
+  const [loadMedError, setLoadMedError] = import_react56.default.useState("");
+  const [patientSearchQuery, setPatientSearchQuery] = import_react56.default.useState("");
+  const [patientSearchMode, setPatientSearchMode] = import_react56.default.useState("name");
+  const [patientSearchResults, setPatientSearchResults] = import_react56.default.useState(null);
+  const [patientSearchLoading, setPatientSearchLoading] = import_react56.default.useState(false);
+  const [patientSearchError, setPatientSearchError] = import_react56.default.useState("");
+  async function handlePatientSearch(e) {
+    if (e) e.preventDefault();
+    if (!patientSearchQuery.trim() || !ehrSessionId) return;
+    setPatientSearchLoading(true);
+    setPatientSearchError("");
+    setPatientSearchResults(null);
+    try {
+      const param = patientSearchMode === "identifier" ? `identifier=${encodeURIComponent(patientSearchQuery.trim())}` : `name=${encodeURIComponent(patientSearchQuery.trim())}`;
+      const path2 = encodeURIComponent(`/Patient?${param}&_count=20`);
+      const res = await fetch(`${API_BASE_PATH}/fhir/proxy?path=${path2}`, {
+        headers: { "X-FHIR-Session": ehrSessionId }
+      });
+      if (res.status === 401) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error ?? "EHR session not found. Please reconnect.");
+      }
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error ?? `FHIR server returned ${res.status}`);
+      }
+      const bundle = await res.json();
+      const entries = Array.isArray(bundle?.entry) ? bundle.entry : [];
+      setPatientSearchResults(entries.map((e3) => {
+        const r2 = e3.resource ?? {};
+        const name = (r2.name ?? []).find((n) => n.use === "official") ?? r2.name?.[0] ?? {};
+        const given = Array.isArray(name.given) ? name.given.join(" ") : "";
+        const family = name.family ?? "";
+        const displayName = [given, family].filter(Boolean).join(" ") || r2.id;
+        const dob = r2.birthDate ?? "";
+        const id = r2.id ?? "";
+        const mrn = (r2.identifier ?? []).find((i) => i.type?.coding?.some((c2) => c2.code === "MR"))?.value ?? "";
+        return { id, displayName, dob, mrn };
+      }));
+    } catch (err) {
+      setPatientSearchError(err instanceof Error ? err.message : "Patient search failed.");
+    } finally {
+      setPatientSearchLoading(false);
+    }
+  }
+  function handleSelectPatient(patient) {
+    if (onPatientSelected) {
+      onPatientSelected(patient.id, patient.displayName);
+    }
+    setPatientSearchResults(null);
+    setPatientSearchQuery("");
+  }
+  import_react56.default.useEffect(() => {
+    fetch(`${API_BASE_PATH}/fhir/smart/config`).then((r2) => r2.json()).then((data) => {
+      setSmartEnabled(Boolean(data.enabled));
+      setCustomSupported(Boolean(data.customSupported));
+      setSmartStatusMessage(
+        data.message ?? "SMART on FHIR live EHR connection is a beta workflow and may be disabled in this environment."
+      );
+      if (Array.isArray(data.systems)) {
+        setEhrSystems(data.systems);
+      }
+    }).catch(() => {
+      setSmartEnabled(false);
+      setCustomSupported(false);
+      setSmartStatusMessage(
+        "Could not load SMART on FHIR beta configuration. Manual FHIR bundle import is still available."
+      );
+    }).finally(() => {
+      setSmartConfigLoaded(true);
+    });
+  }, []);
+  async function handleLoadMedications() {
+    if (!ehrSessionId || !ehrPatientId) return;
+    setLoadingMeds(true);
+    setLoadMedError("");
+    const fetchFromProxy = async (path2) => {
+      const encodedPath = encodeURIComponent(path2);
+      const res = await fetch(
+        `${API_BASE_PATH}/fhir/proxy?path=${encodedPath}`,
+        { headers: { "X-FHIR-Session": ehrSessionId } }
+      );
+      if (res.status === 401) {
+        const err = await res.json().catch(() => ({}));
+        if (err.expired) throw new Error("Your EHR session has expired. Please reconnect.");
+        throw new Error(err.error ?? "EHR session not found. Please reconnect.");
+      }
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error ?? `FHIR server returned ${res.status}`);
+      }
+      return res.json();
+    };
+    try {
+      const pid = encodeURIComponent(ehrPatientId);
+      const [medReqBundle, medStmtBundle] = await Promise.allSettled([
+        fetchFromProxy(`/MedicationRequest?patient=${pid}&_count=100`),
+        fetchFromProxy(`/MedicationStatement?patient=${pid}&_count=100`)
+      ]);
+      const allEntries = [];
+      if (medReqBundle.status === "fulfilled" && Array.isArray(medReqBundle.value?.entry)) {
+        allEntries.push(...medReqBundle.value.entry);
+      }
+      if (medStmtBundle.status === "fulfilled" && Array.isArray(medStmtBundle.value?.entry)) {
+        allEntries.push(...medStmtBundle.value.entry);
+      }
+      if (allEntries.length === 0 && medReqBundle.status === "rejected") {
+        throw medReqBundle.reason;
+      }
+      const combinedBundle = {
+        resourceType: "Bundle",
+        type: "searchset",
+        total: allEntries.length,
+        entry: allEntries
+      };
+      await onLoadMedications(combinedBundle);
+    } catch (err) {
+      setLoadMedError(err instanceof Error ? err.message : "Failed to load medications from EHR.");
+    } finally {
+      setLoadingMeds(false);
+    }
+  }
+  const isConnected = Boolean(ehrSessionId);
+  const isCustom = selectedEhrId === "custom";
+  return h(
+    "div",
+    { className: "fhir-tab-panel ehr-connect-panel" },
+    !smartEnabled ? h(
+      import_react56.default.Fragment,
+      null,
+      h("p", { className: "helper" }, smartConfigLoaded ? smartStatusMessage : "Loading SMART on FHIR beta availability\u2026"),
+      h(
+        "p",
+        { className: "helper" },
+        "This MVP keeps paste/upload FHIR import available. The live EHR connection stays behind an explicit beta switch until the deployment environment and vendor credentials are fully production-ready."
+      ),
+      h(
+        "div",
+        { className: "fhir-actions" },
+        h("button", { type: "button", className: "secondary-button", onClick: onClose }, "Close")
+      )
+    ) : isConnected ? h(
+      import_react56.default.Fragment,
+      null,
+      h(
+        "div",
+        { className: "ehr-status connected" },
+        h("span", { className: "ehr-status-dot" }),
+        h(
+          "div",
+          { className: "ehr-status-text" },
+          h("strong", null, "Connected to EHR"),
+          h(
+            "span",
+            { className: "ehr-status-detail" },
+            ehrPatientName ? `Patient: ${ehrPatientName}` : ehrPatientId ? `Patient ID: ${ehrPatientId}` : "Patient context ready"
+          ),
+          ehrSystemName ? h("span", { className: "ehr-status-system" }, `System: ${ehrSystemName}`) : null
+        )
+      ),
+      loadMedError ? h("p", { className: "helper error-text" }, loadMedError) : null,
+      h(
+        "div",
+        { className: "fhir-actions" },
+        ehrPatientId ? h(
+          "button",
+          {
+            type: "button",
+            className: "primary-button",
+            disabled: loadingMeds,
+            onClick: handleLoadMedications
+          },
+          loadingMeds ? "Loading medications\u2026" : "Load patient medications"
+        ) : h(
+          import_react56.default.Fragment,
+          null,
+          h("p", { className: "helper" }, "No patient was pre-selected by the EHR. Search for a patient by name or MRN to continue."),
+          h(
+            "form",
+            { className: "patient-search-form", onSubmit: handlePatientSearch },
+            h(
+              "div",
+              { className: "patient-search-mode" },
+              h(
+                "label",
+                { className: "radio-label" },
+                h("input", {
+                  type: "radio",
+                  name: "patientSearchMode",
+                  value: "name",
+                  checked: patientSearchMode === "name",
+                  onChange: () => setPatientSearchMode("name")
+                }),
+                " Name"
+              ),
+              h(
+                "label",
+                { className: "radio-label" },
+                h("input", {
+                  type: "radio",
+                  name: "patientSearchMode",
+                  value: "identifier",
+                  checked: patientSearchMode === "identifier",
+                  onChange: () => setPatientSearchMode("identifier")
+                }),
+                " MRN / Identifier"
+              )
+            ),
+            h(
+              "div",
+              { className: "patient-search-input-row" },
+              h("input", {
+                type: "text",
+                className: "patient-search-input",
+                placeholder: patientSearchMode === "identifier" ? "Enter MRN or identifier\u2026" : "Enter patient name\u2026",
+                value: patientSearchQuery,
+                onChange: (e) => setPatientSearchQuery(e.target.value),
+                disabled: patientSearchLoading
+              }),
+              h(
+                "button",
+                {
+                  type: "submit",
+                  className: "primary-button",
+                  disabled: patientSearchLoading || !patientSearchQuery.trim()
+                },
+                patientSearchLoading ? "Searching\u2026" : "Search"
+              )
+            )
+          ),
+          patientSearchError ? h("p", { className: "helper error-text" }, patientSearchError) : null,
+          patientSearchResults !== null ? patientSearchResults.length === 0 ? h("p", { className: "helper" }, "No patients found. Try a different search term.") : h(
+            "ul",
+            { className: "patient-search-results" },
+            patientSearchResults.map(
+              (patient) => h(
+                "li",
+                { key: patient.id, className: "patient-search-result" },
+                h(
+                  "button",
+                  {
+                    type: "button",
+                    className: "patient-result-btn",
+                    onClick: () => handleSelectPatient(patient)
+                  },
+                  h("span", { className: "patient-result-name" }, patient.displayName),
+                  patient.dob ? h("span", { className: "patient-result-detail" }, `DOB: ${patient.dob}`) : null,
+                  patient.mrn ? h("span", { className: "patient-result-detail" }, `MRN: ${patient.mrn}`) : null
+                )
+              )
+            )
+          ) : null
+        ),
+        h(
+          "button",
+          {
+            type: "button",
+            className: "secondary-button",
+            onClick: onEhrDisconnect
+          },
+          "Disconnect"
+        ),
+        h("button", { type: "button", className: "secondary-button", onClick: onClose }, "Cancel")
+      )
+    ) : h(
+      import_react56.default.Fragment,
+      null,
+      h(
+        "p",
+        { className: "helper" },
+        smartStatusMessage
+      ),
+      h(
+        "div",
+        { className: "field" },
+        h("label", { className: "field-label", htmlFor: "ehrSystemPicker" }, "EHR system"),
+        h(
+          "select",
+          {
+            id: "ehrSystemPicker",
+            value: selectedEhrId,
+            onChange: (e) => setSelectedEhrId(e.target.value)
+          },
+          ehrSystems.map(
+            (s2) => h("option", { key: s2.id, value: s2.id }, s2.name)
+          ),
+          customSupported ? h("option", { value: "custom" }, "Custom FHIR server") : null
+        )
+      ),
+      customSupported ? h(
+        "p",
+        { className: "helper" },
+        "Custom FHIR server entry is intended for controlled testing only. Leave it off in production unless the backend explicitly enables it."
+      ) : null,
+      isCustom ? h(
+        import_react56.default.Fragment,
+        null,
+        h(
+          "div",
+          { className: "field" },
+          h("label", { className: "field-label", htmlFor: "customFhirBase" }, "FHIR Base URL"),
+          h("input", {
+            id: "customFhirBase",
+            type: "url",
+            placeholder: "https://example.com/fhir/R4",
+            value: customFhirBaseUrl,
+            onChange: (e) => setCustomFhirBaseUrl(e.target.value)
+          })
+        ),
+        h(
+          "div",
+          { className: "field" },
+          h("label", { className: "field-label", htmlFor: "customAuthorize" }, "Authorize URL"),
+          h("input", {
+            id: "customAuthorize",
+            type: "url",
+            placeholder: "https://example.com/oauth2/authorize",
+            value: customAuthorizeUrl,
+            onChange: (e) => setCustomAuthorizeUrl(e.target.value)
+          })
+        ),
+        h(
+          "div",
+          { className: "field" },
+          h("label", { className: "field-label", htmlFor: "customToken" }, "Token URL"),
+          h("input", {
+            id: "customToken",
+            type: "url",
+            placeholder: "https://example.com/oauth2/token",
+            value: customTokenUrl,
+            onChange: (e) => setCustomTokenUrl(e.target.value)
+          })
+        ),
+        h(
+          "div",
+          { className: "field" },
+          h("label", { className: "field-label", htmlFor: "customClientId" }, "Client ID"),
+          h("input", {
+            id: "customClientId",
+            type: "text",
+            placeholder: "your-client-id",
+            value: customClientId,
+            onChange: (e) => setCustomClientId(e.target.value)
+          })
+        )
+      ) : null,
+      ehrError ? h("p", { className: "helper error-text" }, ehrError) : null,
+      h(
+        "div",
+        { className: "fhir-actions" },
+        h(
+          "button",
+          {
+            type: "button",
+            className: "primary-button",
+            disabled: !smartEnabled || ehrConnecting || isCustom && (!customFhirBaseUrl || !customAuthorizeUrl || !customTokenUrl || !customClientId),
+            onClick: () => onEhrConnect({
+              ehrId: selectedEhrId,
+              fhirBaseUrl: customFhirBaseUrl,
+              authorizeUrl: customAuthorizeUrl,
+              tokenUrl: customTokenUrl,
+              clientId: customClientId
+            })
+          },
+          ehrConnecting ? "Connecting\u2026" : "Connect"
+        ),
+        h("button", { type: "button", className: "secondary-button", onClick: onClose }, "Cancel")
+      )
+    )
+  );
 }
 function normalizeDrugRecord(drug, index) {
   const referenceMaxDailyDose = Number.isFinite(Number(drug.referenceMaxDailyDose)) && Number(drug.referenceMaxDailyDose) > 0 ? Number(drug.referenceMaxDailyDose) : Number.isFinite(Number(drug.maxDailyDose)) && Number(drug.maxDailyDose) > 0 ? Number(drug.maxDailyDose) : 100;
@@ -51385,9 +53267,10 @@ function normalizeDoseRecord(dose, index, defaultDrugId) {
     id: String(dose.id ?? `dose-${index + 1}`),
     drugId: String(dose.drugId ?? defaultDrugId),
     date: dose.date,
-    endDate: dose.endDate || dose.date,
+    endDate: dose.endDate ?? "",
     route: dose.route ?? "PO",
     amount: Number(dose.amount ?? 0),
+    doseUnit: normalizeDoseUnit(dose.doseUnit ?? dose.unit),
     notes: dose.notes ?? ""
   };
 }
@@ -51548,8 +53431,9 @@ function getFilteredEvents(doses, selectedDrugIds, route, startDate, endDate, me
   const startKey = formatDateKey(startDate);
   const endKey = formatDateKey(endDate);
   const medicationByDrug = groupMedicationEntriesByDrug(medicationEntries);
-  return doses.filter((dose) => {
-    const eventEndDate = dose.endDate ?? dose.date;
+  const timelineDoses = resolveDoseTimeline(doses, endKey);
+  return timelineDoses.filter((dose) => {
+    const eventEndDate = dose.resolvedEndDate ?? dose.endDate ?? dose.date;
     const matchingEntries = (medicationByDrug.get(String(dose.drugId)) ?? []).filter(
       (entry) => entry.route === dose.route
     );
@@ -51569,7 +53453,7 @@ function buildChartData(events, selectedDrugs, startDate, endDate) {
   const byDrugAndDate = /* @__PURE__ */ new Map();
   for (const event of events) {
     const eventStart = /* @__PURE__ */ new Date(`${event.date}T12:00:00`);
-    const eventEnd = /* @__PURE__ */ new Date(`${event.endDate ?? event.date}T12:00:00`);
+    const eventEnd = /* @__PURE__ */ new Date(`${event.resolvedEndDate ?? event.endDate ?? event.date}T12:00:00`);
     const cursor2 = new Date(eventStart);
     while (cursor2 <= eventEnd) {
       const currentDate = formatDateKey(cursor2);
@@ -51602,6 +53486,48 @@ function buildChartData(events, selectedDrugs, startDate, endDate) {
     cursor.setDate(cursor.getDate() + 1);
   }
   return bucketSeries(points, selectedDrugs);
+}
+function resolveDoseTimeline(doses, fallbackEndDate) {
+  const normalizedDoses = Array.isArray(doses) ? doses.map((dose, index) => normalizeDoseRecord(dose, index)) : [];
+  const grouped = /* @__PURE__ */ new Map();
+  for (const dose of normalizedDoses) {
+    const key = `${dose.drugId}:${dose.route}`;
+    if (!grouped.has(key)) {
+      grouped.set(key, []);
+    }
+    grouped.get(key).push(dose);
+  }
+  const resolved = [];
+  for (const entries of grouped.values()) {
+    const sortedEntries = entries.slice().sort(
+      (left, right) => String(left.date).localeCompare(String(right.date)) || String(left.id).localeCompare(String(right.id))
+    );
+    for (let index = 0; index < sortedEntries.length; index += 1) {
+      const dose = sortedEntries[index];
+      const nextDose = sortedEntries[index + 1];
+      const explicitEndDate = dose.endDate || "";
+      let resolvedEndDate = explicitEndDate || dose.date;
+      if (!explicitEndDate) {
+        if (nextDose?.date) {
+          resolvedEndDate = getPreviousDateKey(nextDose.date, dose.date);
+        } else {
+          resolvedEndDate = fallbackEndDate || dose.date;
+        }
+      }
+      resolved.push({
+        ...dose,
+        ordinal: index + 1,
+        resolvedEndDate: resolvedEndDate < dose.date ? dose.date : resolvedEndDate
+      });
+    }
+  }
+  return resolved;
+}
+function getPreviousDateKey(dateKey, minimumDateKey) {
+  const date2 = /* @__PURE__ */ new Date(`${dateKey}T12:00:00`);
+  date2.setDate(date2.getDate() - 1);
+  const previousDateKey = formatDateKey(date2);
+  return previousDateKey < minimumDateKey ? minimumDateKey : previousDateKey;
 }
 function bucketSeries(points, selectedDrugs) {
   if (!points.length) {
@@ -52113,13 +54039,14 @@ function buildDoseEventsCsv(filteredEvents, drugLookup) {
     const drug = drugLookup.get(String(event.drugId));
     const maxDose = drug?.maxDailyDose ?? 100;
     const percent = maxDose > 0 ? (event.amount / maxDose * 100).toFixed(1) : "0.0";
+    const unit2 = normalizeDoseUnit(event.doseUnit ?? drug?.unit);
     rows.push([
       event.date,
       event.endDate ?? "",
       drug?.name ?? "Unknown drug",
       event.route,
       String(event.amount),
-      drug?.unit ?? "mg",
+      unit2,
       percent,
       event.notes ?? ""
     ]);
@@ -52202,16 +54129,20 @@ function buildLineDefinition(drug, context) {
 }
 function getAnchorDate(doses) {
   if (!doses.length) {
-    const today = /* @__PURE__ */ new Date();
-    today.setHours(0, 0, 0, 0);
-    return today;
+    const today2 = /* @__PURE__ */ new Date();
+    today2.setHours(0, 0, 0, 0);
+    return today2;
   }
-  const latestDose = doses.reduce((latest3, dose) => {
-    const latestDate = dose.endDate ?? dose.date;
-    const previousLatestDate = latest3.endDate ?? latest3.date;
+  const today = /* @__PURE__ */ new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayKey = formatDateKey(today);
+  const resolvedDoses = resolveDoseTimeline(doses, todayKey);
+  const latestDose = resolvedDoses.reduce((latest3, dose) => {
+    const latestDate = dose.resolvedEndDate ?? dose.endDate ?? dose.date;
+    const previousLatestDate = latest3.resolvedEndDate ?? latest3.endDate ?? latest3.date;
     return latestDate > previousLatestDate ? dose : latest3;
-  }, doses[0]);
-  return /* @__PURE__ */ new Date(`${latestDose.endDate ?? latestDose.date}T12:00:00`);
+  }, resolvedDoses[0]);
+  return /* @__PURE__ */ new Date(`${latestDose.resolvedEndDate ?? latestDose.endDate ?? latestDose.date}T12:00:00`);
 }
 function formatShortDate(date2) {
   return new Intl.DateTimeFormat("en-US", {
@@ -52233,6 +54164,62 @@ function coerceDrugId(drugId) {
   const numeric = Number(drugId);
   return Number.isInteger(numeric) && `${numeric}` === `${drugId}` ? numeric : drugId;
 }
+function getProfileLimitForUser(user) {
+  if (user?.role === "admin" || user?.role === "developer" || user?.role === "system") {
+    return Number.POSITIVE_INFINITY;
+  }
+  if (user?.id) {
+    return 20;
+  }
+  return 5;
+}
+function getProfileTierLabelForUser(user) {
+  if (user?.role === "admin" || user?.role === "developer" || user?.role === "system") {
+    return "Developer";
+  }
+  if (user?.id) {
+    return "Clinician";
+  }
+  return "Patient";
+}
+function canCreateAnotherProfileForUser(user, profiles, existingProfile) {
+  if (existingProfile) {
+    return {
+      allowed: true,
+      limit: getProfileLimitForUser(user),
+      tier: getProfileTierLabelForUser(user)
+    };
+  }
+  const limit = getProfileLimitForUser(user);
+  return {
+    allowed: profiles.length < limit,
+    limit,
+    tier: getProfileTierLabelForUser(user)
+  };
+}
+(function handleSmartCallback() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has("code") || !params.has("state")) return;
+    const code = params.get("code");
+    const state = params.get("state");
+    if (window.opener) {
+      window.opener.postMessage(
+        { type: "smart_auth_callback", code, state },
+        window.location.origin
+      );
+      window.close();
+    } else {
+      sessionStorage.setItem(
+        "smart_auth_redirect_pending",
+        JSON.stringify({ code, state })
+      );
+      const cleanUrl = window.location.pathname + window.location.hash;
+      window.history.replaceState({}, "", cleanUrl);
+    }
+  } catch {
+  }
+})();
 (0, import_client.createRoot)(document.getElementById("root")).render(h(App));
 /*! Bundled license information:
 

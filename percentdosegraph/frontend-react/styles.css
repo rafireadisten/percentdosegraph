@@ -516,6 +516,105 @@ textarea {
   margin-top: 0;
 }
 
+.advanced-options-panel {
+  gap: 1rem;
+}
+
+.advanced-options-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.advanced-toggle {
+  white-space: nowrap;
+}
+
+.advanced-options-grid,
+.external-import-card-grid,
+.external-import-status-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.advanced-options-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.external-import-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.external-import-status-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.advanced-option-card,
+.external-import-card {
+  display: grid;
+  gap: 0.7rem;
+  padding: 1rem 1.05rem;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.advanced-option-card h4,
+.external-import-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.advanced-option-card p,
+.external-import-card p {
+  margin-bottom: 0;
+}
+
+.advanced-option-actions,
+.external-import-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.step-three-toolbar {
+  display: grid;
+  grid-template-columns: minmax(160px, 220px) repeat(3, auto);
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.step-three-timeframe-field {
+  min-width: 0;
+}
+
+.external-import-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.external-import-sidebar,
+.external-import-main {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.external-import-main {
+  gap: 24px;
+}
+
+.external-import-mini-card {
+  min-height: auto;
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.88);
+}
+
 .compliance-panel {
   display: grid;
   gap: 0.8rem;
@@ -604,6 +703,10 @@ textarea {
 
 .entry-grid.two-up {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dose-entry-secondary-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .dose-form-actions {
@@ -964,14 +1067,20 @@ textarea {
 
   .metrics,
   .insights,
-  .print-summary-grid {
+  .print-summary-grid,
+  .advanced-options-grid,
+  .external-import-layout,
+  .external-import-card-grid,
+  .external-import-status-grid {
     grid-template-columns: 1fr;
   }
 
   .result-row,
   .selected-drug,
   .selected-drug-meta,
-  .entry-grid {
+  .entry-grid,
+  .dose-entry-secondary-grid,
+  .step-three-toolbar {
     grid-template-columns: 1fr;
   }
 

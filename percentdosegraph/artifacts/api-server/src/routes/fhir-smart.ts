@@ -5,6 +5,146 @@ import logger from '../lib/logger.js';
 
 const router = Router();
 
+function parseBooleanEnv(value: string | undefined, fallback: boolean): boolean {
+  if (value == null || value === '') return fallback;
+  const normalized = value.trim().toLowerCase();
+  if (['1', 'true', 'yes', 'on'].includes(normalized)) return true;
+  if (['0', 'false', 'no', 'off'].includes(normalized)) return false;
+  return fallback;
+}
+
+const FHIR_SMART_ENABLED = parseBooleanEnv(
+  process.env.ENABLE_FHIR_SMART,
+  process.env.NODE_ENV !== 'production'
+);
+const CUSTOM_FHIR_ENABLED = parseBooleanEnv(process.env.ENABLE_CUSTOM_FHIR_EHR, false);
+const DEFAULT_ALLOWED_APP_ORIGINS = [
+  'http://localhost:8080',
+  'http://127.0.0.1:8080',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  'https://percentdosegraph.pages.dev',
+  'https://dosegraph.io',
+  'https://www.dosegraph.io',
+];
+
+function buildAllowedAppOrigins(): Set<string> {
+  const configured = (process.env.ALLOWED_APP_ORIGINS ?? '')
+    .split(',')
+    .map(origin => origin.trim())
+    .filter(Boolean);
+
+  const appBaseUrl = process.env.APP_BASE_URL?.trim();
+  if (appBaseUrl) {
+    configured.push(appBaseUrl);
+  }
+
+  return new Set(
+    [...DEFAULT_ALLOWED_APP_ORIGINS, ...configured].map(origin => {
+      try {
+        return new URL(origin).origin;
+      } catch {
+        return null;
+      }
+    }).filter(Boolean) as string[]
+  );
+}
+
+const ALLOWED_APP_ORIGINS = buildAllowedAppOrigins();
+
+function isLoopbackHostname(hostname: string): boolean {
+  const normalized = hostname.toLowerCase();
+  return normalized === 'localhost' || normalized === '127.0.0.1' || normalized === '::1';
+}
+
+function isBlockedPrivateHostname(hostname: string): boolean {
+  const normalized = hostname.toLowerCase();
+  return (
+    normalized === '0.0.0.0' ||
+    normalized.endsWith('.local') ||
+    normalized.startsWith('10.') ||
+    normalized.startsWith('127.') ||
+    normalized.startsWith('169.254.') ||
+    normalized.startsWith('192.168.') ||
+    /^172\.(1[6-9]|2\d|3[0-1])\./.test(normalized)
+  );
+}
+
+function ensureSmartEnabled(res: Response): boolean {
+  if (!FHIR_SMART_ENABLED) {
+    res.status(503).json({
+      error:
+        'SMART on FHIR live EHR connections are disabled in this environment. Manual FHIR bundle import remains available.',
+    });
+    return false;
+  }
+
+  return true;
+}
+
+function validateRedirectUri(rawRedirectUri: string): URL {
+  let redirectUrl: URL;
+  try {
+    redirectUrl = new URL(rawRedirectUri);
+  } catch {
+    throw new Error('redirectUri must be a valid absolute URL.');
+  }
+
+  const protocol = redirectUrl.protocol.toLowerCase();
+  if (protocol !== 'https:' && !(protocol === 'http:' && isLoopbackHostname(redirectUrl.hostname))) {
+    throw new Error('redirectUri must use https unless it targets localhost for local development.');
+  }
+
+  if (!ALLOWED_APP_ORIGINS.has(redirectUrl.origin)) {
+    throw new Error(`redirectUri origin "${redirectUrl.origin}" is not in the allowed app origins list.`);
+  }
+
+  return redirectUrl;
+}
+
+function validateExternalHttpsUrl(rawUrl: string, label: string): string {
+  let parsed: URL;
+  try {
+    parsed = new URL(rawUrl);
+  } catch {
+    throw new Error(`${label} must be a valid absolute URL.`);
+  }
+
+  if (parsed.protocol !== 'https:') {
+    throw new Error(`${label} must use https.`);
+  }
+
+  if (isLoopbackHostname(parsed.hostname) || isBlockedPrivateHostname(parsed.hostname)) {
+    throw new Error(`${label} cannot target localhost or private-network hosts.`);
+  }
+
+  return parsed.toString().replace(/\/$/, '');
+}
+
+function buildFhirTargetUrl(baseUrl: string, fhirPath: string, query: URLSearchParams): string {
+  if (!fhirPath.startsWith('/')) {
+    throw new Error('FHIR path must start with "/".');
+  }
+
+  if (fhirPath.startsWith('//') || fhirPath.includes('://')) {
+    throw new Error('FHIR path must be relative to the configured FHIR base URL.');
+  }
+
+  const normalizedBase = baseUrl.replace(/\/$/, '');
+  const targetUrl = new URL(`${normalizedBase}${fhirPath}`);
+  const baseOrigin = new URL(normalizedBase).origin;
+
+  if (targetUrl.origin !== baseOrigin) {
+    throw new Error('FHIR path resolved outside the configured FHIR origin.');
+  }
+
+  if (query.toString()) {
+    targetUrl.search = query.toString();
+  }
+
+  return targetUrl.toString();
+}
+
 // ---- EHR Registry ----
 
 type EhrSystem = {
@@ -126,14 +266,23 @@ function getLogger(req: Request) {
  */
 router.get('/fhir/smart/config', (_req: Request, res: Response) => {
   res.json({
-    systems: EHR_REGISTRY.map(s => ({
-      id: s.id,
-      name: s.name,
-      fhirBaseUrl: s.fhirBaseUrl,
-      authorizeUrl: s.authorizeUrl,
-      tokenUrl: s.tokenUrl,
-      scopes: s.scopes,
-    })),
+    enabled: FHIR_SMART_ENABLED,
+    supportTier: 'beta',
+    customSupported: CUSTOM_FHIR_ENABLED,
+    message: FHIR_SMART_ENABLED
+      ? 'SMART on FHIR live EHR connection is available in beta.'
+      : 'SMART on FHIR live EHR connection is disabled in this environment. Manual FHIR bundle import is still available.',
+    allowedOrigins: Array.from(ALLOWED_APP_ORIGINS),
+    systems: FHIR_SMART_ENABLED
+      ? EHR_REGISTRY.map(s => ({
+          id: s.id,
+          name: s.name,
+          fhirBaseUrl: s.fhirBaseUrl,
+          authorizeUrl: s.authorizeUrl,
+          tokenUrl: s.tokenUrl,
+          scopes: s.scopes,
+        }))
+      : [],
   });
 });
 
@@ -164,6 +313,10 @@ router.get('/fhir/smart/config', (_req: Request, res: Response) => {
 router.get('/fhir/smart/auth/start', (req: Request, res: Response) => {
   const log = getLogger(req);
   try {
+    if (!ensureSmartEnabled(res)) {
+      return;
+    }
+
     const {
       ehrId,
       fhirBaseUrl,
@@ -179,14 +332,24 @@ router.get('/fhir/smart/auth/start', (req: Request, res: Response) => {
       return;
     }
 
+    const validatedRedirectUri = validateRedirectUri(redirectUri).toString();
+
     let system: EhrSystem | undefined;
     if (ehrId && ehrId !== 'custom') {
       system = EHR_REGISTRY.find(s => s.id === ehrId);
     }
 
-    const resolvedFhirBaseUrl = system?.fhirBaseUrl ?? fhirBaseUrl;
-    const resolvedAuthorizeUrl = system?.authorizeUrl ?? authorizeUrl;
-    const resolvedTokenUrl = system?.tokenUrl ?? tokenUrl;
+    if (ehrId === 'custom' && !CUSTOM_FHIR_ENABLED) {
+      res.status(403).json({
+        error:
+          'Custom FHIR server connections are disabled. Use a configured sandbox/production EHR entry or enable custom EHR support explicitly.',
+      });
+      return;
+    }
+
+    const resolvedFhirBaseUrl = system?.fhirBaseUrl ?? (fhirBaseUrl ? validateExternalHttpsUrl(fhirBaseUrl, 'fhirBaseUrl') : undefined);
+    const resolvedAuthorizeUrl = system?.authorizeUrl ?? (authorizeUrl ? validateExternalHttpsUrl(authorizeUrl, 'authorizeUrl') : undefined);
+    const resolvedTokenUrl = system?.tokenUrl ?? (tokenUrl ? validateExternalHttpsUrl(tokenUrl, 'tokenUrl') : undefined);
     const resolvedClientId = system?.clientId ?? clientId;
     const resolvedScopes =
       system?.scopes ??
@@ -217,14 +380,14 @@ router.get('/fhir/smart/auth/start', (req: Request, res: Response) => {
       clientId: resolvedClientId,
       scopes: resolvedScopes,
       codeVerifier,
-      redirectUri,
+      redirectUri: validatedRedirectUri,
       createdAt: Date.now(),
     });
 
     const params = new URLSearchParams({
       response_type: 'code',
       client_id: resolvedClientId,
-      redirect_uri: redirectUri,
+      redirect_uri: validatedRedirectUri,
       scope: resolvedScopes,
       state,
       code_challenge: codeChallenge,
@@ -272,6 +435,10 @@ router.get('/fhir/smart/auth/start', (req: Request, res: Response) => {
 router.post('/fhir/smart/auth/callback', async (req: Request, res: Response) => {
   const log = getLogger(req);
   try {
+    if (!ensureSmartEnabled(res)) {
+      return;
+    }
+
     const { code, state } = req.body as { code?: string; state?: string };
 
     if (!code || !state) {
@@ -339,8 +506,7 @@ router.post('/fhir/smart/auth/callback', async (req: Request, res: Response) => 
           const nameEntry = patientData.name?.[0];
           patientName =
             nameEntry?.text ??
-            [nameEntry?.given?.join(' '), nameEntry?.family].filter(Boolean).join(' ') ||
-            null;
+            ([nameEntry?.given?.join(' '), nameEntry?.family].filter(Boolean).join(' ') || null);
         }
       } catch (patientErr) {
         log.warn({ err: patientErr }, 'Could not fetch patient demographics');
@@ -407,6 +573,10 @@ router.post('/fhir/smart/auth/callback', async (req: Request, res: Response) => 
 router.post('/fhir/smart/auth/refresh', async (req: Request, res: Response) => {
   const log = getLogger(req);
   try {
+    if (!ensureSmartEnabled(res)) {
+      return;
+    }
+
     const { sessionId } = req.body as { sessionId?: string };
     if (!sessionId) {
       res.status(400).json({ error: 'sessionId is required' });
@@ -484,6 +654,10 @@ router.post('/fhir/smart/auth/refresh', async (req: Request, res: Response) => {
  *         description: Session not found
  */
 router.get('/fhir/smart/session', (req: Request, res: Response) => {
+  if (!ensureSmartEnabled(res)) {
+    return;
+  }
+
   const sessionId = req.headers['x-fhir-session'] as string;
   if (!sessionId) {
     res.status(400).json({ error: 'X-FHIR-Session header required' });
@@ -524,6 +698,10 @@ router.get('/fhir/smart/session', (req: Request, res: Response) => {
  *         description: Disconnected
  */
 router.delete('/fhir/smart/session', (req: Request, res: Response) => {
+  if (!ensureSmartEnabled(res)) {
+    return;
+  }
+
   const sessionId = req.headers['x-fhir-session'] as string;
   if (sessionId) fhirSessions.delete(sessionId);
   res.json({ disconnected: true });
@@ -559,6 +737,10 @@ router.delete('/fhir/smart/session', (req: Request, res: Response) => {
  */
 router.get('/fhir/proxy', async (req: Request, res: Response) => {
   const log = getLogger(req);
+  if (!ensureSmartEnabled(res)) {
+    return;
+  }
+
   const sessionId = req.headers['x-fhir-session'] as string;
 
   if (!sessionId) {
@@ -620,11 +802,9 @@ router.get('/fhir/proxy', async (req: Request, res: Response) => {
     if (typeof value === 'string') forwardParams.set(key, value);
   }
 
-  const targetUrl = `${session.fhirBaseUrl}${fhirPath}${
-    forwardParams.toString() ? `?${forwardParams.toString()}` : ''
-  }`;
-
+  let targetUrl = '';
   try {
+    targetUrl = buildFhirTargetUrl(session.fhirBaseUrl, fhirPath, forwardParams);
     const fhirRes = await fetch(targetUrl, {
       headers: {
         Authorization: `Bearer ${session.accessToken}`,

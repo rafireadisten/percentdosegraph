@@ -28,6 +28,7 @@ DoseGraph's main job is simple: show each drug dose as a percent of that drug's 
 - **Drug Library**: Built-in medication list including inhaled drugs and combination inhalers
 - **Editing Workflow**: Update doses from the form workflow and from graph-linked detail panels
 - **Data Tools**: Import/export options moved behind advanced actions for a cleaner UI
+- **FHIR Import**: Paste/upload FHIR bundles today, with live SMART-on-FHIR EHR connection kept in beta until deployment and credential hardening are complete
 
 ## Core Files
 
@@ -108,6 +109,15 @@ For backward compatibility, `POST /api/profiles` still works and will attach the
 ## Important note
 
 The bundled `drug-library.json` is a starter reference library for inference and display. It is not a validated clinical formulary and should remain clinician-adjustable.
+
+## Production Hosting
+
+Use GitHub for source control and Cloudflare Pages for the public site:
+
+- GitHub: code, commits, history, collaboration
+- Cloudflare Pages: production frontend hosting for `dosegraph.io`
+
+For the current repo layout, the Cloudflare Pages root directory should be `percentdosegraph/`, not the outer workspace root.
 
 ## Mobile App Development
 

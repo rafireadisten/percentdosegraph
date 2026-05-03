@@ -15,6 +15,7 @@
         <a href="../about.html">About</a>
         <a href="../updates.html">Updates</a>
         <a href="./">DoseGraph Basic</a>
+        <a href="../import-medications.html">Import Medications (FHIR/SMART/EHR)</a>
         <a href="../frontend-react/">DoseGraph Full (advanced)</a>
         <a href="mailto:rafi@readisten.com">Contact</a>
         <a href="../accounts.html">Accounts &amp; profiles</a>
@@ -24,11 +25,11 @@
       <header class="hero">
         <div class="hero-copy">
           <p class="eyebrow">DoseGraph Basic</p>
-          <h1>Use the basic DoseGraph workspace for core medication dose graphing.</h1>
+          <h1>Compare and see medication doses over time.</h1>
           <p class="hero-text">
-            Enter the medication, patient label, route, reference max dose, and dose dates in one
-            place. This basic page focuses on the core graph functions without requiring account
-            registration.
+            DoseGraph shows each dose as a percent of that drug's maximum dose at each time point.
+            This makes it easy to compare one drug to another, or compare the same drug across
+            time.
           </p>
         </div>
 
@@ -568,10 +569,10 @@
             </div>
           </div>
 
-          <div class="ehr-connect-panel">
+          <div class="ehr-connect-panel" id="import-medications">
             <div class="panel-header compact">
               <p class="section-kicker">EHR Connection</p>
-              <h3>Connect to EHR</h3>
+              <h3>Import Medications (FHIR / SMART / EHR)</h3>
               <p>
                 Sign in to your patient portal through SMART on FHIR to automatically load your
                 medication list into the graph.

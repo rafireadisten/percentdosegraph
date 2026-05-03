@@ -22,6 +22,10 @@ const TIMELINE_STATUS_OPTIONS = [
   { value: 'historic', label: 'Historic' },
   { value: 'planned', label: 'Planned' },
 ];
+const DOSE_STATUS_OPTIONS = [
+  { value: 'active', label: 'Active' },
+  { value: 'ended', label: 'Ended' },
+];
 const TIMEFRAME_OPTIONS = [
   { value: '30d', label: '30 days', days: 30 },
   { value: '90d', label: '90 days', days: 90 },
@@ -36,6 +40,8 @@ const LAST_WORKSPACE_STORAGE_KEY = 'percentdosegraph:react-last-workspace';
 const AUTH_TOKEN_STORAGE_KEY = 'percentdosegraph:auth-token';
 const AUTH_ACCOUNT_STORAGE_KEY = 'percentdosegraph:auth-account';
 const LEGAL_ACK_STORAGE_KEY = 'percentdosegraph:legal-acknowledgements';
+const APP_VIEW_WORKSPACE = 'workspace';
+const APP_VIEW_EXTERNAL_IMPORT = 'external-import';
 const COMMON_DOSE_UNITS = ['mg', 'mcg', 'g', 'mEq', 'mL', 'units', 'IU', 'drops'];
 const CHART_COLORS = [
   '#0f5a2d',
@@ -229,6 +235,7 @@ function App() {
   const sessionDefaults = loadAuthSessionFromStorage();
   const legalDefaults = loadLegalAcknowledgementsFromStorage();
   const importFileRef = useRef(null);
+  const [currentView, setCurrentView] = useState(() => getAppViewFromHash(window.location.hash));
   const [drugs, setDrugs] = useState([]);
   const [doses, setDoses] = useState([]);
   const [selectedDrugIds, setSelectedDrugIds] = useState([]);
@@ -259,6 +266,7 @@ function App() {
   const [entryDrugId, setEntryDrugId] = useState('');
   const [entryDate, setEntryDate] = useState(formatDateKey(new Date()));
   const [entryEndDate, setEntryEndDate] = useState('');
+  const [entryDoseStatus, setEntryDoseStatus] = useState('active');
   const [entryRoute, setEntryRoute] = useState('PO');
   const [entryAmount, setEntryAmount] = useState('');
   const [entryDoseUnit, setEntryDoseUnit] = useState('mg');
@@ -305,7 +313,9 @@ function App() {
   const [generatingRandom, setGeneratingRandom] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [fhirModalOpen, setFhirModalOpen] = useState(false);
+  const [fhirModalInitialTab, setFhirModalInitialTab] = useState('paste');
   const [fhirImportStatus, setFhirImportStatus] = useState('');
+  const [stepThreeAdvancedOpen, setStepThreeAdvancedOpen] = useState(false);
 
   // EHR / SMART on FHIR connection state
   // Restore from localStorage; server-side validation on mount keeps this in sync
@@ -319,6 +329,15 @@ function App() {
   useEffect(() => {
     saveProfilesToStorage(profiles);
   }, [profiles]);
+
+  useEffect(() => {
+    function handleHashChange() {
+      setCurrentView(getAppViewFromHash(window.location.hash));
+    }
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   useEffect(() => {
     saveMedicationEntriesToStorage(medicationEntries);
@@ -605,7 +624,9 @@ function App() {
         if (code && state) {
           processEhrCallback(code, state);
         }
-      } catch {}
+      } catch {
+        // Ignore malformed redirect state and fall back to a fresh auth flow.
+      }
     }
 
     return () => window.removeEventListener('message', handleSmartCallbackMessage);
@@ -1197,7 +1218,9 @@ function App() {
           method: 'DELETE',
           headers: { 'X-FHIR-Session': ehrSessionId },
         });
-      } catch {}
+      } catch {
+        // Disconnect still clears the local session even if the API is unavailable.
+      }
     }
     setEhrSessionId('');
     setEhrPatientName('');
@@ -1224,6 +1247,7 @@ function App() {
     setEntryDrugId(String(dose.drugId));
     setEntryDate(dose.date);
     setEntryEndDate(dose.endDate ?? '');
+    setEntryDoseStatus(dose.endDate ? 'ended' : 'active');
     setEntryRoute(dose.route);
     setEntryAmount(String(dose.amount));
     setEntryDoseUnit(normalizeDoseUnit(dose.doseUnit ?? selectedDrug?.unit));
@@ -1237,6 +1261,7 @@ function App() {
     setEditingDoseId(null);
     setEntryDate(formatDateKey(new Date()));
     setEntryEndDate('');
+    setEntryDoseStatus('active');
     setEntryAmount('');
     setEntryDoseUnit(getPreferredDoseUnit(selectedDrug));
     setEntryNotes('');
@@ -1327,6 +1352,12 @@ function App() {
       return;
     }
 
+    if (entryDoseStatus === 'ended' && !entryEndDate) {
+      setEntryError('Choose an end date when the dose state is marked ended.');
+      setEntryStatus('');
+      return;
+    }
+
     if (!Number.isFinite(amount) || amount <= 0) {
       setEntryError('Enter a dose amount greater than zero.');
       setEntryStatus('');
@@ -1336,7 +1367,7 @@ function App() {
     const payload = {
       drugId: coerceDrugId(entryDrugId),
       date: entryDate,
-      endDate: entryEndDate || undefined,
+      endDate: entryDoseStatus === 'ended' ? entryEndDate || undefined : undefined,
       route: entryRoute,
       amount,
       doseUnit: normalizeDoseUnit(entryDoseUnit),
@@ -1404,11 +1435,13 @@ function App() {
 
     if (!saveAndAddAnother) {
       setEntryEndDate('');
+      setEntryDoseStatus('active');
     }
 
     if (saveAndAddAnother) {
       setEntryDate(formatDateKey(new Date()));
       setEntryEndDate('');
+      setEntryDoseStatus('active');
       setEntryStatus('Dose segment saved. Continue adding another segment.');
     }
 
@@ -1721,6 +1754,25 @@ function App() {
     return h('div', { className: 'auth-container' }, h('p', null, 'Restoring session...'));
   }
 
+  function navigateToView(view) {
+    setCurrentView(view);
+    setMenuOpen(false);
+    const nextHash = view === APP_VIEW_EXTERNAL_IMPORT ? '#external-import' : '#workspace';
+    if (window.location.hash !== nextHash) {
+      window.history.replaceState(
+        {},
+        '',
+        `${window.location.pathname}${window.location.search}${nextHash}`
+      );
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function openFhirModal(tab = 'paste') {
+    setFhirModalInitialTab(tab);
+    setFhirModalOpen(true);
+  }
+
   return h(
     'div',
     { className: 'app-shell' },
@@ -1751,7 +1803,18 @@ function App() {
         h('a', { href: '../about.html' }, 'About'),
         h('a', { href: '../updates.html' }, 'Updates'),
         h('a', { href: '../frontend-static/' }, 'Static version'),
-        h('a', { href: './' }, 'Dynamic version'),
+        h('a', { href: '../import-medications.html' }, 'Import Medications (FHIR/SMART/EHR)'),
+        h(
+          'a',
+          {
+            href: '#workspace',
+            onClick: event => {
+              event.preventDefault();
+              navigateToView(APP_VIEW_WORKSPACE);
+            },
+          },
+          'Dynamic workspace'
+        ),
         h('a', { href: 'mailto:rafi@readisten.com' }, 'Contact developers / engineers'),
         h('a', { href: '../accounts.html' }, 'Accounts & profiles management')
       )
@@ -1763,11 +1826,11 @@ function App() {
         'article',
         { className: 'hero-copy' },
         h('p', { className: 'eyebrow' }, 'DoseGraph Dynamic'),
-        h('h1', null, 'Use the dynamic DoseGraph workspace with the static workspace as the core mold.'),
+        h('h1', null, 'Compare and see medication doses over time.'),
         h(
           'p',
           { className: 'hero-text' },
-          'Enter the medication, patient label, route, reference max dose, and dose dates in one place. This dynamic page follows the static workspace layout first, then layers in saved profiles, account sync, and import/export tools.'
+          "DoseGraph shows each dose as a percent of that drug's maximum dose at each time point. This makes it easy to compare one drug to another, or compare the same drug across time."
         )
       ),
       h(
@@ -1833,7 +1896,17 @@ function App() {
         )
       )
     ),
-    h(
+    currentView === APP_VIEW_EXTERNAL_IMPORT
+      ? h(ExternalImportPage, {
+          onReturnToWorkspace: () => navigateToView(APP_VIEW_WORKSPACE),
+          onOpenImportModal: openFhirModal,
+          fhirImportStatus,
+          hasAcceptedComplianceRequirements,
+          ehrSessionId,
+          ehrPatientName,
+          ehrSystemName,
+        })
+      : h(
       'section',
       { className: 'layout' },
       h(
@@ -1991,29 +2064,6 @@ function App() {
           )
         ),
         h(
-          'div',
-          { className: 'panel-header compact' },
-          h('p', { className: 'section-kicker' }, 'Step 2 — Optional shortcut'),
-          h('h2', null, 'Import from FHIR'),
-          h(
-            'p',
-            null,
-            'Have a FHIR Bundle from an EHR or patient portal? Paste or upload the JSON to import the medication history automatically, then review and confirm which medications to add.'
-          ),
-          h(
-            'button',
-            {
-              type: 'button',
-              className: 'primary-button',
-              onClick: () => setFhirModalOpen(true),
-            },
-            'Import from FHIR'
-          ),
-          fhirImportStatus
-            ? h('p', { className: 'helper success-text' }, fhirImportStatus)
-            : null
-        ),
-        h(
           'form',
           { className: 'dose-entry-form', onSubmit: handleMedicationEntrySubmit },
           h(
@@ -2129,7 +2179,7 @@ function App() {
             h(
               'p',
               null,
-              'Add dose segments with a date, optional end date, route, and amount so the graph updates immediately and stays closer to the static dose-entry workflow.'
+              'Add dose segments with a start date, optional end date, and an active or ended state. Use additional entries to represent titrations, repeat the same dose later, or capture a new dose level for the same drug and route.'
             )
           ),
           h(
@@ -2152,7 +2202,7 @@ function App() {
             h(
               'div',
               { className: 'field' },
-              h('label', { htmlFor: 'entryDate' }, 'Dose date'),
+              h('label', { htmlFor: 'entryDate' }, 'Start date'),
               h('input', {
                 id: 'entryDate',
                 type: 'date',
@@ -2163,12 +2213,13 @@ function App() {
             h(
               'div',
               { className: 'field' },
-              h('label', { htmlFor: 'entryEndDate' }, 'Dose end date'),
+              h('label', { htmlFor: 'entryEndDate' }, 'End date'),
               h('input', {
                 id: 'entryEndDate',
                 type: 'date',
                 value: entryEndDate,
                 min: entryDate,
+                disabled: entryDoseStatus !== 'ended',
                 onChange: event => setEntryEndDate(event.target.value),
               })
             ),
@@ -2189,7 +2240,29 @@ function App() {
           ),
           h(
             'div',
-            { className: 'entry-grid two-up' },
+            { className: 'entry-grid dose-entry-secondary-grid' },
+            h(
+              'div',
+              { className: 'field' },
+              h('label', { htmlFor: 'entryDoseStatus' }, 'Dose state'),
+              h(
+                'select',
+                {
+                  id: 'entryDoseStatus',
+                  value: entryDoseStatus,
+                  onChange: event => {
+                    const nextStatus = event.target.value;
+                    setEntryDoseStatus(nextStatus);
+                    if (nextStatus !== 'ended') {
+                      setEntryEndDate('');
+                    }
+                  },
+                },
+                DOSE_STATUS_OPTIONS.map(option =>
+                  h('option', { key: option.value, value: option.value }, option.label)
+                )
+              )
+            ),
             h(
               'div',
               { className: 'field' },
@@ -2266,22 +2339,135 @@ function App() {
               )
             : null,
           entryStatus ? h('p', { className: 'helper success-text' }, entryStatus) : null,
-          entryError ? h('p', { className: 'helper error-text' }, entryError) : null
-        ),
-        h(
-          'div',
-          { className: 'field' },
-          h('label', { htmlFor: 'timeframe' }, 'Timeframe'),
+          entryError ? h('p', { className: 'helper error-text' }, entryError) : null,
           h(
-            'select',
+            'section',
             {
-              id: 'timeframe',
-              value: timeframe,
-              onChange: event => setTimeframe(event.target.value),
+              className: `workspace-panel advanced-options-panel${stepThreeAdvancedOpen ? ' open' : ''}`,
             },
-            TIMEFRAME_OPTIONS.map(option =>
-              h('option', { key: option.value, value: option.value }, option.label)
-            )
+            h(
+              'div',
+              { className: 'advanced-options-header' },
+              h(
+                'div',
+                null,
+                h('p', { className: 'section-kicker' }, 'Advanced Options'),
+                h('h3', null, 'External import and SMART / FHIR tools'),
+                h(
+                  'p',
+                  { className: 'helper' },
+                  'Keep external-source import and beta EHR tools close at hand without interrupting the main dose-entry workflow.'
+                )
+              )
+            ),
+            h(
+              'div',
+              { className: 'step-three-toolbar' },
+              h(
+                'div',
+                { className: 'field step-three-timeframe-field' },
+                h('label', { htmlFor: 'timeframe' }, 'Timeframe'),
+                h(
+                  'select',
+                  {
+                    id: 'timeframe',
+                    value: timeframe,
+                    onChange: event => setTimeframe(event.target.value),
+                  },
+                  TIMEFRAME_OPTIONS.map(option =>
+                    h('option', { key: option.value, value: option.value }, option.label)
+                  )
+                )
+              ),
+              h(
+                'button',
+                {
+                  type: 'button',
+                  className: 'secondary-button advanced-toggle',
+                  onClick: () => setStepThreeAdvancedOpen(current => !current),
+                },
+                'Advanced Options'
+              ),
+              h(
+                'button',
+                {
+                  type: 'button',
+                  className: 'remove-button',
+                  onClick: handleClearWorkspace,
+                },
+                'Clear All'
+              )
+            ),
+            stepThreeAdvancedOpen
+              ? h(
+                  'div',
+                  { className: 'advanced-options-grid' },
+                  h(
+                    'article',
+                    { className: 'advanced-option-card' },
+                    h('p', { className: 'card-label' }, 'External source import'),
+                    h('h4', null, 'Import medicine data from external source'),
+                    h(
+                      'p',
+                      null,
+                      'Open the dedicated import workspace or jump straight into a FHIR paste or upload import.'
+                    ),
+                    h(
+                      'div',
+                      { className: 'advanced-option-actions' },
+                      h(
+                        'button',
+                        {
+                          type: 'button',
+                          className: 'primary-button',
+                          onClick: () => navigateToView(APP_VIEW_EXTERNAL_IMPORT),
+                        },
+                        'Open import page'
+                      ),
+                      h(
+                        'button',
+                        {
+                          type: 'button',
+                          className: 'secondary-button',
+                          onClick: () => openFhirModal('paste'),
+                        },
+                        'Import FHIR'
+                      )
+                    )
+                  ),
+                  h(
+                    'article',
+                    { className: 'advanced-option-card' },
+                    h('p', { className: 'card-label' }, 'SMART on FHIR beta'),
+                    h('h4', null, 'Connect to a supported EHR'),
+                    h(
+                      'p',
+                      null,
+                      'Launch the beta SMART / FHIR tools when you need a live EHR connection from within the current regimen workflow.'
+                    ),
+                    h(
+                      'div',
+                      { className: 'advanced-option-actions' },
+                      h(
+                        'button',
+                        {
+                          type: 'button',
+                          className: 'secondary-button',
+                          onClick: () => openFhirModal('ehr'),
+                        },
+                        'Open SMART / FHIR tools'
+                      )
+                    )
+                  )
+                )
+              : h(
+                  'p',
+                  { className: 'helper' },
+                  'Open advanced options to access the dedicated external-source import page and SMART / FHIR beta tools from Step 3.'
+                ),
+            fhirImportStatus
+              ? h('p', { className: 'helper success-text' }, fhirImportStatus)
+              : null
           )
         ),
         h(
@@ -3534,6 +3720,7 @@ function App() {
       fhirModalOpen
         ? h(FhirImportModal, {
             key: 'fhir-import-modal',
+            initialTab: fhirModalInitialTab,
             drugs,
             onClose: () => setFhirModalOpen(false),
             onConfirm: handleFhirImportConfirm,
@@ -3564,8 +3751,202 @@ function resolveApiBasePath() {
   return `${window.location.origin}/api`;
 }
 
+function getAppViewFromHash(hash) {
+  return hash === '#external-import' ? APP_VIEW_EXTERNAL_IMPORT : APP_VIEW_WORKSPACE;
+}
+
+function ExternalImportPage({
+  onReturnToWorkspace,
+  onOpenImportModal,
+  fhirImportStatus,
+  hasAcceptedComplianceRequirements,
+  ehrSessionId,
+  ehrPatientName,
+  ehrSystemName,
+}) {
+  return h(
+    'section',
+    { className: 'external-import-layout' },
+    h(
+      'aside',
+      { className: 'panel external-import-sidebar' },
+      h('p', { className: 'section-kicker' }, 'External source import'),
+      h('h2', null, 'Compare and see medication doses over time.'),
+      h(
+        'p',
+        null,
+        "DoseGraph shows each dose as a percent of that drug's maximum dose at each time point. This makes it easy to compare one drug to another, or compare the same drug across time."
+      ),
+      h(
+        'div',
+        { className: 'external-import-actions' },
+        h(
+          'button',
+          {
+            type: 'button',
+            className: 'primary-button',
+            onClick: () => onOpenImportModal('paste'),
+          },
+          'Paste FHIR bundle JSON'
+        ),
+        h(
+          'button',
+          {
+            type: 'button',
+            className: 'secondary-button',
+            onClick: () => onOpenImportModal('upload'),
+          },
+          'Upload FHIR bundle file'
+        ),
+        h(
+          'button',
+          {
+            type: 'button',
+            className: 'secondary-button',
+            onClick: () => onOpenImportModal('ehr'),
+          },
+          'Open SMART / FHIR beta'
+        ),
+        h(
+          'button',
+          {
+            type: 'button',
+            className: 'pill-button secondary-button',
+            onClick: onReturnToWorkspace,
+          },
+          'Return to workspace'
+        )
+      ),
+      fhirImportStatus
+        ? h('p', { className: 'helper success-text' }, fhirImportStatus)
+        : null
+    ),
+    h(
+      'div',
+      { className: 'external-import-main' },
+      h(
+        'section',
+        { className: 'workspace-panel' },
+        h('p', { className: 'section-kicker' }, 'How this works'),
+        h('h2', null, 'Review first, then add to the active workspace'),
+        h(
+          'div',
+          { className: 'external-import-card-grid' },
+          h(
+            'article',
+            { className: 'external-import-card' },
+            h('p', { className: 'card-label' }, '1. Bring in data'),
+            h(
+              'p',
+              null,
+              'Paste JSON, upload a FHIR Bundle file, or open the SMART on FHIR beta connection tools.'
+            )
+          ),
+          h(
+            'article',
+            { className: 'external-import-card' },
+            h('p', { className: 'card-label' }, '2. Review matches'),
+            h(
+              'p',
+              null,
+              'DoseGraph maps medications against the local library and flags anything that needs manual review before it is added.'
+            )
+          ),
+          h(
+            'article',
+            { className: 'external-import-card' },
+            h('p', { className: 'card-label' }, '3. Continue in graph workflow'),
+            h(
+              'p',
+              null,
+              'Accepted medications flow back into the active medication list and dose-graph workspace for editing and comparison.'
+            )
+          )
+        )
+      ),
+      h(
+        'section',
+        { className: 'panel external-import-status-panel' },
+        h('p', { className: 'section-kicker' }, 'Import status'),
+        h('h2', null, 'Current import readiness'),
+        h(
+          'div',
+          { className: 'external-import-status-grid' },
+          h(
+            'article',
+            { className: 'workspace-card external-import-mini-card' },
+            h('p', { className: 'card-label' }, 'Legal checklist'),
+            h('strong', null, hasAcceptedComplianceRequirements ? 'Accepted' : 'Still pending'),
+            h(
+              'p',
+              { className: 'workspace-detail' },
+              hasAcceptedComplianceRequirements
+                ? 'The legal acknowledgements for synced workflows and data tools have been accepted.'
+                : 'Review the legal checklist in the main workspace before relying on synced account workflows.'
+            )
+          ),
+          h(
+            'article',
+            { className: 'workspace-card external-import-mini-card' },
+            h('p', { className: 'card-label' }, 'SMART / FHIR beta'),
+            h('strong', null, ehrSessionId ? 'Connected' : 'Not connected'),
+            h(
+              'p',
+              { className: 'workspace-detail' },
+              ehrSessionId
+                ? `${ehrSystemName || 'EHR'}${ehrPatientName ? ` · ${ehrPatientName}` : ''}`
+                : 'Use this only when live EHR connection is enabled for the environment.'
+            )
+          )
+        )
+      ),
+      h(
+        'section',
+        { className: 'panel' },
+        h('p', { className: 'section-kicker' }, 'Source types'),
+        h('h2', null, 'Supported external-source paths'),
+        h(
+          'div',
+          { className: 'external-import-card-grid' },
+          h(
+            'article',
+            { className: 'external-import-card' },
+            h('h3', null, 'FHIR Bundle paste'),
+            h(
+              'p',
+              null,
+              'Best when another system gives you raw FHIR JSON that you want to review quickly without saving a file first.'
+            )
+          ),
+          h(
+            'article',
+            { className: 'external-import-card' },
+            h('h3', null, 'FHIR file upload'),
+            h(
+              'p',
+              null,
+              'Useful for exported bundle files from EHR portals, developer sandboxes, or intermediary clinical data tools.'
+            )
+          ),
+          h(
+            'article',
+            { className: 'external-import-card' },
+            h('h3', null, 'SMART on FHIR beta'),
+            h(
+              'p',
+              null,
+              'Available when the API environment explicitly enables live EHR connection. Keep this as an advanced workflow, not the default MVP path.'
+            )
+          )
+        )
+      )
+    )
+  );
+}
+
 
 function FhirImportModal({
+  initialTab = 'paste',
   drugs,
   onClose,
   onConfirm,
@@ -3579,7 +3960,7 @@ function FhirImportModal({
   onEhrDisconnect,
   onPatientSelected,
 }) {
-  const [activeTab, setActiveTab] = React.useState('paste');
+  const [activeTab, setActiveTab] = React.useState(initialTab);
   const [pasteText, setPasteText] = React.useState('');
   const [parseError, setParseError] = React.useState('');
   const [importing, setImporting] = React.useState(false);
@@ -3778,8 +4159,8 @@ function FhirImportModal({
                   onClick: () => { setActiveTab('ehr'); setParseError(''); },
                 },
                 ehrSessionId
-                  ? '\u2022 Connected to EHR'
-                  : 'Connect to EHR'
+                  ? '\u2022 EHR beta connected'
+                  : 'EHR beta'
               )
             ),
             activeTab === 'paste'
@@ -3994,6 +4375,12 @@ function EhrConnectPanel({
   ];
   const [selectedEhrId, setSelectedEhrId] = React.useState('epic-sandbox');
   const [ehrSystems, setEhrSystems] = React.useState(DEFAULT_EHR_SYSTEMS);
+  const [smartEnabled, setSmartEnabled] = React.useState(false);
+  const [customSupported, setCustomSupported] = React.useState(false);
+  const [smartConfigLoaded, setSmartConfigLoaded] = React.useState(false);
+  const [smartStatusMessage, setSmartStatusMessage] = React.useState(
+    'Loading SMART on FHIR beta availability…'
+  );
   const [customFhirBaseUrl, setCustomFhirBaseUrl] = React.useState('');
   const [customAuthorizeUrl, setCustomAuthorizeUrl] = React.useState('');
   const [customTokenUrl, setCustomTokenUrl] = React.useState('');
@@ -4060,36 +4447,51 @@ function EhrConnectPanel({
     fetch(`${API_BASE_PATH}/fhir/smart/config`)
       .then(r => r.json())
       .then(data => {
+        setSmartEnabled(Boolean(data.enabled));
+        setCustomSupported(Boolean(data.customSupported));
+        setSmartStatusMessage(
+          data.message ??
+            'SMART on FHIR live EHR connection is a beta workflow and may be disabled in this environment.'
+        );
         if (Array.isArray(data.systems)) {
           setEhrSystems(data.systems);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        setSmartEnabled(false);
+        setCustomSupported(false);
+        setSmartStatusMessage(
+          'Could not load SMART on FHIR beta configuration. Manual FHIR bundle import is still available.'
+        );
+      })
+      .finally(() => {
+        setSmartConfigLoaded(true);
+      });
   }, []);
 
   async function handleLoadMedications() {
     if (!ehrSessionId || !ehrPatientId) return;
     setLoadingMeds(true);
     setLoadMedError('');
-    try {
-      async function fetchFromProxy(path) {
-        const encodedPath = encodeURIComponent(path);
-        const res = await fetch(
-          `${API_BASE_PATH}/fhir/proxy?path=${encodedPath}`,
-          { headers: { 'X-FHIR-Session': ehrSessionId } }
-        );
-        if (res.status === 401) {
-          const err = await res.json().catch(() => ({}));
-          if (err.expired) throw new Error('Your EHR session has expired. Please reconnect.');
-          throw new Error(err.error ?? 'EHR session not found. Please reconnect.');
-        }
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          throw new Error(errData.error ?? `FHIR server returned ${res.status}`);
-        }
-        return res.json();
+    const fetchFromProxy = async path => {
+      const encodedPath = encodeURIComponent(path);
+      const res = await fetch(
+        `${API_BASE_PATH}/fhir/proxy?path=${encodedPath}`,
+        { headers: { 'X-FHIR-Session': ehrSessionId } }
+      );
+      if (res.status === 401) {
+        const err = await res.json().catch(() => ({}));
+        if (err.expired) throw new Error('Your EHR session has expired. Please reconnect.');
+        throw new Error(err.error ?? 'EHR session not found. Please reconnect.');
       }
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error ?? `FHIR server returned ${res.status}`);
+      }
+      return res.json();
+    };
 
+    try {
       const pid = encodeURIComponent(ehrPatientId);
       const [medReqBundle, medStmtBundle] = await Promise.allSettled([
         fetchFromProxy(`/MedicationRequest?patient=${pid}&_count=100`),
@@ -4129,7 +4531,23 @@ function EhrConnectPanel({
   return h(
     'div',
     { className: 'fhir-tab-panel ehr-connect-panel' },
-    isConnected
+    !smartEnabled
+      ? h(
+          React.Fragment,
+          null,
+          h('p', { className: 'helper' }, smartConfigLoaded ? smartStatusMessage : 'Loading SMART on FHIR beta availability…'),
+          h(
+            'p',
+            { className: 'helper' },
+            'This MVP keeps paste/upload FHIR import available. The live EHR connection stays behind an explicit beta switch until the deployment environment and vendor credentials are fully production-ready.'
+          ),
+          h(
+            'div',
+            { className: 'fhir-actions' },
+            h('button', { type: 'button', className: 'secondary-button', onClick: onClose }, 'Close')
+          )
+        )
+      : isConnected
       ? h(
           React.Fragment,
           null,
@@ -4280,7 +4698,7 @@ function EhrConnectPanel({
           h(
             'p',
             { className: 'helper' },
-            'Connect directly to an EHR using SMART on FHIR. Select your system and click Connect — a login window will open.'
+            smartStatusMessage
           ),
           h(
             'div',
@@ -4296,9 +4714,16 @@ function EhrConnectPanel({
               ehrSystems.map(s =>
                 h('option', { key: s.id, value: s.id }, s.name)
               ),
-              h('option', { value: 'custom' }, 'Custom FHIR server')
+              customSupported ? h('option', { value: 'custom' }, 'Custom FHIR server') : null
             )
           ),
+          customSupported
+            ? h(
+                'p',
+                { className: 'helper' },
+                'Custom FHIR server entry is intended for controlled testing only. Leave it off in production unless the backend explicitly enables it.'
+              )
+            : null,
           isCustom
             ? h(
                 React.Fragment,
@@ -4361,13 +4786,13 @@ function EhrConnectPanel({
             { className: 'fhir-actions' },
             h(
               'button',
-              {
-                type: 'button',
-                className: 'primary-button',
-                disabled: ehrConnecting || (isCustom && (!customFhirBaseUrl || !customAuthorizeUrl || !customTokenUrl || !customClientId)),
-                onClick: () =>
-                  onEhrConnect({
-                    ehrId: selectedEhrId,
+                {
+                  type: 'button',
+                  className: 'primary-button',
+                  disabled: !smartEnabled || ehrConnecting || (isCustom && (!customFhirBaseUrl || !customAuthorizeUrl || !customTokenUrl || !customClientId)),
+                  onClick: () =>
+                    onEhrConnect({
+                      ehrId: selectedEhrId,
                     fhirBaseUrl: customFhirBaseUrl,
                     authorizeUrl: customAuthorizeUrl,
                     tokenUrl: customTokenUrl,
@@ -5665,7 +6090,9 @@ function canCreateAnotherProfileForUser(user, profiles, existingProfile) {
       const cleanUrl = window.location.pathname + window.location.hash;
       window.history.replaceState({}, '', cleanUrl);
     }
-  } catch {}
+  } catch {
+    // Ignore malformed callback query state and allow the app shell to load normally.
+  }
 })();
 
 createRoot(document.getElementById('root')).render(h(App));
